@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 
 namespace BulletManiac.Entity
 {
@@ -37,12 +36,15 @@ namespace BulletManiac.Entity
         /// <summary>
         /// Current rotation to render the game object;
         /// </summary>
-        private float rotation;
+        private float rotation = 0f;
         /// <summary>
         /// Scale of the object should render
         /// </summary>
         protected Vector2 scale = Vector2.One;
-        protected Vector2 origin;
+        /// <summary>
+        /// Origin point (pivot) of the object, default to top left corner
+        /// </summary>
+        protected Vector2 origin = Vector2.Zero;
 
         private bool destroyed = false;
         #endregion

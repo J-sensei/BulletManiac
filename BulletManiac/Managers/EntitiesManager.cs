@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace BulletManiac.Managers
 {
     /// <summary>
-    /// Managing the life time of game objects througout the game
+    /// Managing the life cycle of game objects througout the game
     /// </summary>
     public class EntitiesManager
     {

@@ -15,13 +15,15 @@ namespace BulletManiac
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
+            IsMouseVisible = true; // Move is visible
         }
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-            GameManager.Initialize();
+            // Pass in content manager to the resources manager to make sure it will load the resources after initialization
+            GameManager.Resources.Load(Content);
+            GameManager.AddGameObject(new Player()); // Test code
+            GameManager.Initialize(); // Initialize all the game stuffs
 
             base.Initialize();
         }
@@ -29,11 +31,6 @@ namespace BulletManiac
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
-            GameManager.Resources.Load(Content);
-            GameManager.Resources.LoadTexture("Pistol", "Test/Pistol");
-            GameManager.AddGameObject(new Gun(GameManager.Resources.FindTexture("Pistol")));
         }
 
         protected override void Update(GameTime gameTime)
@@ -41,8 +38,7 @@ namespace BulletManiac
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
-            GameManager.Update(gameTime);
+            GameManager.Update(gameTime); // Update all the game stuffs
 
             base.Update(gameTime);
         }
@@ -51,9 +47,9 @@ namespace BulletManiac
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
-            _spriteBatch.Begin();
-            GameManager.Draw(_spriteBatch, gameTime);
+            // SpriteBatch Begin settings make sure the texture sprite is clean when scale up
+            _spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp);
+            GameManager.Draw(_spriteBatch, gameTime); // GameManager contains all the stuffs to draw
             _spriteBatch.End();
 
             base.Draw(gameTime);

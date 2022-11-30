@@ -31,6 +31,7 @@ namespace BulletManiac.Managers
 
         public static void Update(GameTime gameTime)
         {
+            InputManager.Update(gameTime);
             entitiesManager.Update(gameTime);
         }
 

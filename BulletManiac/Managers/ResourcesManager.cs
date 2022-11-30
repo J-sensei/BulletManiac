@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace BulletManiac.Managers
 {
+    /// <summary>
+    /// Manage all resources throughout the game
+    /// </summary>
     public class ResourcesManager
     {
         private ContentManager contentManager;
@@ -23,6 +26,11 @@ namespace BulletManiac.Managers
             Textures.Add(name, texture);
         }
 
+        /// <summary>
+        /// Load the texture by specify the name and path using content manager
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="path"></param>
         public void LoadTexture(string name, string path)
         {
             Texture2D texture = contentManager.Load<Texture2D>(path);
