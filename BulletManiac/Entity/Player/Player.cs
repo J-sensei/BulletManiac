@@ -13,6 +13,7 @@ namespace BulletManiac.Entity.Player
         {
             position = new Vector2(0, 0);
             animationManager = new AnimationManager();
+            scale = new Vector2(3f, 3f);
 
             // Load player sprites
             GameManager.Resources.LoadTexture("Player_Down", "Test/TopDownCharacter/Character_Down");
@@ -55,13 +56,14 @@ namespace BulletManiac.Entity.Player
 
             // Update the animations
             animationManager.Update(InputManager.Direction, gameTime);
-
+            texture = animationManager.CurrentAnimation.CurrentTexture; // Update the texture based on the animation
             base.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            animationManager.CurrentAnimation.Draw(spriteBatch, position, Color.White, 0f, origin, new Vector2(3f, 3f), SpriteEffects.None, 0f);
+            base.Draw(spriteBatch, gameTime);
+            //animationManager.CurrentAnimation.Draw(spriteBatch, position, Color.White, 0f, origin, new Vector2(3f, 3f), SpriteEffects.None, 0f);
         }
     }
 }

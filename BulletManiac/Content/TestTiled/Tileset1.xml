@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:ns="Microsoft.Xna.Framework">
+	<Asset Type="BulletManiac.Tiled.TilesetData">
+		<Version>1.9</Version>
+		<TiledVersion>1.9.2</TiledVersion>
+		<Name>CosmicLilac_Tiles</Name>
+		<TileWidth>16</TileWidth>
+		<TileHeight>16</TileHeight>
+		<TileCount>104</TileCount>
+		<Columns>13</Columns>
+		<Image>CosmicLilac_Tiles</Image>
+		<Width>208</Width>
+		<Height>128</Height>
+	</Asset>
+</XnaContent>

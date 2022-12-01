@@ -1,4 +1,5 @@
 ﻿using BulletManiac.Managers;
+using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -33,6 +34,20 @@ namespace BulletManiac.Entity
         /// Switch the animation on / off
         /// </summary>
         private bool active = true;
+        /// <summary>
+        /// Cropped textures based on the bounds data
+        /// </summary>
+        private Texture2D[] croppedTextures;
+        /// <summary>
+        /// Get the current frame sprite
+        /// </summary>
+        public Texture2D CurrentTexture
+        {
+            get
+            {
+                return croppedTextures[currentFrame];
+            }
+        }
 
         /// <summary>
         /// Takes the texture, number of frames (X and Y), time between frames and which row of the sprite to animate
@@ -56,6 +71,13 @@ namespace BulletManiac.Entity
             for(int i = 0; i < frameCount; i++)
             {
                 bounds.Add(new Rectangle(i * width, (row - 1) * height, width, height));
+            }
+
+            // Crop the sprite sheet and store into the texture array
+            croppedTextures = new Texture2D[bounds.Count];
+            for(int i = 0; i < croppedTextures.Length; i++)
+            {
+                croppedTextures[i] = Extensions.CropTexture2D(texture, bounds[i]);
             }
         }
 

@@ -10,6 +10,7 @@
 
 #-------------------------------- References --------------------------------#
 
+/reference:..\bin\Debug\net6.0\BulletManiac.dll
 
 #---------------------------------- Content ---------------------------------#
 
@@ -120,4 +121,9 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Test/TopDownCharacter/Character_UpRight.png
+
+#begin TestTiled/Tileset1.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:TestTiled/Tileset1.xml
 

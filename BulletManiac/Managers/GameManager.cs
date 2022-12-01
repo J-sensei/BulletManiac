@@ -1,4 +1,5 @@
 ﻿using BulletManiac.Entity;
+using BulletManiac.Tiled;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -49,7 +50,10 @@ namespace BulletManiac.Managers
         public static void Initialize()
         {
             // Init Resolution setting
-
+            Resources.LoadTilesetData("Test", "TestTiled/Tileset1");
+            TilesetData data = Resources.FindTilesetData("Test");
+            //Tileset t = new();
+            //t.Load(Resources.FindXml("Test"));
             entitiesManager.Initialize();
         }
 
