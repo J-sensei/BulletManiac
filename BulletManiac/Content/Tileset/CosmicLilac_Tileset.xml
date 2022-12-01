@@ -3,12 +3,12 @@
 	<Asset Type="BulletManiac.Tiled.TilesetData">
 		<Version>1.9</Version>
 		<TiledVersion>1.9.2</TiledVersion>
-		<Name>CosmicLilac_Tiles</Name>
+		<ImagePath>SpriteSheet/Tiles/CosmicLilac_Tiles</ImagePath>
+		<ResourcesName>CosmicLilac_Tiles</ResourcesName>
 		<TileWidth>16</TileWidth>
 		<TileHeight>16</TileHeight>
 		<TileCount>104</TileCount>
 		<Columns>13</Columns>
-		<Image>CosmicLilac_Tiles</Image>
 		<Width>208</Width>
 		<Height>128</Height>
 	</Asset>

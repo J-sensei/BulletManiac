@@ -50,8 +50,7 @@ namespace BulletManiac.Managers
         public static void Initialize()
         {
             // Init Resolution setting
-            Resources.LoadTilesetData("Test", "TestTiled/Tileset1");
-            TilesetData data = Resources.FindTilesetData("Test");
+            Resources.LoadTileset("Tileset/CosmicLilac_Tileset");
             //Tileset t = new();
             //t.Load(Resources.FindXml("Test"));
             entitiesManager.Initialize();
@@ -66,7 +65,9 @@ namespace BulletManiac.Managers
 
         public static void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            entitiesManager.Draw(spriteBatch, gameTime);
+            // Test drawing tile
+            spriteBatch.Draw(Resources.FindTileset("CosmicLilac_Tiles").Get(29), Vector2.Zero, null, Color.White, 0f, Vector2.Zero, new Vector2(3f, 3f), SpriteEffects.None, 0f);
+            entitiesManager.Draw(spriteBatch, gameTime);       
         }
     }
 }

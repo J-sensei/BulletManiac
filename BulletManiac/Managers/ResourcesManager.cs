@@ -17,7 +17,10 @@ namespace BulletManiac.Managers
     {
         private ContentManager contentManager;
         private readonly Dictionary<string, Texture2D> Textures = new();
-        private readonly Dictionary<string, TilesetData> TilesetData = new();
+        /// <summary>
+        /// Tileset generated when loading tileset data
+        /// </summary>
+        private readonly Dictionary<string, Tileset> Tilesets = new();
 
         public void Load(ContentManager contentManager)
         {
@@ -27,10 +30,6 @@ namespace BulletManiac.Managers
         public void Add(string name, Texture2D texture)
         {
             Textures.Add(name, texture);
-        }
-        public void Add(string name, TilesetData data)
-        {
-            TilesetData.Add(name, data);
         }
 
         /// <summary>
@@ -43,11 +42,22 @@ namespace BulletManiac.Managers
             Texture2D texture = contentManager.Load<Texture2D>(path);
             Add(name, texture);
         }
+        /// <summary>
+        /// Load the texture directly from the content manager
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public Texture2D LoadTextureRaw(string path)
+        {
+            return contentManager.Load<Texture2D>(path);
+        }
 
-        public void LoadTilesetData(string name, string path)
+        public void LoadTileset(string path)
         {
             TilesetData data = contentManager.Load<TilesetData>(path);
-            Add(name, data);
+            Tileset tileset = new Tileset(data);
+
+            Tilesets.Add(data.ResourcesName, tileset);
         }
 
         public Texture2D FindTexture(string name)
@@ -67,9 +77,9 @@ namespace BulletManiac.Managers
             Textures.Remove(name);
         }
 
-        public TilesetData FindTilesetData(string name)
+        public Tileset FindTileset(string name)
         {
-            return TilesetData[name];
+            return Tilesets[name];
         }
     }
 }

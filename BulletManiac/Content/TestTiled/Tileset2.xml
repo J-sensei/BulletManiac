@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<XnaContent xmlns:ns="Microsoft.Xna.Framework">
-	<Asset Type="BulletManiac.Tiled.TilesetData">
-		<tileset version="1.9" tiledversion="1.9.2" name="FD_Dungeon_Free" tilewidth="16" tileheight="16" tilecount="176" columns="11">
-			<image source="../Assignment/Assets/Fantasy Dreamland - Dungeon V2 (Free)/16x16/FD_Dungeon_Free.png" width="176" height="256"/>
-		</tileset>
-	</Asset>
-</XnaContent>

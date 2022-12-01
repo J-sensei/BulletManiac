@@ -14,6 +14,18 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin SpriteSheet/Tiles/CosmicLilac_Tiles.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:SpriteSheet/Tiles/CosmicLilac_Tiles.png
+
 #begin Test/Pistol.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -122,8 +134,8 @@
 /processorParam:TextureFormat=Color
 /build:Test/TopDownCharacter/Character_UpRight.png
 
-#begin TestTiled/Tileset1.xml
+#begin Tileset/CosmicLilac_Tileset.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
-/build:TestTiled/Tileset1.xml
+/build:Tileset/CosmicLilac_Tileset.xml
 
