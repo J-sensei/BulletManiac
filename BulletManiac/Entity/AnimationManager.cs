@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace BulletManiac.Entity
 {
     /// <summary>
-    /// Handle animation in different situationa
+    /// Handle animation in different situations
     /// </summary>
     public class AnimationManager
     {

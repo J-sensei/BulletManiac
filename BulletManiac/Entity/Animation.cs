@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using BulletManiac.Managers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
@@ -65,7 +66,7 @@ namespace BulletManiac.Entity
         public void Update(GameTime gameTime)
         {
             if (!active) return;
-            float totalSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            float totalSeconds = GameManager.DeltaTime;
             frameTimeLeft -= totalSeconds;
 
             if(frameTimeLeft <= 0)

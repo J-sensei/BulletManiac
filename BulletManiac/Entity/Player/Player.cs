@@ -11,7 +11,7 @@ namespace BulletManiac.Entity.Player
         float animationSpeed = 0.08f;
         public Player()
         {
-            position = new Vector2(100f, 100f);
+            position = new Vector2(0, 0);
             animationManager = new AnimationManager();
 
             // Load player sprites
@@ -50,7 +50,7 @@ namespace BulletManiac.Entity.Player
             // Player movement
             if (InputManager.Moving)
             {
-                position += Vector2.Normalize(InputManager.Direction) * moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                position += Vector2.Normalize(InputManager.Direction) * moveSpeed * GameManager.DeltaTime;
             }
 
             // Update the animations
@@ -61,7 +61,7 @@ namespace BulletManiac.Entity.Player
 
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            animationManager.CurrentAnimation.Draw(spriteBatch, position, Color.White, 0f, origin, new Vector2(5f, 5f), SpriteEffects.None, 0f);
+            animationManager.CurrentAnimation.Draw(spriteBatch, position, Color.White, 0f, origin, new Vector2(3f, 3f), SpriteEffects.None, 0f);
         }
     }
 }
