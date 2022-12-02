@@ -1,24 +1,43 @@
-﻿using BulletManiac.Managers;
+﻿using BulletManiac.Entity;
+using BulletManiac.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace BulletManiac.Tiled
 {
-    public class Tile
+    public class Tile : GameObject
     {
-        private readonly Texture2D texture;
-        private readonly Vector2 position;
-
         public Tile(Texture2D texture, Vector2 position)
         {
+            name = "Tile";
             this.texture = texture;
             this.position = position;
+            scale = new Vector2(1f, 1f);
         }
 
-        public void Draw(SpriteBatch spriteBatch, GameTime gameTime, Vector2 offset)
+        public Tile(Texture2D texture, Vector2 position, Vector2 scale)
         {
-            if(texture != null)
-                spriteBatch.Draw(texture, (position + offset) * GameManager.CurrentGameScale, null, Color.White, 0f, Vector2.Zero, new Vector2(1f, 1f) * GameManager.CurrentGameScale, SpriteEffects.None, 0f);
+            name = "Tile";
+            this.texture = texture;
+            this.position = position;
+            this.scale = scale;
+        }
+
+        protected override Rectangle CalculateBound()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Take offset to move 
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="offset"></param>
+        public void Draw(SpriteBatch spriteBatch, Vector2 offset)
+        {
+            if (texture != null)
+                spriteBatch.Draw(texture, (position + offset) * GameManager.CurrentGameScale * scale, null, Color.White, 0f, Vector2.Zero, scale * GameManager.CurrentGameScale, SpriteEffects.None, 0f);
         }
     }
 }

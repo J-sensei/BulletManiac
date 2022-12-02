@@ -26,6 +26,18 @@
 /processorParam:TextureFormat=Color
 /build:SpriteSheet/Tiles/CosmicLilac_Tiles.png
 
+#begin SpriteSheet/Tiles/FD_Dungeon_Free_32x32.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:SpriteSheet/Tiles/FD_Dungeon_Free_32x32.png
+
 #begin SpriteSheet/Tiles/FD_Dungeon_Free.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -151,6 +163,11 @@
 /processor:PassThroughProcessor
 /build:Tilemap/Cosmic_Test.xml
 
+#begin Tilemap/Dungeon_Test_32x32.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Tilemap/Dungeon_Test_32x32.xml
+
 #begin Tilemap/Test.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -160,6 +177,11 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Tileset/CosmicLilac_Tileset.xml
+
+#begin Tileset/FD_Dungeon_Free_32x32.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Tileset/FD_Dungeon_Free_32x32.xml
 
 #begin Tileset/FD_Dungeon_Free.xml
 /importer:XmlImporter

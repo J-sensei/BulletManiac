@@ -27,7 +27,9 @@ namespace BulletManiac.Tiled
 
         public void Update(GameTime gameTime)
         {
-            offset += InputManager.Direction * 1f; // Test
+            var x = InputManager.Direction;
+            x.Normalize();
+            offset += InputManager.Direction * 25f * GameManager.DeltaTime; // Test
         }
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
@@ -35,7 +37,8 @@ namespace BulletManiac.Tiled
             // Render all layers
             for (int i = 0; i < layers.Length; i++)
             {
-                layers[i].Draw(spriteBatch, gameTime, offset);
+                layers[i].Draw(spriteBatch, offset);
+
             }
         }
     }
@@ -163,14 +166,14 @@ namespace BulletManiac.Tiled
             return new Vector2(x, y);
         }
 
-        public void Draw(SpriteBatch spriteBatch, GameTime gameTime, Vector2 offset)
+        public void Draw(SpriteBatch spriteBatch, Vector2 offset)
         {
             for (int y = 0; y < tiles.GetLength(1); y++)
             {
                 for (int x = 0; x < tiles.GetLength(0); x++)
                 {
                     // Render tiles with offset
-                    tiles[x, y].Draw(spriteBatch, gameTime, offset);
+                    tiles[x, y].Draw(spriteBatch, offset);
                 }
             }
         }

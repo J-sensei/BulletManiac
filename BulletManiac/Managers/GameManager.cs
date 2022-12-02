@@ -20,7 +20,7 @@ namespace BulletManiac.Managers
             1.5f, 3f, 6f, 12f
         };
 
-        public static int CurrentResolutionIndex = 2;
+        public static int CurrentResolutionIndex = 1;
         public static Vector2 CurrentResolution { 
             get
             {
@@ -60,6 +60,8 @@ namespace BulletManiac.Managers
             Resources.LoadTileset("Tileset/CosmicLilac_Tileset");
             Resources.LoadTileset("Tileset/FD_Dungeon_Free");
             Resources.LoadTilemap("Test", "Tilemap/Cosmic_Test"); // Test loading tilemap
+            //Resources.LoadTileset("Tileset/FD_Dungeon_Free_32x32");
+            //Resources.LoadTilemap("Dungeon_Test_32x32", "Tilemap/Dungeon_Test_32x32"); // Test loading tilemap
             //map = new Tilemap(Resources.FindTileset("CosmicLilac_Tiles"));
             //Tileset t = new();
             //t.Load(Resources.FindXml("Test"));
@@ -72,13 +74,16 @@ namespace BulletManiac.Managers
             InputManager.Update(gameTime);
 
             Resources.FindTilemap("Test").Update(gameTime); // test update tilemap
+            //Resources.FindTilemap("Dungeon_Test_32x32").Update(gameTime);
             entitiesManager.Update(gameTime);
 
         }
 
         public static void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
+            //Resources.FindTilemap("Dungeon_Test_32x32").Draw(spriteBatch, gameTime); // Test draw tilemap
             Resources.FindTilemap("Test").Draw(spriteBatch, gameTime); // Test draw tilemap
+
             //map.Draw(spriteBatch, gameTime);
             // Test drawing tile
             //spriteBatch.Draw(Resources.FindTileset("CosmicLilac_Tiles").Get(29), Vector2.Zero, null, Color.White, 0f, Vector2.Zero, new Vector2(3f, 3f), SpriteEffects.None, 0f);
