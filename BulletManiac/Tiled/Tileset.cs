@@ -46,8 +46,10 @@ namespace BulletManiac.Tiled
                 {
                     row++;
                 }
-                Rectangle bound = new Rectangle((i % tilesetData.Columns) * tilesetData.TileWidth, (row - 1) * tilesetData.TileHeight, tilesetData.TileWidth, tilesetData.TileHeight);
-                bounds[i] = bound;
+                // Add bound area to each tile
+                bounds[i] = new Rectangle((i % tilesetData.Columns) * tilesetData.TileWidth, 
+                                        (row - 1) * tilesetData.TileHeight, 
+                                        tilesetData.TileWidth, tilesetData.TileHeight);
             }
         }
 

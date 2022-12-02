@@ -55,6 +55,28 @@ namespace BulletManiac.Utilities
 
         private void UpdateMatrix()
         {
+            // Constraint the camera to move (TEST)
+            float minX = 0f;
+            float maxX = 2000f;
+            float minY = 0f;
+            float maxY = 1000f;
+
+            float xLeft = Position.X - Bounds.Width * 0.5f;
+            float xRight = Position.X + Bounds.Width * 0.5f;
+            float yUp = Position.Y - Bounds.Height * 0.5f;
+            float yDown = Position.Y + Bounds.Height * 0.5f;
+            //Console.WriteLine("xLeft: " + xLeft + " xRight: " + xRight + " yUp: " + yUp + " yDown: " + yDown);
+
+            Vector2 pos = Position;
+
+            if (xLeft < minX) pos.X = minX + Bounds.Width * 0.5f;
+            if (xRight > maxX) pos.X = maxX - Bounds.Width * 0.5f;
+            if (yUp < minY) pos.Y = minY + Bounds.Height * 0.5f;
+            if (yDown > maxY) pos.Y = maxY - Bounds.Height * 0.5f;
+
+            Position = pos;
+
+            // Update the matrix to make camera move
             Matrix position = Matrix.CreateTranslation(new Vector3(-Position.X, -Position.Y, 0));
             Matrix zoom = Matrix.CreateScale(Zoom);
             Matrix offset = Matrix.CreateTranslation(new Vector3(Bounds.Width * 0.5f, Bounds.Height * 0.5f, 0));
@@ -64,16 +86,20 @@ namespace BulletManiac.Utilities
 
         public void MoveCamera(Vector2 movePosition)
         {
-            Vector2 newPosition = Position + movePosition;
+            Console.WriteLine(Position);
+            Vector2 pos;
 
-            if(followPosition != null || followPosition != Vector2.Zero)
+            // Test If Statament
+            if (followPosition != Vector2.Zero)
             {
-                Position = followPosition;
+                pos = followPosition;
             }
             else
             {
-                Position = newPosition;
+                Vector2 newPosition = Position + movePosition;
+                pos = newPosition;
             }
+            Position = pos;
         }
 
         public void AdjustZoom(float zoomAmount)
