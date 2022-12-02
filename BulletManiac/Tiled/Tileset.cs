@@ -2,13 +2,6 @@
 using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 
 namespace BulletManiac.Tiled
 {
@@ -29,10 +22,14 @@ namespace BulletManiac.Tiled
         /// Each tile sprite cropped from the sprite sheet
         /// </summary>
         private Texture2D[] tiles;
-        /// <summary>
-        /// Bounding rectangle of each individual tile
-        /// </summary>
-        private readonly Rectangle[] bounds;
+
+        public Point TileSize
+        {
+            get
+            {
+                return new Point(tilesetData.TileWidth, tilesetData.TileHeight);
+            }
+        }
 
         public Tileset(TilesetData tilesetData)
         {
@@ -40,25 +37,21 @@ namespace BulletManiac.Tiled
             spriteSheet = GameManager.Resources.LoadTextureRaw(tilesetData.ImagePath);
 
             // Calculate the bounds of each image
-            bounds = new Rectangle[tilesetData.TileCount];
             tiles = new Texture2D[tilesetData.TileCount];
 
             int row = 1; // start as first row
-            for(int i = 0; i < bounds.Length; i++)
+            for(int i = 0; i < tiles.Length; i++)
             {
-                Rectangle bound = new Rectangle((i % tilesetData.Columns) * tilesetData.TileWidth, (row - 1) * tilesetData.TileHeight, tilesetData.TileWidth, tilesetData.TileHeight);
-                bounds[i] = bound;
                 // Each the end of the column, increment the row to next row
-                if(i % tilesetData.Columns == 0 && i != 0)
+                if (i % tilesetData.Columns == 0 && i != 0)
                 {
                     row++;
                 }
+                Rectangle bound = new Rectangle((i % tilesetData.Columns) * tilesetData.TileWidth, (row - 1) * tilesetData.TileHeight, tilesetData.TileWidth, tilesetData.TileHeight);
 
                 // crop the tiles
-                tiles[i] = Extensions.CropTexture2D(spriteSheet, bounds[i]);
+                tiles[i] = Extensions.CropTexture2D(spriteSheet, bound);
             }
-
-            Array.Clear(bounds, 0, bounds.Length); // Clear the bound array as its no use anymore
         }
 
         /// <summary>

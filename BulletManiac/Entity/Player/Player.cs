@@ -13,7 +13,7 @@ namespace BulletManiac.Entity.Player
         {
             position = new Vector2(0, 0);
             animationManager = new AnimationManager();
-            scale = new Vector2(3f, 3f);
+            scale = new Vector2(1f, 1f) * GameManager.CurrentGameScale;
 
             // Load player sprites
             GameManager.Resources.LoadTexture("Player_Down", "Test/TopDownCharacter/Character_Down");

@@ -26,6 +26,18 @@
 /processorParam:TextureFormat=Color
 /build:SpriteSheet/Tiles/CosmicLilac_Tiles.png
 
+#begin SpriteSheet/Tiles/FD_Dungeon_Free.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:SpriteSheet/Tiles/FD_Dungeon_Free.png
+
 #begin Test/Pistol.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -134,8 +146,23 @@
 /processorParam:TextureFormat=Color
 /build:Test/TopDownCharacter/Character_UpRight.png
 
+#begin Tilemap/Cosmic_Test.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Tilemap/Cosmic_Test.xml
+
+#begin Tilemap/Test.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Tilemap/Test.xml
+
 #begin Tileset/CosmicLilac_Tileset.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Tileset/CosmicLilac_Tileset.xml
+
+#begin Tileset/FD_Dungeon_Free.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Tileset/FD_Dungeon_Free.xml
 

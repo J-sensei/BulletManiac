@@ -15,13 +15,20 @@ namespace BulletManiac.Managers
             new Vector2(1280, 720), // Scale 4
             new Vector2(2560, 1080), // Scale 5
         };
-        public static int CurrentResolutionIndex = 1;
+        private static List<float> ScaleList = new List<float>()
+        {
+            1.5f, 3f, 6f, 12f
+        };
+
+        public static int CurrentResolutionIndex = 2;
         public static Vector2 CurrentResolution { 
             get
             {
                 return ResolutionList[CurrentResolutionIndex];
             } 
         }
+
+        public static float CurrentGameScale { get { return ScaleList[CurrentResolutionIndex]; } }
 
         public static ResourcesManager Resources = new();
 
@@ -46,11 +53,14 @@ namespace BulletManiac.Managers
         {
             return entitiesManager.Find(gameObject);
         }
-
+        static Tilemap map;
         public static void Initialize()
         {
             // Init Resolution setting
             Resources.LoadTileset("Tileset/CosmicLilac_Tileset");
+            Resources.LoadTileset("Tileset/FD_Dungeon_Free");
+            Resources.LoadTilemap("Test", "Tilemap/Cosmic_Test"); // Test loading tilemap
+            //map = new Tilemap(Resources.FindTileset("CosmicLilac_Tiles"));
             //Tileset t = new();
             //t.Load(Resources.FindXml("Test"));
             entitiesManager.Initialize();
@@ -60,13 +70,18 @@ namespace BulletManiac.Managers
         {
             DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             InputManager.Update(gameTime);
+
+            Resources.FindTilemap("Test").Update(gameTime); // test update tilemap
             entitiesManager.Update(gameTime);
+
         }
 
         public static void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
+            Resources.FindTilemap("Test").Draw(spriteBatch, gameTime); // Test draw tilemap
+            //map.Draw(spriteBatch, gameTime);
             // Test drawing tile
-            spriteBatch.Draw(Resources.FindTileset("CosmicLilac_Tiles").Get(29), Vector2.Zero, null, Color.White, 0f, Vector2.Zero, new Vector2(3f, 3f), SpriteEffects.None, 0f);
+            //spriteBatch.Draw(Resources.FindTileset("CosmicLilac_Tiles").Get(29), Vector2.Zero, null, Color.White, 0f, Vector2.Zero, new Vector2(3f, 3f), SpriteEffects.None, 0f);
             entitiesManager.Draw(spriteBatch, gameTime);       
         }
     }

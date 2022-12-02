@@ -18,7 +18,7 @@
 		/// </summary>
 		public string ImagePath { get; set; }
 		/// <summary>
-		/// Name given in the resources manager
+		/// Name given to the resources manager
 		/// </summary>
 		public string ResourcesName { get; set; }
 		/// <summary>

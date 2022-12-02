@@ -21,6 +21,7 @@ namespace BulletManiac.Managers
         /// Tileset generated when loading tileset data
         /// </summary>
         private readonly Dictionary<string, Tileset> Tilesets = new();
+        private readonly Dictionary<string, Tilemap> Tilemaps = new();
 
         public void Load(ContentManager contentManager)
         {
@@ -60,6 +61,13 @@ namespace BulletManiac.Managers
             Tilesets.Add(data.ResourcesName, tileset);
         }
 
+        public void LoadTilemap(string name, string path)
+        {
+            TilemapData data = contentManager.Load<TilemapData>(path);
+            Tilemap map = new Tilemap(null, data);
+            Tilemaps.Add(name, map);
+        }
+
         public Texture2D FindTexture(string name)
         {
             if (Textures[name] != null)
@@ -80,6 +88,11 @@ namespace BulletManiac.Managers
         public Tileset FindTileset(string name)
         {
             return Tilesets[name];
+        }
+
+        public Tilemap FindTilemap(string name)
+        {
+            return Tilemaps[name];
         }
     }
 }
