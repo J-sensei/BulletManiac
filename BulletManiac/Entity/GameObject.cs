@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using BulletManiac.Managers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace BulletManiac.Entity
@@ -62,6 +63,7 @@ namespace BulletManiac.Entity
             get { return destroyed; }
         }
         public string Name { get { return name; } }
+        public Vector2 Position { get { return position; } }
         #endregion
 
         public delegate void OnCollision(GameObject gameObject);
@@ -85,7 +87,7 @@ namespace BulletManiac.Entity
 
         public virtual void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            spriteBatch.Draw(texture, position, null, Color.White, rotation, origin, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(texture, position, null, Color.White, rotation, origin, scale * GameManager.CurrentGameScale, SpriteEffects.None, 0f);
         }
 
         public static void Destroy(GameObject gameObject)

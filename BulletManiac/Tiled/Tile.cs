@@ -10,7 +10,7 @@ namespace BulletManiac.Tiled
     {
         public Tile(Texture2D texture, Vector2 position)
         {
-            name = "Tile";
+            name = "Tile [" + position + "]";
             this.texture = texture;
             this.position = position;
             scale = new Vector2(1f, 1f);
@@ -36,8 +36,20 @@ namespace BulletManiac.Tiled
         /// <param name="offset"></param>
         public void Draw(SpriteBatch spriteBatch, Vector2 offset)
         {
+            // If the texture is null, dont draw anything
             if (texture != null)
-                spriteBatch.Draw(texture, (position + offset) * GameManager.CurrentGameScale * scale, null, Color.White, 0f, Vector2.Zero, scale * GameManager.CurrentGameScale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(texture, (position + offset) * GameManager.CurrentGameScale * scale, 
+                                            null, Color.White, 0f, Vector2.Zero, scale * GameManager.CurrentGameScale, 
+                                            SpriteEffects.None, 0f);
+        }
+
+        public void Draw(SpriteBatch spriteBatch, Texture2D texture, Vector2 offset)
+        {
+            // If the texture is null, dont draw anything
+            if (texture != null)
+                spriteBatch.Draw(texture, (position + offset) * GameManager.CurrentGameScale * scale,
+                                            null, Color.White, 0f, Vector2.Zero, scale * GameManager.CurrentGameScale,
+                                            SpriteEffects.None, 0f);
         }
     }
 }

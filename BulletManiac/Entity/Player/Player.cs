@@ -1,6 +1,7 @@
 ﻿using BulletManiac.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace BulletManiac.Entity.Player
 {
@@ -11,9 +12,10 @@ namespace BulletManiac.Entity.Player
         float animationSpeed = 0.08f;
         public Player()
         {
+            name = "Player";
             position = new Vector2(0, 0);
             animationManager = new AnimationManager();
-            scale = new Vector2(1f, 1f) * GameManager.CurrentGameScale;
+            scale = new Vector2(1f, 1f);
 
             // Load player sprites
             GameManager.Resources.LoadTexture("Player_Down", "Test/TopDownCharacter/Character_Down");
@@ -38,7 +40,8 @@ namespace BulletManiac.Entity.Player
 
         protected override Rectangle CalculateBound()
         {
-            return Rectangle.Empty;
+            Vector2 pos = position - origin;
+            return new Rectangle((int)pos.X, (int)pos.Y, (int)(texture.Width * GameManager.CurrentGameScale), (int)(texture.Height * (int)GameManager.CurrentGameScale));
         }
 
         public override void Initialize()
@@ -51,7 +54,7 @@ namespace BulletManiac.Entity.Player
             // Player movement
             if (InputManager.Moving)
             {
-                position += Vector2.Normalize(InputManager.Direction) * moveSpeed * GameManager.DeltaTime;
+                position += Vector2.Normalize(InputManager.Direction) * moveSpeed * GameManager.CurrentSpeedScale * GameManager.DeltaTime;
             }
 
             // Update the animations

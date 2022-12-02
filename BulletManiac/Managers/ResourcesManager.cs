@@ -56,16 +56,33 @@ namespace BulletManiac.Managers
         public void LoadTileset(string path)
         {
             TilesetData data = contentManager.Load<TilesetData>(path);
-            Tileset tileset = new Tileset(data);
 
-            Tilesets.Add(data.ResourcesName, tileset);
+            // If this data is already inside the resources, do not add it
+            if (!Tilesets.ContainsKey(data.ResourcesName))
+            {
+                Tileset tileset = new Tileset(data);
+
+                Tilesets.Add(data.ResourcesName, tileset);
+            }
+            else
+            {
+                Console.WriteLine("[Resources Manager] Duplicate name '" + data.ResourcesName + "' is failed to add into Tileset resources.");
+            }
         }
 
         public void LoadTilemap(string name, string path)
         {
-            TilemapData data = contentManager.Load<TilemapData>(path);
-            Tilemap map = new Tilemap(null, data);
-            Tilemaps.Add(name, map);
+            // If this name is already inside the resources, do not add it
+            if (!Tilemaps.ContainsKey(name))
+            {
+                TilemapData data = contentManager.Load<TilemapData>(path);
+                Tilemap map = new Tilemap(null, data);
+                Tilemaps.Add(name, map);
+            }
+            else
+            {
+                Console.WriteLine("[Resources Manager] Duplicate name '" + name + "' is failed to add into Tilemap resources.");
+            }
         }
 
         public Texture2D FindTexture(string name)

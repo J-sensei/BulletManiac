@@ -1,5 +1,6 @@
 ﻿using BulletManiac.Entity.Player;
 using BulletManiac.Managers;
+using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -18,16 +19,21 @@ namespace BulletManiac
             IsMouseVisible = true; // Move is visible
         }
 
+        private Camera camera;
         protected override void Initialize()
         {
             // Pass in content manager to the resources manager to make sure it will load the resources after initialization
-            _graphics.PreferredBackBufferWidth = (int)GameManager.CurrentResolution.X;
-            _graphics.PreferredBackBufferHeight = (int)GameManager.CurrentResolution.Y;
-            _graphics.ApplyChanges();
+            //_graphics.PreferredBackBufferWidth = (int)GameManager.CurrentResolution.X;
+            //_graphics.PreferredBackBufferHeight = (int)GameManager.CurrentResolution.Y;
+            //_graphics.ApplyChanges();
+            GameManager.UpdateScreenSize(_graphics);
 
             GameManager.Resources.Load(Content);
             GameManager.AddGameObject(new Player()); // Test code
             GameManager.Initialize(); // Initialize all the game stuffs
+
+            // Camera
+            camera = new();
 
             base.Initialize();
         }
@@ -43,16 +49,23 @@ namespace BulletManiac
                 Exit();
 
             GameManager.Update(gameTime); // Update all the game stuffs
+            camera.Update(_graphics.GraphicsDevice.Viewport);
+            camera.Follow(GameManager.FindGameObject("Player"));
 
             base.Update(gameTime);
+            // Teat Resolution change
+            //if (InputManager.MouseLeftClick)
+            //{
+            //    GameManager.CurrentResolutionIndex = ++GameManager.CurrentResolutionIndex % 4;
+            //    GameManager.UpdateScreenSize(_graphics);
+            //}
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            
             // SpriteBatch Begin settings make sure the texture sprite is clean when scale up
-            _spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp);
+            _spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: camera.Transform);
             GameManager.Draw(_spriteBatch, gameTime); // GameManager contains all the stuffs to draw
             _spriteBatch.End();
 

@@ -27,9 +27,9 @@ namespace BulletManiac.Tiled
 
         public void Update(GameTime gameTime)
         {
-            var x = InputManager.Direction;
-            x.Normalize();
-            offset += InputManager.Direction * 25f * GameManager.DeltaTime; // Test
+            //var x = InputManager.Direction;
+            //x.Normalize();
+            //offset += InputManager.Direction * 25f * GameManager.DeltaTime; // Test
         }
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)

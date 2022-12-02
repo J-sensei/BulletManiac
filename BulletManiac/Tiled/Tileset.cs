@@ -21,7 +21,7 @@ namespace BulletManiac.Tiled
         /// <summary>
         /// Each tile sprite cropped from the sprite sheet
         /// </summary>
-        private Texture2D[] tiles;
+        private Rectangle[] bounds;
 
         public Point TileSize
         {
@@ -37,10 +37,9 @@ namespace BulletManiac.Tiled
             spriteSheet = GameManager.Resources.LoadTextureRaw(tilesetData.ImagePath);
 
             // Calculate the bounds of each image
-            tiles = new Texture2D[tilesetData.TileCount];
-
+            bounds = new Rectangle[tilesetData.TileCount];
             int row = 1; // start as first row
-            for(int i = 0; i < tiles.Length; i++)
+            for(int i = 0; i < bounds.Length; i++)
             {
                 // Each the end of the column, increment the row to next row
                 if (i % tilesetData.Columns == 0 && i != 0)
@@ -48,9 +47,7 @@ namespace BulletManiac.Tiled
                     row++;
                 }
                 Rectangle bound = new Rectangle((i % tilesetData.Columns) * tilesetData.TileWidth, (row - 1) * tilesetData.TileHeight, tilesetData.TileWidth, tilesetData.TileHeight);
-
-                // crop the tiles
-                tiles[i] = Extensions.CropTexture2D(spriteSheet, bound);
+                bounds[i] = bound;
             }
         }
 
@@ -63,7 +60,8 @@ namespace BulletManiac.Tiled
         {
             // Prevent accessing array out of bound
             if (id <= 0 || id > tilesetData.TileCount) return null;
-            return tiles[id - 1];
+            //return tiles[id - 1];
+            return Extensions.CropTexture2D(spriteSheet, bounds[id - 1]);
         }
     }
 }

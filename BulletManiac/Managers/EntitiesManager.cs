@@ -68,6 +68,7 @@ namespace BulletManiac.Managers
             foreach (var gameObject in objectQueue)
             {
                 runningObjects.Add(gameObject);
+                gameObject.Initialize(); // Called the initalize after new game object is added into the list
             }
             objectQueue.Clear();
 
