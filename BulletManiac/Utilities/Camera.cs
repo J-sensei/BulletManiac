@@ -66,14 +66,11 @@ namespace BulletManiac.Utilities
             float yUp = Position.Y - Bounds.Height * 0.5f;
             float yDown = Position.Y + Bounds.Height * 0.5f;
             //Console.WriteLine("xLeft: " + xLeft + " xRight: " + xRight + " yUp: " + yUp + " yDown: " + yDown);
-
             Vector2 pos = Position;
-
             if (xLeft < minX) pos.X = minX + Bounds.Width * 0.5f;
             if (xRight > maxX) pos.X = maxX - Bounds.Width * 0.5f;
             if (yUp < minY) pos.Y = minY + Bounds.Height * 0.5f;
             if (yDown > maxY) pos.Y = maxY - Bounds.Height * 0.5f;
-
             Position = pos;
 
             // Update the matrix to make camera move
@@ -86,7 +83,6 @@ namespace BulletManiac.Utilities
 
         public void MoveCamera(Vector2 movePosition)
         {
-            Console.WriteLine(Position);
             Vector2 pos;
 
             // Test If Statament
@@ -99,7 +95,8 @@ namespace BulletManiac.Utilities
                 Vector2 newPosition = Position + movePosition;
                 pos = newPosition;
             }
-            Position = pos;
+
+            Position = Vector2.Lerp(Position, pos, 5f * GameManager.DeltaTime);
         }
 
         public void AdjustZoom(float zoomAmount)
