@@ -57,9 +57,9 @@ namespace BulletManiac.Utilities
         {
             // Constraint the camera to move (TEST)
             float minX = 0f;
-            float maxX = 2000f;
+            float maxX = 1280f * 2f;
             float minY = 0f;
-            float maxY = 1000f;
+            float maxY = 720f * 2f;
 
             float xLeft = Position.X - Bounds.Width * 0.5f;
             float xRight = Position.X + Bounds.Width * 0.5f;
@@ -71,14 +71,48 @@ namespace BulletManiac.Utilities
             if (xRight > maxX) pos.X = maxX - Bounds.Width * 0.5f;
             if (yUp < minY) pos.Y = minY + Bounds.Height * 0.5f;
             if (yDown > maxY) pos.Y = maxY - Bounds.Height * 0.5f;
+
             Position = pos;
 
+            // Apply Shake
+            if (InputManager.MouseLeftClick && shakeViewport == false)
+            {
+                shakeViewport = true;
+            }
+            Shake();
             // Update the matrix to make camera move
             Matrix position = Matrix.CreateTranslation(new Vector3(-Position.X, -Position.Y, 0));
             Matrix zoom = Matrix.CreateScale(Zoom);
             Matrix offset = Matrix.CreateTranslation(new Vector3(Bounds.Width * 0.5f, Bounds.Height * 0.5f, 0));
             Transform = position * zoom * offset;
             UpdateVisibleArea();
+        }
+
+        bool shakeViewport = false;
+        float shakeStartAngle = 0;
+        float shakeRadius = 3.5f;
+        float shakeTime = 0.15f;
+        float currentShakeTime =0.15f;
+        private void Shake()
+        {
+            Vector2 offset = new Vector2(0, 0);
+            Random rand = new Random();
+            if (shakeViewport)
+            {
+                Console.WriteLine("Radius: " + shakeRadius + " Time: " + shakeTime);
+                offset = new Vector2((float)(Math.Sin(shakeStartAngle) * shakeRadius), (float)(Math.Cos(shakeStartAngle) * shakeRadius));
+                shakeRadius -= 0.25f;
+                shakeStartAngle += (150 + rand.Next(60));
+                currentShakeTime -= GameManager.DeltaTime;
+
+                if (currentShakeTime <= 0 || shakeRadius <= 0)
+                {
+                    shakeViewport = false;
+                    shakeRadius = 3.5f;
+                    currentShakeTime = shakeTime;
+                }
+            }
+            Position += offset;
         }
 
         public void MoveCamera(Vector2 movePosition)

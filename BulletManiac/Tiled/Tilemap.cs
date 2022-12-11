@@ -12,6 +12,8 @@ namespace BulletManiac.Tiled
         private readonly TilesetRender tilesetRender;
         private readonly Layer[] layers;
 
+        public Rectangle Bound { get; private set; }
+
         public Tilemap(Tileset tileset, TilemapData tilemapData)
         {
             tileset = GameManager.Resources.FindTileset(tilemapData.TileSources[0].Source);
@@ -23,6 +25,9 @@ namespace BulletManiac.Tiled
             {
                 layers[i] = new Layer(tilesetRender, tilemapData.Layers[i]);
             }
+
+            //Bound = new Rectangle(0, 0, layers[0]., Bound.Height);
+            Console.WriteLine(layers[0].Size);
         }
 
         public void Update(GameTime gameTime)
@@ -106,6 +111,15 @@ namespace BulletManiac.Tiled
         private Tile[,] tiles; // Tiles to render
         private TilesetRender tilesetRender;
         private Point tileSize;
+
+        public Rectangle Size {
+            get
+            {
+                Vector2 initialTile = tiles[0, 0].Position;
+                Vector2 lastTile = tiles[tiles.GetLength(0) - 1, tiles.GetLength(1) - 1].Position;
+                return new Rectangle((int)initialTile.X, (int)initialTile.Y, (int)(lastTile.X - initialTile.X), (int)(lastTile.Y - initialTile.Y));
+            } 
+        }
 
         public Layer(TilesetRender tilesetRender, TilemapLayer layer)
         {

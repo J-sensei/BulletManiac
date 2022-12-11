@@ -51,6 +51,7 @@ namespace BulletManiac.Entity.Player
 
         public override void Update(GameTime gameTime)
         {
+            //Console.WriteLine(Position);
             // Player movement
             if (InputManager.Moving)
             {
