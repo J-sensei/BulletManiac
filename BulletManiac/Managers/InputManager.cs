@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Linq;
 
 namespace BulletManiac.Managers
 {
@@ -28,6 +29,16 @@ namespace BulletManiac.Managers
         public static bool MouseScrollDown { get; private set; }
         private static float currentMouseWheel, previousMouseWheel;
 
+        // Array of keys, used to check if certain key is press once
+        private static int[] keyCodes;
+        private static bool[] keyPress;
+        public static void Initialize()
+        {
+            // Initialize the key from the Keys enum
+            keyCodes = Enum.GetValues(typeof(Keys)).Cast<int>().ToArray();
+            keyPress = new bool[keyCodes.Length];
+        }
+
         public static void Update(GameTime gameTime)
         {
             // Direction update based on the kaybord events
@@ -42,6 +53,23 @@ namespace BulletManiac.Managers
                 if (keyboardState.IsKeyDown(Keys.W)) direction.Y--;
                 if (keyboardState.IsKeyDown(Keys.S)) direction.Y++;
             }
+
+            // Update the keys press
+            currentKeyboardState = keyboardState;
+
+            for(int i = 0; i < keyCodes.Length; i++)
+            {
+                if (currentKeyboardState.IsKeyDown((Keys)keyCodes[i]) && lastKeyboardState.IsKeyUp((Keys)keyCodes[i]))
+                {
+                    keyPress[i] = true;
+                }
+                else
+                {
+                    keyPress[i] = false;
+                }
+            }
+
+            lastKeyboardState = currentKeyboardState;
 
             // Mouse Update
             MouseState mouseState = Mouse.GetState();
@@ -73,17 +101,8 @@ namespace BulletManiac.Managers
         /// <returns></returns>
         public static bool GetKey(Keys key)
         {
-            currentKeyboardState = Keyboard.GetState();
-            if (currentKeyboardState.IsKeyDown(key) && lastKeyboardState.IsKeyUp(key))
-            {
-                lastKeyboardState = currentKeyboardState;
-                return true;
-            }
-            else
-            {
-                lastKeyboardState = currentKeyboardState;
-                return false;
-            }
+            int index = Array.FindIndex(keyCodes, x => x == (int)key); // Get the index based on the keycode given
+            return keyPress[index]; // Get if the key is press
         }
     }
 }

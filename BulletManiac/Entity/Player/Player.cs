@@ -9,14 +9,15 @@ namespace BulletManiac.Entity.Player
     {
         AnimationManager animationManager;
 
-        float moveSpeed = 50f;
+        float moveSpeed = 75f;
         float animationSpeed = 0.08f;
         public Player()
         {
             name = "Player";
             position = new Vector2(0, 0);
             animationManager = new AnimationManager();
-            scale = new Vector2(.7f, .7f);
+            scale = new Vector2(1f);
+            origin = new Vector2(16f, 16f);
 
             // Load player sprites
             GameManager.Resources.LoadTexture("Player_Down", "Test/TopDownCharacter/Character_Down");
@@ -41,9 +42,9 @@ namespace BulletManiac.Entity.Player
 
         protected override Rectangle CalculateBound()
         {
-            Vector2 pos = position - origin;
-            return new Rectangle((int)pos.X, (int)pos.Y, (int)(texture.Width * scale.X), (int)(texture.Height * scale.Y));
-            //return Rectangle.Empty;
+            float x = 1.75f;
+            Vector2 pos = position - origin / x;
+            return new Rectangle((int)pos.X, (int)pos.Y, (int)(texture.Width / x), (int)(texture.Height / x));
         }
 
         public override void Initialize()

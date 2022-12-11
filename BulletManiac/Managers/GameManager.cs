@@ -12,7 +12,7 @@ namespace BulletManiac.Managers
 {
     public static class GameManager
     {
-        public static bool Debug = true;
+        public static bool Debug = false;
         public static GraphicsDevice GraphicsDevice;
         private static List<Point> ResolutionList = new List<Point>()
         {
@@ -26,10 +26,6 @@ namespace BulletManiac.Managers
         //    1.5f, 3f, 6f, 12f
         //};
         private static List<float> ScaleList = new List<float>()
-        {
-            0.5f, 1f, 2f, 4f
-        };
-        private static List<float> SpeedScaleList = new List<float>()
         {
             0.5f, 1f, 2f, 4f
         };
@@ -51,7 +47,6 @@ namespace BulletManiac.Managers
         }
 
         public static float CurrentGameScale { get { return ScaleList[CurrentResolutionIndex]; } }
-        public static float CurrentSpeedScale { get { return SpeedScaleList[CurrentResolutionIndex]; } }
         public static float CurrentCameraZoom { get { return GameZoomLevelList[CurrentResolutionIndex]; } }
 
         public static ResourcesManager Resources = new();
@@ -71,7 +66,7 @@ namespace BulletManiac.Managers
             graphics.PreferredBackBufferHeight = CurrentResolution.Y;
             graphics.ApplyChanges();
 
-            Console.WriteLine("Camera Zoom: " + CurrentCameraZoom + " , Index: " + CurrentResolutionIndex);
+            // Console.WriteLine("Camera Zoom: " + CurrentCameraZoom + " , Index: " + CurrentResolutionIndex);
             MainCamera.AdjustZoom(CurrentCameraZoom);
 
             ScreenSize = CurrentResolution;
@@ -113,6 +108,7 @@ namespace BulletManiac.Managers
             //map = new Tilemap(Resources.FindTileset("CosmicLilac_Tiles"));
             //Tileset t = new();
             //t.Load(Resources.FindXml("Test"));
+            InputManager.Initialize();
             entitiesManager.Initialize();
         }
 

@@ -1,6 +1,7 @@
 ﻿using BulletManiac.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace BulletManiac.Entity
 {
@@ -93,12 +94,11 @@ namespace BulletManiac.Entity
 
         public virtual void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            spriteBatch.Draw(texture, position, null, Color.White, rotation, origin, scale, SpriteEffects.None, 0f);
-
             if (GameManager.Debug)
             {
                 spriteBatch.Draw(debugBox, Bound, Color.White);
             }
+            spriteBatch.Draw(texture, position, null, Color.White, rotation, origin, scale, SpriteEffects.None, 0f);
         }
 
         public static void Destroy(GameObject gameObject)

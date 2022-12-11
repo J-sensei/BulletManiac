@@ -56,6 +56,7 @@ namespace BulletManiac
             camera.Follow(GameManager.FindGameObject("Player"));
 
             base.Update(gameTime);
+
             // Teat Resolution change
             if (InputManager.GetKey(Keys.P))
             {
