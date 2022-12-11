@@ -87,7 +87,7 @@ namespace BulletManiac.Entity
 
         public virtual void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            spriteBatch.Draw(texture, position, null, Color.White, rotation, origin, scale * GameManager.CurrentGameScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(texture, position, null, Color.White, rotation, origin, scale, SpriteEffects.None, 0f);
         }
 
         public static void Destroy(GameObject gameObject)

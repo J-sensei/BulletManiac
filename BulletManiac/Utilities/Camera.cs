@@ -4,10 +4,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BulletManiac.Utilities
 {
@@ -28,7 +24,7 @@ namespace BulletManiac.Utilities
         public float Zoom { get; set; }
         public Vector2 Position { get; set; }
 
-        private float currentMouseWheelValue, previousMouseWheelValue, zoom, previousZoom;
+        private float zoom, previousZoom;
         public Camera()
         {
             Zoom = 1f;
@@ -55,24 +51,24 @@ namespace BulletManiac.Utilities
 
         private void UpdateMatrix()
         {
-            // Constraint the camera to move (TEST)
-            float minX = 0f;
-            float maxX = 1280f * 2f;
-            float minY = 0f;
-            float maxY = 720f * 2f;
+            //// Constraint the camera to move (TEST)
+            //float minX = 0f;
+            //float maxX = 1280f * 2f;
+            //float minY = 0f;
+            //float maxY = 720f * 2f;
 
-            float xLeft = Position.X - Bounds.Width * 0.5f;
-            float xRight = Position.X + Bounds.Width * 0.5f;
-            float yUp = Position.Y - Bounds.Height * 0.5f;
-            float yDown = Position.Y + Bounds.Height * 0.5f;
-            //Console.WriteLine("xLeft: " + xLeft + " xRight: " + xRight + " yUp: " + yUp + " yDown: " + yDown);
-            Vector2 pos = Position;
-            if (xLeft < minX) pos.X = minX + Bounds.Width * 0.5f;
-            if (xRight > maxX) pos.X = maxX - Bounds.Width * 0.5f;
-            if (yUp < minY) pos.Y = minY + Bounds.Height * 0.5f;
-            if (yDown > maxY) pos.Y = maxY - Bounds.Height * 0.5f;
+            //float xLeft = Position.X - Bounds.Width * 0.5f;
+            //float xRight = Position.X + Bounds.Width * 0.5f;
+            //float yUp = Position.Y - Bounds.Height * 0.5f;
+            //float yDown = Position.Y + Bounds.Height * 0.5f;
+            ////Console.WriteLine("xLeft: " + xLeft + " xRight: " + xRight + " yUp: " + yUp + " yDown: " + yDown);
+            //Vector2 pos = Position;
+            //if (xLeft < minX) pos.X = minX + Bounds.Width * 0.5f;
+            //if (xRight > maxX) pos.X = maxX - Bounds.Width * 0.5f;
+            //if (yUp < minY) pos.Y = minY + Bounds.Height * 0.5f;
+            //if (yDown > maxY) pos.Y = maxY - Bounds.Height * 0.5f;
 
-            Position = pos;
+            //Position = pos;
 
             // Apply Shake
             if (InputManager.MouseLeftClick && shakeViewport == false)
@@ -135,15 +131,15 @@ namespace BulletManiac.Utilities
 
         public void AdjustZoom(float zoomAmount)
         {
-            Zoom += zoomAmount;
-            if (Zoom < .35f)
-            {
-                Zoom = .35f;
-            }
-            if (Zoom > 2f)
-            {
-                Zoom = 2f;
-            }
+            Zoom = zoomAmount;
+            //if (Zoom < .35f)
+            //{
+            //    Zoom = .35f;
+            //}
+            //if (Zoom > 5f)
+            //{
+            //    Zoom = 5f;
+            //}
         }
         Vector2 followPosition;
         public void Follow(GameObject target)
@@ -208,27 +204,24 @@ namespace BulletManiac.Utilities
                 cameraMovement.X = moveSpeed;
             }
 
-            previousMouseWheelValue = currentMouseWheelValue;
-            currentMouseWheelValue = Mouse.GetState().ScrollWheelValue;
-
-            if (currentMouseWheelValue > previousMouseWheelValue)
+            if (InputManager.MouseScrollUp)
             {
-                AdjustZoom(.05f);
+                AdjustZoom(zoom += .05f);
                 Console.WriteLine(moveSpeed);
             }
 
-            if (currentMouseWheelValue < previousMouseWheelValue)
+            if (InputManager.MouseScrollDown)
             {
-                AdjustZoom(-.05f);
+                AdjustZoom(zoom -= .05f);
                 Console.WriteLine(moveSpeed);
             }
 
+            // Debug for camera zoom
             previousZoom = zoom;
             zoom = Zoom;
             if (previousZoom != zoom)
             {
                 Console.WriteLine(zoom);
-
             }
 
             MoveCamera(cameraMovement);

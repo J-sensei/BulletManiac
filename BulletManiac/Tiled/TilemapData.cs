@@ -1,5 +1,8 @@
 ﻿namespace BulletManiac.Tiled
 {
+    /// <summary>
+    /// Use to load custom tile map data file from the content
+    /// </summary>
     public class TilemapData
     {
         public TilesetSource[] TileSources { get; set; }

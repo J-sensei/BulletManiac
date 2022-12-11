@@ -159,6 +159,28 @@
 /processorParam:TextureFormat=Color
 /build:Test/TopDownCharacter/Character_UpRight.png
 
+#begin Tiled/CosmicLilac_Tiles.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Tiled/CosmicLilac_Tiles.png
+
+#begin Tiled/Level0.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Tiled/Level0.tmx
+
+#begin Tiled/Tileset1.tsx
+/importer:TiledMapTilesetImporter
+/processor:TiledMapTilesetProcessor
+/build:Tiled/Tileset1.tsx
+
 #begin Tilemap/Cosmic_Test.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
