@@ -160,28 +160,31 @@ namespace BulletManiac.Utilities
             UpdateMatrix();
 
             Vector2 cameraMovement = Vector2.Zero;
-            int moveSpeed;
+            //int moveSpeed;
 
-            if (Zoom > .8f)
-            {
-                moveSpeed = 15;
-            }
-            else if (Zoom < .8f && Zoom >= .6f)
-            {
-                moveSpeed = 20;
-            }
-            else if (Zoom < .6f && Zoom > .35f)
-            {
-                moveSpeed = 25;
-            }
-            else if (Zoom <= .35f)
-            {
-                moveSpeed = 30;
-            }
-            else
-            {
-                moveSpeed = 10;
-            }
+            //if (Zoom > .8f)
+            //{
+            //    moveSpeed = 15;
+            //}
+            //else if (Zoom < .8f && Zoom >= .6f)
+            //{
+            //    moveSpeed = 20;
+            //}
+            //else if (Zoom < .6f && Zoom > .35f)
+            //{
+            //    moveSpeed = 25;
+            //}
+            //else if (Zoom <= .35f)
+            //{
+            //    moveSpeed = 30;
+            //}
+            //else
+            //{
+            //    moveSpeed = 10;
+            //}
+
+            // Test Code
+            int moveSpeed = 0;
 
 
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
@@ -224,6 +227,7 @@ namespace BulletManiac.Utilities
                 Console.WriteLine(zoom);
             }
 
+            // NEED TO OPTIMISE - as camera movement is not using when follow target is assigned
             MoveCamera(cameraMovement);
         }
     }

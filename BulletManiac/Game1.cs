@@ -29,6 +29,7 @@ namespace BulletManiac
             // Camera
             camera = new();
             GameManager.MainCamera = camera;
+            GameManager.GraphicsDevice = _graphics.GraphicsDevice;
 
             GameManager.Resources.Load(Content);
             GameManager.AddGameObject(new Player()); // Test code

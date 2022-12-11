@@ -3,6 +3,7 @@ using BulletManiac.Tiled;
 using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Tiled.Renderers;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,8 @@ namespace BulletManiac.Managers
 {
     public static class GameManager
     {
+        public static bool Debug = true;
+        public static GraphicsDevice GraphicsDevice;
         private static List<Point> ResolutionList = new List<Point>()
         {
             new Point(320, 180), // Scale 2
@@ -122,6 +125,9 @@ namespace BulletManiac.Managers
             //Resources.FindTilemap("Dungeon_Test_32x32").Update(gameTime);
             TiledMapRenderer.Update(gameTime);
             entitiesManager.Update(gameTime);
+
+            // Update debug status
+            if (InputManager.GetKey(Keys.F12)) Debug = !Debug;
         }
 
         public static void Draw(SpriteBatch spriteBatch, GameTime gameTime)
