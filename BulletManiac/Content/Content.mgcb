@@ -11,6 +11,7 @@
 #-------------------------------- References --------------------------------#
 
 /reference:..\bin\Debug\net6.0\BulletManiac.dll
+/reference:C:\Users\Jsliew\.nuget\packages\monogame.extended.content.pipeline\3.9.0-alpha0084\tools\MonoGame.Extended.Content.Pipeline.dll
 
 #---------------------------------- Content ---------------------------------#
 
