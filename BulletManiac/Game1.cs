@@ -1,4 +1,5 @@
 ﻿using BulletManiac.Entity.Player;
+using BulletManiac.Entity.UI;
 using BulletManiac.Managers;
 using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
@@ -16,7 +17,7 @@ namespace BulletManiac
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = true; // Move is visible
+            IsMouseVisible = true; // Move is not visible
         }
 
         private Camera camera;
@@ -33,6 +34,7 @@ namespace BulletManiac
 
             GameManager.Resources.Load(Content);
             GameManager.AddGameObject(new Player(new Vector2(5f))); // Test code
+            GameManager.AddGameObjectUI(new Cursor());
 
             var p = new Player(new Vector2(45f));
             p.move = false;
@@ -75,6 +77,11 @@ namespace BulletManiac
             // SpriteBatch Begin settings make sure the texture sprite is clean when scale up
             _spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: camera.Transform);
             GameManager.Draw(_spriteBatch, gameTime); // GameManager contains all the stuffs to draw
+            _spriteBatch.End();
+
+            // Render the game UI without affect by the Camera
+            _spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp);
+            GameManager.DrawUI(_spriteBatch, gameTime);
             _spriteBatch.End();
 
             base.Draw(gameTime);

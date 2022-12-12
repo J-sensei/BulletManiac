@@ -93,6 +93,11 @@ namespace BulletManiac.Entity
             {
                 spriteBatch.Draw(debugBox, Bound, Color.White);
             }
+            if (texture == null)
+            {
+                Console.WriteLine(Name);
+                return;
+            }
             spriteBatch.Draw(texture, position, null, Color.White, rotation, origin, scale, SpriteEffects.None, 0f);
         }
 

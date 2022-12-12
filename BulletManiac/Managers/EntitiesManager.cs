@@ -22,6 +22,8 @@ namespace BulletManiac.Managers
         /// Game objects waiting to be add into the current list
         /// </summary>
         private readonly List<GameObject> objectQueue = new List<GameObject>();
+        private readonly List<GameObject> uiObjects = new();
+        private readonly List<GameObject> uiObjectsQueue = new();
 
         private bool updating;
 
@@ -48,9 +50,25 @@ namespace BulletManiac.Managers
             }
         }
 
+        public void AddUIObject(GameObject gameObject)
+        {
+            if (updating)
+            {
+                uiObjectsQueue.Add(gameObject);
+            }
+            else
+            {
+                uiObjects.Add(gameObject);
+            }
+        }
+
         public void Initialize()
         {
             foreach (var gameObj in runningObjects)
+            {
+                gameObj.Initialize();
+            }
+            foreach (var gameObj in uiObjects)
             {
                 gameObj.Initialize();
             }
@@ -63,6 +81,10 @@ namespace BulletManiac.Managers
             {
                 gameObj.Update(gameTime);
             }
+            foreach(var gameObj in uiObjects)
+            {
+                gameObj.Update(gameTime);
+            }
             updating = false;
 
             foreach (var gameObject in objectQueue)
@@ -70,7 +92,13 @@ namespace BulletManiac.Managers
                 runningObjects.Add(gameObject);
                 gameObject.Initialize(); // Called the initalize after new game object is added into the list
             }
+            foreach (var gameObject in uiObjectsQueue)
+            {
+                uiObjects.Add(gameObject);
+                gameObject.Initialize();
+            }
             objectQueue.Clear();
+            uiObjectsQueue.Clear();
 
             var destroyObjects = runningObjects.Where(x => x.IsDestroyed).ToList();
 
@@ -83,6 +111,14 @@ namespace BulletManiac.Managers
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             foreach (var gameObj in runningObjects)
+            {
+                gameObj.Draw(spriteBatch, gameTime);
+            }
+        }
+
+        public void DrawUI(SpriteBatch spriteBatch, GameTime gameTime)
+        {
+            foreach(var gameObj in uiObjects)
             {
                 gameObj.Draw(spriteBatch, gameTime);
             }

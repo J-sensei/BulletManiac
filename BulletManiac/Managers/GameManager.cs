@@ -78,6 +78,10 @@ namespace BulletManiac.Managers
         {
             entitiesManager.Add(gameObject);
         }
+        public static void AddGameObjectUI(GameObject gameObject)
+        {
+            entitiesManager.AddUIObject(gameObject);
+        }
 
         public static GameObject FindGameObject(string name)
         {
@@ -134,6 +138,10 @@ namespace BulletManiac.Managers
             //Resources.FindTilemap("Test").Draw(spriteBatch, gameTime); // Test draw tilemap
             TiledMapRenderer.Draw(MainCamera.Transform);
             entitiesManager.Draw(spriteBatch, gameTime);       
+        }
+        public static void DrawUI(SpriteBatch spriteBatch, GameTime gameTime)
+        {
+            entitiesManager.DrawUI(spriteBatch, gameTime);
         }
     }
 }
