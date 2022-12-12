@@ -53,19 +53,14 @@ namespace BulletManiac.Entity
         /// Determine whether the game object need to delete from the game
         /// </summary>
         private bool destroyed = false;
+        protected SpriteEffects spriteEffects = SpriteEffects.None;
         #endregion
 
         #region Properties
         /// <summary>
         /// Rectangle bound of the game object
         /// </summary>
-        public Rectangle Bound
-        {
-            get
-            {
-                return CalculateBound();
-            }
-        }
+        public Rectangle Bound { get { return CalculateBound(); } }
         /// <summary>
         /// Is the game object destroyed already?
         /// </summary>
@@ -78,6 +73,32 @@ namespace BulletManiac.Entity
         /// Current position of the game object
         /// </summary>
         public Vector2 Position { get { return position; } }
+        public float Rotation { 
+            get 
+            {
+                // Atan2 is expensive, so only calculate when needed
+                if (directionChange)
+                {
+                    rotation = MathF.Atan2(direction.Y, direction.X);
+                    directionChange = false;
+                }
+                return rotation;
+            } 
+        }
+        public Vector2 Direction
+        {
+            get => direction;
+            set
+            {
+                direction = value;
+                // We ALWAYS normalize direction
+                direction.Normalize();
+
+                // Also, when direction is changed, we flag it
+                // to ensure rotation is recalculated.
+                directionChange = true;
+            }
+        }
         #endregion
         
         public delegate void OnDestroy();
@@ -114,7 +135,7 @@ namespace BulletManiac.Entity
                 GameManager.Log("Game Object", "\"" + Name + "\"" + " Texture is null, skipping to draw it");
                 return;
             }
-            spriteBatch.Draw(texture, position, null, Color.White, rotation, origin, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(texture, position, null, Color.White, Rotation, origin, scale, spriteEffects, 0f);
         }
 
         /// <summary>

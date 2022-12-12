@@ -26,6 +26,8 @@ namespace BulletManiac.Entity
             } 
         }
 
+        private bool active = true;
+
         /// <summary>
         /// Add new set of animation with the action key defined
         /// </summary>
@@ -48,7 +50,11 @@ namespace BulletManiac.Entity
             if (animations.ContainsKey(key))
             {
                 animations[key].Start();
-                animations[key].Update(gameTime);
+
+                if (active)
+                    animations[key].Update(gameTime);
+                else
+                    animations[key].Reset();
                 lastKey = key;
             }
             else // otherwise always refer to the last key to call the animation
@@ -57,5 +63,8 @@ namespace BulletManiac.Entity
                 animations[lastKey].Reset();
             }
         }
+
+        public void Start() => active = true;
+        public void Stop() => active = false;
     }
 }

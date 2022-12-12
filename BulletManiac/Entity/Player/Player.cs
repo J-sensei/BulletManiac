@@ -8,10 +8,14 @@ namespace BulletManiac.Entity.Player
 {
     public class Player : GameObject
     {
+
         private AnimationManager animationManager; // Manange the animation based on certain action
+        private Vector2 cursorDirection;
 
         float moveSpeed = 100f;
         float animationSpeed = 0.08f;
+
+        private Gun gun;
 
         public bool move = true; // test
         public Player(Vector2 position)
@@ -21,6 +25,8 @@ namespace BulletManiac.Entity.Player
             animationManager = new AnimationManager();
             scale = new Vector2(1f); // Scale of the player
             origin = new Vector2(16f); // Origin (Half of the sprite size)
+
+            gun = new Gun();
 
             // Load player sprites
             GameManager.Resources.LoadTexture("Player_Down", "Test/TopDownCharacter/Character_Down");
@@ -33,6 +39,7 @@ namespace BulletManiac.Entity.Player
             GameManager.Resources.LoadTexture("Player_UpRight", "Test/TopDownCharacter/Character_UpRight");
 
             // Define the keys and animations
+            animationManager.AddAnimation(new Vector2(0, 0), new Animation(GameManager.Resources.FindTexture("Player_Down"), 4, 1, animationSpeed));
             animationManager.AddAnimation(new Vector2(0, 1), new Animation(GameManager.Resources.FindTexture("Player_Down"), 4, 1, animationSpeed));
             animationManager.AddAnimation(new Vector2(-1, 0), new Animation(GameManager.Resources.FindTexture("Player_Left"), 4, 1, animationSpeed));
             animationManager.AddAnimation(new Vector2(1, 0), new Animation(GameManager.Resources.FindTexture("Player_Right"), 4, 1, animationSpeed));
@@ -57,6 +64,7 @@ namespace BulletManiac.Entity.Player
         {
             CollisionManager.Add(this, Position.ToString()); // Testing Collision
             base.Initialize();
+            gun.Initialize();
         }
 
         public override void Update(GameTime gameTime)
@@ -66,16 +74,53 @@ namespace BulletManiac.Entity.Player
             if (InputManager.Moving && move)
             {
                 position += Vector2.Normalize(InputManager.Direction) * moveSpeed * GameManager.DeltaTime;
+                animationManager.Start();
+            }
+            else
+            {
+                animationManager.Stop();
             }
 
+            UpdateCursorDirection();
+
+            gun.Follow(this, new Vector2(0f, 0f));
             // Update the animations
-            animationManager.Update(InputManager.Direction, gameTime);
+            animationManager.Update(cursorDirection, gameTime);
             texture = animationManager.CurrentAnimation.CurrentTexture; // Update the texture based on the animation
             base.Update(gameTime);
+            gun.Update(gameTime);
+        }
+
+        public void UpdateCursorDirection()
+        {
+            Vector2 halfScreen = GameManager.CurrentResolution.ToVector2() / 2f;
+            Vector2 mousePos = InputManager.MousePosition;
+            cursorDirection = Vector2.Zero;
+            float offset = 25f * GameManager.CurrentCameraZoom;
+            if(mousePos.X < halfScreen.X - offset)
+            {
+                cursorDirection.X = -1;
+            }
+            else if(mousePos.X > halfScreen.X + offset)
+            {
+                cursorDirection.X = 1;
+            }
+
+            if (mousePos.Y < halfScreen.Y - offset / 2f)
+            {
+                cursorDirection.Y = -1;
+            }
+            else if (mousePos.Y > halfScreen.Y + offset / 2f)
+            {
+                cursorDirection.Y = 1;
+            }
+            // Console.WriteLine(halfScreen + " | " + mousePos + " | " + cursorDirection);
+            //Console.WriteLine(mousePos + " | " + cursorDirection);
         }
 
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
+            gun.Draw(spriteBatch, gameTime);
             base.Draw(spriteBatch, gameTime);
             //animationManager.CurrentAnimation.Draw(spriteBatch, position, Color.White, 0f, origin, new Vector2(3f, 3f), SpriteEffects.None, 0f);
         }

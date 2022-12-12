@@ -31,11 +31,12 @@ namespace BulletManiac.Entity.UI
             Rectangle cropBound = new Rectangle(0, 32, 16, 16); // Get the target sprite from the spritesheet
             texture = Extensions.CropTexture2D(spriteSheet, cropBound);
             origin = texture.Bounds.Center.ToVector2();
-            scale = new Vector2(6f); // Larger scale for the cursor
+            scale = Vector2.One * GameManager.CurrentCameraZoom; // Larger scale for the cursor
         }
 
         public override void Update(GameTime gameTime)
         {
+            scale = Vector2.One * GameManager.CurrentCameraZoom;
             position = InputManager.MousePosition;
 
             base.Update(gameTime);

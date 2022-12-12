@@ -90,10 +90,10 @@ namespace BulletManiac.Managers
         /// <param name="path"></param>
         public void LoadTexture(string name, string path)
         {
-            Texture2D texture = contentManager.Load<Texture2D>(path);
             // If same texture is loaded, no need to add again into the Dictionary
             if (!Textures.ContainsKey(name))
             {
+                Texture2D texture = contentManager.Load<Texture2D>(path);
                 Textures.Add(name, texture);
             }
             else

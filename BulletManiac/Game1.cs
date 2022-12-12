@@ -27,9 +27,10 @@ namespace BulletManiac
             // Test code 
             GameManager.AddGameObjectUI(new Cursor()); // Add the game cursor
             GameManager.AddGameObject(new Player(new Vector2(5f))); // Add player
-            var p = new Player(new Vector2(45f)); // Add another player to test with the collision
-            p.move = false;
-            GameManager.AddGameObject(p);
+            //var p = new Player(new Vector2(45f)); // Add another player to test with the collision
+            //p.move = false;
+            //GameManager.AddGameObject(p);
+            // GameManager.AddGameObject(new Gun());
 
             // Initialize objects
             GameManager.Initialize();
