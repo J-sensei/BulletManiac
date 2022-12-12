@@ -39,8 +39,7 @@ namespace BulletManiac.Collision
                 // calling OnCollision
                 if (go1.GameObject.IsDestroyed)
                 {
-                    if(GameManager.Debug)
-                        Console.WriteLine($"{collidables[i].GameObject.Name} is DESTROYED, skipping.");
+                    GameManager.Log("Collision Manager", $"{ collidables[i].GameObject.Name} is DESTROYED, skipping.");
                     continue;
                 }
 
@@ -53,13 +52,7 @@ namespace BulletManiac.Collision
 
                     if (IsCollided_AABB(go1, go2))
                     {
-                        if (GameManager.Debug)
-                            Console.WriteLine(go1.GameObject.Name + " and " + go2.GameObject.Name + " COLLIDED");
-
-                        //if(go1.GameObject.CollisionAction != null)
-                        //    go1.GameObject.CollisionAction.Invoke(go2.GameObject);
-                        //if (go2.GameObject.CollisionAction != null)
-                        //    go2.GameObject.CollisionAction.Invoke(go1.GameObject);
+                        GameManager.Log("Collision Manager", go1.GameObject.Name + " and " + go2.GameObject.Name + " is COLLIDING");
 
                         go1.GameObject.CollisionEvent(go2.GameObject);
                         go2.GameObject.CollisionEvent(go1.GameObject);
@@ -80,8 +73,8 @@ namespace BulletManiac.Collision
             {
                 if (collidables[i].GameObject.IsDestroyed)
                 {
-                    if (GameManager.Debug)
-                        Console.WriteLine($"Deleting {collidables[i].GameObject.Name} from collision manager.");
+                    GameManager.Log("Collision Manager", $"Deleting {collidables[i].GameObject.Name} from collision manager.");
+
                     collidables[i].Dispose();
                     collidables.RemoveAt(i);
                 }

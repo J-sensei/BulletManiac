@@ -225,7 +225,7 @@ namespace BulletManiac.Utilities
             zoom = Zoom;
             if (previousZoom != zoom)
             {
-                Console.WriteLine(zoom);
+                GameManager.Log("Camera", "Current zoom is " + zoom + ".");
             }
 
             // NEED TO OPTIMISE - as camera movement is not using when follow target is assigned

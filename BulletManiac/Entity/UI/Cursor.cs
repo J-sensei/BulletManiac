@@ -3,10 +3,6 @@ using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BulletManiac.Entity.UI
 {
@@ -24,8 +20,8 @@ namespace BulletManiac.Entity.UI
 
         protected override Rectangle CalculateBound()
         {
-            Vector2 pos = position - origin;
-            return new Rectangle((int)pos.X, (int)pos.Y, texture.Width, texture.Height);
+            Vector2 pos = position - (origin * scale / 2f);
+            return new Rectangle((int)pos.X, (int)pos.Y, (int)(texture.Width * scale.X / 2f), (int)(texture.Height * scale.Y / 2f));
         }
 
         public override void Initialize()

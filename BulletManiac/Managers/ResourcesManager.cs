@@ -12,57 +12,12 @@ namespace BulletManiac.Managers
     /// </summary>
     public class ResourcesManager
     {
-        private ContentManager contentManager;
-        private readonly Dictionary<string, Texture2D> Textures = new();
+        #region Legacy
         /// <summary>
         /// Tileset generated when loading tileset data
         /// </summary>
         private readonly Dictionary<string, Tileset> Tilesets = new();
         private readonly Dictionary<string, Tilemap> Tilemaps = new();
-
-        /// <summary>
-        /// Store Tiled Map (Monogame Extended) data 
-        /// </summary>
-        private readonly Dictionary<string, TiledMap> TiledMaps = new();
-
-        public void Load(ContentManager contentManager)
-        {
-            this.contentManager = contentManager;
-        }
-
-        public void Add(string name, Texture2D texture)
-        {
-            Textures.Add(name, texture);
-        }
-
-        /// <summary>
-        /// Load the texture by specify the name and path using content manager
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="path"></param>
-        public void LoadTexture(string name, string path)
-        {
-            Texture2D texture = contentManager.Load<Texture2D>(path);
-            //Add(name, texture);
-            if (!Textures.ContainsKey(name))
-            {
-                Textures.Add(name, texture);
-            }
-            else
-            {
-                Console.WriteLine("[Resources Manager] Duplicate name '" + name + "' is failed to add into Texture resources.");
-            }
-        }
-        /// <summary>
-        /// Load the texture directly from the content manager
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public Texture2D LoadTextureRaw(string path)
-        {
-            return contentManager.Load<Texture2D>(path);
-        }
-
         public void LoadTileset(string path)
         {
             TilesetData data = contentManager.Load<TilesetData>(path);
@@ -94,6 +49,68 @@ namespace BulletManiac.Managers
                 Console.WriteLine("[Resources Manager] Duplicate name '" + name + "' is failed to add into Tilemap resources.");
             }
         }
+        public Tileset FindTileset(string name)
+        {
+            return Tilesets[name];
+        }
+
+        public Tilemap FindTilemap(string name)
+        {
+            return Tilemaps[name];
+        }
+        #endregion
+
+        /// <summary>
+        /// Content Manager helps to load the XNB content build by the MGCB
+        /// </summary>
+        private ContentManager contentManager;
+
+        /// <summary>
+        /// Textures bank, store texture need to use in the game
+        /// </summary>
+        private readonly Dictionary<string, Texture2D> Textures = new();
+        /// <summary>
+        /// Store Tiled Map (Monogame Extended) data 
+        /// </summary>
+        private readonly Dictionary<string, TiledMap> TiledMaps = new();
+
+        /// <summary>
+        /// Initialize the content manager
+        /// </summary>
+        /// <param name="contentManager"></param>
+        public void Load(ContentManager contentManager)
+        {
+            this.contentManager = contentManager;
+        }
+
+        /// <summary>
+        /// Load the texture by specify the name and path using content manager
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="path"></param>
+        public void LoadTexture(string name, string path)
+        {
+            Texture2D texture = contentManager.Load<Texture2D>(path);
+            // If same texture is loaded, no need to add again into the Dictionary
+            if (!Textures.ContainsKey(name))
+            {
+                Textures.Add(name, texture);
+            }
+            else
+            {
+                GameManager.Log("Resources Manager", "Duplicate name '" + name + "' is failed to add into Texture resources.");
+            }
+        }
+
+        /// <summary>
+        /// Load the texture directly from the content manager
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public Texture2D LoadTextureRaw(string path)
+        {
+            return contentManager.Load<Texture2D>(path);
+        }
 
         /// <summary>
         /// Load Tiled Map (Monogame Extended)
@@ -109,10 +126,16 @@ namespace BulletManiac.Managers
             }
             else
             {
-                Console.WriteLine("[Resources Manager] Duplicate name '" + name + "' is failed to add into TiledMap resources.");
+                GameManager.Log("Resources Manager", "Duplicate name '" + name + "' is failed to add into TiledMap resources.");
             }
         }
 
+        /// <summary>
+        /// Find and get the texture by the name in the Dictionary
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        /// <exception cref="NullReferenceException"></exception>
         public Texture2D FindTexture(string name)
         {
             if (Textures[name] != null)
@@ -125,24 +148,19 @@ namespace BulletManiac.Managers
             }
         }
 
-        public void RemoveTexture(string name)
-        {
-            Textures.Remove(name);
-        }
-
-        public Tileset FindTileset(string name)
-        {
-            return Tilesets[name];
-        }
-
-        public Tilemap FindTilemap(string name)
-        {
-            return Tilemaps[name];
-        }
-
+        /// <summary>
+        /// Find the Tiled Map
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public TiledMap FindTiledMap(string name)
         {
             return TiledMaps[name];
+        }
+
+        public void RemoveTexture(string name)
+        {
+            Textures.Remove(name);
         }
     }
 }

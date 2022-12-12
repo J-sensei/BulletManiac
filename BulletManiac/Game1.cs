@@ -1,7 +1,6 @@
 ﻿using BulletManiac.Entity.Player;
 using BulletManiac.Entity.UI;
 using BulletManiac.Managers;
-using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -17,32 +16,24 @@ namespace BulletManiac
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = true; // Move is not visible
+            IsMouseVisible = false;
         }
 
-        private Camera camera;
         protected override void Initialize()
         {
-            // Pass in content manager to the resources manager to make sure it will load the resources after initialization
-            //_graphics.PreferredBackBufferWidth = (int)GameManager.CurrentResolution.X;
-            //_graphics.PreferredBackBufferHeight = (int)GameManager.CurrentResolution.Y;
-            //_graphics.ApplyChanges();
-            // Camera
-            camera = new();
-            GameManager.MainCamera = camera;
-            GameManager.GraphicsDevice = _graphics.GraphicsDevice;
+            GameManager.GraphicsDevice = _graphics.GraphicsDevice; // Initialize the Graphics Device in the Game Manager first
+            GameManager.Resources.Load(Content); // Initialize the Resource Manager
 
-            GameManager.Resources.Load(Content);
-            GameManager.AddGameObject(new Player(new Vector2(5f))); // Test code
-            GameManager.AddGameObjectUI(new Cursor());
-
-            var p = new Player(new Vector2(45f));
+            // Test code 
+            GameManager.AddGameObjectUI(new Cursor()); // Add the game cursor
+            GameManager.AddGameObject(new Player(new Vector2(5f))); // Add player
+            var p = new Player(new Vector2(45f)); // Add another player to test with the collision
             p.move = false;
-            GameManager.AddGameObject(p); // Test code
+            GameManager.AddGameObject(p);
 
-            GameManager.InitializeTileRenderer(_graphics.GraphicsDevice); // Init tile rendere first
-            GameManager.Initialize(); // Initialize all the game stuffs
-            GameManager.UpdateScreenSize(_graphics);
+            // Initialize objects
+            GameManager.Initialize();
+            GameManager.UpdateScreenSize(_graphics); // Update the default resolution
 
             base.Initialize();
         }
@@ -58,9 +49,6 @@ namespace BulletManiac
                 Exit();
 
             GameManager.Update(gameTime); // Update all the game stuffs
-            camera.Update(_graphics.GraphicsDevice.Viewport);
-            camera.Follow(GameManager.FindGameObject("Player"));
-
             base.Update(gameTime);
 
             // Teat Resolution change
@@ -69,13 +57,16 @@ namespace BulletManiac
                 GameManager.CurrentResolutionIndex = ++GameManager.CurrentResolutionIndex % 4;
                 GameManager.UpdateScreenSize(_graphics);
             }
+
+            IsMouseVisible = GameManager.Debug;
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.CornflowerBlue); // Default screen clear color
+
             // SpriteBatch Begin settings make sure the texture sprite is clean when scale up
-            _spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: camera.Transform);
+            _spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: GameManager.MainCamera.Transform);
             GameManager.Draw(_spriteBatch, gameTime); // GameManager contains all the stuffs to draw
             _spriteBatch.End();
 
