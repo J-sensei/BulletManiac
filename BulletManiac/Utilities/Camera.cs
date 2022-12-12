@@ -86,7 +86,8 @@ namespace BulletManiac.Utilities
 
         bool shakeViewport = false;
         float shakeStartAngle = 0;
-        float shakeRadius = 3.5f;
+        const float shakeRadiusInit = 1f;
+        float shakeRadius = shakeRadiusInit;
         float shakeTime = 0.15f;
         float currentShakeTime =0.15f;
         private void Shake()
@@ -104,7 +105,7 @@ namespace BulletManiac.Utilities
                 if (currentShakeTime <= 0 || shakeRadius <= 0)
                 {
                     shakeViewport = false;
-                    shakeRadius = 3.5f;
+                    shakeRadius = shakeRadiusInit;
                     currentShakeTime = shakeTime;
                 }
             }
