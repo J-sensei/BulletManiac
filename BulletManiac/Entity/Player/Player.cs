@@ -1,4 +1,5 @@
-﻿using BulletManiac.Managers;
+﻿using BulletManiac.Collision;
+using BulletManiac.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -9,12 +10,14 @@ namespace BulletManiac.Entity.Player
     {
         AnimationManager animationManager;
 
-        float moveSpeed = 75f;
+        float moveSpeed = 100f;
         float animationSpeed = 0.08f;
-        public Player()
+
+        public bool move = true; // test
+        public Player(Vector2 position)
         {
             name = "Player";
-            position = new Vector2(0, 0);
+            this.position = position;
             animationManager = new AnimationManager();
             scale = new Vector2(1f);
             origin = new Vector2(16f, 16f);
@@ -49,6 +52,7 @@ namespace BulletManiac.Entity.Player
 
         public override void Initialize()
         {
+            CollisionManager.Add(this, Position.ToString()); // Testing Collision
             base.Initialize();
         }
 
@@ -56,7 +60,7 @@ namespace BulletManiac.Entity.Player
         {
             //Console.WriteLine(Position);
             // Player movement
-            if (InputManager.Moving)
+            if (InputManager.Moving && move)
             {
                 position += Vector2.Normalize(InputManager.Direction) * moveSpeed * GameManager.DeltaTime;
             }
@@ -71,6 +75,11 @@ namespace BulletManiac.Entity.Player
         {
             base.Draw(spriteBatch, gameTime);
             //animationManager.CurrentAnimation.Draw(spriteBatch, position, Color.White, 0f, origin, new Vector2(3f, 3f), SpriteEffects.None, 0f);
+        }
+
+        public override void CollisionEvent(GameObject gameObject)
+        {
+            
         }
     }
 }

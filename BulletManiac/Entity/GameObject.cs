@@ -68,13 +68,8 @@ namespace BulletManiac.Entity
         public string Name { get { return name; } }
         public Vector2 Position { get { return position; } }
         #endregion
-
-        public delegate void OnCollision(GameObject gameObject);
+        
         public delegate void OnDestroy();
-        /// <summary>
-        /// Action to happens when this object collide with other object
-        /// </summary>
-        public OnCollision CollisionAction;
         public OnDestroy DestroyAction;
 
         public GameObject(string name = DEFAULT_NAME)
@@ -103,7 +98,19 @@ namespace BulletManiac.Entity
 
         public static void Destroy(GameObject gameObject)
         {
-            gameObject.destroyed = true;
+            if(gameObject.DestroyAction != null)
+                gameObject.DestroyAction.Invoke(); // Invoke any destroy action
+
+            gameObject.destroyed = true; // Entities Manager will take care of this after destroy is set to true
+        }
+
+        /// <summary>
+        /// Trigger when collide with other game object
+        /// </summary>
+        /// <param name="other"></param>
+        public virtual void CollisionEvent(GameObject other)
+        {
+
         }
     }
 }

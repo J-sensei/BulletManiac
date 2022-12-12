@@ -32,7 +32,11 @@ namespace BulletManiac
             GameManager.GraphicsDevice = _graphics.GraphicsDevice;
 
             GameManager.Resources.Load(Content);
-            GameManager.AddGameObject(new Player()); // Test code
+            GameManager.AddGameObject(new Player(new Vector2(5f))); // Test code
+
+            var p = new Player(new Vector2(45f));
+            p.move = false;
+            GameManager.AddGameObject(p); // Test code
 
             GameManager.InitializeTileRenderer(_graphics.GraphicsDevice); // Init tile rendere first
             GameManager.Initialize(); // Initialize all the game stuffs

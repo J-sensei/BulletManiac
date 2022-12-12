@@ -43,7 +43,15 @@ namespace BulletManiac.Managers
         public void LoadTexture(string name, string path)
         {
             Texture2D texture = contentManager.Load<Texture2D>(path);
-            Add(name, texture);
+            //Add(name, texture);
+            if (!Textures.ContainsKey(name))
+            {
+                Textures.Add(name, texture);
+            }
+            else
+            {
+                Console.WriteLine("[Resources Manager] Duplicate name '" + name + "' is failed to add into Texture resources.");
+            }
         }
         /// <summary>
         /// Load the texture directly from the content manager

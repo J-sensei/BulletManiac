@@ -1,4 +1,5 @@
-﻿using BulletManiac.Entity;
+﻿using BulletManiac.Collision;
+using BulletManiac.Entity;
 using BulletManiac.Tiled;
 using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
@@ -121,6 +122,7 @@ namespace BulletManiac.Managers
             //Resources.FindTilemap("Dungeon_Test_32x32").Update(gameTime);
             TiledMapRenderer.Update(gameTime);
             entitiesManager.Update(gameTime);
+            CollisionManager.Update(gameTime);
 
             // Update debug status
             if (InputManager.GetKey(Keys.F12)) Debug = !Debug;
