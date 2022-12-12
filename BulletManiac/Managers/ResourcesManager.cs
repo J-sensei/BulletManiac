@@ -1,12 +1,9 @@
 ﻿using BulletManiac.Tiled;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Tiled;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 
 namespace BulletManiac.Managers
 {
@@ -22,6 +19,11 @@ namespace BulletManiac.Managers
         /// </summary>
         private readonly Dictionary<string, Tileset> Tilesets = new();
         private readonly Dictionary<string, Tilemap> Tilemaps = new();
+
+        /// <summary>
+        /// Store Tiled Map (Monogame Extended) data 
+        /// </summary>
+        private readonly Dictionary<string, TiledMap> TiledMaps = new();
 
         public void Load(ContentManager contentManager)
         {
@@ -85,6 +87,24 @@ namespace BulletManiac.Managers
             }
         }
 
+        /// <summary>
+        /// Load Tiled Map (Monogame Extended)
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="path"></param>
+        public void LoadTiledMap(string name, string path)
+        {
+            if (!Tilemaps.ContainsKey(name))
+            {
+                TiledMap data = contentManager.Load<TiledMap>(path);
+                TiledMaps.Add(name, data);
+            }
+            else
+            {
+                Console.WriteLine("[Resources Manager] Duplicate name '" + name + "' is failed to add into TiledMap resources.");
+            }
+        }
+
         public Texture2D FindTexture(string name)
         {
             if (Textures[name] != null)
@@ -110,6 +130,11 @@ namespace BulletManiac.Managers
         public Tilemap FindTilemap(string name)
         {
             return Tilemaps[name];
+        }
+
+        public TiledMap FindTiledMap(string name)
+        {
+            return TiledMaps[name];
         }
     }
 }

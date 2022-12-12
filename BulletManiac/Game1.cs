@@ -26,14 +26,17 @@ namespace BulletManiac
             //_graphics.PreferredBackBufferWidth = (int)GameManager.CurrentResolution.X;
             //_graphics.PreferredBackBufferHeight = (int)GameManager.CurrentResolution.Y;
             //_graphics.ApplyChanges();
-            GameManager.UpdateScreenSize(_graphics);
+            // Camera
+            camera = new();
+            GameManager.MainCamera = camera;
+            GameManager.GraphicsDevice = _graphics.GraphicsDevice;
 
             GameManager.Resources.Load(Content);
             GameManager.AddGameObject(new Player()); // Test code
-            GameManager.Initialize(); // Initialize all the game stuffs
 
-            // Camera
-            camera = new();
+            GameManager.InitializeTileRenderer(_graphics.GraphicsDevice); // Init tile rendere first
+            GameManager.Initialize(); // Initialize all the game stuffs
+            GameManager.UpdateScreenSize(_graphics);
 
             base.Initialize();
         }
@@ -53,12 +56,13 @@ namespace BulletManiac
             camera.Follow(GameManager.FindGameObject("Player"));
 
             base.Update(gameTime);
+
             // Teat Resolution change
-            //if (InputManager.MouseLeftClick)
-            //{
-            //    GameManager.CurrentResolutionIndex = ++GameManager.CurrentResolutionIndex % 4;
-            //    GameManager.UpdateScreenSize(_graphics);
-            //}
+            if (InputManager.GetKey(Keys.P))
+            {
+                GameManager.CurrentResolutionIndex = ++GameManager.CurrentResolutionIndex % 4;
+                GameManager.UpdateScreenSize(_graphics);
+            }
         }
 
         protected override void Draw(GameTime gameTime)
