@@ -71,11 +71,11 @@ namespace BulletManiac.Utilities
             //Position = pos;
 
             // Apply Shake
-            if (InputManager.MouseLeftClick && shakeViewport == false)
-            {
-                shakeViewport = true;
-            }
-            Shake();
+            //if (InputManager.MouseLeftClick && shakeViewport == false)
+            //{
+            //    shakeViewport = true;
+            //}
+            UpdateShaking();
             // Update the matrix to make camera move
             Matrix position = Matrix.CreateTranslation(new Vector3(-Position.X, -Position.Y, 0));
             Matrix zoom = Matrix.CreateScale(Zoom);
@@ -90,13 +90,19 @@ namespace BulletManiac.Utilities
         float shakeRadius = shakeRadiusInit;
         float shakeTime = 0.15f;
         float currentShakeTime =0.15f;
-        private void Shake()
+
+        public void Shake()
+        {
+            shakeViewport = true;
+        }
+
+        private void UpdateShaking()
         {
             Vector2 offset = new Vector2(0, 0);
             Random rand = new Random();
             if (shakeViewport)
             {
-                Console.WriteLine("Radius: " + shakeRadius + " Time: " + shakeTime);
+                //Console.WriteLine("Radius: " + shakeRadius + " Time: " + shakeTime);
                 offset = new Vector2((float)(Math.Sin(shakeStartAngle) * shakeRadius), (float)(Math.Cos(shakeStartAngle) * shakeRadius));
                 shakeRadius -= 0.25f;
                 shakeStartAngle += (150 + rand.Next(60));

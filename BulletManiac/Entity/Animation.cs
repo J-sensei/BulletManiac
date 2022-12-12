@@ -2,6 +2,7 @@
 using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 
 namespace BulletManiac.Entity
@@ -30,6 +31,8 @@ namespace BulletManiac.Entity
         /// Switch the animation on / off
         /// </summary>
         private bool active = true;
+        private bool looping;
+
         /// <summary>
         /// Cropped textures based on the bounds data
         /// </summary>
@@ -46,6 +49,11 @@ namespace BulletManiac.Entity
         }
 
         /// <summary>
+        /// Animation finish playing
+        /// </summary>
+        public bool Finish { get; private set; }
+
+        /// <summary>
         /// Takes the texture, number of frames (X and Y), time between frames and which row of the sprite to animate
         /// </summary>
         /// <param name="texture"></param>
@@ -53,12 +61,13 @@ namespace BulletManiac.Entity
         /// <param name="frameCountY"></param>
         /// <param name="frameTime"></param>
         /// <param name="row"></param>
-        public Animation(Texture2D texture, int frameCountX, int frameCountY, float frameTime, int row = 1)
+        public Animation(Texture2D texture, int frameCountX, int frameCountY, float frameTime, int row = 1, bool looping = true)
         {
             this.texture = texture;
             this.frameCount = frameCountX;
             this.frameTime = frameTime;
             frameTimeLeft = frameTime;
+            this.looping = looping;
 
             // Calculate rectangle bounds of each frame
             var width = texture.Width / frameCountX;
@@ -85,8 +94,27 @@ namespace BulletManiac.Entity
 
             if(frameTimeLeft <= 0)
             {
-                frameTimeLeft = frameTime; // reset the frame time
-                currentFrame = (currentFrame + 1) % frameCount; // move to next frame
+                if (looping)
+                {
+                    frameTimeLeft = frameTime; // reset the frame time
+                    currentFrame = (currentFrame + 1) % frameCount; // move to next frame
+                    Finish = false;
+                }
+                else
+                {
+                    // Console.WriteLine(currentFrame + " " + frameCount);
+                    if(currentFrame < frameCount - 1)
+                    {
+                        frameTimeLeft = frameTime; // reset the frame time
+
+                        currentFrame++;// move to next frame
+                        Finish = false;
+                    }
+                    else
+                    {
+                        Finish = true;
+                    }
+                }
             }
         }
 
@@ -120,6 +148,7 @@ namespace BulletManiac.Entity
         {
             currentFrame = 0;
             frameTimeLeft = frameTime;
+            Finish = false;
         }
     }
 }

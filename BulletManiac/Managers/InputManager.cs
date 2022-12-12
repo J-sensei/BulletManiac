@@ -25,6 +25,8 @@ namespace BulletManiac.Managers
         public static Vector2 MousePosition { get; private set; }
         public static bool MouseLeftClick { get; private set; }
         public static bool MouseRightClick { get; private set; }
+        public static bool MouseLeftHold { get; private set; }
+        public static bool MouseRightHold { get; private set; }
         public static bool MouseScrollUp { get; private set; }
         public static bool MouseScrollDown { get; private set; }
         private static float currentMouseWheel, previousMouseWheel;
@@ -32,11 +34,13 @@ namespace BulletManiac.Managers
         // Array of keys, used to check if certain key is press once
         private static int[] keyCodes;
         private static bool[] keyPress;
+        private static bool[] keyDown;
         public static void Initialize()
         {
             // Initialize the key from the Keys enum
             keyCodes = Enum.GetValues(typeof(Keys)).Cast<int>().ToArray();
             keyPress = new bool[keyCodes.Length];
+            keyDown = new bool[keyCodes.Length];
         }
 
         public static void Update(GameTime gameTime)
@@ -67,6 +71,15 @@ namespace BulletManiac.Managers
                 {
                     keyPress[i] = false;
                 }
+
+                if (currentKeyboardState.IsKeyDown((Keys)keyCodes[i]))
+                {
+                    keyDown[i] = true;
+                }
+                else
+                {
+                    keyDown[i] = false;
+                }
             }
 
             lastKeyboardState = currentKeyboardState;
@@ -76,6 +89,8 @@ namespace BulletManiac.Managers
             MousePosition = mouseState.Position.ToVector2(); // Position Update
             MouseLeftClick = mouseState.LeftButton == ButtonState.Pressed && lastMouseState.LeftButton == ButtonState.Released; // The boolean will only register once
             MouseRightClick = mouseState.RightButton == ButtonState.Pressed && lastMouseState.RightButton == ButtonState.Released;
+            MouseLeftHold = mouseState.LeftButton == ButtonState.Pressed;
+            MouseRightHold = mouseState.RightButton == ButtonState.Pressed;
 
             previousMouseWheel = currentMouseWheel;
             currentMouseWheel = mouseState.ScrollWheelValue;
@@ -103,6 +118,12 @@ namespace BulletManiac.Managers
         {
             int index = Array.FindIndex(keyCodes, x => x == (int)key); // Get the index based on the keycode given
             return keyPress[index]; // Get if the key is press
+        }
+
+        public static bool GetKeyDown(Keys key)
+        {
+            int index = Array.FindIndex(keyCodes, x => x == (int)key); // Get the index based on the keycode given
+            return keyDown[index]; // Get if the key is press
         }
     }
 }

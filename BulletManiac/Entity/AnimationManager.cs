@@ -39,6 +39,11 @@ namespace BulletManiac.Entity
             lastKey ??= key; // Initialize the last key
         }
 
+        public Animation GetAnimation(object key)
+        {
+            return animations[key];
+        }
+
         /// <summary>
         /// Update the animation based on the key given
         /// </summary>
