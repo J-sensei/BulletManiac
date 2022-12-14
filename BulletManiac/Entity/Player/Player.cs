@@ -152,8 +152,16 @@ namespace BulletManiac.Entity.Player
 
         protected override Rectangle CalculateBound()
         {
-            Vector2 pos = position - (origin * scale / 1.1f);
-            return new Rectangle((int)pos.X, (int)pos.Y, (int)(texture.Width * scale.X / 1.25f), (int)(texture.Height * scale.Y));
+            if(spriteEffects == SpriteEffects.None)
+            {
+                Vector2 pos = position - (origin * scale / 1.1f);
+                return new Rectangle((int)pos.X, (int)pos.Y, (int)(texture.Width * scale.X / 1.25f), (int)(texture.Height * scale.Y));
+            }
+            else
+            {
+                Vector2 pos = position - (origin * scale / 1.1f) + new Vector2(2f, 0f);
+                return new Rectangle((int)pos.X, (int)pos.Y, (int)(texture.Width * scale.X / 1.25f), (int)(texture.Height * scale.Y));
+            }
         }
 
         public override void Initialize()
@@ -201,6 +209,12 @@ namespace BulletManiac.Entity.Player
                 shooting = true;
                 currentAction = PlayerAction.Throw;
                 GameManager.MainCamera.Shake();
+
+                // Spawn Bullet
+                Console.WriteLine(InputManager.MousePosition + " " + position);
+                Vector2 bulletDirection = Vector2.Normalize(position - InputManager.MousePosition);
+                Bullet bullet = new Bullet(position, bulletDirection, 100f);
+                GameManager.AddGameObject(bullet);
             }
         }
 
