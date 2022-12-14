@@ -53,6 +53,9 @@ namespace BulletManiac.Entity
         /// Determine whether the game object need to delete from the game
         /// </summary>
         private bool destroyed = false;
+        /// <summary>
+        /// Flip horizontally or vertically the texture sprite
+        /// </summary>
         protected SpriteEffects spriteEffects = SpriteEffects.None;
         #endregion
 

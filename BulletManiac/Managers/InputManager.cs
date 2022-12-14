@@ -48,21 +48,20 @@ namespace BulletManiac.Managers
             // Direction update based on the kaybord events
             direction = Vector2.Zero;
 
-            KeyboardState keyboardState = Keyboard.GetState();
-            if(keyboardState.GetPressedKeyCount() > 0)
+            currentKeyboardState = Keyboard.GetState();
+            if(currentKeyboardState.GetPressedKeyCount() > 0)
             {
                 // Increment / decrement based on the input
-                if (keyboardState.IsKeyDown(Keys.A)) direction.X--;
-                if (keyboardState.IsKeyDown(Keys.D)) direction.X++;
-                if (keyboardState.IsKeyDown(Keys.W)) direction.Y--;
-                if (keyboardState.IsKeyDown(Keys.S)) direction.Y++;
+                if (currentKeyboardState.IsKeyDown(Keys.A)) direction.X--;
+                if (currentKeyboardState.IsKeyDown(Keys.D)) direction.X++;
+                if (currentKeyboardState.IsKeyDown(Keys.W)) direction.Y--;
+                if (currentKeyboardState.IsKeyDown(Keys.S)) direction.Y++;
             }
 
-            // Update the keys press
-            currentKeyboardState = keyboardState;
-
-            for(int i = 0; i < keyCodes.Length; i++)
+            // Update Keys
+            for (int i = 0; i < keyCodes.Length; i++)
             {
+                // Key Press
                 if (currentKeyboardState.IsKeyDown((Keys)keyCodes[i]) && lastKeyboardState.IsKeyUp((Keys)keyCodes[i]))
                 {
                     keyPress[i] = true;
@@ -72,6 +71,7 @@ namespace BulletManiac.Managers
                     keyPress[i] = false;
                 }
 
+                // Key Press Down
                 if (currentKeyboardState.IsKeyDown((Keys)keyCodes[i]))
                 {
                     keyDown[i] = true;
@@ -87,6 +87,8 @@ namespace BulletManiac.Managers
             // Mouse Update
             MouseState mouseState = Mouse.GetState();
             MousePosition = mouseState.Position.ToVector2(); // Position Update
+
+            // Mouse Button Update
             MouseLeftClick = mouseState.LeftButton == ButtonState.Pressed && lastMouseState.LeftButton == ButtonState.Released; // The boolean will only register once
             MouseRightClick = mouseState.RightButton == ButtonState.Pressed && lastMouseState.RightButton == ButtonState.Released;
             MouseLeftHold = mouseState.LeftButton == ButtonState.Pressed;
@@ -95,6 +97,7 @@ namespace BulletManiac.Managers
             previousMouseWheel = currentMouseWheel;
             currentMouseWheel = mouseState.ScrollWheelValue;
 
+            // Mouse Scroll Update
             MouseScrollUp = MouseScrollDown = false;
             if (currentMouseWheel > previousMouseWheel)
             {

@@ -26,16 +26,20 @@ namespace BulletManiac.Entity.Player
         public override void Initialize()
         {
             GameManager.Resources.LoadTexture("Test Bullet", "SpriteSheet/Bullet/Test_Bullets_16x16");
-            Rectangle b = new Rectangle(0, 0, 16, 16);
+            Rectangle b = new Rectangle(0, 16, 16, 16);
             texture = Extensions.CropTexture2D(GameManager.Resources.FindTexture("Test Bullet"), b);
-            origin = new Vector2(16f);
+            origin = new Vector2(8f);
+            scale = new Vector2(0.5f);
             base.Initialize();
         }
 
         protected override Rectangle CalculateBound()
         {
-            Vector2 pos = position - origin;
-            return new Rectangle((int)pos.X, (int)pos.Y, texture.Width, texture.Height);
+            //Vector2 pos = position - origin;
+            //return new Rectangle((int)pos.X, (int)pos.Y, texture.Width, texture.Height);
+
+            Vector2 pos = position - (origin * scale / 1.1f);
+            return new Rectangle((int)pos.X, (int)pos.Y, (int)(texture.Width * scale.X / 1.25f), (int)(texture.Height * scale.Y));
         }
 
         public override void Update(GameTime gameTime)

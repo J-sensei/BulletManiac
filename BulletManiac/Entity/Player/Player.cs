@@ -1,5 +1,6 @@
 ﻿using BulletManiac.Collision;
 using BulletManiac.Managers;
+using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -133,6 +134,7 @@ namespace BulletManiac.Entity.Player
 
         float moveSpeed = 100f;
         float animationSpeed = 0.1f;
+        float runAnimationSpeed = 0.1f;
         float attackAnimationSpeed = 0.1f;
         float shootSpeed = 1f;
 
@@ -154,7 +156,7 @@ namespace BulletManiac.Entity.Player
         {
             if(spriteEffects == SpriteEffects.None)
             {
-                Vector2 pos = position - (origin * scale / 1.1f);
+                Vector2 pos = position - (origin * scale / 1.1f) + new Vector2(2f, 0f); ;
                 return new Rectangle((int)pos.X, (int)pos.Y, (int)(texture.Width * scale.X / 1.25f), (int)(texture.Height * scale.Y));
             }
             else
@@ -178,7 +180,7 @@ namespace BulletManiac.Entity.Player
 
             // Define the keys and animations
             animationManager.AddAnimation(PlayerAction.Idle, new Animation(GameManager.Resources.FindTexture("Player_Idle"), 4, 1, animationSpeed));
-            animationManager.AddAnimation(PlayerAction.Run, new Animation(GameManager.Resources.FindTexture("Player_Run"), 6, 1, animationSpeed));
+            animationManager.AddAnimation(PlayerAction.Run, new Animation(GameManager.Resources.FindTexture("Player_Run"), 6, 1, runAnimationSpeed));
             animationManager.AddAnimation(PlayerAction.Walk, new Animation(GameManager.Resources.FindTexture("Player_Walk"), 6, 1, animationSpeed));
             animationManager.AddAnimation(PlayerAction.Death, new Animation(GameManager.Resources.FindTexture("Player_Death"), 8, 1, animationSpeed));
             animationManager.AddAnimation(PlayerAction.Throw, new Animation(GameManager.Resources.FindTexture("Player_Throw"), 4, 1, attackAnimationSpeed * shootSpeed, looping: false));
@@ -211,16 +213,17 @@ namespace BulletManiac.Entity.Player
                 GameManager.MainCamera.Shake();
 
                 // Spawn Bullet
-                Console.WriteLine(InputManager.MousePosition + " " + position);
-                Vector2 bulletDirection = Vector2.Normalize(position - InputManager.MousePosition);
+                Vector2 mousePos = Camera.ScreenToWorld(InputManager.MousePosition); // Convert mouse screen position to the world position
+                Vector2 bulletDirection = mousePos - position;
+
                 Bullet bullet = new Bullet(position, bulletDirection, 100f);
-                GameManager.AddGameObject(bullet);
+                GameManager.AddGameObject(bullet); // Straight away add bullet to entity manager to run it
             }
         }
 
         private void PlayerMovement()
         {
-            if (shooting) return;
+            if (shooting) return; // No movement when player is shooting
             // Updating the speed
             if (InputManager.Moving && move)
             {
@@ -246,20 +249,40 @@ namespace BulletManiac.Entity.Player
                     currentAction = PlayerAction.Run;
                 }
 
-
-                // Flip sprite
-                if (InputManager.Direction.X > 0)
-                {
-                    spriteEffects = SpriteEffects.None;
-                }
-                else if (InputManager.Direction.X < 0)
-                {
-                    spriteEffects = SpriteEffects.FlipHorizontally;
-                }
+                // Flip sprite based on the key input
+                //Console.WriteLine(Position + " " + Camera.ScreenToWorld(InputManager.MousePosition));
+                //Vector2 mousePos = Camera.ScreenToWorld(InputManager.MousePosition);
+                ////if (InputManager.Direction.X > 0)
+                ////{
+                ////    spriteEffects = SpriteEffects.None;
+                ////}
+                ////else if (InputManager.Direction.X < 0)
+                ////{
+                ////    spriteEffects = SpriteEffects.FlipHorizontally;
+                ////}
+                //if (position.X > mousePos.X)
+                //{
+                //    spriteEffects = SpriteEffects.None;
+                //}
+                //else if (position.X < mousePos.X)
+                //{
+                //    spriteEffects = SpriteEffects.FlipHorizontally;
+                //}
             }
             else
             {
                 currentAction = PlayerAction.Idle;
+            }
+            
+            // Slip the sprite based on the mouse X position
+            Vector2 mousePos = Camera.ScreenToWorld(InputManager.MousePosition);
+            if (position.X <= mousePos.X)
+            {
+                spriteEffects = SpriteEffects.None;
+            }
+            else if (position.X > mousePos.X)
+            {
+                spriteEffects = SpriteEffects.FlipHorizontally;
             }
         }
 

@@ -122,10 +122,11 @@ namespace BulletManiac.Utilities
         {
             Vector2 pos;
 
+            UpdateMouseMove();
             // Test If Statament
             if (followPosition != Vector2.Zero)
             {
-                pos = followPosition;
+                pos = followPosition + offset;
             }
             else
             {
@@ -155,6 +156,42 @@ namespace BulletManiac.Utilities
             //Matrix offset = Matrix.CreateTranslation(GameManager.ScreenSize.X / 2, GameManager.ScreenSize.Y / 2, 0f);
             //Transform = position * offset;
             followPosition = new Vector2(target.Position.X + (target.Bound.Width / 2), target.Position.Y + (target.Bound.Height / 2));
+        }
+
+        /// <summary>
+        /// Test (USed for moving the camera based on the mouse position)
+        /// </summary>
+        Vector2 offset;
+        private void UpdateMouseMove()
+        {
+            Vector2 mousePos = InputManager.MousePosition;
+            Vector2 screenSize = GameManager.CurrentResolution.ToVector2() / 2f;
+            float amount = 350f;
+            offset = new Vector2(0f);
+            if (InputManager.GetKeyDown(Keys.LeftShift)) return; // Test
+
+            float x, y;
+            if(mousePos.X > screenSize.X)
+            {
+                x = amount;
+
+            }
+            else
+            {
+                x = -amount;
+            }
+
+            if (mousePos.Y > screenSize.Y)
+            {
+                y = amount;
+            }
+            else
+            {
+                y = -amount;
+            }
+
+            Vector2 target = new Vector2(x, y);
+            offset = Vector2.Lerp(offset, target, 2f * GameManager.DeltaTime);
         }
 
         /// <summary>
@@ -236,6 +273,17 @@ namespace BulletManiac.Utilities
 
             // NEED TO OPTIMISE - as camera movement is not using when follow target is assigned
             MoveCamera(cameraMovement);
+        }
+
+        /// <summary>
+        /// Convert on screen positon to the world position along with the entity
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
+        public static Vector2 ScreenToWorld(Vector2 position)
+        {
+            var matrix = Matrix.Invert(GameManager.MainCamera.Transform); // Inverted matrix from the main camera
+            return Vector2.Transform(position, matrix); // The world position
         }
     }
 }
