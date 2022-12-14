@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 
 namespace BulletManiac.Entity
@@ -39,6 +40,11 @@ namespace BulletManiac.Entity
             lastKey ??= key; // Initialize the last key
         }
 
+        /// <summary>
+        /// Get the animation object based on the key given
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public Animation GetAnimation(object key)
         {
             return animations[key];
@@ -60,6 +66,7 @@ namespace BulletManiac.Entity
                     animations[key].Update(gameTime);
                 else
                     animations[key].Reset();
+
                 lastKey = key;
             }
             else // otherwise always refer to the last key to call the animation

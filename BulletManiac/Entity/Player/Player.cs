@@ -141,8 +141,6 @@ namespace BulletManiac.Entity.Player
         private bool shooting = false;
 
         PlayerAction currentAction = PlayerAction.Idle;
-
-        public bool move = true; // test
         public Player(Vector2 position)
         {
             name = "Player";
@@ -223,58 +221,7 @@ namespace BulletManiac.Entity.Player
 
         private void PlayerMovement()
         {
-            if (shooting) return; // No movement when player is shooting
-            // Updating the speed
-            if (InputManager.Moving && move)
-            {
-                if (InputManager.GetKeyDown(Keys.LeftShift))
-                {
-                    position += Vector2.Normalize(InputManager.Direction) * (50f) * GameManager.DeltaTime;
-                }
-                else
-                {
-                    position += Vector2.Normalize(InputManager.Direction) * moveSpeed * GameManager.DeltaTime;
-                }
-            }
-
-            // Changing player action and sprite effect
-            if (InputManager.Moving && move)
-            {
-                if (InputManager.GetKeyDown(Keys.LeftShift))
-                {
-                    currentAction = PlayerAction.Walk;
-                }
-                else
-                {
-                    currentAction = PlayerAction.Run;
-                }
-
-                // Flip sprite based on the key input
-                //Console.WriteLine(Position + " " + Camera.ScreenToWorld(InputManager.MousePosition));
-                //Vector2 mousePos = Camera.ScreenToWorld(InputManager.MousePosition);
-                ////if (InputManager.Direction.X > 0)
-                ////{
-                ////    spriteEffects = SpriteEffects.None;
-                ////}
-                ////else if (InputManager.Direction.X < 0)
-                ////{
-                ////    spriteEffects = SpriteEffects.FlipHorizontally;
-                ////}
-                //if (position.X > mousePos.X)
-                //{
-                //    spriteEffects = SpriteEffects.None;
-                //}
-                //else if (position.X < mousePos.X)
-                //{
-                //    spriteEffects = SpriteEffects.FlipHorizontally;
-                //}
-            }
-            else
-            {
-                currentAction = PlayerAction.Idle;
-            }
-            
-            // Slip the sprite based on the mouse X position
+            // Flip the sprite based on the mouse X position
             Vector2 mousePos = Camera.ScreenToWorld(InputManager.MousePosition);
             if (position.X <= mousePos.X)
             {
@@ -283,6 +230,38 @@ namespace BulletManiac.Entity.Player
             else if (position.X > mousePos.X)
             {
                 spriteEffects = SpriteEffects.FlipHorizontally;
+            }
+
+            if (shooting) return; // No movement when player is shooting
+
+            // Updating the speed
+            if (InputManager.Moving)
+            {
+                if (InputManager.GetKeyDown(Keys.LeftShift))
+                {
+                    position += Vector2.Normalize(InputManager.Direction) * (50f) * GameManager.DeltaTime;
+                    currentAction = PlayerAction.Walk;
+                }
+                else
+                {
+                    position += Vector2.Normalize(InputManager.Direction) * moveSpeed * GameManager.DeltaTime;
+                    currentAction = PlayerAction.Run;
+                }
+
+                // Set animation reverse
+                if(spriteEffects == SpriteEffects.None && InputManager.Direction.X < 0 || 
+                   spriteEffects == SpriteEffects.FlipHorizontally && InputManager.Direction.X >= 0)
+                {
+                    animationManager.GetAnimation(PlayerAction.Run).SetReverse(true);
+                }
+                else
+                {
+                    animationManager.GetAnimation(PlayerAction.Run).SetReverse(false);
+                }
+            }
+            else
+            {
+                currentAction = PlayerAction.Idle; // Player is Idle when not moving
             }
         }
 

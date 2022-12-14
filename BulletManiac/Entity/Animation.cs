@@ -52,6 +52,10 @@ namespace BulletManiac.Entity
         /// Animation finish playing
         /// </summary>
         public bool Finish { get; private set; }
+        /// <summary>
+        /// Play the animation in reverse order
+        /// </summary>
+        public bool Reverse { get; private set; } = false;
 
         /// <summary>
         /// Takes the texture, number of frames (X and Y), time between frames and which row of the sprite to animate
@@ -96,25 +100,51 @@ namespace BulletManiac.Entity
             {
                 if (looping)
                 {
-                    frameTimeLeft = frameTime; // reset the frame time
-                    currentFrame = (currentFrame + 1) % frameCount; // move to next frame
-                    Finish = false;
+                    LoopingAnimation();
                 }
                 else
                 {
-                    // Console.WriteLine(currentFrame + " " + frameCount);
-                    if(currentFrame < frameCount - 1)
-                    {
-                        frameTimeLeft = frameTime; // reset the frame time
-
-                        currentFrame++;// move to next frame
-                        Finish = false;
-                    }
-                    else
-                    {
-                        Finish = true;
-                    }
+                    NonLoopingAnimation();
                 }
+            }
+        }
+
+        private void LoopingAnimation()
+        {
+            if (Reverse)
+            {
+                // Reverse animation frmae
+                if(currentFrame == 0)
+                {
+                    currentFrame = frameCount - 1;
+                }
+                else
+                {
+                    currentFrame--;
+                }
+            }
+            else
+            {
+                currentFrame = (currentFrame + 1) % frameCount; // move to next frame
+            }
+
+            frameTimeLeft = frameTime; // reset the frame time
+            Finish = false; // Looping animation will never finish
+        }
+
+        private void NonLoopingAnimation()
+        {
+            // Console.WriteLine(currentFrame + " " + frameCount);
+            if (currentFrame < frameCount - 1)
+            {
+                frameTimeLeft = frameTime; // reset the frame time
+
+                currentFrame++;// move to next frame
+                Finish = false;
+            }
+            else
+            {
+                Finish = true;
             }
         }
 
@@ -149,6 +179,28 @@ namespace BulletManiac.Entity
             currentFrame = 0;
             frameTimeLeft = frameTime;
             Finish = false;
+        }
+
+        /// <summary>
+        /// Set the animation reverse
+        /// </summary>
+        /// <param name="reverse"></param>
+        public void SetReverse(bool reverse)
+        {
+            if (Reverse != reverse) // Only set the reverse and reset the animation when the setting is different
+            {
+                Reverse = reverse;
+                Reset();
+
+                if (reverse)
+                {
+                    currentFrame = frameCount - 1;
+                }
+                else
+                {
+                    currentFrame = 0;
+                }
+            }
         }
     }
 }
