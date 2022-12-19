@@ -6,8 +6,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using BulletManiac.Tiled;
-using MonoGame.Extended.Tiled;
 
 namespace BulletManiac.Entity.Player
 {
@@ -128,6 +126,9 @@ namespace BulletManiac.Entity.Player
 
         //}
         #endregion
+        /// <summary>
+        /// Player actions, used to determine animation
+        /// </summary>
         enum PlayerAction
         {
             Idle, Run, Walk, Death, Throw
@@ -135,26 +136,39 @@ namespace BulletManiac.Entity.Player
 
         private AnimationManager animationManager; // Manange the animation based on certain action
 
+        // Player status
         float moveSpeed = 80f;
         float animationSpeed = 0.1f;
         float runAnimationSpeed = 0.1f;
-        float attackAnimationSpeed = 0.1f;
+        float attackAnimationSpeed = 0.01f; // Attach speed
         float shootSpeed = 1f;
 
-        private bool shooting = false;
+        // Accuracy
+        const float DEFAULT_ACCURACY = 0.25f;
+        float accuracy = DEFAULT_ACCURACY; // The lower the number, the better accuracy
 
-        PlayerAction currentAction = PlayerAction.Idle;
+        private bool shooting = false;
+        private PlayerAction currentAction = PlayerAction.Idle; // Current action of the player is doing
+
         public Player(Vector2 position)
         {
             name = "Player";
             this.position = position;
-            animationManager = new AnimationManager();
-            scale = new Vector2(0.7f); // Scale of the player
-            origin = new Vector2(16f); // Origin (Half of the sprite size)
+            animationManager = new AnimationManager(); // Using animation manager to handler different kind of animation
+            scale = new Vector2(0.65f); // Scale of the player
+            origin = new Vector2(16f); // Origin (Half of the sprite size) 32x32 / 2
+
+            // Define the keys and animations
+            animationManager.AddAnimation(PlayerAction.Idle, new Animation(GameManager.Resources.FindTexture("Player_Idle"), 4, 1, animationSpeed));
+            animationManager.AddAnimation(PlayerAction.Run, new Animation(GameManager.Resources.FindTexture("Player_Run"), 6, 1, runAnimationSpeed));
+            animationManager.AddAnimation(PlayerAction.Walk, new Animation(GameManager.Resources.FindTexture("Player_Walk"), 6, 1, animationSpeed));
+            animationManager.AddAnimation(PlayerAction.Death, new Animation(GameManager.Resources.FindTexture("Player_Death"), 8, 1, animationSpeed));
+            animationManager.AddAnimation(PlayerAction.Throw, new Animation(GameManager.Resources.FindTexture("Player_Throw"), 4, 1, attackAnimationSpeed * shootSpeed, looping: false));
         }
 
         protected override Rectangle CalculateBound()
         {
+            // Left and right sprite will have slightly different bound to create accurate bound detection
             if(spriteEffects == SpriteEffects.None)
             {
                 Vector2 pos = position - (origin * scale / 1.1f) + new Vector2(2f, 0f); ;
@@ -169,30 +183,16 @@ namespace BulletManiac.Entity.Player
 
         public override void Initialize()
         {
-            CollisionManager.Add(this, Position.ToString()); // Testing Collision
-
-            // Load player sprites
-            GameManager.Resources.LoadTexture("Player_Death", "SpriteSheet/Player/Owlet_Monster_Death_8");
-            GameManager.Resources.LoadTexture("Player_Idle", "SpriteSheet/Player/Owlet_Monster_Idle_4");
-            GameManager.Resources.LoadTexture("Player_Walk", "SpriteSheet/Player/Owlet_Monster_Walk_6");
-            GameManager.Resources.LoadTexture("Player_Run", "SpriteSheet/Player/Owlet_Monster_Run_6");
-            GameManager.Resources.LoadTexture("Player_Throw", "SpriteSheet/Player/Owlet_Monster_Throw_4");
-
-            // Define the keys and animations
-            animationManager.AddAnimation(PlayerAction.Idle, new Animation(GameManager.Resources.FindTexture("Player_Idle"), 4, 1, animationSpeed));
-            animationManager.AddAnimation(PlayerAction.Run, new Animation(GameManager.Resources.FindTexture("Player_Run"), 6, 1, runAnimationSpeed));
-            animationManager.AddAnimation(PlayerAction.Walk, new Animation(GameManager.Resources.FindTexture("Player_Walk"), 6, 1, animationSpeed));
-            animationManager.AddAnimation(PlayerAction.Death, new Animation(GameManager.Resources.FindTexture("Player_Death"), 8, 1, animationSpeed));
-            animationManager.AddAnimation(PlayerAction.Throw, new Animation(GameManager.Resources.FindTexture("Player_Throw"), 4, 1, attackAnimationSpeed * shootSpeed, looping: false));
+            CollisionManager.Add(this, Position.ToString()); // Add player into the collision manager
 
             base.Initialize();
         }
 
         public override void Update(GameTime gameTime)
         {
-            //MoveVector();
             PlayerMovement();
             PlayerAttack();
+
             // Update the animations
             animationManager.Update(currentAction, gameTime);
             texture = animationManager.CurrentAnimation.CurrentTexture; // Update the texture based on the animation
@@ -217,10 +217,15 @@ namespace BulletManiac.Entity.Player
                 // Spawn Bullet
                 Vector2 mousePos = Camera.ScreenToWorld(InputManager.MousePosition); // Convert mouse screen position to the world position
                 Vector2 bulletDirection = mousePos - position;
+                bulletDirection.Normalize();
+
+                // Random the based on the accuracy of the player
+                bulletDirection.X = Extensions.RandomRangeFloat(bulletDirection.X - accuracy, bulletDirection.X + accuracy);
+                bulletDirection.Y = Extensions.RandomRangeFloat(bulletDirection.Y - accuracy, bulletDirection.Y + accuracy);
 
                 // Fire Bullet
                 DefaultBullet bullet = new DefaultBullet(position, bulletDirection, 100f);
-                GameManager.AddGameObject(bullet); // Straight away add bullet to entity manager to run it
+                GameManager.AddGameObject(bullet); // Straight away add bullet to entity manager to run it immediately
             }
         }
 
@@ -244,152 +249,71 @@ namespace BulletManiac.Entity.Player
             {
                 float currentSpeed = 0f;
 
-                // Player moving backward, set animation reverse and make the player move slower
+                // Player moving backward, set animation reverse
                 if (spriteEffects == SpriteEffects.None && InputManager.Direction.X < 0 ||
                    spriteEffects == SpriteEffects.FlipHorizontally && InputManager.Direction.X > 0)
                 {
                     animationManager.GetAnimation(PlayerAction.Run).SetReverse(true);
-                    // currentSpeed = moveSpeed * 0.5f; // 50% slower if move backward
                 }
                 else
                 {
                     animationManager.GetAnimation(PlayerAction.Run).SetReverse(false);
-
                 }
-                currentSpeed = moveSpeed;
-                // Player move
-                if (InputManager.GetKeyDown(Keys.LeftShift))
+
+                // Player Move
+                if (InputManager.GetKeyDown(Keys.LeftShift)) // Player is walking, more accurate shooting
                 {
-                    // position += Vector2.Normalize(InputManager.Direction) * (50f) * GameManager.DeltaTime;
-                    currentSpeed = moveSpeed * 0.5f;
+                    currentSpeed = moveSpeed * 0.7f; // NEED TO CHANGE LATER
+                    accuracy = DEFAULT_ACCURACY * 0.2f; // NEED TO CHANGE LATER
                     currentAction = PlayerAction.Walk;
                 }
-                else
+                else // Player is running (Default), less accrate shooting
                 {
+                    currentSpeed = moveSpeed;
+                    accuracy = DEFAULT_ACCURACY;
                     currentAction = PlayerAction.Run;
                 }
-
-                //Vector2 moveAmount = Vector2.Normalize(InputManager.Direction) * currentSpeed * GameManager.DeltaTime;
-
-                //if (!Tile.Collision(position + moveAmount, 16))
-                //{
-                //    position += moveAmount;
-                //}
-
-                ApplyMove(InputManager.Direction, currentSpeed);
-
-                //Console.WriteLine(Bound + " " + Tile.GetTileBound(position + moveAmount, 16));
-                //if (!CollisionManager.IsCollided_AABB(Bound, Tile.GetTileBound(position + moveAmount, 16)))
-                //{
-                //    Console.WriteLine("Colliding with tile");
-                //    position += moveAmount;
-                //}
+                
+                ApplyMove(InputManager.Direction, currentSpeed); // Move the player and apply the collision to tiles
             }
             else
             {
                 currentAction = PlayerAction.Idle; // Player is Idle when not moving
             }
         }
-        
-        Tile leftTile = new Tile(0, 0, 16, 16); // Test Code
-        Tile topTile = new Tile(0, 0, 16, 16); // Test Code
-        Tile rightTile = new Tile(0, 0, 16, 16); // Test Code
-        Tile bottomTile = new Tile(0, 0, 16, 16); // Test Code
+
         private void ApplyMove(Vector2 direction, float moveSpeed)
         {
-            leftTile.Col = leftTile.Row = 0;
-            topTile.Col = topTile.Row = 0;
-            rightTile.Col = rightTile.Row = 0;
-            bottomTile.Col = bottomTile.Row = 0;
+            bool moveX = false; // Determine if the player can move left / right
+            bool moveY = false; // Determine if the player can move up / down
 
-            bool moveX = true;
-            bool moveY = true;
+            Vector2 moveAmount = Vector2.Normalize(direction) * moveSpeed * GameManager.DeltaTime; // Amount of move in this frmae
+            Vector2 moveAmountX = moveAmount; // Amount of move for x axis
+            moveAmountX.Y = 0;
+            Vector2 moveAmountY = moveAmount; // Amount of move for y axis
+            moveAmountY.X = 0;
 
-            // Check collision to tiles
-            if (direction.X < 0)
-            {
-                ushort x = (ushort)(Bound.Left / 16);
-                ushort y = (ushort)((Bound.Center.Y / 16));
-                leftTile.Col = x;
-                leftTile.Row = y;
+            // Check the collisioni for x and y axis
+            if(direction.X > 0)
+                moveX = !CollisionManager.CheckTileCollision(this, moveAmountX * 1.5f);
+            else
+                moveX = !CollisionManager.CheckTileCollision(this, moveAmountX * 0.5f);
 
-                if (Tile.IsCollided(Bound, leftTile)) moveX = false;
-            }
-
-            if (direction.X > 0)
-            {
-                ushort x = (ushort)(Bound.Right / 16);
-                ushort y = (ushort)((Bound.Center.Y / 16));
-                rightTile.Col = x;
-                rightTile.Row = y;
-
-                if (Tile.IsCollided(Bound, rightTile)) moveX = false;
-            }
-
-            if (direction.Y > 0)
-            {
-                ushort x = (ushort)(Bound.Center.X / 16);
-                ushort y = (ushort)((Bound.Bottom / 16));
-                bottomTile.Col = x;
-                bottomTile.Row = y;
-
-                if (Tile.IsCollided(Bound, bottomTile)) moveY = false;
-            }
-
-            if (direction.Y < 0)
-            {
-                ushort x = (ushort)(Bound.Center.X / 16);
-                ushort y = (ushort)((Bound.Top / 16));
-                topTile.Col = x;
-                topTile.Row = y;
-
-                if (Tile.IsCollided(Bound, topTile)) moveY = false;
-            }
-
-            Vector2 moveAmount = Vector2.Normalize(InputManager.Direction) * moveSpeed * GameManager.DeltaTime;
+            if(direction.Y > 0)
+                moveY = !CollisionManager.CheckTileCollision(this, moveAmountY * 1.5f);
+            else
+                moveY = !CollisionManager.CheckTileCollision(this, moveAmountY * 0.5f);
+    
+            // Move the character according to the result
             if (moveX)
-            {
-                position.X += moveAmount.X;
-            }
+                position.X += moveAmountX.X;
 
             if (moveY)
-            {
-                position.Y += moveAmount.Y;
-            }
-        }
-
-        private void MoveVector()
-        {
-            Vector2 result = Vector2.Zero;
-            int tileSize = 16;
-
-            // TiledMap map
-            TiledMapTileLayer layer = GameManager.CurrentLevel.Map.GetLayer<TiledMapTileLayer>("Wall");
-            TiledMapTile? tile = null;
-
-            //ushort x = (ushort)(playerPosX / tileSize);
-            //ushort y = (ushort)(playerPosY / tileSize);
-            Tile t = Tile.ToTile(Position, tileSize, tileSize);
-
-            // Get tile based on player position
-            layer.TryGetTile((ushort)t.Col, (ushort)t.Row, out tile);
-
-            if (tile.HasValue && tile.Value.GlobalIdentifier != 0)
-            {
-                // collided!
-                // you can also compute the tile's position using the X, Y and tileWidth if needed.
-                Console.WriteLine(t.Col + " " + t.Row);
-            }
+                position.Y += moveAmountY.Y;
         }
 
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            // Debug test
-            topTile.Draw(spriteBatch, gameTime);
-            leftTile.Draw(spriteBatch, gameTime);
-            bottomTile.Draw(spriteBatch, gameTime);
-            rightTile.Draw(spriteBatch, gameTime);
-
             base.Draw(spriteBatch, gameTime);
             //animationManager.CurrentAnimation.Draw(spriteBatch, position, Color.White, 0f, origin, new Vector2(3f, 3f), SpriteEffects.None, 0f);
         }

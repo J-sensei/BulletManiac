@@ -15,7 +15,11 @@ namespace BulletManiac.Entity.UI
 
         public Cursor()
         {
-            GameManager.Resources.LoadTexture("Crosshair_SpriteSheet", "SpriteSheet/UI/Crosshair"); // Load the spritesheet to the resources
+            // Load sprite and set the origin
+            spriteSheet = GameManager.Resources.FindTexture("Crosshair_SpriteSheet");
+            Rectangle cropBound = new Rectangle(0, 32, 16, 16); // Get the target sprite from the spritesheet
+            texture = Extensions.CropTexture2D(spriteSheet, cropBound);
+            origin = texture.Bounds.Center.ToVector2();
         }
 
         protected override Rectangle CalculateBound()
@@ -26,11 +30,6 @@ namespace BulletManiac.Entity.UI
 
         public override void Initialize()
         {
-            spriteSheet = GameManager.Resources.FindTexture("Crosshair_SpriteSheet");
-
-            Rectangle cropBound = new Rectangle(0, 32, 16, 16); // Get the target sprite from the spritesheet
-            texture = Extensions.CropTexture2D(spriteSheet, cropBound);
-            origin = texture.Bounds.Center.ToVector2();
             scale = Vector2.One * GameManager.CurrentCameraZoom; // Larger scale for the cursor
         }
 

@@ -20,10 +20,10 @@ namespace BulletManiac.Entity.Bullet
 
         protected override Rectangle CalculateBound()
         {
-            Vector2 pos = position - (origin * scale / 1.1f);
+            Vector2 pos = position - (origin * scale / 1.2f);
             if(texture != null)
             {
-                return new Rectangle((int)pos.X + 2, (int)pos.Y + 2, (int)(texture.Width * scale.X / 1.25f), (int)(texture.Height * scale.Y / 1.25f));
+                return new Rectangle((int)pos.X + 2, (int)pos.Y + 3, (int)(texture.Width * scale.X / 1.5f), (int)(texture.Height * scale.Y / 1.5f));
             }
             else
             {

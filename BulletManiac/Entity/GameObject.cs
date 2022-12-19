@@ -75,7 +75,7 @@ namespace BulletManiac.Entity
         /// <summary>
         /// Current position of the game object
         /// </summary>
-        public Vector2 Position { get { return position; } }
+        public Vector2 Position { get { return position; } set { position = value; } }
         public float Rotation { 
             get 
             {

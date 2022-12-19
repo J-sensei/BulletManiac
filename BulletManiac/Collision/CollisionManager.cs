@@ -1,5 +1,6 @@
 ﻿using BulletManiac.Entity;
 using BulletManiac.Managers;
+using BulletManiac.Tiled;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,45 @@ namespace BulletManiac.Collision
     public static class CollisionManager
     {
         private static readonly List<ICollidable> collidables = new List<ICollidable>();
+
+        /// <summary>
+        /// List of tile bound to check the collision with tile
+        /// </summary>
+        public static readonly List<Tile> TileBounds = new();
+
+        /// <summary>
+        /// Add the tile into the collision count
+        /// </summary>
+        /// <param name="tileGameObject"></param>
+        /// <exception cref="NullReferenceException"></exception>
+        public static void AddTileBound(Tile tileGameObject)
+        {
+            if (tileGameObject == null)
+            {
+                throw new NullReferenceException("[Collision Manager] Tile Game Object is null, not able to add into the collision");
+            }
+            TileBounds.Add(tileGameObject);
+        }
+
+        /// <summary>
+        /// Use to check the collision of game object with tiles, offset shift the current bound of the game object
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        public static bool CheckTileCollision(GameObject target, Vector2 offset)
+        {
+            Rectangle b = target.Bound;
+            Rectangle bound = new Rectangle((int)(b.X + offset.X), (int)(b.Y + offset.Y), b.Width, b.Height);
+            for(int i = 0; i < TileBounds.Count; i++)
+            {
+                if (IsCollided_AABB(bound, TileBounds[i].Bound))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         public static ICollidable Add(GameObject gameObject, string tag = "")
         {
@@ -93,6 +133,24 @@ namespace BulletManiac.Collision
             Vector2 obj2_TL = new(obj2Bound.X, obj2Bound.Y);
             Vector2 obj1_BR = new Vector2(obj1Bound.X, obj1Bound.Y) + new Vector2(obj1Bound.Width, obj1Bound.Height);
             Vector2 obj2_BR = new Vector2(obj2Bound.X, obj2Bound.Y) + new Vector2(obj2Bound.Width, obj2Bound.Height);
+
+            if (obj1_BR.X < obj2_TL.X || obj2_BR.X < obj1_TL.X ||
+                obj1_BR.Y < obj2_TL.Y || obj2_BR.Y < obj1_TL.Y)
+                return false;
+            else
+                return true;
+        }
+
+        private static bool IsCollided_AABB(GameObject go1, GameObject go2)
+        {
+            // TL = top left, BR = bottom right
+            Rectangle obj1Bounds = go1.Bound;
+            Rectangle obj2Bounds = go2.Bound;
+
+            Vector2 obj1_TL = new(obj1Bounds.X, obj1Bounds.Y);
+            Vector2 obj2_TL = new(obj2Bounds.X, obj2Bounds.Y);
+            Vector2 obj1_BR = go1.Position + new Vector2(obj1Bounds.Width, obj1Bounds.Height);
+            Vector2 obj2_BR = go2.Position + new Vector2(obj2Bounds.Width, obj2Bounds.Height);
 
             if (obj1_BR.X < obj2_TL.X || obj2_BR.X < obj1_TL.X ||
                 obj1_BR.Y < obj2_TL.Y || obj2_BR.Y < obj1_TL.Y)

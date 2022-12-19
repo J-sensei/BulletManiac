@@ -1,7 +1,9 @@
-﻿using BulletManiac.Managers;
+﻿using BulletManiac.Collision;
+using BulletManiac.Managers;
 using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace BulletManiac.Entity.Bullet
 {
@@ -33,9 +35,6 @@ namespace BulletManiac.Entity.Bullet
 
         protected Animation Animation { get { return animation; } set { animation = value; } }
 
-        // Test Destroy
-        float timer = 0;
-
         public Bullet(Vector2 position, Vector2 direction, float speed = DEFAULT_SPEED)
         {
             name = "Bullet";
@@ -46,23 +45,8 @@ namespace BulletManiac.Entity.Bullet
 
         public override void Initialize()
         {
-            // Test
-            //GameManager.Resources.LoadTexture("Test Bullet", "SpriteSheet/Bullet/Test_Bullets_16x16");
-            //Rectangle b = new Rectangle(0, 16, 16, 16);
-            //texture = GameManager.Resources.FindTexture("Test Bullet").CropTexture2D(b);
-            //origin = new Vector2(8f);
-            //scale = new Vector2(0.5f);
             base.Initialize();
         }
-
-        //protected override Rectangle CalculateBound()
-        //{
-        //    //Vector2 pos = position - origin;
-        //    //return new Rectangle((int)pos.X, (int)pos.Y, texture.Width, texture.Height);
-
-        //    Vector2 pos = position - (origin * scale / 1.1f);
-        //    return new Rectangle((int)pos.X, (int)pos.Y, (int)(texture.Width * scale.X / 1.25f), (int)(texture.Height * scale.Y));
-        //}
 
         public override void Update(GameTime gameTime)
         {
@@ -74,8 +58,7 @@ namespace BulletManiac.Entity.Bullet
             }
 
             // Test destroy
-            timer += GameManager.DeltaTime;
-            if(timer >= 1f)
+            if(CollisionManager.CheckTileCollision(this, Vector2.Zero))
             {
                 Destroy(this);
             }

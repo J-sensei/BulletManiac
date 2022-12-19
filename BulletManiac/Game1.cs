@@ -1,6 +1,4 @@
-﻿using BulletManiac.Entity.Player;
-using BulletManiac.Entity.UI;
-using BulletManiac.Managers;
+﻿using BulletManiac.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -22,13 +20,6 @@ namespace BulletManiac
         protected override void Initialize()
         {
             GameManager.GraphicsDevice = _graphics.GraphicsDevice; // Initialize the Graphics Device in the Game Manager first
-            GameManager.Resources.Load(Content); // Initialize the Resource Manager
-
-            // Test code 
-            //var p = new Player(new Vector2(45f)); // Add another player to test with the collision
-            //p.move = false;
-            //GameManager.AddGameObject(p);
-            // GameManager.AddGameObject(new Gun());
 
             // Initialize objects
             GameManager.Initialize();
@@ -40,6 +31,7 @@ namespace BulletManiac
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            GameManager.LoadContent(Content);
         }
 
         protected override void Update(GameTime gameTime)
@@ -57,7 +49,7 @@ namespace BulletManiac
                 GameManager.UpdateScreenSize(_graphics);
             }
 
-            IsMouseVisible = GameManager.Debug;
+            IsMouseVisible = GameManager.Debug; // Show mouse cursor in debug mode
         }
 
         protected override void Draw(GameTime gameTime)

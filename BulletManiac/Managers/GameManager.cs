@@ -5,6 +5,7 @@ using BulletManiac.Entity.UI;
 using BulletManiac.Tiled;
 using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Tiled;
@@ -147,28 +148,45 @@ namespace BulletManiac.Managers
             //Tileset t = new();
             //t.Load(Resources.FindXml("Test"));
             #endregion
-            MainCamera = new Camera();
-            tiledMapRenderer = new TiledMapRenderer(GraphicsDevice);
+            MainCamera = new Camera(); // Create main camera for the game (Controlling zoom level to zoom in the tiles)
+            tiledMapRenderer = new TiledMapRenderer(GraphicsDevice); // Initialize Tiled
 
+            InputManager.Initialize();
+            entityManager.Initialize();
+        }
+
+        private static void LoadDefaultResources()
+        {
             // Load textures
-            GameManager.Resources.LoadTexture("Bullet1", "SpriteSheet/Bullet/Bullets1_16x16");
+            Resources.LoadTexture("Bullet1", "SpriteSheet/Bullet/Bullets1_16x16");
+            Resources.LoadTexture("Crosshair_SpriteSheet", "SpriteSheet/UI/Crosshair"); // Load the spritesheet to the resources
 
-            // Test Tiled Map
+            // Load player sprites
+            Resources.LoadTexture("Player_Death", "SpriteSheet/Player/Owlet_Monster_Death_8");
+            Resources.LoadTexture("Player_Idle", "SpriteSheet/Player/Owlet_Monster_Idle_4");
+            Resources.LoadTexture("Player_Walk", "SpriteSheet/Player/Owlet_Monster_Walk_6");
+            Resources.LoadTexture("Player_Run", "SpriteSheet/Player/Owlet_Monster_Run_6");
+            Resources.LoadTexture("Player_Throw", "SpriteSheet/Player/Owlet_Monster_Throw_4");
+
+            // Load Tiled Map level
             Resources.LoadTiledMap("Level0", "Tiled/Level0");
             Resources.LoadTiledMap("Level1", "Tiled/Level/Level1");
+        }
+
+        public static void LoadContent(ContentManager content)
+        {
+            GameManager.Resources.Load(content); // Initialize the Resource Manager
+            LoadDefaultResources(); // Load default resources needed for the game to start
 
             // Add cursor and plpayer
             AddGameObjectUI(new Cursor()); // Add the game cursor
             AddGameObject(new Player(new Vector2(50f))); // Add player
 
-            // Load Level
+            // Set current level
             CurrentLevel = new();
             CurrentLevel.Map = Resources.FindTiledMap("Level1");
             tiledMapRenderer.LoadMap(CurrentLevel.Map);
-            //Tile.AddTileCollision(CurrentLevel.Map.GetLayer<TiledMapTileLayer>("Wall"), CurrentLevel.Map.Width, CurrentLevel.Map.Height, CurrentLevel.Map.TileWidth, CurrentLevel.Map.TileHeight);
-
-            InputManager.Initialize();
-            entityManager.Initialize();
+            Tile.AddTileCollision(CurrentLevel.Map.GetLayer<TiledMapTileLayer>("Wall"), CurrentLevel.Map.Width, CurrentLevel.Map.Height, CurrentLevel.Map.TileWidth, CurrentLevel.Map.TileHeight);
         }
 
         public static void Update(GameTime gameTime)
@@ -199,8 +217,12 @@ namespace BulletManiac.Managers
             //Resources.FindTilemap("Dungeon_Test_32x32").Draw(spriteBatch, gameTime); // Test draw tilemap
             //Resources.FindTilemap("Test").Draw(spriteBatch, gameTime); // Test draw tilemap
             #endregion
-
             tiledMapRenderer.Draw(MainCamera.Transform); // Render the Tiled
+            // Debug draw for the tiles collision
+            foreach (Tile t in CollisionManager.TileBounds)
+            {
+                t.Draw(spriteBatch, gameTime);
+            }
             entityManager.Draw(spriteBatch, gameTime);       
         }
         public static void DrawUI(SpriteBatch spriteBatch, GameTime gameTime)

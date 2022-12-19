@@ -1,10 +1,19 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace BulletManiac.Utilities
 {
     public static class Extensions
     {
+        private static Random random = new Random();
+
+        public static float RandomRangeFloat(float min, float max)
+        {
+            double val = (random.NextDouble() * (max - min) + min);
+            return (float)val;
+        }
+
         public static Texture2D CropTexture2D(this Texture2D spriteSheet, Rectangle source)
         {
             Texture2D croppedTexture2d = new Texture2D(spriteSheet.GraphicsDevice, source.Width, source.Height);

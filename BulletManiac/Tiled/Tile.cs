@@ -1,13 +1,8 @@
 ﻿using BulletManiac.Collision;
 using BulletManiac.Entity;
-using BulletManiac.Managers;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Tiled;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BulletManiac.Tiled
 {
@@ -85,56 +80,14 @@ namespace BulletManiac.Tiled
             return new Tile((int)(position.X / tileWidth), (int)(position.Y / tileHeight), tileWidth, tileHeight);
         }
 
-        public static bool Collision(Vector2 position, int tileSize)
-        {
-            Vector2 result = Vector2.Zero;
-
-            // TiledMap map
-            TiledMapTileLayer layer = GameManager.CurrentLevel.Map.GetLayer<TiledMapTileLayer>("Wall");
-            TiledMapTile? tile = null;
-
-            ushort x = (ushort)(position.X / tileSize);
-            ushort y = (ushort)(position.Y / tileSize);
-
-            // Get tile based on player position
-            layer.TryGetTile(x, y, out tile);
-            if (tile.HasValue && tile.Value.GlobalIdentifier != 0)
-            {
-                // collided!
-                // you can also compute the tile's position using the X, Y and tileWidth if needed.
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public static Rectangle GetTileBound(Vector2 position, int tileSize)
-        {
-            Vector2 result = Vector2.Zero;
-
-            // TiledMap map
-            TiledMapTileLayer layer = GameManager.CurrentLevel.Map.GetLayer<TiledMapTileLayer>("Wall");
-            TiledMapTile? tile = null;
-
-            ushort x = (ushort)(position.X / tileSize);
-            ushort y = (ushort)(position.Y / tileSize);
-
-            // Get tile based on player position
-            layer.TryGetTile(x, y, out tile);
-            if (tile.HasValue && tile.Value.GlobalIdentifier != 0)
-            {
-                // collided!
-                // you can also compute the tile's position using the X, Y and tileWidth if needed.
-                return new Rectangle((x * tileSize), (y * tileSize), tileSize , tileSize);
-            }
-            else
-            {
-                return Rectangle.Empty;
-            }
-        }
-
+        /// <summary>
+        /// Add collision block tiles into the game
+        /// </summary>
+        /// <param name="mapLayer"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="tileWidth"></param>
+        /// <param name="tileHeight"></param>
         public static void AddTileCollision(TiledMapTileLayer mapLayer, int width, int height, int tileWidth, int tileHeight)
         {
             for (int i = 0; i < width; i++)
@@ -146,31 +99,16 @@ namespace BulletManiac.Tiled
                     {
                         // Add collision to the collision manager
                         Tile t = new Tile(i, j, tileWidth, tileHeight);
-                        GameManager.AddGameObject(t);
-                        // CollisionManager.Add(t, "Tile");
+                        CollisionManager.AddTileBound(t);
                     }
                 }
             }
         }
 
-        public static bool IsCollided(Rectangle bound, Tile targetTile)
-        {
-            // TiledMap map
-            TiledMapTileLayer layer = GameManager.CurrentLevel.Map.GetLayer<TiledMapTileLayer>("Wall");
-            TiledMapTile? tile = null;
-
-            // Get tile based on player position
-            layer.TryGetTile((ushort)targetTile.Col, (ushort)targetTile.Row, out tile);
-            if (tile.HasValue && tile.Value.GlobalIdentifier != 0 && CollisionManager.IsCollided_AABB(bound, targetTile.Bound))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
+        /// <summary>
+        /// Bound of a tile
+        /// </summary>
+        /// <returns></returns>
         protected override Rectangle CalculateBound()
         {
             return new Rectangle((col * TileWidth), (row * TileHeight), TileWidth, TileHeight);
