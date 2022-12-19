@@ -7,7 +7,7 @@ namespace BulletManiac.Entity
     /// <summary>
     /// Handle animation in different situations
     /// </summary>
-    public class AnimationManager
+    public class AnimationManager : IDisposable
     {
         /// <summary>
         /// Link different action to an animation
@@ -78,5 +78,14 @@ namespace BulletManiac.Entity
 
         public void Start() => active = true;
         public void Stop() => active = false;
+
+        public void Dispose()
+        {
+            foreach(var animation in animations.Values)
+            {
+                animation.Dispose();
+            }
+            animations.Clear();
+        }
     }
 }

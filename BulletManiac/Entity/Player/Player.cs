@@ -210,6 +210,15 @@ namespace BulletManiac.Entity.Player
 
             if (InputManager.MouseLeftHold && !shooting)
             {
+                if (InputManager.GetKeyDown(Keys.LeftShift)) // Player is walking, more accurate shooting
+                {
+                    accuracy = DEFAULT_ACCURACY * 0.2f; // NEED TO CHANGE LATER
+                }
+                else
+                {
+                    accuracy = DEFAULT_ACCURACY;
+                }
+
                 shooting = true;
                 currentAction = PlayerAction.Throw;
                 GameManager.MainCamera.Shake();
@@ -264,13 +273,11 @@ namespace BulletManiac.Entity.Player
                 if (InputManager.GetKeyDown(Keys.LeftShift)) // Player is walking, more accurate shooting
                 {
                     currentSpeed = moveSpeed * 0.7f; // NEED TO CHANGE LATER
-                    accuracy = DEFAULT_ACCURACY * 0.2f; // NEED TO CHANGE LATER
                     currentAction = PlayerAction.Walk;
                 }
                 else // Player is running (Default), less accrate shooting
                 {
                     currentSpeed = moveSpeed;
-                    accuracy = DEFAULT_ACCURACY;
                     currentAction = PlayerAction.Run;
                 }
                 

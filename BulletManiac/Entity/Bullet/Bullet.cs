@@ -57,7 +57,7 @@ namespace BulletManiac.Entity.Bullet
                 texture = animation.CurrentTexture;
             }
 
-            // Test destroy
+            // Destroy the bullet when it hit the wall
             if(CollisionManager.CheckTileCollision(this, Vector2.Zero))
             {
                 Destroy(this);
@@ -78,6 +78,13 @@ namespace BulletManiac.Entity.Bullet
             // Destroy the bullet
             // Destroy the enemy
             base.CollisionEvent(other);
+        }
+
+        public override void Dispose()
+        {
+            animation.Dispose();
+            animation = null;
+            base.Dispose();
         }
     }
 }

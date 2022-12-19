@@ -145,6 +145,7 @@ namespace BulletManiac.Managers
 
             foreach (var gameObj in destroyObjects)
             {
+                gameObj.Dispose(); // Test dispose the destroyed entity
                 gameObjects.Remove(gameObj);
             }
         }

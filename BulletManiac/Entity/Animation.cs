@@ -10,7 +10,7 @@ namespace BulletManiac.Entity
     /// <summary>
     /// Animation for a single sprite sheet
     /// </summary>
-    public class Animation
+    public class Animation : IDisposable
     {
         /// <summary>
         /// Sprite sheet
@@ -201,6 +201,16 @@ namespace BulletManiac.Entity
                     currentFrame = 0;
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            for(int i = 0; i < croppedTextures.Length; i++)
+            {
+                croppedTextures[i].Dispose();
+                croppedTextures[i] = null;
+            }
+            croppedTextures = null;
         }
     }
 }

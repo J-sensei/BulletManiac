@@ -8,7 +8,7 @@ namespace BulletManiac.Entity
     /// <summary>
     /// Base object of all entities in the game
     /// </summary>
-    public abstract class GameObject
+    public abstract class GameObject : IDisposable
     {
         #region Constant
         const string DEFAULT_NAME = "New GameObject";
@@ -158,5 +158,11 @@ namespace BulletManiac.Entity
         /// </summary>
         /// <param name="other"></param>
         public virtual void CollisionEvent(GameObject other) { }
+
+        public virtual void Dispose()
+        {
+            if(texture != null) texture.Dispose();
+            if(debugBox != null) debugBox.Dispose();
+        }
     }
 }
