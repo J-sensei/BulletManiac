@@ -1,4 +1,4 @@
-﻿using BulletManiac.Tiled;
+﻿using BulletManiac.Tiled.Legacy;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tiled;

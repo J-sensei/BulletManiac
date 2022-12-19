@@ -100,5 +100,21 @@ namespace BulletManiac.Collision
             else
                 return true;
         }
+
+        public static bool IsCollided_AABB(Rectangle rectX, Rectangle rectY)
+        {
+            if (rectX == Rectangle.Empty || rectY == Rectangle.Empty) return false;
+
+            Vector2 obj1_TL = new(rectX.X, rectX.Y);
+            Vector2 obj2_TL = new(rectY.X, rectY.Y);
+            Vector2 obj1_BR = new Vector2(rectX.X, rectX.Y) + new Vector2(rectX.Width, rectX.Height);
+            Vector2 obj2_BR = new Vector2(rectY.X, rectY.Y) + new Vector2(rectY.Width, rectY.Height);
+
+            if (obj1_BR.X < obj2_TL.X || obj2_BR.X < obj1_TL.X ||
+                obj1_BR.Y < obj2_TL.Y || obj2_BR.Y < obj1_TL.Y)
+                return false;
+            else
+                return true;
+        }
     }
 }

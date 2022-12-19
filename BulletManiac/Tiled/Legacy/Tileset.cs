@@ -3,7 +3,7 @@ using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace BulletManiac.Tiled
+namespace BulletManiac.Tiled.Legacy
 {
     /// <summary>
     /// Tileset contains each tile position from tile sprite sheet
@@ -39,7 +39,7 @@ namespace BulletManiac.Tiled
             // Calculate the bounds of each image
             bounds = new Rectangle[tilesetData.TileCount];
             int row = 1; // start as first row
-            for(int i = 0; i < bounds.Length; i++)
+            for (int i = 0; i < bounds.Length; i++)
             {
                 // Each the end of the column, increment the row to next row
                 if (i % tilesetData.Columns == 0 && i != 0)
@@ -47,8 +47,8 @@ namespace BulletManiac.Tiled
                     row++;
                 }
                 // Add bound area to each tile
-                bounds[i] = new Rectangle((i % tilesetData.Columns) * tilesetData.TileWidth, 
-                                        (row - 1) * tilesetData.TileHeight, 
+                bounds[i] = new Rectangle(i % tilesetData.Columns * tilesetData.TileWidth,
+                                        (row - 1) * tilesetData.TileHeight,
                                         tilesetData.TileWidth, tilesetData.TileHeight);
             }
         }
@@ -63,7 +63,7 @@ namespace BulletManiac.Tiled
             // Prevent accessing array out of bound
             if (id <= 0 || id > tilesetData.TileCount) return null;
             //return tiles[id - 1];
-            return Extensions.CropTexture2D(spriteSheet, bounds[id - 1]);
+            return spriteSheet.CropTexture2D(bounds[id - 1]);
         }
     }
 }

@@ -25,8 +25,6 @@ namespace BulletManiac
             GameManager.Resources.Load(Content); // Initialize the Resource Manager
 
             // Test code 
-            GameManager.AddGameObjectUI(new Cursor()); // Add the game cursor
-            GameManager.AddGameObject(new Player(new Vector2(5f))); // Add player
             //var p = new Player(new Vector2(45f)); // Add another player to test with the collision
             //p.move = false;
             //GameManager.AddGameObject(p);

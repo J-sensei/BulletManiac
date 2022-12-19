@@ -135,7 +135,7 @@ namespace BulletManiac.Entity
 
             if (texture == null)
             {
-                GameManager.Log("Game Object", "\"" + Name + "\"" + " Texture is null, skipping to draw it");
+                //GameManager.Log("Game Object", "\"" + Name + "\"" + " Texture is null, skipping to draw it");
                 return;
             }
             spriteBatch.Draw(texture, position, null, Color.White, Rotation, origin, scale, spriteEffects, 0f);

@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace BulletManiac.Tiled
+namespace BulletManiac.Tiled.Legacy
 {
     public class Tilemap
     {
@@ -70,7 +70,7 @@ namespace BulletManiac.Tiled
             tilemapData = TilemapData;
             tilesets = new Tileset[tilemapData.TileSources.Length];
             firstGrids = new int[tilemapData.TileSources.Length];
-            for(int i = 0; i < tilemapData.TileSources.Length; i++)
+            for (int i = 0; i < tilemapData.TileSources.Length; i++)
             {
                 tilesets[i] = GameManager.Resources.FindTileset(tilemapData.TileSources[i].Source); // Get correct tileset
                 firstGrids[i] = tilemapData.TileSources[i].FirstGrid;
@@ -86,10 +86,10 @@ namespace BulletManiac.Tiled
         {
             Texture2D result = null;
 
-            for(int i = tilemapData.TileSources.Length - 1; i >=0; i--)
+            for (int i = tilemapData.TileSources.Length - 1; i >= 0; i--)
             {
-                int sourceId = (id + 1) - firstGrids[i];
-                if(sourceId > 0)
+                int sourceId = id + 1 - firstGrids[i];
+                if (sourceId > 0)
                 {
                     result = tilesets[i].Get(sourceId);
                     break;
@@ -112,13 +112,14 @@ namespace BulletManiac.Tiled
         private TilesetRender tilesetRender;
         private Point tileSize;
 
-        public Rectangle Size {
+        public Rectangle Size
+        {
             get
             {
                 Vector2 initialTile = tiles[0, 0].Position;
                 Vector2 lastTile = tiles[tiles.GetLength(0) - 1, tiles.GetLength(1) - 1].Position;
                 return new Rectangle((int)initialTile.X, (int)initialTile.Y, (int)(lastTile.X - initialTile.X), (int)(lastTile.Y - initialTile.Y));
-            } 
+            }
         }
 
         public Layer(TilesetRender tilesetRender, TilemapLayer layer)
@@ -138,12 +139,12 @@ namespace BulletManiac.Tiled
             int y = 0;
             foreach (string str in rowStrings)
             {
-                if (String.IsNullOrEmpty(str)) continue;
+                if (string.IsNullOrEmpty(str)) continue;
                 string newStr = string.Join("", str.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries)); // Remove white spaces
                 string[] parts = newStr.Split(','); // Split comma
                 foreach (string part in parts)
                 {
-                    if (!String.IsNullOrEmpty(part))
+                    if (!string.IsNullOrEmpty(part))
                     {
                         data[x, y] = Convert.ToInt32(part);
                         x++;
@@ -174,8 +175,8 @@ namespace BulletManiac.Tiled
         /// <returns></returns>
         Vector2 MapToScreen(int mapX, int mapY)
         {
-            float x = (mapX * tileSize.X);
-            float y = (mapY * tileSize.Y);
+            float x = mapX * tileSize.X;
+            float y = mapY * tileSize.Y;
 
             return new Vector2(x, y);
         }

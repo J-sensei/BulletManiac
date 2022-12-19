@@ -33,6 +33,9 @@ namespace BulletManiac.Entity.Bullet
 
         protected Animation Animation { get { return animation; } set { animation = value; } }
 
+        // Test Destroy
+        float timer = 0;
+
         public Bullet(Vector2 position, Vector2 direction, float speed = DEFAULT_SPEED)
         {
             name = "Bullet";
@@ -68,6 +71,13 @@ namespace BulletManiac.Entity.Bullet
             {
                 animation.Update(gameTime);
                 texture = animation.CurrentTexture;
+            }
+
+            // Test destroy
+            timer += GameManager.DeltaTime;
+            if(timer >= 1f)
+            {
+                Destroy(this);
             }
 
             // Default bahavior of the bullet, which is moving to the desired direction

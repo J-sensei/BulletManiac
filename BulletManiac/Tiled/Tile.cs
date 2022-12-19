@@ -1,55 +1,179 @@
-﻿using BulletManiac.Entity;
+﻿using BulletManiac.Collision;
+using BulletManiac.Entity;
 using BulletManiac.Managers;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Tiled;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace BulletManiac.Tiled
 {
+    /// <summary>
+    /// Basic tile data from the Tiled map 
+    /// </summary>
     public class Tile : GameObject
     {
-        public Tile(Texture2D texture, Vector2 position)
+        private int row;
+        private int col;
+
+        public int Row { get { return row; } set { row = value; } }
+        public int Col { get { return col; } set { col = value; } }
+        public int TileWidth { get; private set; }
+        public int TileHeight { get; private set; }
+
+        public Tile(int col, int row)
         {
-            name = "Tile [" + position + "]";
-            this.texture = texture;
-            this.position = position;
-            scale = new Vector2(1f, 1f);
+            this.row = row;
+            this.col = col;
         }
 
-        public Tile(Texture2D texture, Vector2 position, Vector2 scale)
+        public Tile(int col, int row, int width, int height)
         {
-            name = "Tile";
-            this.texture = texture;
-            this.position = position;
-            this.scale = scale;
+            this.row = row;
+            this.col = col;
+            TileWidth = width;
+            TileHeight = height;
+        }
+
+        public override string ToString()
+        {
+            return String.Format("Tile ({0}, {1})", Col, Row);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || !this.GetType().Equals(obj.GetType()))
+            {
+                return false;
+            }
+            else
+            {
+                Tile rhs = (Tile)obj;
+                return (row == rhs.row) && (col == rhs.col);
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return (Row << 2) ^ Col;
+        }
+
+        /// <summary>
+        /// Convert the tile row and col to the world position
+        /// </summary>
+        /// <param name="tile"></param>
+        /// <param name="tileWidth"></param>
+        /// <param name="tileHeight"></param>
+        /// <returns></returns>
+        public static Vector2 ToPosition(Tile tile, int tileWidth, int tileHeight)
+        {
+            return new Vector2(tile.col * tileWidth, tile.row * tileHeight);
+        }
+
+        /// <summary>
+        /// Convert position to the tile
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="tileWidth"></param>
+        /// <param name="tileHeight"></param>
+        /// <returns></returns>
+        public static Tile ToTile(Vector2 position, int tileWidth, int tileHeight)
+        {
+            return new Tile((int)(position.X / tileWidth), (int)(position.Y / tileHeight), tileWidth, tileHeight);
+        }
+
+        public static bool Collision(Vector2 position, int tileSize)
+        {
+            Vector2 result = Vector2.Zero;
+
+            // TiledMap map
+            TiledMapTileLayer layer = GameManager.CurrentLevel.Map.GetLayer<TiledMapTileLayer>("Wall");
+            TiledMapTile? tile = null;
+
+            ushort x = (ushort)(position.X / tileSize);
+            ushort y = (ushort)(position.Y / tileSize);
+
+            // Get tile based on player position
+            layer.TryGetTile(x, y, out tile);
+            if (tile.HasValue && tile.Value.GlobalIdentifier != 0)
+            {
+                // collided!
+                // you can also compute the tile's position using the X, Y and tileWidth if needed.
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public static Rectangle GetTileBound(Vector2 position, int tileSize)
+        {
+            Vector2 result = Vector2.Zero;
+
+            // TiledMap map
+            TiledMapTileLayer layer = GameManager.CurrentLevel.Map.GetLayer<TiledMapTileLayer>("Wall");
+            TiledMapTile? tile = null;
+
+            ushort x = (ushort)(position.X / tileSize);
+            ushort y = (ushort)(position.Y / tileSize);
+
+            // Get tile based on player position
+            layer.TryGetTile(x, y, out tile);
+            if (tile.HasValue && tile.Value.GlobalIdentifier != 0)
+            {
+                // collided!
+                // you can also compute the tile's position using the X, Y and tileWidth if needed.
+                return new Rectangle((x * tileSize), (y * tileSize), tileSize , tileSize);
+            }
+            else
+            {
+                return Rectangle.Empty;
+            }
+        }
+
+        public static void AddTileCollision(TiledMapTileLayer mapLayer, int width, int height, int tileWidth, int tileHeight)
+        {
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    bool hasTile = mapLayer.TryGetTile((ushort)i, (ushort)j, out TiledMapTile? tile);
+                    if (hasTile && tile.Value.GlobalIdentifier != 0)
+                    {
+                        // Add collision to the collision manager
+                        Tile t = new Tile(i, j, tileWidth, tileHeight);
+                        GameManager.AddGameObject(t);
+                        // CollisionManager.Add(t, "Tile");
+                    }
+                }
+            }
+        }
+
+        public static bool IsCollided(Rectangle bound, Tile targetTile)
+        {
+            // TiledMap map
+            TiledMapTileLayer layer = GameManager.CurrentLevel.Map.GetLayer<TiledMapTileLayer>("Wall");
+            TiledMapTile? tile = null;
+
+            // Get tile based on player position
+            layer.TryGetTile((ushort)targetTile.Col, (ushort)targetTile.Row, out tile);
+            if (tile.HasValue && tile.Value.GlobalIdentifier != 0 && CollisionManager.IsCollided_AABB(bound, targetTile.Bound))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         protected override Rectangle CalculateBound()
         {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Take offset to move 
-        /// </summary>
-        /// <param name="spriteBatch"></param>
-        /// <param name="offset"></param>
-        public void Draw(SpriteBatch spriteBatch, Vector2 offset)
-        {
-            // If the texture is null, dont draw anything
-            if (texture != null)
-                spriteBatch.Draw(texture, (position + offset) * GameManager.CurrentGameScale * scale, 
-                                            null, Color.White, 0f, Vector2.Zero, scale * GameManager.CurrentGameScale, 
-                                            SpriteEffects.None, 0f);
-        }
-
-        public void Draw(SpriteBatch spriteBatch, Texture2D texture, Vector2 offset)
-        {
-            // If the texture is null, dont draw anything
-            if (texture != null)
-                spriteBatch.Draw(texture, (position + offset) * GameManager.CurrentGameScale * scale,
-                                            null, Color.White, 0f, Vector2.Zero, scale * GameManager.CurrentGameScale,
-                                            SpriteEffects.None, 0f);
+            return new Rectangle((col * TileWidth), (row * TileHeight), TileWidth, TileHeight);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace BulletManiac.Tiled
+﻿namespace BulletManiac.Tiled.Legacy
 {
     /// <summary>
     /// Use to load custom tile map data file from the content
@@ -14,7 +14,7 @@
         /// <summary>
         /// First Grid start ID for the tileset
         /// </summary>
-        public int FirstGrid { get ; set; }
+        public int FirstGrid { get; set; }
         /// <summary>
         /// Which tileset to use
         /// </summary>

@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using BulletManiac.Tiled;
+using MonoGame.Extended.Tiled;
 
 namespace BulletManiac.Entity.Player
 {
@@ -156,12 +158,12 @@ namespace BulletManiac.Entity.Player
             if(spriteEffects == SpriteEffects.None)
             {
                 Vector2 pos = position - (origin * scale / 1.1f) + new Vector2(2f, 0f); ;
-                return new Rectangle((int)pos.X, (int)pos.Y, (int)(texture.Width * scale.X / 1.25f), (int)(texture.Height * scale.Y));
+                return new Rectangle((int)pos.X, (int)pos.Y + 3, (int)(texture.Width * scale.X / 1.25f), (int)(texture.Height * scale.Y / 1.1f));
             }
             else
             {
                 Vector2 pos = position - (origin * scale / 1.1f) + new Vector2(2f, 0f);
-                return new Rectangle((int)pos.X, (int)pos.Y, (int)(texture.Width * scale.X / 1.25f), (int)(texture.Height * scale.Y));
+                return new Rectangle((int)pos.X, (int)pos.Y + 3, (int)(texture.Width * scale.X / 1.25f), (int)(texture.Height * scale.Y / 1.1f));
             }
         }
 
@@ -188,6 +190,7 @@ namespace BulletManiac.Entity.Player
 
         public override void Update(GameTime gameTime)
         {
+            //MoveVector();
             PlayerMovement();
             PlayerAttack();
             // Update the animations
@@ -266,16 +269,127 @@ namespace BulletManiac.Entity.Player
                     currentAction = PlayerAction.Run;
                 }
 
-                position += Vector2.Normalize(InputManager.Direction) * currentSpeed * GameManager.DeltaTime;
+                //Vector2 moveAmount = Vector2.Normalize(InputManager.Direction) * currentSpeed * GameManager.DeltaTime;
+
+                //if (!Tile.Collision(position + moveAmount, 16))
+                //{
+                //    position += moveAmount;
+                //}
+
+                ApplyMove(InputManager.Direction, currentSpeed);
+
+                //Console.WriteLine(Bound + " " + Tile.GetTileBound(position + moveAmount, 16));
+                //if (!CollisionManager.IsCollided_AABB(Bound, Tile.GetTileBound(position + moveAmount, 16)))
+                //{
+                //    Console.WriteLine("Colliding with tile");
+                //    position += moveAmount;
+                //}
             }
             else
             {
                 currentAction = PlayerAction.Idle; // Player is Idle when not moving
             }
         }
+        
+        Tile leftTile = new Tile(0, 0, 16, 16); // Test Code
+        Tile topTile = new Tile(0, 0, 16, 16); // Test Code
+        Tile rightTile = new Tile(0, 0, 16, 16); // Test Code
+        Tile bottomTile = new Tile(0, 0, 16, 16); // Test Code
+        private void ApplyMove(Vector2 direction, float moveSpeed)
+        {
+            leftTile.Col = leftTile.Row = 0;
+            topTile.Col = topTile.Row = 0;
+            rightTile.Col = rightTile.Row = 0;
+            bottomTile.Col = bottomTile.Row = 0;
+
+            bool moveX = true;
+            bool moveY = true;
+
+            // Check collision to tiles
+            if (direction.X < 0)
+            {
+                ushort x = (ushort)(Bound.Left / 16);
+                ushort y = (ushort)((Bound.Center.Y / 16));
+                leftTile.Col = x;
+                leftTile.Row = y;
+
+                if (Tile.IsCollided(Bound, leftTile)) moveX = false;
+            }
+
+            if (direction.X > 0)
+            {
+                ushort x = (ushort)(Bound.Right / 16);
+                ushort y = (ushort)((Bound.Center.Y / 16));
+                rightTile.Col = x;
+                rightTile.Row = y;
+
+                if (Tile.IsCollided(Bound, rightTile)) moveX = false;
+            }
+
+            if (direction.Y > 0)
+            {
+                ushort x = (ushort)(Bound.Center.X / 16);
+                ushort y = (ushort)((Bound.Bottom / 16));
+                bottomTile.Col = x;
+                bottomTile.Row = y;
+
+                if (Tile.IsCollided(Bound, bottomTile)) moveY = false;
+            }
+
+            if (direction.Y < 0)
+            {
+                ushort x = (ushort)(Bound.Center.X / 16);
+                ushort y = (ushort)((Bound.Top / 16));
+                topTile.Col = x;
+                topTile.Row = y;
+
+                if (Tile.IsCollided(Bound, topTile)) moveY = false;
+            }
+
+            Vector2 moveAmount = Vector2.Normalize(InputManager.Direction) * moveSpeed * GameManager.DeltaTime;
+            if (moveX)
+            {
+                position.X += moveAmount.X;
+            }
+
+            if (moveY)
+            {
+                position.Y += moveAmount.Y;
+            }
+        }
+
+        private void MoveVector()
+        {
+            Vector2 result = Vector2.Zero;
+            int tileSize = 16;
+
+            // TiledMap map
+            TiledMapTileLayer layer = GameManager.CurrentLevel.Map.GetLayer<TiledMapTileLayer>("Wall");
+            TiledMapTile? tile = null;
+
+            //ushort x = (ushort)(playerPosX / tileSize);
+            //ushort y = (ushort)(playerPosY / tileSize);
+            Tile t = Tile.ToTile(Position, tileSize, tileSize);
+
+            // Get tile based on player position
+            layer.TryGetTile((ushort)t.Col, (ushort)t.Row, out tile);
+
+            if (tile.HasValue && tile.Value.GlobalIdentifier != 0)
+            {
+                // collided!
+                // you can also compute the tile's position using the X, Y and tileWidth if needed.
+                Console.WriteLine(t.Col + " " + t.Row);
+            }
+        }
 
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
+            // Debug test
+            topTile.Draw(spriteBatch, gameTime);
+            leftTile.Draw(spriteBatch, gameTime);
+            bottomTile.Draw(spriteBatch, gameTime);
+            rightTile.Draw(spriteBatch, gameTime);
+
             base.Draw(spriteBatch, gameTime);
             //animationManager.CurrentAnimation.Draw(spriteBatch, position, Color.White, 0f, origin, new Vector2(3f, 3f), SpriteEffects.None, 0f);
         }

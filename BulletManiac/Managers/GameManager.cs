@@ -1,9 +1,13 @@
 ﻿using BulletManiac.Collision;
 using BulletManiac.Entity;
+using BulletManiac.Entity.Player;
+using BulletManiac.Entity.UI;
+using BulletManiac.Tiled;
 using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
 using System;
 using System.Collections.Generic;
@@ -64,6 +68,9 @@ namespace BulletManiac.Managers
         public static Point CurrentResolution { get { return resolutionList[CurrentResolutionIndex]; } }
         public static float CurrentGameScale { get { return scaleList[CurrentResolutionIndex]; } }
         public static float CurrentCameraZoom { get { return gameZoomLevelList[CurrentResolutionIndex]; } }
+
+        // Level
+        public static Level CurrentLevel;
         #endregion
 
         /// <summary>
@@ -149,8 +156,16 @@ namespace BulletManiac.Managers
             // Test Tiled Map
             Resources.LoadTiledMap("Level0", "Tiled/Level0");
             Resources.LoadTiledMap("Level1", "Tiled/Level/Level1");
-            tiledMapRenderer.LoadMap(Resources.FindTiledMap("Level1"));
 
+            // Add cursor and plpayer
+            AddGameObjectUI(new Cursor()); // Add the game cursor
+            AddGameObject(new Player(new Vector2(50f))); // Add player
+
+            // Load Level
+            CurrentLevel = new();
+            CurrentLevel.Map = Resources.FindTiledMap("Level1");
+            tiledMapRenderer.LoadMap(CurrentLevel.Map);
+            //Tile.AddTileCollision(CurrentLevel.Map.GetLayer<TiledMapTileLayer>("Wall"), CurrentLevel.Map.Width, CurrentLevel.Map.Height, CurrentLevel.Map.TileWidth, CurrentLevel.Map.TileHeight);
 
             InputManager.Initialize();
             entityManager.Initialize();
