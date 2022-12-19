@@ -1,6 +1,7 @@
 ﻿using BulletManiac.Collision;
 using BulletManiac.Managers;
 using BulletManiac.Utilities;
+using BulletManiac.Entity.Bullet;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -132,7 +133,7 @@ namespace BulletManiac.Entity.Player
 
         private AnimationManager animationManager; // Manange the animation based on certain action
 
-        float moveSpeed = 100f;
+        float moveSpeed = 80f;
         float animationSpeed = 0.1f;
         float runAnimationSpeed = 0.1f;
         float attackAnimationSpeed = 0.1f;
@@ -175,7 +176,6 @@ namespace BulletManiac.Entity.Player
             GameManager.Resources.LoadTexture("Player_Run", "SpriteSheet/Player/Owlet_Monster_Run_6");
             GameManager.Resources.LoadTexture("Player_Throw", "SpriteSheet/Player/Owlet_Monster_Throw_4");
 
-
             // Define the keys and animations
             animationManager.AddAnimation(PlayerAction.Idle, new Animation(GameManager.Resources.FindTexture("Player_Idle"), 4, 1, animationSpeed));
             animationManager.AddAnimation(PlayerAction.Run, new Animation(GameManager.Resources.FindTexture("Player_Run"), 6, 1, runAnimationSpeed));
@@ -193,6 +193,7 @@ namespace BulletManiac.Entity.Player
             // Update the animations
             animationManager.Update(currentAction, gameTime);
             texture = animationManager.CurrentAnimation.CurrentTexture; // Update the texture based on the animation
+
             base.Update(gameTime);
         }
 
@@ -214,7 +215,8 @@ namespace BulletManiac.Entity.Player
                 Vector2 mousePos = Camera.ScreenToWorld(InputManager.MousePosition); // Convert mouse screen position to the world position
                 Vector2 bulletDirection = mousePos - position;
 
-                Bullet bullet = new Bullet(position, bulletDirection, 100f);
+                // Fire Bullet
+                DefaultBullet bullet = new DefaultBullet(position, bulletDirection, 100f);
                 GameManager.AddGameObject(bullet); // Straight away add bullet to entity manager to run it
             }
         }
@@ -237,27 +239,34 @@ namespace BulletManiac.Entity.Player
             // Updating the speed
             if (InputManager.Moving)
             {
-                if (InputManager.GetKeyDown(Keys.LeftShift))
-                {
-                    position += Vector2.Normalize(InputManager.Direction) * (50f) * GameManager.DeltaTime;
-                    currentAction = PlayerAction.Walk;
-                }
-                else
-                {
-                    position += Vector2.Normalize(InputManager.Direction) * moveSpeed * GameManager.DeltaTime;
-                    currentAction = PlayerAction.Run;
-                }
+                float currentSpeed = 0f;
 
-                // Set animation reverse
-                if(spriteEffects == SpriteEffects.None && InputManager.Direction.X < 0 || 
-                   spriteEffects == SpriteEffects.FlipHorizontally && InputManager.Direction.X >= 0)
+                // Player moving backward, set animation reverse and make the player move slower
+                if (spriteEffects == SpriteEffects.None && InputManager.Direction.X < 0 ||
+                   spriteEffects == SpriteEffects.FlipHorizontally && InputManager.Direction.X > 0)
                 {
                     animationManager.GetAnimation(PlayerAction.Run).SetReverse(true);
+                    // currentSpeed = moveSpeed * 0.5f; // 50% slower if move backward
                 }
                 else
                 {
                     animationManager.GetAnimation(PlayerAction.Run).SetReverse(false);
+
                 }
+                currentSpeed = moveSpeed;
+                // Player move
+                if (InputManager.GetKeyDown(Keys.LeftShift))
+                {
+                    // position += Vector2.Normalize(InputManager.Direction) * (50f) * GameManager.DeltaTime;
+                    currentSpeed = moveSpeed * 0.5f;
+                    currentAction = PlayerAction.Walk;
+                }
+                else
+                {
+                    currentAction = PlayerAction.Run;
+                }
+
+                position += Vector2.Normalize(InputManager.Direction) * currentSpeed * GameManager.DeltaTime;
             }
             else
             {

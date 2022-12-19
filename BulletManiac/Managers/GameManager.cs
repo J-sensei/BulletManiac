@@ -143,9 +143,14 @@ namespace BulletManiac.Managers
             MainCamera = new Camera();
             tiledMapRenderer = new TiledMapRenderer(GraphicsDevice);
 
+            // Load textures
+            GameManager.Resources.LoadTexture("Bullet1", "SpriteSheet/Bullet/Bullets1_16x16");
+
             // Test Tiled Map
             Resources.LoadTiledMap("Level0", "Tiled/Level0");
-            tiledMapRenderer.LoadMap(Resources.FindTiledMap("Level0"));
+            Resources.LoadTiledMap("Level1", "Tiled/Level/Level1");
+            tiledMapRenderer.LoadMap(Resources.FindTiledMap("Level1"));
+
 
             InputManager.Initialize();
             entityManager.Initialize();

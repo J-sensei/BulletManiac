@@ -15,6 +15,18 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin SpriteSheet/Bullet/Bullets1_16x16.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:SpriteSheet/Bullet/Bullets1_16x16.png
+
 #begin SpriteSheet/Bullet/Test_Bullets_16x16.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -266,6 +278,38 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Tiled/CosmicLilac_Tiles.png
+
+#begin Tiled/Level/GBDungeon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Tiled/Level/GBDungeon.png
+
+#begin Tiled/Level/GBDungeon.tsx
+/importer:TiledMapTilesetImporter
+/processor:TiledMapTilesetProcessor
+/build:Tiled/Level/GBDungeon.tsx
+
+#begin Tiled/Level/level1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Tiled/Level/level1.tmx
+
+#begin Tiled/Level/level2.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Tiled/Level/level2.tmx
+
+#begin Tiled/Level/level3.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Tiled/Level/level3.tmx
 
 #begin Tiled/Level0.tmx
 /importer:TiledMapImporter

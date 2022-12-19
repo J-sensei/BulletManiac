@@ -1,4 +1,5 @@
 ﻿using BulletManiac.Managers;
+using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -39,9 +40,10 @@ namespace BulletManiac.Entity.Player
             base.Initialize();
         }
 
-        public void Follow(GameObject gameObject, Vector2 offset)
+        public void Follow(GameObject gameObject, Vector2 offset, SpriteEffects spriteEffect = SpriteEffects.None)
         {
             position = gameObject.Position + offset;
+            spriteEffects = spriteEffect;
         }
 
         public override void Update(GameTime gameTime)
@@ -49,8 +51,8 @@ namespace BulletManiac.Entity.Player
             animation.Update(gameTime);
             texture = animation.CurrentTexture;
 
-            Direction = Vector2.Normalize(InputManager.MousePosition - Position);
-            // Console.WriteLine(Rotation);
+            Vector2 mousePos = Camera.ScreenToWorld(InputManager.MousePosition); // Convert mouse screen position to the world position
+            Direction = mousePos - Position;
             base.Update(gameTime);
         }
 
