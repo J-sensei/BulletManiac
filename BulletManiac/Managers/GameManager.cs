@@ -171,6 +171,9 @@ namespace BulletManiac.Managers
             Resources.LoadTiledMap("Level2", "Tiled/Level/Level2");
             Resources.LoadTiledMap("Level3", "Tiled/Level/Level3");
 
+            // Animation
+            Resources.LoadAnimation("Bullet1", new Animation(Resources.FindTexture("Bullet1"), 5, 25, 0.1f, 6));
+
             // Load Sound Effect
             Resources.LoadSoundEffect("Footstep1", "Audio/Footstep/Footstep1");
             Resources.LoadSoundEffect("Footstep2", "Audio/Footstep/Footstep2");

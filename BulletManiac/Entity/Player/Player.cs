@@ -31,7 +31,7 @@ namespace BulletManiac.Entity.Player
         float animationSpeed = 0.1f;
         float runAnimationSpeed = 0.1f;
         float attackAnimationSpeed = 0.065f; // Attach speed
-        float shootSpeed = 1f;
+        float shootSpeed = 0.8f;
 
         // Accuracy
         const float DEFAULT_ACCURACY = 0.25f;
@@ -214,7 +214,7 @@ namespace BulletManiac.Entity.Player
                 position.Y += moveAmountY.Y;
         }
 
-        int lastWalkingAnimIndex = 0;
+        private int lastWalkingAnimIndex = 0; // Play the walking sfx only once
         private void WalkingSFX()
         {
             Animation anim = animationManager.GetAnimation(PlayerAction.Run);
@@ -224,8 +224,19 @@ namespace BulletManiac.Entity.Player
                 if (currentIndex == lastWalkingAnimIndex) return;
 
                 // Smoke Effect
-                AnimationEffect effect = new AnimationEffect(new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false), 
-                                            Position + new Vector2(0, 5f), new Vector2(32, 32), true);
+                AnimationEffect effect;
+                
+                if(spriteEffects != SpriteEffects.None)
+                {
+                    effect = new AnimationEffect(new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false),
+                            Position + new Vector2(8f, 5f), new Vector2(32, 32), true, SpriteEffects.FlipHorizontally);
+                }
+                else
+                {
+                    effect = new AnimationEffect(new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false),
+                            Position + new Vector2(-5f, 5f), new Vector2(32, 32), true);
+                }
+
                 GameManager.AddGameObject(effect);
 
                 // Audio

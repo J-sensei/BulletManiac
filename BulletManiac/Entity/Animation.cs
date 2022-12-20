@@ -36,7 +36,7 @@ namespace BulletManiac.Entity
         /// <summary>
         /// Cropped textures based on the bounds data
         /// </summary>
-        private Texture2D[] croppedTextures;
+        public Texture2D[] croppedTextures;
         /// <summary>
         /// Get the current frame sprite
         /// </summary>

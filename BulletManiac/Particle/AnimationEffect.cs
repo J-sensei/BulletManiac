@@ -1,5 +1,6 @@
 ﻿using BulletManiac.Entity;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 
 namespace BulletManiac.Particle
@@ -9,12 +10,13 @@ namespace BulletManiac.Particle
         private Animation animation;
         private bool destroyWhenFinish = false;
 
-        public AnimationEffect(Animation animation, Vector2 spawnPosition, Vector2 origin, bool destroyWhenFinish = true)
+        public AnimationEffect(Animation animation, Vector2 spawnPosition, Vector2 origin, bool destroyWhenFinish = true, SpriteEffects spriteEffects = 0)
         {
             this.animation = animation;
             this.destroyWhenFinish = destroyWhenFinish;
             position = spawnPosition;
             this.origin = origin;
+            this.spriteEffects = spriteEffects;
             animation.Reset();
         }
 

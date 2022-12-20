@@ -54,8 +54,8 @@ namespace BulletManiac
 
         protected override void Draw(GameTime gameTime)
         {
-            //GraphicsDevice.Clear(new Color(7, 24, 33)); // Default screen clear color (Same color as the map)
-            GraphicsDevice.Clear(Color.CornflowerBlue); // Default screen clear color (Same color as the map)
+            GraphicsDevice.Clear(new Color(7, 24, 33)); // Default screen clear color (Same color as the map)
+            //GraphicsDevice.Clear(Color.CornflowerBlue); // Default screen clear color (Same color as the map)
 
             // SpriteBatch Begin settings make sure the texture sprite is clean when scale up
             _spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: GameManager.MainCamera.Transform);
