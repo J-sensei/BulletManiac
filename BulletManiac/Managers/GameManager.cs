@@ -137,17 +137,6 @@ namespace BulletManiac.Managers
         
         public static void Initialize()
         {
-            #region Legacy Tile Test Code
-            //Resources.LoadTileset("Tileset/CosmicLilac_Tileset");
-            //Resources.LoadTileset("Tileset/FD_Dungeon_Free");
-            //Resources.LoadTilemap("Test", "Tilemap/Cosmic_Test"); // Test loading tilemap
-
-            //Resources.LoadTileset("Tileset/FD_Dungeon_Free_32x32");
-            //Resources.LoadTilemap("Dungeon_Test_32x32", "Tilemap/Dungeon_Test_32x32"); // Test loading tilemap
-            //map = new Tilemap(Resources.FindTileset("CosmicLilac_Tiles"));
-            //Tileset t = new();
-            //t.Load(Resources.FindXml("Test"));
-            #endregion
             MainCamera = new Camera(); // Create main camera for the game (Controlling zoom level to zoom in the tiles)
             tiledMapRenderer = new TiledMapRenderer(GraphicsDevice); // Initialize Tiled
 

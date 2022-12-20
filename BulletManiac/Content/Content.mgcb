@@ -27,30 +27,6 @@
 /processorParam:TextureFormat=Color
 /build:SpriteSheet/Bullet/Bullets1_16x16.png
 
-#begin SpriteSheet/Bullet/Test_Bullets_16x16.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:SpriteSheet/Bullet/Test_Bullets_16x16.png
-
-#begin SpriteSheet/Gun/Pistol.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:SpriteSheet/Gun/Pistol.png
-
 #begin SpriteSheet/Player/Owlet_Monster_Death_8.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -111,42 +87,6 @@
 /processorParam:TextureFormat=Color
 /build:SpriteSheet/Player/Owlet_Monster_Walk_6.png
 
-#begin SpriteSheet/Tiles/CosmicLilac_Tiles.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:SpriteSheet/Tiles/CosmicLilac_Tiles.png
-
-#begin SpriteSheet/Tiles/FD_Dungeon_Free_32x32.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:SpriteSheet/Tiles/FD_Dungeon_Free_32x32.png
-
-#begin SpriteSheet/Tiles/FD_Dungeon_Free.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:SpriteSheet/Tiles/FD_Dungeon_Free.png
-
 #begin SpriteSheet/UI/Crosshair.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -158,114 +98,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:SpriteSheet/UI/Crosshair.png
-
-#begin Test/Pistol.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Test/Pistol.png
-
-#begin Test/TopDownCharacter/Character_Down.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Test/TopDownCharacter/Character_Down.png
-
-#begin Test/TopDownCharacter/Character_DownLeft.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Test/TopDownCharacter/Character_DownLeft.png
-
-#begin Test/TopDownCharacter/Character_DownRight.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Test/TopDownCharacter/Character_DownRight.png
-
-#begin Test/TopDownCharacter/Character_Left.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Test/TopDownCharacter/Character_Left.png
-
-#begin Test/TopDownCharacter/Character_Right.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Test/TopDownCharacter/Character_Right.png
-
-#begin Test/TopDownCharacter/Character_Up.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Test/TopDownCharacter/Character_Up.png
-
-#begin Test/TopDownCharacter/Character_UpLeft.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Test/TopDownCharacter/Character_UpLeft.png
-
-#begin Test/TopDownCharacter/Character_UpRight.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Test/TopDownCharacter/Character_UpRight.png
 
 #begin Tiled/CosmicLilac_Tiles.png
 /importer:TextureImporter
@@ -320,34 +152,4 @@
 /importer:TiledMapTilesetImporter
 /processor:TiledMapTilesetProcessor
 /build:Tiled/Tileset1.tsx
-
-#begin Tilemap/Cosmic_Test.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Tilemap/Cosmic_Test.xml
-
-#begin Tilemap/Dungeon_Test_32x32.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Tilemap/Dungeon_Test_32x32.xml
-
-#begin Tilemap/Test.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Tilemap/Test.xml
-
-#begin Tileset/CosmicLilac_Tileset.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Tileset/CosmicLilac_Tileset.xml
-
-#begin Tileset/FD_Dungeon_Free_32x32.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Tileset/FD_Dungeon_Free_32x32.xml
-
-#begin Tileset/FD_Dungeon_Free.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Tileset/FD_Dungeon_Free.xml
 
