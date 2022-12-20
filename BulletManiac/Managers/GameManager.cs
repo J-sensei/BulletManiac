@@ -207,12 +207,14 @@ namespace BulletManiac.Managers
             //Resources.FindTilemap("Dungeon_Test_32x32").Draw(spriteBatch, gameTime); // Test draw tilemap
             //Resources.FindTilemap("Test").Draw(spriteBatch, gameTime); // Test draw tilemap
             #endregion
-            tiledMapRenderer.Draw(MainCamera.Transform); // Render the Tiled
+            tiledMapRenderer.Draw(viewMatrix: MainCamera.Transform); // Render the Tiled
+
             // Debug draw for the tiles collision
             foreach (Tile t in CollisionManager.TileBounds)
             {
                 t.Draw(spriteBatch, gameTime);
             }
+
             entityManager.Draw(spriteBatch, gameTime);       
         }
         public static void DrawUI(SpriteBatch spriteBatch, GameTime gameTime)
