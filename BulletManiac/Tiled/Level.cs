@@ -13,6 +13,7 @@ namespace BulletManiac.Tiled
     /// </summary>
     public class Level
     {
+        const string WALL_LAYER_NAME = "Wall";
         /// <summary>
         /// The difficulty value
         /// </summary>
@@ -21,9 +22,19 @@ namespace BulletManiac.Tiled
         /// Map of the level
         /// </summary>
         public TiledMap Map;
+        public TileGraph TileGraph;
         /// <summary>
         /// Initial player spawn position
         /// </summary>
         public Vector2 SpawnPosition;
+
+        public Level(TiledMap map, int colStart, int rowStart)
+        {
+            Map = map;
+            TiledMapTileLayer wallLayer = Map.GetLayer<TiledMapTileLayer>(WALL_LAYER_NAME);
+            // Construct the TileGraph
+            TileGraph = new TileGraph();
+            TileGraph.CreatePathsFromMap(wallLayer, colStart, rowStart);
+        }
     }
 }

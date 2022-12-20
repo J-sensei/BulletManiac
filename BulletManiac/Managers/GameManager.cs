@@ -146,16 +146,21 @@ namespace BulletManiac.Managers
 
         private static void LoadDefaultResources()
         {
-            // Load textures
+            // Load Sprites
             Resources.LoadTexture("Bullet1", "SpriteSheet/Bullet/Bullets1_16x16");
-            Resources.LoadTexture("Crosshair_SpriteSheet", "SpriteSheet/UI/Crosshair"); // Load the spritesheet to the resources
 
-            // Load player sprites
+            // Load Player Sprites
             Resources.LoadTexture("Player_Death", "SpriteSheet/Player/Owlet_Monster_Death_8");
             Resources.LoadTexture("Player_Idle", "SpriteSheet/Player/Owlet_Monster_Idle_4");
             Resources.LoadTexture("Player_Walk", "SpriteSheet/Player/Owlet_Monster_Walk_6");
             Resources.LoadTexture("Player_Run", "SpriteSheet/Player/Owlet_Monster_Run_6");
             Resources.LoadTexture("Player_Throw", "SpriteSheet/Player/Owlet_Monster_Throw_4");
+
+            // Load UI Sprites
+            Resources.LoadTexture("Crosshair_SpriteSheet", "SpriteSheet/UI/Crosshair");
+
+            // Load Debug UI Sprites
+            Resources.LoadTexture("Debug_Direction", "SpriteSheet/DebugUI/direction_16x16");
 
             // Load Tiled Map level
             Resources.LoadTiledMap("Level0", "Tiled/Level0");
@@ -172,8 +177,7 @@ namespace BulletManiac.Managers
             AddGameObject(new Player(new Vector2(50f))); // Add player
 
             // Set current level
-            CurrentLevel = new();
-            CurrentLevel.Map = Resources.FindTiledMap("Level1");
+            CurrentLevel = new Level(Resources.FindTiledMap("Level1"), 9, 8);
             tiledMapRenderer.LoadMap(CurrentLevel.Map);
             Tile.AddTileCollision(CurrentLevel.Map.GetLayer<TiledMapTileLayer>("Wall"), CurrentLevel.Map.Width, CurrentLevel.Map.Height, CurrentLevel.Map.TileWidth, CurrentLevel.Map.TileHeight);
         }
@@ -203,16 +207,16 @@ namespace BulletManiac.Managers
 
         public static void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            #region Legacy Tile Map Test Code
-            //Resources.FindTilemap("Dungeon_Test_32x32").Draw(spriteBatch, gameTime); // Test draw tilemap
-            //Resources.FindTilemap("Test").Draw(spriteBatch, gameTime); // Test draw tilemap
-            #endregion
             tiledMapRenderer.Draw(viewMatrix: MainCamera.Transform); // Render the Tiled
 
             // Debug draw for the tiles collision
-            foreach (Tile t in CollisionManager.TileBounds)
+            if (Debug)
             {
-                t.Draw(spriteBatch, gameTime);
+                foreach (Tile t in CollisionManager.TileBounds)
+                {
+                    t.Draw(spriteBatch, gameTime);
+                }
+                TileGraph.DebugDrawGraph(spriteBatch, CurrentLevel.TileGraph);
             }
 
             entityManager.Draw(spriteBatch, gameTime);       
