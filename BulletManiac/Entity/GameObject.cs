@@ -105,7 +105,7 @@ namespace BulletManiac.Entity
         #endregion
         
         public delegate void OnDestroy();
-        public OnDestroy DestroyAction;
+        public OnDestroy DestroyAction { get; set; }
 
         public GameObject(string name = DEFAULT_NAME)
         {

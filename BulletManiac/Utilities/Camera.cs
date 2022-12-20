@@ -133,7 +133,7 @@ namespace BulletManiac.Utilities
                 Vector2 newPosition = Position + movePosition;
                 pos = newPosition;
             }
-
+            //Position = new Vector2((int)pos.X, (int)pos.Y); // No Tearing with int
             Position = Vector2.Lerp(Position, pos, 5f * GameManager.DeltaTime);
         }
 
@@ -166,6 +166,8 @@ namespace BulletManiac.Utilities
         {
             Vector2 mousePos = InputManager.MousePosition;
             Vector2 screenSize = GameManager.CurrentResolution.ToVector2() / 2f;
+
+            //Console.WriteLine(Vector2.Normalize(mousePos) + " " + screenSize);
             float amount = 350f;
             offset = new Vector2(0f);
             if (InputManager.GetKeyDown(Keys.LeftShift)) return; // Test
@@ -173,7 +175,7 @@ namespace BulletManiac.Utilities
             float x, y;
             if(mousePos.X > screenSize.X)
             {
-                x = amount;
+                x = (Vector2.Normalize(mousePos).X / 2) * amount;
 
             }
             else
@@ -192,6 +194,7 @@ namespace BulletManiac.Utilities
 
             Vector2 target = new Vector2(x, y);
             offset = Vector2.Lerp(offset, target, 2f * GameManager.DeltaTime);
+            //Console.WriteLine(target + " " + offset);
         }
 
         /// <summary>

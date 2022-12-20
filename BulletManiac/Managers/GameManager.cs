@@ -150,6 +150,7 @@ namespace BulletManiac.Managers
         {
             // Load Sprites
             Resources.LoadTexture("Bullet1", "SpriteSheet/Bullet/Bullets1_16x16");
+            Resources.LoadTexture("Walking_Smoke", "SpriteSheet/Effect/Smoke_Walking");
 
             // Load Player Sprites
             Resources.LoadTexture("Player_Death", "SpriteSheet/Player/Owlet_Monster_Death_8");
@@ -173,7 +174,7 @@ namespace BulletManiac.Managers
 
         public static void LoadContent(ContentManager content)
         {
-            GameManager.Resources.Load(content); // Initialize the Resource Manager
+            Resources.Load(content); // Initialize the Resource Manager
             LoadDefaultResources(); // Load default resources needed for the game to start
 
             // Add cursor and plpayer

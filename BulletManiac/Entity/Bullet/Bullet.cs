@@ -1,5 +1,6 @@
 ﻿using BulletManiac.Collision;
 using BulletManiac.Managers;
+using BulletManiac.Particle;
 using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -60,6 +61,10 @@ namespace BulletManiac.Entity.Bullet
             // Destroy the bullet when it hit the wall
             if(CollisionManager.CheckTileCollision(this, Vector2.Zero))
             {
+                // Add smoke effect when bullet is destroy
+                AnimationEffect effect = new AnimationEffect(new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false),
+                                                        Position, new Vector2(32, 32), true);
+                GameManager.AddGameObject(effect);
                 Destroy(this);
             }
 

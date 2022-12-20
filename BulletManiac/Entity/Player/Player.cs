@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using BulletManiac.Particle;
 
 namespace BulletManiac.Entity.Player
 {
@@ -20,6 +21,7 @@ namespace BulletManiac.Entity.Player
         }
 
         private AnimationManager animationManager; // Manange the animation based on certain action
+        private Animation walkingSmokeEffect;
 
         // Player status
         float moveSpeed = 80f;
@@ -49,6 +51,8 @@ namespace BulletManiac.Entity.Player
             animationManager.AddAnimation(PlayerAction.Walk, new Animation(GameManager.Resources.FindTexture("Player_Walk"), 6, 1, animationSpeed));
             animationManager.AddAnimation(PlayerAction.Death, new Animation(GameManager.Resources.FindTexture("Player_Death"), 8, 1, animationSpeed));
             animationManager.AddAnimation(PlayerAction.Throw, new Animation(GameManager.Resources.FindTexture("Player_Throw"), 4, 1, attackAnimationSpeed * shootSpeed, looping: false));
+
+            walkingSmokeEffect = new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false);
         }
 
         protected override Rectangle CalculateBound()
@@ -167,6 +171,7 @@ namespace BulletManiac.Entity.Player
                 }
                 
                 ApplyMove(InputManager.Direction, currentSpeed); // Move the player and apply the collision to tiles
+                WalkingSFX(); // Update Moving SFX
             }
             else
             {
@@ -202,6 +207,21 @@ namespace BulletManiac.Entity.Player
 
             if (moveY)
                 position.Y += moveAmountY.Y;
+        }
+
+        int lastWalkingAnimIndex = 0;
+        private void WalkingSFX()
+        {
+            Animation anim = animationManager.GetAnimation(PlayerAction.Run);
+            if (anim.CurrentFrameIndex == 3 || anim.CurrentFrameIndex == 5)
+            {
+                int currentIndex = anim.CurrentFrameIndex;
+                if (currentIndex == lastWalkingAnimIndex) return;
+                AnimationEffect effect = new AnimationEffect(new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false), 
+                                            Position + new Vector2(0, 5f), new Vector2(32, 32), true);
+                GameManager.AddGameObject(effect);
+                lastWalkingAnimIndex = currentIndex;
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
