@@ -1,4 +1,5 @@
-﻿using BulletManiac.Tiled.Legacy;
+﻿using BulletManiac.Entity;
+using BulletManiac.Tiled.Legacy;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tiled;
@@ -73,6 +74,7 @@ namespace BulletManiac.Managers
         /// Store Tiled Map (Monogame Extended) data 
         /// </summary>
         private readonly Dictionary<string, TiledMap> TiledMaps = new();
+        private readonly Dictionary<string, Animation> Animations = new();
 
         /// <summary>
         /// Initialize the content manager
@@ -129,6 +131,17 @@ namespace BulletManiac.Managers
                 GameManager.Log("Resources Manager", "Duplicate name '" + name + "' is failed to add into TiledMap resources.");
             }
         }
+        public void LoadAnimation(string name, Animation animation)
+        {
+            if (!Animations.ContainsKey(name))
+            {
+                Animations.Add(name, animation);
+            }
+            else
+            {
+                GameManager.Log("Resources Manager", "Duplicate name '" + name + "' is failed to add into Animations resources.");
+            }
+        }
 
         /// <summary>
         /// Find and get the texture by the name in the Dictionary
@@ -156,6 +169,11 @@ namespace BulletManiac.Managers
         public TiledMap FindTiledMap(string name)
         {
             return TiledMaps[name];
+        }
+
+        public Animation FindAnimation(string name)
+        {
+            return Animations[name];
         }
 
         public void RemoveTexture(string name)

@@ -159,7 +159,7 @@ namespace BulletManiac.Utilities
         }
 
         /// <summary>
-        /// Test (USed for moving the camera based on the mouse position)
+        /// Test (Used for moving the camera based on the mouse position)
         /// </summary>
         Vector2 offset;
         private void UpdateMouseMove()
@@ -229,7 +229,6 @@ namespace BulletManiac.Utilities
 
             // Test Code
             int moveSpeed = 0;
-
 
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
             {

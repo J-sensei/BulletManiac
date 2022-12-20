@@ -19,18 +19,20 @@ namespace BulletManiac.Tiled
         public int TileWidth { get; private set; }
         public int TileHeight { get; private set; }
 
-        public Tile(int col, int row)
+        public Tile(int col, int row, string name = "Tile")
         {
             this.row = row;
             this.col = col;
+            this.name = String.Format("{0}({1}, {2})", name, Col, Row);
         }
 
-        public Tile(int col, int row, int width, int height)
+        public Tile(int col, int row, int width, int height, string name = "Tile")
         {
             this.row = row;
             this.col = col;
             TileWidth = width;
             TileHeight = height;
+            this.name = String.Format("{0}({1}, {2})", name, Col, Row);
         }
 
         public override string ToString()
@@ -97,8 +99,8 @@ namespace BulletManiac.Tiled
                     bool hasTile = mapLayer.TryGetTile((ushort)i, (ushort)j, out TiledMapTile? tile);
                     if (hasTile && tile.Value.GlobalIdentifier != 0)
                     {
-                        // Add collision to the collision manager
-                        Tile t = new Tile(i, j, tileWidth, tileHeight);
+                        // Add collision tile to the collision manager
+                        Tile t = new Tile(i, j, tileWidth, tileHeight, "Collision Tile");
                         CollisionManager.AddTileBound(t);
                     }
                 }

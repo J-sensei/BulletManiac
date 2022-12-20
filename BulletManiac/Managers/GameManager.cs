@@ -199,13 +199,14 @@ namespace BulletManiac.Managers
             DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds; // Update the delta time
             InputManager.Update(gameTime); // Update the input manager
 
-            tiledMapRenderer.Update(gameTime); // Tiled Map Update
             entityManager.Update(gameTime); // Entity Manager Update
             CollisionManager.Update(gameTime); // Collision Update
 
             // Camera Update
             MainCamera.Update(GraphicsDevice.Viewport);
             MainCamera.Follow(FindGameObject("Player")); // Always follow the player
+
+            tiledMapRenderer.Update(gameTime); // Tiled Map Update
 
             // Update debug status
             if (InputManager.GetKey(Keys.F12)) Debug = !Debug;

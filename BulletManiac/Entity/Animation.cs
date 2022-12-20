@@ -49,6 +49,14 @@ namespace BulletManiac.Entity
         }
 
         /// <summary>
+        /// Current frame index in the animation (start from 0)
+        /// </summary>
+        public int CurrentFrameIndex
+        {
+            get { return currentFrame; }
+        }
+
+        /// <summary>
         /// Animation finish playing
         /// </summary>
         public bool Finish { get; private set; }
@@ -56,6 +64,16 @@ namespace BulletManiac.Entity
         /// Play the animation in reverse order
         /// </summary>
         public bool Reverse { get; private set; } = false;
+
+        public Animation(Animation animation)
+        {
+            this.texture = animation.texture;
+            this.frameCount = animation.frameCount;
+            this.frameTime = animation.frameTime;
+            frameTimeLeft = animation.frameTime;
+            this.looping = animation.looping;
+            this.croppedTextures = animation.croppedTextures;
+        }
 
         /// <summary>
         /// Takes the texture, number of frames (X and Y), time between frames and which row of the sprite to animate
@@ -84,6 +102,7 @@ namespace BulletManiac.Entity
                 Rectangle bound = new Rectangle(i * width, (row - 1) * height, width, height);
                 croppedTextures[i] = Extensions.CropTexture2D(texture, bound);
             }
+            this.texture = null; // Texture is no use anymore
         }
 
         /// <summary>
