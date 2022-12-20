@@ -129,8 +129,8 @@ namespace BulletManiac.Tiled
         public static void DebugDrawGraph(SpriteBatch spriteBatch, TileGraph tileGraph)
         {
             Texture2D debugTexture = GameManager.Resources.FindTexture("Debug_Direction");
-            int[] count = { 0, 1, 0, 8, 2, 0, 4, 0 };
-            //Console.WriteLine("DebugTexture Height: " + debugTexture.Height);
+            int[] count = { 0, 1, 0, 8, 2, 0, 4, 0 }; // Direction texture crop position
+            
             foreach (Tile tile in tileGraph.Nodes)
             {
                 Vector2 position = new Vector2(tile.Col * 16, tile.Row * 16);

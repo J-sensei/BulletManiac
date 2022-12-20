@@ -69,10 +69,12 @@ namespace BulletManiac.Managers
         public static Point CurrentResolution { get { return resolutionList[CurrentResolutionIndex]; } }
         public static float CurrentGameScale { get { return scaleList[CurrentResolutionIndex]; } }
         public static float CurrentCameraZoom { get { return gameZoomLevelList[CurrentResolutionIndex]; } }
+        #endregion
 
         // Level
+        public static List<Level> Levels = new();
         public static Level CurrentLevel;
-        #endregion
+        public static int CurrentLevelIndex;
 
         /// <summary>
         /// Load / Unload and Find the resources of the game
@@ -165,6 +167,8 @@ namespace BulletManiac.Managers
             // Load Tiled Map level
             Resources.LoadTiledMap("Level0", "Tiled/Level0");
             Resources.LoadTiledMap("Level1", "Tiled/Level/Level1");
+            Resources.LoadTiledMap("Level2", "Tiled/Level/Level2");
+            Resources.LoadTiledMap("Level3", "Tiled/Level/Level3");
         }
 
         public static void LoadContent(ContentManager content)
@@ -177,32 +181,41 @@ namespace BulletManiac.Managers
             AddGameObject(new Player(new Vector2(50f))); // Add player
 
             // Set current level
-            CurrentLevel = new Level(Resources.FindTiledMap("Level1"), 9, 8);
+            Levels.Add(new Level(Resources.FindTiledMap("Level1"), 9, 8));
+            Levels.Add(new Level(Resources.FindTiledMap("Level2"), 9, 8));
+            Levels.Add(new Level(Resources.FindTiledMap("Level3"), 9, 8));
+
+            // Assign the current level
+            CurrentLevel = Levels[0];
             tiledMapRenderer.LoadMap(CurrentLevel.Map);
+            Tile.AddTileCollision(CurrentLevel.Map.GetLayer<TiledMapTileLayer>("Wall"), CurrentLevel.Map.Width, CurrentLevel.Map.Height, CurrentLevel.Map.TileWidth, CurrentLevel.Map.TileHeight);
+        }
+         
+        // Test change level
+        public static void ChangeLevel()
+        {
+            CurrentLevelIndex = (CurrentLevelIndex + 1) % Levels.Count;
+            CurrentLevel = Levels[CurrentLevelIndex];
+            tiledMapRenderer.LoadMap(CurrentLevel.Map);
+            CollisionManager.ClearTileCollision();
             Tile.AddTileCollision(CurrentLevel.Map.GetLayer<TiledMapTileLayer>("Wall"), CurrentLevel.Map.Width, CurrentLevel.Map.Height, CurrentLevel.Map.TileWidth, CurrentLevel.Map.TileHeight);
         }
 
         public static void Update(GameTime gameTime)
         {
-            #region Legacy Tile Map Test Code
-            //Resources.FindTilemap("Test").Update(gameTime); // test update tilemap
-            //Resources.FindTilemap("Dungeon_Test_32x32").Update(gameTime);
-            #endregion
-
             DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds; // Update the delta time
             InputManager.Update(gameTime); // Update the input manager
-
-            entityManager.Update(gameTime); // Entity Manager Update
+            tiledMapRenderer.Update(gameTime); // Tiled Map Update
             CollisionManager.Update(gameTime); // Collision Update
+            entityManager.Update(gameTime); // Entity Manager Update
 
             // Camera Update
             MainCamera.Update(GraphicsDevice.Viewport);
             MainCamera.Follow(FindGameObject("Player")); // Always follow the player
 
-            tiledMapRenderer.Update(gameTime); // Tiled Map Update
-
             // Update debug status
             if (InputManager.GetKey(Keys.F12)) Debug = !Debug;
+            if (InputManager.GetKey(Keys.R)) ChangeLevel(); // Test change level
         }
 
         public static void Draw(SpriteBatch spriteBatch, GameTime gameTime)

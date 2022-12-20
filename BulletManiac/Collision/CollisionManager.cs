@@ -53,6 +53,19 @@ namespace BulletManiac.Collision
             return false;
         }
 
+        /// <summary>
+        /// Clear the Tile Bounds game objects
+        /// </summary>
+        public static void ClearTileCollision()
+        {
+            for (int i = 0; i < TileBounds.Count; i++)
+            {
+                TileBounds[i].Dispose();
+                TileBounds[i] = null;
+            }
+            TileBounds.Clear();
+        }
+
         public static ICollidable Add(GameObject gameObject, string tag = "")
         {
             if(gameObject == null)
@@ -133,24 +146,6 @@ namespace BulletManiac.Collision
             Vector2 obj2_TL = new(obj2Bound.X, obj2Bound.Y);
             Vector2 obj1_BR = new Vector2(obj1Bound.X, obj1Bound.Y) + new Vector2(obj1Bound.Width, obj1Bound.Height);
             Vector2 obj2_BR = new Vector2(obj2Bound.X, obj2Bound.Y) + new Vector2(obj2Bound.Width, obj2Bound.Height);
-
-            if (obj1_BR.X < obj2_TL.X || obj2_BR.X < obj1_TL.X ||
-                obj1_BR.Y < obj2_TL.Y || obj2_BR.Y < obj1_TL.Y)
-                return false;
-            else
-                return true;
-        }
-
-        private static bool IsCollided_AABB(GameObject go1, GameObject go2)
-        {
-            // TL = top left, BR = bottom right
-            Rectangle obj1Bounds = go1.Bound;
-            Rectangle obj2Bounds = go2.Bound;
-
-            Vector2 obj1_TL = new(obj1Bounds.X, obj1Bounds.Y);
-            Vector2 obj2_TL = new(obj2Bounds.X, obj2Bounds.Y);
-            Vector2 obj1_BR = go1.Position + new Vector2(obj1Bounds.Width, obj1Bounds.Height);
-            Vector2 obj2_BR = go2.Position + new Vector2(obj2Bounds.Width, obj2Bounds.Height);
 
             if (obj1_BR.X < obj2_TL.X || obj2_BR.X < obj1_TL.X ||
                 obj1_BR.Y < obj2_TL.Y || obj2_BR.Y < obj1_TL.Y)

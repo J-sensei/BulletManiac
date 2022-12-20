@@ -37,6 +37,7 @@ namespace BulletManiac.Collision
 
         public void Dispose()
         {
+            GameObject.Dispose();
             GameObject = null;
             Tag = null;
         }
