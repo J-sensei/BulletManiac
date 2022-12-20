@@ -1,4 +1,5 @@
 ﻿using BulletManiac.Entity;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tiled;
@@ -26,6 +27,7 @@ namespace BulletManiac.Managers
         /// </summary>
         private readonly Dictionary<string, TiledMap> TiledMaps = new();
         private readonly Dictionary<string, Animation> Animations = new();
+        private readonly Dictionary<string, SoundEffect> SoundEffects = new();
 
         /// <summary>
         /// Initialize the content manager
@@ -94,6 +96,19 @@ namespace BulletManiac.Managers
             }
         }
 
+        public void LoadSoundEffect(string name, string path)
+        {
+            if (!SoundEffects.ContainsKey(name))
+            {
+                SoundEffect data = contentManager.Load<SoundEffect>(path);
+                SoundEffects.Add(name, data);
+            }
+            else
+            {
+                GameManager.Log("Resources Manager", "Duplicate name '" + name + "' is failed to add into Sound Effect resources.");
+            }
+        }
+
         /// <summary>
         /// Find and get the texture by the name in the Dictionary
         /// </summary>
@@ -125,6 +140,11 @@ namespace BulletManiac.Managers
         public Animation FindAnimation(string name)
         {
             return Animations[name];
+        }
+
+        public SoundEffect FindSoundEffect(string name)
+        {
+            return SoundEffects[name];
         }
 
         public void RemoveTexture(string name)

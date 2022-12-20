@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using BulletManiac.Particle;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework.Audio;
 
 namespace BulletManiac.Entity.Player
 {
@@ -22,6 +24,7 @@ namespace BulletManiac.Entity.Player
 
         private AnimationManager animationManager; // Manange the animation based on certain action
         private Animation walkingSmokeEffect;
+        private List<SoundEffect> footstepsSound = new();
 
         // Player status
         float moveSpeed = 80f;
@@ -53,6 +56,8 @@ namespace BulletManiac.Entity.Player
             animationManager.AddAnimation(PlayerAction.Throw, new Animation(GameManager.Resources.FindTexture("Player_Throw"), 4, 1, attackAnimationSpeed * shootSpeed, looping: false));
 
             walkingSmokeEffect = new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false);
+            footstepsSound.Add(GameManager.Resources.FindSoundEffect("Footstep1"));
+            footstepsSound.Add(GameManager.Resources.FindSoundEffect("Footstep2"));
         }
 
         protected override Rectangle CalculateBound()
@@ -213,13 +218,18 @@ namespace BulletManiac.Entity.Player
         private void WalkingSFX()
         {
             Animation anim = animationManager.GetAnimation(PlayerAction.Run);
-            if (anim.CurrentFrameIndex == 3 || anim.CurrentFrameIndex == 5)
+            if (anim.CurrentFrameIndex == 2 || anim.CurrentFrameIndex == 5)
             {
                 int currentIndex = anim.CurrentFrameIndex;
                 if (currentIndex == lastWalkingAnimIndex) return;
+
+                // Smoke Effect
                 AnimationEffect effect = new AnimationEffect(new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false), 
                                             Position + new Vector2(0, 5f), new Vector2(32, 32), true);
                 GameManager.AddGameObject(effect);
+
+                // Audio
+                footstepsSound[Extensions.Random.Next(footstepsSound.Count)].Play();
                 lastWalkingAnimIndex = currentIndex;
             }
         }

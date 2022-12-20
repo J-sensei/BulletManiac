@@ -170,6 +170,10 @@ namespace BulletManiac.Managers
             Resources.LoadTiledMap("Level1", "Tiled/Level/Level1");
             Resources.LoadTiledMap("Level2", "Tiled/Level/Level2");
             Resources.LoadTiledMap("Level3", "Tiled/Level/Level3");
+
+            // Load Sound Effect
+            Resources.LoadSoundEffect("Footstep1", "Audio/Footstep/Footstep1");
+            Resources.LoadSoundEffect("Footstep2", "Audio/Footstep/Footstep2");
         }
 
         public static void LoadContent(ContentManager content)

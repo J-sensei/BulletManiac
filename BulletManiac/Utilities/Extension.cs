@@ -7,6 +7,7 @@ namespace BulletManiac.Utilities
     public static class Extensions
     {
         private static Random random = new Random();
+        public static Random Random { get { return random; } }
 
         public static float RandomRangeFloat(float min, float max)
         {

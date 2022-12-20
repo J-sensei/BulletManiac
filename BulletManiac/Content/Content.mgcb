@@ -15,6 +15,18 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Audio/Footstep/Footstep1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Footstep/Footstep1.wav
+
+#begin Audio/Footstep/Footstep2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Footstep/Footstep2.wav
+
 #begin SpriteSheet/Bullet/Bullets1_16x16.png
 /importer:TextureImporter
 /processor:TextureProcessor
