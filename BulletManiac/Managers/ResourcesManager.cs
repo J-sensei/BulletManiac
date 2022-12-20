@@ -1,5 +1,4 @@
 ﻿using BulletManiac.Entity;
-using BulletManiac.Tiled.Legacy;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tiled;
@@ -13,54 +12,6 @@ namespace BulletManiac.Managers
     /// </summary>
     public class ResourcesManager
     {
-        #region Legacy
-        /// <summary>
-        /// Tileset generated when loading tileset data
-        /// </summary>
-        private readonly Dictionary<string, Tileset> Tilesets = new();
-        private readonly Dictionary<string, Tilemap> Tilemaps = new();
-        public void LoadTileset(string path)
-        {
-            TilesetData data = contentManager.Load<TilesetData>(path);
-
-            // If this data is already inside the resources, do not add it
-            if (!Tilesets.ContainsKey(data.ResourcesName))
-            {
-                Tileset tileset = new Tileset(data);
-
-                Tilesets.Add(data.ResourcesName, tileset);
-            }
-            else
-            {
-                Console.WriteLine("[Resources Manager] Duplicate name '" + data.ResourcesName + "' is failed to add into Tileset resources.");
-            }
-        }
-
-        public void LoadTilemap(string name, string path)
-        {
-            // If this name is already inside the resources, do not add it
-            if (!Tilemaps.ContainsKey(name))
-            {
-                TilemapData data = contentManager.Load<TilemapData>(path);
-                Tilemap map = new Tilemap(null, data);
-                Tilemaps.Add(name, map);
-            }
-            else
-            {
-                Console.WriteLine("[Resources Manager] Duplicate name '" + name + "' is failed to add into Tilemap resources.");
-            }
-        }
-        public Tileset FindTileset(string name)
-        {
-            return Tilesets[name];
-        }
-
-        public Tilemap FindTilemap(string name)
-        {
-            return Tilemaps[name];
-        }
-        #endregion
-
         /// <summary>
         /// Content Manager helps to load the XNB content build by the MGCB
         /// </summary>
@@ -121,7 +72,7 @@ namespace BulletManiac.Managers
         /// <param name="path"></param>
         public void LoadTiledMap(string name, string path)
         {
-            if (!Tilemaps.ContainsKey(name))
+            if (!TiledMaps.ContainsKey(name))
             {
                 TiledMap data = contentManager.Load<TiledMap>(path);
                 TiledMaps.Add(name, data);

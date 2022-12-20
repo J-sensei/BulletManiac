@@ -140,7 +140,7 @@ namespace BulletManiac.Entity.Player
         float moveSpeed = 80f;
         float animationSpeed = 0.1f;
         float runAnimationSpeed = 0.1f;
-        float attackAnimationSpeed = 0.01f; // Attach speed
+        float attackAnimationSpeed = 0.065f; // Attach speed
         float shootSpeed = 1f;
 
         // Accuracy
@@ -301,15 +301,15 @@ namespace BulletManiac.Entity.Player
             moveAmountY.X = 0;
 
             // Check the collisioni for x and y axis
-            if(direction.X > 0)
+            if(direction.X >= 0)
                 moveX = !CollisionManager.CheckTileCollision(this, moveAmountX * 1.5f);
             else
-                moveX = !CollisionManager.CheckTileCollision(this, moveAmountX * 0.5f);
+                moveX = !CollisionManager.CheckTileCollision(this, moveAmountX * 1f);
 
-            if(direction.Y > 0)
+            if(direction.Y >= 0)
                 moveY = !CollisionManager.CheckTileCollision(this, moveAmountY * 1.5f);
             else
-                moveY = !CollisionManager.CheckTileCollision(this, moveAmountY * 0.5f);
+                moveY = !CollisionManager.CheckTileCollision(this, moveAmountY * 1f);
     
             // Move the character according to the result
             if (moveX)
