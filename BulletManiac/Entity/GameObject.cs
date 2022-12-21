@@ -103,9 +103,6 @@ namespace BulletManiac.Entity
             }
         }
         #endregion
-        
-        public delegate void OnDestroy();
-        public OnDestroy DestroyAction { get; set; }
 
         public GameObject(string name = DEFAULT_NAME)
         {
@@ -147,9 +144,7 @@ namespace BulletManiac.Entity
         /// <param name="gameObject"></param>
         public static void Destroy(GameObject gameObject)
         {
-            if(gameObject.DestroyAction != null)
-                gameObject.DestroyAction.Invoke(); // Invoke any destroy action
-
+            gameObject.DeleteEvent();
             gameObject.destroyed = true; // Entities Manager will take care of this after destroy is set to true
         }
 
@@ -158,6 +153,13 @@ namespace BulletManiac.Entity
         /// </summary>
         /// <param name="other"></param>
         public virtual void CollisionEvent(GameObject other) { }
+        /// <summary>
+        /// Trigger before the object is delete
+        /// </summary>
+        public virtual void DeleteEvent()
+        {
+
+        }
 
         public virtual void Dispose()
         {

@@ -151,6 +151,7 @@ namespace BulletManiac.Managers
             // Load Sprites
             Resources.LoadTexture("Bullet1", "SpriteSheet/Bullet/Bullets1_16x16");
             Resources.LoadTexture("Walking_Smoke", "SpriteSheet/Effect/Smoke_Walking");
+            Resources.LoadTexture("Player_Pistol", "SpriteSheet/Gun/[FULL]PistolV1.01");
 
             // Load Player Sprites
             Resources.LoadTexture("Player_Death", "SpriteSheet/Player/Owlet_Monster_Death_8");
@@ -158,6 +159,7 @@ namespace BulletManiac.Managers
             Resources.LoadTexture("Player_Walk", "SpriteSheet/Player/Owlet_Monster_Walk_6");
             Resources.LoadTexture("Player_Run", "SpriteSheet/Player/Owlet_Monster_Run_6");
             Resources.LoadTexture("Player_Throw", "SpriteSheet/Player/Owlet_Monster_Throw_4");
+            Resources.LoadTexture("Player_SpriteSheet", "SpriteSheet/Player/AnimationSheet_Player");
 
             // Load UI Sprites
             Resources.LoadTexture("Crosshair_SpriteSheet", "SpriteSheet/UI/Crosshair");
@@ -177,6 +179,12 @@ namespace BulletManiac.Managers
             // Load Sound Effect
             Resources.LoadSoundEffect("Footstep1", "Audio/Footstep/Footstep1");
             Resources.LoadSoundEffect("Footstep2", "Audio/Footstep/Footstep2");
+            Resources.LoadSoundEffect("Footstep3", "Audio/Footstep/Footstep3");
+            Resources.LoadSoundEffect("Footstep4", "Audio/Footstep/Footstep4");
+            Resources.LoadSoundEffect("Footstep5", "Audio/Footstep/Footstep5");
+            Resources.LoadSoundEffect("Footstep6", "Audio/Footstep/Footstep6");
+            Resources.LoadSoundEffect("Footstep7", "Audio/Footstep/Footstep7");
+            Resources.LoadSoundEffect("Gun_Shoot", "Audio/Gun/Gun_Shoot");
         }
 
         public static void LoadContent(ContentManager content)

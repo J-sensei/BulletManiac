@@ -13,7 +13,7 @@ namespace BulletManiac.Entity.Bullet
     /// </summary>
     public class DefaultBullet : Bullet
     {
-        public DefaultBullet(Vector2 position, Vector2 direction, float speed = 0) : base(position, direction, speed)
+        public DefaultBullet(Vector2 position, Vector2 direction, float speed = DEFAULT_SPEED, float initalSpeed = 0f) : base(position, direction, speed, initalSpeed)
         {
             this.name = "Default Bullet";
         }
