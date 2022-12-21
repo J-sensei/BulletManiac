@@ -72,9 +72,13 @@ namespace BulletManiac.Managers
         #endregion
 
         // Level
+        public static Player Player { get; private set; }
         public static List<Level> Levels = new();
         public static Level CurrentLevel;
         public static int CurrentLevelIndex;
+
+        // Pathfinding
+        private static PathTester pathTester;
 
         /// <summary>
         /// Load / Unload and Find the resources of the game
@@ -167,6 +171,7 @@ namespace BulletManiac.Managers
 
             // Load Debug UI Sprites
             Resources.LoadTexture("Debug_Direction", "SpriteSheet/DebugUI/direction_16x16");
+            Resources.LoadTexture("Debug_Path", "SpriteSheet/DebugUI/path_16x16");
 
             // Load Tiled Map level
             Resources.LoadTiledMap("Level0", "Tiled/Level0");
@@ -195,7 +200,8 @@ namespace BulletManiac.Managers
 
             // Add cursor and plpayer
             AddGameObjectUI(new Cursor()); // Add the game cursor
-            AddGameObject(new Player(new Vector2(50f))); // Add player
+            Player = new Player(new Vector2(50f)); // Create Player in the game
+            AddGameObject(Player); // Add player
 
             // Set current level
             Levels.Add(new Level(Resources.FindTiledMap("Level1"), 9, 8));
@@ -206,6 +212,9 @@ namespace BulletManiac.Managers
             CurrentLevel = Levels[0];
             tiledMapRenderer.LoadMap(CurrentLevel.Map);
             Tile.AddTileCollision(CurrentLevel.Map.GetLayer<TiledMapTileLayer>("Wall"), CurrentLevel.Map.Width, CurrentLevel.Map.Height, CurrentLevel.Map.TileWidth, CurrentLevel.Map.TileHeight);
+
+            // Pathfinding
+            pathTester = new PathTester(CurrentLevel);
         }
          
         // Test change level
@@ -216,6 +225,7 @@ namespace BulletManiac.Managers
             tiledMapRenderer.LoadMap(CurrentLevel.Map);
             CollisionManager.ClearTileCollision();
             Tile.AddTileCollision(CurrentLevel.Map.GetLayer<TiledMapTileLayer>("Wall"), CurrentLevel.Map.Width, CurrentLevel.Map.Height, CurrentLevel.Map.TileWidth, CurrentLevel.Map.TileHeight);
+            pathTester.ChangeLevel(CurrentLevel);
         }
 
         public static void Update(GameTime gameTime)
@@ -233,6 +243,11 @@ namespace BulletManiac.Managers
             // Update debug status
             if (InputManager.GetKey(Keys.F12)) Debug = !Debug;
             if (InputManager.GetKey(Keys.R)) ChangeLevel(); // Test change level
+
+            if (Debug)
+            {
+                pathTester.Update(gameTime);
+            }
         }
 
         public static void Draw(SpriteBatch spriteBatch, GameTime gameTime)
@@ -247,6 +262,7 @@ namespace BulletManiac.Managers
                     t.Draw(spriteBatch, gameTime);
                 }
                 TileGraph.DebugDrawGraph(spriteBatch, CurrentLevel.TileGraph);
+                pathTester.Draw(spriteBatch);
             }
 
             entityManager.Draw(spriteBatch, gameTime);       

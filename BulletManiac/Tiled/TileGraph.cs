@@ -18,11 +18,11 @@ namespace BulletManiac.Tiled
         /// <summary>
         /// 8 direction of moving row (y axis)
         /// </summary>
-        private readonly int[] moveRow = { -1, -1, -1, 0, 0, 1, 1, 1 };
+        public static readonly int[] MoveRow = { -1, -1, -1, 0, 0, 1, 1, 1 };
         /// <summary>
         /// 8 direction of moving column (x axis)
         /// </summary>
-        private readonly int[] moveCol = { -1, 0, 1, -1, 1, -1, 0, 1 };
+        public static readonly int[] MoveCol = { -1, 0, 1, -1, 1, -1, 0, 1 };
         /// <summary>
         /// Diagonal : 2, Non-Diagonal : 1
         /// </summary>
@@ -86,8 +86,8 @@ namespace BulletManiac.Tiled
                 foreach(int direction in directions)
                 {
                     // Get neigbour tile
-                    int neighbourRow = currentTile.Row + moveRow[direction];
-                    int neighbourCol = currentTile.Col + moveCol[direction];
+                    int neighbourRow = currentTile.Row + MoveRow[direction];
+                    int neighbourCol = currentTile.Col + MoveCol[direction];
 
                     // A valid neighbour satisfies the following criteria:
                     // (1) Row and column is within the number of rows and columns respectively
@@ -140,7 +140,7 @@ namespace BulletManiac.Tiled
                 int index = 0;
 
                 for (int i = 0; i < weights.Length; ++i)
-                    if (weights[i] != 0)
+                    if (weights[i] != 0) // As long as the weight is not 0, it is a valid path
                         index += count[i];
 
                 rect.X = index * debugTexture.Height;

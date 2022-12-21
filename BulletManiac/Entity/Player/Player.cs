@@ -24,7 +24,7 @@ namespace BulletManiac.Entity.Player
 
         private AnimationManager animationManager; // Manange the animation based on certain action
         private Animation walkingSmokeEffect;
-        private List<SoundEffect> footstepsSound = new();
+        private List<SoundEffect> footstepsSound;
         private TextureEffect shadowEffect;
 
         private Gun gun;
@@ -56,12 +56,6 @@ namespace BulletManiac.Entity.Player
             origin = new Vector2(16f); // Origin (Half of the sprite size) 32x32 / 2
 
             // Define the keys and animations
-            //animationManager.AddAnimation(PlayerAction.Idle, new Animation(GameManager.Resources.FindTexture("Player_Idle"), 4, 1, animationSpeed));
-            //animationManager.AddAnimation(PlayerAction.Run, new Animation(GameManager.Resources.FindTexture("Player_Run"), 6, 1, runAnimationSpeed));
-            //animationManager.AddAnimation(PlayerAction.Walk, new Animation(GameManager.Resources.FindTexture("Player_Walk"), 6, 1, animationSpeed));
-            //animationManager.AddAnimation(PlayerAction.Death, new Animation(GameManager.Resources.FindTexture("Player_Death"), 8, 1, animationSpeed));
-            //animationManager.AddAnimation(PlayerAction.Throw, new Animation(GameManager.Resources.FindTexture("Player_Throw"), 4, 1, attackAnimationSpeed * shootSpeed, looping: false));
-
             animationManager.AddAnimation(PlayerAction.Idle, new Animation(GameManager.Resources.FindTexture("Player_SpriteSheet"), 2, 32, 32, idleAnimationSpeed));
             animationManager.AddAnimation(PlayerAction.Run, new Animation(GameManager.Resources.FindTexture("Player_SpriteSheet"), 8, 32, 32, runAnimationSpeed, 4));
             animationManager.AddAnimation(PlayerAction.Walk, new Animation(GameManager.Resources.FindTexture("Player_SpriteSheet"), 4, 32, 32, walkAnimationSpeed, 3));
@@ -69,13 +63,15 @@ namespace BulletManiac.Entity.Player
             animationManager.AddAnimation(PlayerAction.Throw, new Animation(GameManager.Resources.FindTexture("Player_SpriteSheet"), 8, 32, 32, attackAnimationSpeed * shootSpeed, 9, looping: false));
 
             walkingSmokeEffect = new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false);
-            footstepsSound.Add(GameManager.Resources.FindSoundEffect("Footstep1"));
-            footstepsSound.Add(GameManager.Resources.FindSoundEffect("Footstep2"));
-            footstepsSound.Add(GameManager.Resources.FindSoundEffect("Footstep3"));
-
-            footstepsSound.Add(GameManager.Resources.FindSoundEffect("Footstep5"));
-            footstepsSound.Add(GameManager.Resources.FindSoundEffect("Footstep6"));
-            footstepsSound.Add(GameManager.Resources.FindSoundEffect("Footstep7"));
+            footstepsSound = new List<SoundEffect>()
+            {
+                GameManager.Resources.FindSoundEffect("Footstep1"),
+                GameManager.Resources.FindSoundEffect("Footstep2"),
+                GameManager.Resources.FindSoundEffect("Footstep3"),
+                GameManager.Resources.FindSoundEffect("Footstep5"),
+                GameManager.Resources.FindSoundEffect("Footstep6"),
+                GameManager.Resources.FindSoundEffect("Footstep7")
+            };
 
             Texture2D shadowTexture = Extensions.CropTexture2D(GameManager.Resources.FindTexture("Shadow"), new Rectangle(0, 0, 64, 64)); // Crop a shadow texture
             shadowEffect = new TextureEffect(shadowTexture, this, shadowTexture.Bounds.Center.ToVector2(), new Vector2(0.5f), new Vector2(0f, -3.5f));
@@ -289,8 +285,7 @@ namespace BulletManiac.Entity.Player
 
         public override void Initialize()
         {
-            CollisionManager.Add(this, Position.ToString()); // Add player into the collision manager
-
+            CollisionManager.Add(this, "Player"); // Add player into the collision manager
             base.Initialize();
         }
 
