@@ -3,6 +3,7 @@ using BulletManiac.Entity;
 using BulletManiac.Entity.Player;
 using BulletManiac.Entity.UI;
 using BulletManiac.Tiled;
+using BulletManiac.Tiled.Pathfinding;
 using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -15,6 +16,10 @@ using System.Collections.Generic;
 
 namespace BulletManiac.Managers
 {
+    public enum PathfindingAlgorithm
+    {
+        Dijkstra, AStar
+    }
     /// <summary>
     /// Global class accessing to various functions
     /// </summary>
@@ -79,6 +84,7 @@ namespace BulletManiac.Managers
 
         // Pathfinding
         private static PathTester pathTester;
+        public static PathfindingAlgorithm CurrentPathfindingAlgorithm = PathfindingAlgorithm.AStar;
 
         /// <summary>
         /// Load / Unload and Find the resources of the game

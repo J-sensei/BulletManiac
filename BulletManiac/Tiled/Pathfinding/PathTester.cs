@@ -1,15 +1,17 @@
 ﻿using BulletManiac.Managers;
 using BulletManiac.Tiled;
+using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tiled;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BulletManiac.Utilities
+namespace BulletManiac.Tiled.Pathfinding
 {
     /// <summary>
     /// Path tester use to test the pathfinding algorithm from player position to the user cursor position
@@ -23,61 +25,74 @@ namespace BulletManiac.Utilities
 
         private Point srcPosition;
         private Point destPosition;
-        
+
         private LinkedList<Tile> path;
 
         public PathTester(TileGraph tileGraph, TiledMap map)
         {
             this.tileGraph = tileGraph;
             this.map = map;
-            this.srcPosition = Point.Zero;
-            this.destPosition = Point.Zero;
-            this.path = new LinkedList<Tile>();
+            srcPosition = Point.Zero;
+            destPosition = Point.Zero;
+            path = new LinkedList<Tile>();
 
             pathTexture = GameManager.Resources.FindTexture("Debug_Path");
         }
 
         public PathTester(Level gameLevel) : this(gameLevel.TileGraph, gameLevel.Map)
         {
-            
+
         }
 
         public void ChangeLevel(Level gameLevel)
         {
-            this.tileGraph = gameLevel.TileGraph;
-            this.map = gameLevel.Map;
-            this.srcPosition = Point.Zero;
-            this.destPosition = Point.Zero;
+            tileGraph = gameLevel.TileGraph;
+            map = gameLevel.Map;
+            srcPosition = Point.Zero;
+            destPosition = Point.Zero;
         }
 
+        private Stopwatch stopwatch = Stopwatch.StartNew();
         public void Update(GameTime gameTime)
         {
-            Tile srcTile = Tile.ToTile(GameManager.Player.Position, map.TileWidth, map.TileHeight);
-            Point srcPoint = new Point(srcTile.Col, srcTile.Row);
-
-
-                srcPosition = srcPoint;
-            //Console.WriteLine("SRC: " + srcPosition + " DEST: " + destPoint);
-
             // Calculate path
             if (InputManager.MouseLeftClick)
             {
-                path.Clear();
+                path.Clear(); // Clear previous path data
+                Tile srcTile = Tile.ToTile(GameManager.Player.Position, map.TileWidth, map.TileHeight);
+                srcPosition.X = srcTile.Col;
+                srcPosition.Y = srcTile.Row;
+
                 Tile destTile = Tile.ToTile(Camera.ScreenToWorld(InputManager.MousePosition), map.TileWidth, map.TileHeight);
-                Point destPoint = new Point(destTile.Col, destTile.Row);
-                    destPosition = destPoint;
+                destPosition.X = destTile.Col;
+                destPosition.Y = destTile.Row;
 
                 try
                 {
                     // Calculate srcTile and destTile
                     Tile src = Tile.ToTile(GameManager.Player.Position, map.TileWidth, map.TileHeight);
                     Tile dest = Tile.ToTile(Camera.ScreenToWorld(InputManager.MousePosition), map.TileWidth, map.TileHeight);
+
+                    stopwatch.Reset(); // Debug calculate the time to run pathfinding algorithms
                     // Calculate path
-                    path = Dijkstra.Compute(tileGraph, src, dest);
+                    if (GameManager.CurrentPathfindingAlgorithm == PathfindingAlgorithm.Dijkstra)
+                    {
+                        stopwatch.Start();
+                        path = Dijkstra.Compute(tileGraph, src, dest);
+                        stopwatch.Stop();
+                        GameManager.Log("Path Tester", "Time Ran the Dijkstra Algorithm: " + stopwatch.ElapsedMilliseconds + "ms.");
+                    }
+                    else if(GameManager.CurrentPathfindingAlgorithm == PathfindingAlgorithm.AStar)
+                    {
+                        stopwatch.Start();
+                        path = AStar.Compute(tileGraph, src, dest, AStar.Euclidean);
+                        stopwatch.Stop();
+                        GameManager.Log("Path Tester", "Time Ran the A* Algorithm: " + stopwatch.ElapsedMilliseconds + "ms.");
+                    }
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Failed to perform pathfinding {0}", e.Message);
+                    Console.WriteLine("[Path Tester] Failed to perform pathfinding {0}", e.Message);
                 }
             }
         }
@@ -99,7 +114,7 @@ namespace BulletManiac.Utilities
                     int dCol = next.Value.Col - cur.Value.Col;
                     int dRow = next.Value.Row - cur.Value.Row;
 
-                    index = (dCol + 1) + 3 * (dRow + 1);
+                    index = dCol + 1 + 3 * (dRow + 1);
                 }
 
                 position.X = cur.Value.Col * map.TileWidth;

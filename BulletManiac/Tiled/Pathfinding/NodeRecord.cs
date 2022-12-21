@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BulletManiac.Utilities
+namespace BulletManiac.Tiled.Pathfinding
 {
     /// <summary>
     /// NodeRecord is designed to be used for node selection in priority queue. This class is made to support both Dijkstra and A*
@@ -19,6 +19,8 @@ namespace BulletManiac.Utilities
         /// Heuristic value is use for A* Algorithm
         /// </summary>
         public ulong Heuristic { get; set; }
+        public ulong HeuristicCost { get { return CostSoFar + Heuristic; } }
+        public AStarState State { get; set; } = AStarState.None; // default is None
 
         public NodeRecord(Tile self, Tile from, ulong costSoFar, ulong heuristic)
         {
@@ -32,7 +34,7 @@ namespace BulletManiac.Utilities
         // Keeping it for historic purposes
         public int CompareTo(NodeRecord rhs)
         {
-            ulong f1 = this.CostSoFar + this.Heuristic;
+            ulong f1 = CostSoFar + Heuristic;
             ulong f2 = rhs.CostSoFar + rhs.Heuristic;
             return (int)(f1 - f2);
         }
@@ -42,4 +44,20 @@ namespace BulletManiac.Utilities
             return Self.ToString();
         }
     }
+
+    public enum AStarState
+    {
+        /// <summary>
+        /// None = Not seen
+        /// </summary>
+        None = 0,
+        /// <summary>
+        /// Opened = Seen and is in the Priority Queue (also called 'OpenSet' / 'OpenList')
+        /// </summary>
+        Opened,
+        /// <summary>
+        /// Closed = Seen and has been taken out of the Priority Queue.
+        /// </summary>
+        Closed
+    };
 }

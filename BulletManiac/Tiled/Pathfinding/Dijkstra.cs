@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace BulletManiac.Utilities
+namespace BulletManiac.Tiled.Pathfinding
 {
     /// <summary>
     /// Algorithm to perform pathfinding on the tile environment
@@ -24,7 +24,7 @@ namespace BulletManiac.Utilities
             int[] moveRow = TileGraph.MoveRow;
             int[] moveCol = TileGraph.MoveCol;
 
-            while(priorityQueue.Count > 0)
+            while (priorityQueue.Count > 0)
             {
                 NodeRecord currentRecord = priorityQueue.Dequeue();
                 Tile currentTile = currentRecord.Self;
@@ -35,7 +35,7 @@ namespace BulletManiac.Utilities
                 ulong[] connections = tileGraph.Connections[currentTile];
 
                 // Loop each connection
-                for(int i = 0; i < connections.Length; i++)
+                for (int i = 0; i < connections.Length; i++)
                 {
                     // cost of 0 is treated as no connection, so skip iteration.
                     if (connections[i] == 0) continue;
@@ -51,7 +51,7 @@ namespace BulletManiac.Utilities
                     bool shouldEnqueue = false;
 
                     // 1. record exist, and newCost is lower than recorded cost
-                    if (successGetValue && (newCost < neighbourRecord.CostSoFar))
+                    if (successGetValue && newCost < neighbourRecord.CostSoFar)
                     {
                         shouldEnqueue = true;
                         neighbourRecord.CostSoFar = newCost;
