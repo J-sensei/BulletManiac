@@ -1,5 +1,6 @@
 ﻿using BulletManiac.Collision;
 using BulletManiac.Entity;
+using BulletManiac.Entity.Enemy;
 using BulletManiac.Entity.Player;
 using BulletManiac.Entity.UI;
 using BulletManiac.Tiled;
@@ -221,6 +222,7 @@ namespace BulletManiac.Managers
 
             // Pathfinding
             pathTester = new PathTester(CurrentLevel);
+            AddGameObject(new Spider(Tile.ToPosition(new Tile(10, 12), 16, 16)));
         }
          
         // Test change level
