@@ -86,7 +86,7 @@ namespace BulletManiac.Entity
                     directionChange = false;
                 }
                 return rotation;
-            } 
+            }
         }
         public Vector2 Direction
         {

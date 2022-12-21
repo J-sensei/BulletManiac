@@ -42,7 +42,7 @@ namespace BulletManiac.Entity.Bullet
             this.position = position;
             Direction = direction;
             this.speed = speed;
-            this.position += Direction * initalSpeed * GameManager.DeltaTime; // Move the bullet by the initial speed
+            this.position += Direction * initalSpeed; // Move the bullet by the initial speed
         }
 
         public override void Initialize()

@@ -56,10 +56,14 @@ namespace BulletManiac.Entity.Player
             animation.Update(gameTime);
             texture = animation.CurrentTexture;
 
-            Shoot(); // Gun shooting
             // If the gun is shooting, the animation need to play
             if (shooting) animation.Start();
             else animation.Stop();
+
+            // Gun postion and direction update
+            position = holder.Position + offset; // Position will always follow the holder position
+            Vector2 mousePos = Camera.ScreenToWorld(InputManager.MousePosition); // Convert mouse screen position to the world position
+            Direction = mousePos - Position; // Rotation / Direction will always follow the mouse cursor
 
             // Flip the gun
             float rotationDegree = MathHelper.ToDegrees(Rotation);
@@ -82,10 +86,7 @@ namespace BulletManiac.Entity.Player
                 RenderInfront = true;
             }
 
-            // Gun postion and direction update
-            position = holder.Position + offset; // Position will always follow the holder position
-            Vector2 mousePos = Camera.ScreenToWorld(InputManager.MousePosition); // Convert mouse screen position to the world position
-            Direction = mousePos - Position; // Rotation / Direction will always follow the mouse cursor
+            Shoot(); // Gun shooting
             base.Update(gameTime);
         }
 
@@ -96,16 +97,18 @@ namespace BulletManiac.Entity.Player
 
         public void Shoot()
         {
-            // If the animation is finish playing, then reset it
-            if (shooting && animation.Finish)
+            // If the animation is finish playing, then reset it or the gun is not shooting
+            if (shooting && animation.Finish || (!shooting && animation.CurrentFrameIndex > 0))
             {
                 shooting = false;
                 animation.Reset(); // Reset the animation once its finish playing
             }
 
+            // If gun is not shooting and player want to trigger it
             if (InputManager.MouseLeftHold && !shooting)
             {
-                if (InputManager.GetKeyDown(Keys.LeftShift)) // Player is walking, more accurate shooting
+                // Player is walking, more accurate shooting
+                if (InputManager.GetKeyDown(Keys.LeftShift))
                 {
                     accuracy = DEFAULT_ACCURACY * 0.2f; // NEED TO CHANGE LATER
                 }
@@ -127,7 +130,7 @@ namespace BulletManiac.Entity.Player
                 bulletDirection.Y = Extensions.RandomRangeFloat(bulletDirection.Y - accuracy, bulletDirection.Y + accuracy);
 
                 // Fire Bullet
-                DefaultBullet bullet = new DefaultBullet(position, bulletDirection, 150f, 900f);
+                DefaultBullet bullet = new DefaultBullet(position, bulletDirection, 150f, 16f);
                 GameManager.Resources.FindSoundEffect("Gun_Shoot").Play();
                 GameManager.AddGameObject(bullet); // Straight away add bullet to entity manager to run it immediately
             }

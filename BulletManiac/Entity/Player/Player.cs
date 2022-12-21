@@ -77,7 +77,7 @@ namespace BulletManiac.Entity.Player
             footstepsSound.Add(GameManager.Resources.FindSoundEffect("Footstep6"));
             footstepsSound.Add(GameManager.Resources.FindSoundEffect("Footstep7"));
 
-            Texture2D shadowTexture = Extensions.CropTexture2D(GameManager.Resources.FindTexture("Shadow"), new Rectangle(0, 0, 64, 64));
+            Texture2D shadowTexture = Extensions.CropTexture2D(GameManager.Resources.FindTexture("Shadow"), new Rectangle(0, 0, 64, 64)); // Crop a shadow texture
             shadowEffect = new TextureEffect(shadowTexture, this, shadowTexture.Bounds.Center.ToVector2(), new Vector2(0.5f), new Vector2(0f, -3.5f));
 
             gun = new Gun(this);
