@@ -152,6 +152,7 @@ namespace BulletManiac.Managers
             Resources.LoadTexture("Bullet1", "SpriteSheet/Bullet/Bullets1_16x16");
             Resources.LoadTexture("Walking_Smoke", "SpriteSheet/Effect/Smoke_Walking");
             Resources.LoadTexture("Player_Pistol", "SpriteSheet/Gun/[FULL]PistolV1.01");
+            Resources.LoadTexture("Shadow", "SpriteSheet/Effect/Shadow");
 
             // Load Player Sprites
             Resources.LoadTexture("Player_Death", "SpriteSheet/Player/Owlet_Monster_Death_8");

@@ -85,7 +85,7 @@ namespace BulletManiac.Entity.Bullet
         public override void DeleteEvent()
         {
             // Add smoke effect when bullet is destroy
-            AnimationEffect effect = new AnimationEffect(new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false),
+            TextureEffect effect = new TextureEffect(new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false),
                                                     Position, new Vector2(32, 32), true);
             GameManager.AddGameObject(effect);
             base.DeleteEvent();
