@@ -15,6 +15,54 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Audio/Footstep/Footstep1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Footstep/Footstep1.wav
+
+#begin Audio/Footstep/Footstep2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Footstep/Footstep2.wav
+
+#begin Audio/Footstep/Footstep3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Footstep/Footstep3.wav
+
+#begin Audio/Footstep/Footstep4.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Footstep/Footstep4.wav
+
+#begin Audio/Footstep/Footstep5.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Footstep/Footstep5.wav
+
+#begin Audio/Footstep/Footstep6.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Footstep/Footstep6.wav
+
+#begin Audio/Footstep/Footstep7.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Footstep/Footstep7.wav
+
+#begin Audio/Gun/Gun_Shoot.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Gun/Gun_Shoot.wav
+
 #begin SpriteSheet/Bullet/Bullets1_16x16.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -26,6 +74,54 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:SpriteSheet/Bullet/Bullets1_16x16.png
+
+#begin SpriteSheet/DebugUI/direction_16x16.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:SpriteSheet/DebugUI/direction_16x16.png
+
+#begin SpriteSheet/Effect/Smoke_Walking.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:SpriteSheet/Effect/Smoke_Walking.png
+
+#begin SpriteSheet/Gun/[FULL]PistolV1.01.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:SpriteSheet/Gun/[FULL]PistolV1.01.png
+
+#begin SpriteSheet/Player/AnimationSheet_Player.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:SpriteSheet/Player/AnimationSheet_Player.png
 
 #begin SpriteSheet/Player/Owlet_Monster_Death_8.png
 /importer:TextureImporter

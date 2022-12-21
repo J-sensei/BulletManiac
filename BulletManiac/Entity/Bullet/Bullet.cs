@@ -1,5 +1,6 @@
 ﻿using BulletManiac.Collision;
 using BulletManiac.Managers;
+using BulletManiac.Particle;
 using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -35,12 +36,13 @@ namespace BulletManiac.Entity.Bullet
 
         protected Animation Animation { get { return animation; } set { animation = value; } }
 
-        public Bullet(Vector2 position, Vector2 direction, float speed = DEFAULT_SPEED)
+        public Bullet(Vector2 position, Vector2 direction, float speed = DEFAULT_SPEED, float initalSpeed = 0f)
         {
             name = "Bullet";
             this.position = position;
             Direction = direction;
             this.speed = speed;
+            this.position += Direction * initalSpeed * GameManager.DeltaTime; // Move the bullet by the initial speed
         }
 
         public override void Initialize()
@@ -78,6 +80,15 @@ namespace BulletManiac.Entity.Bullet
             // Destroy the bullet
             // Destroy the enemy
             base.CollisionEvent(other);
+        }
+
+        public override void DeleteEvent()
+        {
+            // Add smoke effect when bullet is destroy
+            AnimationEffect effect = new AnimationEffect(new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false),
+                                                    Position, new Vector2(32, 32), true);
+            GameManager.AddGameObject(effect);
+            base.DeleteEvent();
         }
 
         public override void Dispose()

@@ -69,10 +69,12 @@ namespace BulletManiac.Managers
         public static Point CurrentResolution { get { return resolutionList[CurrentResolutionIndex]; } }
         public static float CurrentGameScale { get { return scaleList[CurrentResolutionIndex]; } }
         public static float CurrentCameraZoom { get { return gameZoomLevelList[CurrentResolutionIndex]; } }
+        #endregion
 
         // Level
+        public static List<Level> Levels = new();
         public static Level CurrentLevel;
-        #endregion
+        public static int CurrentLevelIndex;
 
         /// <summary>
         /// Load / Unload and Find the resources of the game
@@ -146,25 +148,48 @@ namespace BulletManiac.Managers
 
         private static void LoadDefaultResources()
         {
-            // Load textures
+            // Load Sprites
             Resources.LoadTexture("Bullet1", "SpriteSheet/Bullet/Bullets1_16x16");
-            Resources.LoadTexture("Crosshair_SpriteSheet", "SpriteSheet/UI/Crosshair"); // Load the spritesheet to the resources
+            Resources.LoadTexture("Walking_Smoke", "SpriteSheet/Effect/Smoke_Walking");
+            Resources.LoadTexture("Player_Pistol", "SpriteSheet/Gun/[FULL]PistolV1.01");
 
-            // Load player sprites
+            // Load Player Sprites
             Resources.LoadTexture("Player_Death", "SpriteSheet/Player/Owlet_Monster_Death_8");
             Resources.LoadTexture("Player_Idle", "SpriteSheet/Player/Owlet_Monster_Idle_4");
             Resources.LoadTexture("Player_Walk", "SpriteSheet/Player/Owlet_Monster_Walk_6");
             Resources.LoadTexture("Player_Run", "SpriteSheet/Player/Owlet_Monster_Run_6");
             Resources.LoadTexture("Player_Throw", "SpriteSheet/Player/Owlet_Monster_Throw_4");
+            Resources.LoadTexture("Player_SpriteSheet", "SpriteSheet/Player/AnimationSheet_Player");
+
+            // Load UI Sprites
+            Resources.LoadTexture("Crosshair_SpriteSheet", "SpriteSheet/UI/Crosshair");
+
+            // Load Debug UI Sprites
+            Resources.LoadTexture("Debug_Direction", "SpriteSheet/DebugUI/direction_16x16");
 
             // Load Tiled Map level
             Resources.LoadTiledMap("Level0", "Tiled/Level0");
             Resources.LoadTiledMap("Level1", "Tiled/Level/Level1");
+            Resources.LoadTiledMap("Level2", "Tiled/Level/Level2");
+            Resources.LoadTiledMap("Level3", "Tiled/Level/Level3");
+
+            // Animation
+            Resources.LoadAnimation("Bullet1", new Animation(Resources.FindTexture("Bullet1"), 5, 25, 0.1f, 6));
+
+            // Load Sound Effect
+            Resources.LoadSoundEffect("Footstep1", "Audio/Footstep/Footstep1");
+            Resources.LoadSoundEffect("Footstep2", "Audio/Footstep/Footstep2");
+            Resources.LoadSoundEffect("Footstep3", "Audio/Footstep/Footstep3");
+            Resources.LoadSoundEffect("Footstep4", "Audio/Footstep/Footstep4");
+            Resources.LoadSoundEffect("Footstep5", "Audio/Footstep/Footstep5");
+            Resources.LoadSoundEffect("Footstep6", "Audio/Footstep/Footstep6");
+            Resources.LoadSoundEffect("Footstep7", "Audio/Footstep/Footstep7");
+            Resources.LoadSoundEffect("Gun_Shoot", "Audio/Gun/Gun_Shoot");
         }
 
         public static void LoadContent(ContentManager content)
         {
-            GameManager.Resources.Load(content); // Initialize the Resource Manager
+            Resources.Load(content); // Initialize the Resource Manager
             LoadDefaultResources(); // Load default resources needed for the game to start
 
             // Add cursor and plpayer
@@ -172,47 +197,55 @@ namespace BulletManiac.Managers
             AddGameObject(new Player(new Vector2(50f))); // Add player
 
             // Set current level
-            CurrentLevel = new();
-            CurrentLevel.Map = Resources.FindTiledMap("Level1");
+            Levels.Add(new Level(Resources.FindTiledMap("Level1"), 9, 8));
+            Levels.Add(new Level(Resources.FindTiledMap("Level2"), 9, 8));
+            Levels.Add(new Level(Resources.FindTiledMap("Level3"), 9, 8));
+
+            // Assign the current level
+            CurrentLevel = Levels[0];
             tiledMapRenderer.LoadMap(CurrentLevel.Map);
+            Tile.AddTileCollision(CurrentLevel.Map.GetLayer<TiledMapTileLayer>("Wall"), CurrentLevel.Map.Width, CurrentLevel.Map.Height, CurrentLevel.Map.TileWidth, CurrentLevel.Map.TileHeight);
+        }
+         
+        // Test change level
+        public static void ChangeLevel()
+        {
+            CurrentLevelIndex = (CurrentLevelIndex + 1) % Levels.Count;
+            CurrentLevel = Levels[CurrentLevelIndex];
+            tiledMapRenderer.LoadMap(CurrentLevel.Map);
+            CollisionManager.ClearTileCollision();
             Tile.AddTileCollision(CurrentLevel.Map.GetLayer<TiledMapTileLayer>("Wall"), CurrentLevel.Map.Width, CurrentLevel.Map.Height, CurrentLevel.Map.TileWidth, CurrentLevel.Map.TileHeight);
         }
 
         public static void Update(GameTime gameTime)
         {
-            #region Legacy Tile Map Test Code
-            //Resources.FindTilemap("Test").Update(gameTime); // test update tilemap
-            //Resources.FindTilemap("Dungeon_Test_32x32").Update(gameTime);
-            #endregion
-
             DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds; // Update the delta time
             InputManager.Update(gameTime); // Update the input manager
-
-            entityManager.Update(gameTime); // Entity Manager Update
+            tiledMapRenderer.Update(gameTime); // Tiled Map Update
             CollisionManager.Update(gameTime); // Collision Update
+            entityManager.Update(gameTime); // Entity Manager Update
 
             // Camera Update
             MainCamera.Update(GraphicsDevice.Viewport);
             MainCamera.Follow(FindGameObject("Player")); // Always follow the player
 
-            tiledMapRenderer.Update(gameTime); // Tiled Map Update
-
             // Update debug status
             if (InputManager.GetKey(Keys.F12)) Debug = !Debug;
+            if (InputManager.GetKey(Keys.R)) ChangeLevel(); // Test change level
         }
 
         public static void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            #region Legacy Tile Map Test Code
-            //Resources.FindTilemap("Dungeon_Test_32x32").Draw(spriteBatch, gameTime); // Test draw tilemap
-            //Resources.FindTilemap("Test").Draw(spriteBatch, gameTime); // Test draw tilemap
-            #endregion
             tiledMapRenderer.Draw(viewMatrix: MainCamera.Transform); // Render the Tiled
 
             // Debug draw for the tiles collision
-            foreach (Tile t in CollisionManager.TileBounds)
+            if (Debug)
             {
-                t.Draw(spriteBatch, gameTime);
+                foreach (Tile t in CollisionManager.TileBounds)
+                {
+                    t.Draw(spriteBatch, gameTime);
+                }
+                TileGraph.DebugDrawGraph(spriteBatch, CurrentLevel.TileGraph);
             }
 
             entityManager.Draw(spriteBatch, gameTime);       

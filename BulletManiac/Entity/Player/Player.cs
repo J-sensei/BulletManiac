@@ -6,6 +6,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using BulletManiac.Particle;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework.Audio;
 
 namespace BulletManiac.Entity.Player
 {
@@ -20,13 +23,21 @@ namespace BulletManiac.Entity.Player
         }
 
         private AnimationManager animationManager; // Manange the animation based on certain action
+        private Animation walkingSmokeEffect;
+        private List<SoundEffect> footstepsSound = new();
+
+        private Gun gun;
 
         // Player status
         float moveSpeed = 80f;
-        float animationSpeed = 0.1f;
-        float runAnimationSpeed = 0.1f;
+
+        // Animation speed
+        float animationSpeed = 0.2f;
+        float idleAnimationSpeed = 0.2f;
+        float walkAnimationSpeed = 0.2f;
+        float runAnimationSpeed = 0.08f;
         float attackAnimationSpeed = 0.065f; // Attach speed
-        float shootSpeed = 1f;
+        float shootSpeed = 0.01f;
 
         // Accuracy
         const float DEFAULT_ACCURACY = 0.25f;
@@ -44,11 +55,28 @@ namespace BulletManiac.Entity.Player
             origin = new Vector2(16f); // Origin (Half of the sprite size) 32x32 / 2
 
             // Define the keys and animations
-            animationManager.AddAnimation(PlayerAction.Idle, new Animation(GameManager.Resources.FindTexture("Player_Idle"), 4, 1, animationSpeed));
-            animationManager.AddAnimation(PlayerAction.Run, new Animation(GameManager.Resources.FindTexture("Player_Run"), 6, 1, runAnimationSpeed));
-            animationManager.AddAnimation(PlayerAction.Walk, new Animation(GameManager.Resources.FindTexture("Player_Walk"), 6, 1, animationSpeed));
-            animationManager.AddAnimation(PlayerAction.Death, new Animation(GameManager.Resources.FindTexture("Player_Death"), 8, 1, animationSpeed));
-            animationManager.AddAnimation(PlayerAction.Throw, new Animation(GameManager.Resources.FindTexture("Player_Throw"), 4, 1, attackAnimationSpeed * shootSpeed, looping: false));
+            //animationManager.AddAnimation(PlayerAction.Idle, new Animation(GameManager.Resources.FindTexture("Player_Idle"), 4, 1, animationSpeed));
+            //animationManager.AddAnimation(PlayerAction.Run, new Animation(GameManager.Resources.FindTexture("Player_Run"), 6, 1, runAnimationSpeed));
+            //animationManager.AddAnimation(PlayerAction.Walk, new Animation(GameManager.Resources.FindTexture("Player_Walk"), 6, 1, animationSpeed));
+            //animationManager.AddAnimation(PlayerAction.Death, new Animation(GameManager.Resources.FindTexture("Player_Death"), 8, 1, animationSpeed));
+            //animationManager.AddAnimation(PlayerAction.Throw, new Animation(GameManager.Resources.FindTexture("Player_Throw"), 4, 1, attackAnimationSpeed * shootSpeed, looping: false));
+
+            animationManager.AddAnimation(PlayerAction.Idle, new Animation(GameManager.Resources.FindTexture("Player_SpriteSheet"), 2, 32, 32, idleAnimationSpeed));
+            animationManager.AddAnimation(PlayerAction.Run, new Animation(GameManager.Resources.FindTexture("Player_SpriteSheet"), 8, 32, 32, runAnimationSpeed, 4));
+            animationManager.AddAnimation(PlayerAction.Walk, new Animation(GameManager.Resources.FindTexture("Player_SpriteSheet"), 4, 32, 32, walkAnimationSpeed, 3));
+            animationManager.AddAnimation(PlayerAction.Death, new Animation(GameManager.Resources.FindTexture("Player_SpriteSheet"), 8, 32, 32, animationSpeed, 8));
+            animationManager.AddAnimation(PlayerAction.Throw, new Animation(GameManager.Resources.FindTexture("Player_SpriteSheet"), 8, 32, 32, attackAnimationSpeed * shootSpeed, 9, looping: false));
+
+            walkingSmokeEffect = new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false);
+            footstepsSound.Add(GameManager.Resources.FindSoundEffect("Footstep1"));
+            footstepsSound.Add(GameManager.Resources.FindSoundEffect("Footstep2"));
+            footstepsSound.Add(GameManager.Resources.FindSoundEffect("Footstep3"));
+
+            footstepsSound.Add(GameManager.Resources.FindSoundEffect("Footstep5"));
+            footstepsSound.Add(GameManager.Resources.FindSoundEffect("Footstep6"));
+            footstepsSound.Add(GameManager.Resources.FindSoundEffect("Footstep7"));
+
+            gun = new Gun(this);
         }
 
         protected override Rectangle CalculateBound()
@@ -76,7 +104,8 @@ namespace BulletManiac.Entity.Player
         public override void Update(GameTime gameTime)
         {
             PlayerMovement();
-            PlayerAttack();
+            // PlayerAttack(); // Now player is using gun to shoot
+            gun.Update(gameTime);
 
             // Update the animations
             animationManager.Update(currentAction, gameTime);
@@ -167,6 +196,7 @@ namespace BulletManiac.Entity.Player
                 }
                 
                 ApplyMove(InputManager.Direction, currentSpeed); // Move the player and apply the collision to tiles
+                WalkingSFX(); // Update Moving SFX
             }
             else
             {
@@ -204,9 +234,88 @@ namespace BulletManiac.Entity.Player
                 position.Y += moveAmountY.Y;
         }
 
+        int lastWalkingAnimIndex = 0; // Play the walking sfx only once
+        List<int> walkFrame = new List<int>() { 0, 2}; // Frame to generate SFX (Walk)
+        List<int> runFrame = new List<int>() { 2, 6 }; // Frame to generate SFX (Run)
+        private void WalkingSFX()
+        {
+            Animation anim;
+            if (currentAction == PlayerAction.Run)
+            {
+                anim = animationManager.GetAnimation(PlayerAction.Run);
+                CreateWalkSFX(anim, runFrame);
+            }
+            else if(currentAction == PlayerAction.Walk)
+            {
+                anim = animationManager.GetAnimation(PlayerAction.Walk);
+                CreateWalkSFX(anim, walkFrame);
+            }
+            //if (anim.CurrentFrameIndex == 2 || anim.CurrentFrameIndex == 6)
+            //{
+            //    int currentIndex = anim.CurrentFrameIndex;
+            //    if (currentIndex == lastWalkingAnimIndex) return;
+
+            //    // Smoke Effect
+            //    AnimationEffect effect;
+
+            //    if(spriteEffects != SpriteEffects.None)
+            //    {
+            //        effect = new AnimationEffect(new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false),
+            //                Position + new Vector2(8f, 5f), new Vector2(32, 32), true, SpriteEffects.FlipHorizontally);
+            //    }
+            //    else
+            //    {
+            //        effect = new AnimationEffect(new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false),
+            //                Position + new Vector2(-5f, 5f), new Vector2(32, 32), true);
+            //    }
+
+            //    GameManager.AddGameObject(effect);
+
+            //    // Audio
+            //    footstepsSound[Extensions.Random.Next(footstepsSound.Count)].Play();
+            //    lastWalkingAnimIndex = currentIndex;
+            //}
+        }
+
+        private void CreateWalkSFX(Animation animation, List<int> frameToCreate)
+        {
+            int currentIndex = animation.CurrentFrameIndex;
+            if (!frameToCreate.Contains(currentIndex) || currentIndex == lastWalkingAnimIndex) return;
+
+            // Smoke Effect
+            AnimationEffect effect;
+
+            if (spriteEffects != SpriteEffects.None)
+            {
+                effect = new AnimationEffect(new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false),
+                        Position + new Vector2(8f, 5f), new Vector2(32, 32), true, SpriteEffects.FlipHorizontally);
+            }
+            else
+            {
+                effect = new AnimationEffect(new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false),
+                        Position + new Vector2(-5f, 5f), new Vector2(32, 32), true);
+            }
+
+            GameManager.AddGameObject(effect);
+
+            // Audio
+            footstepsSound[Extensions.Random.Next(footstepsSound.Count)].Play();
+            lastWalkingAnimIndex = currentIndex;
+        }
+
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            base.Draw(spriteBatch, gameTime);
+            if (gun.RenderInfront)
+            {
+                base.Draw(spriteBatch, gameTime);
+                gun.Draw(spriteBatch, gameTime);
+            }
+            else
+            {
+                gun.Draw(spriteBatch, gameTime);
+                base.Draw(spriteBatch, gameTime);
+            }
+
             //animationManager.CurrentAnimation.Draw(spriteBatch, position, Color.White, 0f, origin, new Vector2(3f, 3f), SpriteEffects.None, 0f);
         }
 

@@ -13,7 +13,7 @@ namespace BulletManiac.Entity.Bullet
     /// </summary>
     public class DefaultBullet : Bullet
     {
-        public DefaultBullet(Vector2 position, Vector2 direction, float speed = 0) : base(position, direction, speed)
+        public DefaultBullet(Vector2 position, Vector2 direction, float speed = DEFAULT_SPEED, float initalSpeed = 0f) : base(position, direction, speed, initalSpeed)
         {
             this.name = "Default Bullet";
         }
@@ -32,8 +32,10 @@ namespace BulletManiac.Entity.Bullet
         }
 
         public override void Initialize()
-        {            
+        {
             Animation = new Animation(GameManager.Resources.FindTexture("Bullet1"), 5, 25, 0.1f, 6);
+            Animation.Reset();
+            
             origin = Animation.CurrentTexture.Bounds.Center.ToVector2(); // Set the origin to the center of the texture
             scale = new Vector2(0.8f);
             base.Initialize();

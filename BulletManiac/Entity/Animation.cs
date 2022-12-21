@@ -36,7 +36,7 @@ namespace BulletManiac.Entity
         /// <summary>
         /// Cropped textures based on the bounds data
         /// </summary>
-        private Texture2D[] croppedTextures;
+        public Texture2D[] croppedTextures;
         /// <summary>
         /// Get the current frame sprite
         /// </summary>
@@ -94,6 +94,24 @@ namespace BulletManiac.Entity
             // Calculate rectangle bounds of each frame
             var width = texture.Width / frameCountX;
             var height = texture.Height / frameCountY;
+
+            // Crop the sprite sheet and store into the texture array
+            croppedTextures = new Texture2D[frameCount];
+            for (int i = 0; i < frameCount; i++)
+            {
+                Rectangle bound = new Rectangle(i * width, (row - 1) * height, width, height);
+                croppedTextures[i] = Extensions.CropTexture2D(texture, bound);
+            }
+            this.texture = null; // Texture is no use anymore
+        }
+
+        public Animation(Texture2D texture, int frameCountX, int width, int height, float frameTime, int row = 1, bool looping = true)
+        {
+            this.texture = texture;
+            this.frameCount = frameCountX;
+            this.frameTime = frameTime;
+            frameTimeLeft = frameTime;
+            this.looping = looping;
 
             // Crop the sprite sheet and store into the texture array
             croppedTextures = new Texture2D[frameCount];

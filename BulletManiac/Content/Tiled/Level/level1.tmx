@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="20" height="15" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="1">
  <tileset firstgid="1" source="GBDungeon.tsx"/>
- <layer id="2" name="Stage" width="20" height="15" opacity="0.9">
+ <layer id="2" name="Stage" width="20" height="15">
   <data encoding="csv">
 22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,
 22,12,13,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,13,22,
