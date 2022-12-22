@@ -30,5 +30,19 @@ namespace BulletManiac.Entity.Enemy
             animationManager = new AnimationManager();
             CollisionManager.Add(this, "Enemy"); // Add enemy into the collision manager
         }
+
+        public override void CollisionEvent(GameObject other)
+        {
+            Console.WriteLine(other.Name);
+            if(other.Name == "Bullet")
+            {
+                // Deal damaage to the enemy
+
+                // Test
+                Destroy(this);
+                Destroy(other);
+            }
+            base.CollisionEvent(other);
+        }
     }
 }

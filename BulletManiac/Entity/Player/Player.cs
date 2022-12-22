@@ -23,11 +23,10 @@ namespace BulletManiac.Entity.Player
         }
 
         private AnimationManager animationManager; // Manange the animation based on certain action
-        private Animation walkingSmokeEffect;
         private List<SoundEffect> footstepsSound;
-        private TextureEffect shadowEffect;
+        private TextureEffect shadowEffect; // Visual shadow effect
 
-        private Gun gun;
+        private Gun gun; // Player gun
 
         // Player status
         float moveSpeed = 80f;
@@ -44,6 +43,7 @@ namespace BulletManiac.Entity.Player
         const float DEFAULT_ACCURACY = 0.25f;
         float accuracy = DEFAULT_ACCURACY; // The lower the number, the better accuracy
 
+        private bool moveBackward = false;
         private bool shooting = false;
         private PlayerAction currentAction = PlayerAction.Idle; // Current action of the player is doing
 
@@ -62,7 +62,6 @@ namespace BulletManiac.Entity.Player
             animationManager.AddAnimation(PlayerAction.Death, new Animation(GameManager.Resources.FindTexture("Player_SpriteSheet"), 8, 32, 32, animationSpeed, 8));
             animationManager.AddAnimation(PlayerAction.Throw, new Animation(GameManager.Resources.FindTexture("Player_SpriteSheet"), 8, 32, 32, attackAnimationSpeed * shootSpeed, 9, looping: false));
 
-            walkingSmokeEffect = new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false);
             footstepsSound = new List<SoundEffect>()
             {
                 GameManager.Resources.FindSoundEffect("Footstep1"),
@@ -77,10 +76,12 @@ namespace BulletManiac.Entity.Player
             shadowEffect = new TextureEffect(shadowTexture, this, shadowTexture.Bounds.Center.ToVector2(), new Vector2(0.5f), new Vector2(0f, -3.5f));
 
             gun = new Gun(this);
+            CollisionManager.Add(this, "Player");
         }
 
         protected override Rectangle CalculateBound()
         {
+            if (texture == null) return Rectangle.Empty;
             // Left and right sprite will have slightly different bound to create accurate bound detection
             if(spriteEffects == SpriteEffects.None)
             {
@@ -157,10 +158,12 @@ namespace BulletManiac.Entity.Player
                    spriteEffects == SpriteEffects.FlipHorizontally && InputManager.Direction.X > 0)
                 {
                     animationManager.GetAnimation(PlayerAction.Run).SetReverse(true);
+                    moveBackward = true;
                 }
                 else
                 {
                     animationManager.GetAnimation(PlayerAction.Run).SetReverse(false);
+                    moveBackward = false;
                 }
 
                 // Player Move
@@ -230,33 +233,13 @@ namespace BulletManiac.Entity.Player
                 anim = animationManager.GetAnimation(PlayerAction.Walk);
                 CreateWalkSFX(anim, walkFrame);
             }
-            //if (anim.CurrentFrameIndex == 2 || anim.CurrentFrameIndex == 6)
-            //{
-            //    int currentIndex = anim.CurrentFrameIndex;
-            //    if (currentIndex == lastWalkingAnimIndex) return;
-
-            //    // Smoke Effect
-            //    AnimationEffect effect;
-
-            //    if(spriteEffects != SpriteEffects.None)
-            //    {
-            //        effect = new AnimationEffect(new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false),
-            //                Position + new Vector2(8f, 5f), new Vector2(32, 32), true, SpriteEffects.FlipHorizontally);
-            //    }
-            //    else
-            //    {
-            //        effect = new AnimationEffect(new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false),
-            //                Position + new Vector2(-5f, 5f), new Vector2(32, 32), true);
-            //    }
-
-            //    GameManager.AddGameObject(effect);
-
-            //    // Audio
-            //    footstepsSound[Extensions.Random.Next(footstepsSound.Count)].Play();
-            //    lastWalkingAnimIndex = currentIndex;
-            //}
         }
 
+        /// <summary>
+        /// Take list of frame that need to generate effect and sound
+        /// </summary>
+        /// <param name="animation"></param>
+        /// <param name="frameToCreate"></param>
         private void CreateWalkSFX(Animation animation, List<int> frameToCreate)
         {
             int currentIndex = animation.CurrentFrameIndex;
@@ -264,16 +247,18 @@ namespace BulletManiac.Entity.Player
 
             // Smoke Effect
             TextureEffect effect;
-
+            SpriteEffects smokeSpriteEffects = SpriteEffects.None;
             if (spriteEffects != SpriteEffects.None)
             {
+                if (!moveBackward) smokeSpriteEffects = SpriteEffects.FlipHorizontally;
                 effect = new TextureEffect(new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false),
-                        Position + new Vector2(8f, 5f), new Vector2(32, 32), true, SpriteEffects.FlipHorizontally);
+                        Position + new Vector2(8f, 5f), new Vector2(32, 32), true, smokeSpriteEffects);
             }
             else
             {
+                if (moveBackward) smokeSpriteEffects = SpriteEffects.FlipHorizontally;
                 effect = new TextureEffect(new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false),
-                        Position + new Vector2(-5f, 5f), new Vector2(32, 32), true);
+                        Position + new Vector2(-5f, 5f), new Vector2(32, 32), true, smokeSpriteEffects);
             }
 
             GameManager.AddGameObject(effect);
@@ -304,7 +289,8 @@ namespace BulletManiac.Entity.Player
 
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            shadowEffect.Draw(spriteBatch, gameTime);
+            shadowEffect.Draw(spriteBatch, gameTime); // Shadow always behind the player
+            // Draw the gun and player
             if (gun.RenderInfront)
             {
                 base.Draw(spriteBatch, gameTime);

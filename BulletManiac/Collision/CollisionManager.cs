@@ -101,7 +101,7 @@ namespace BulletManiac.Collision
                     var go2 = collidables[j];
 
                     // Don't check for collision between GameObjects with same tag
-                    if (go1.Tag == go2.Tag) continue;
+                    if ((go1.Tag == go2.Tag) || (go1.GameObject.IsDestroyed || go2.GameObject.IsDestroyed)) continue;
 
                     if (IsCollided_AABB(go1, go2))
                     {

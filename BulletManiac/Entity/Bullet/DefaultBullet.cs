@@ -15,7 +15,7 @@ namespace BulletManiac.Entity.Bullet
     {
         public DefaultBullet(Vector2 position, Vector2 direction, float speed = DEFAULT_SPEED, float initalSpeed = 0f) : base(position, direction, speed, initalSpeed)
         {
-            this.name = "Default Bullet";
+            
         }
 
         protected override Rectangle CalculateBound()

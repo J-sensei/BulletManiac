@@ -161,6 +161,7 @@ namespace BulletManiac.Managers
         {
             // Load Sprites
             Resources.LoadTexture("Bullet1", "SpriteSheet/Bullet/Bullets1_16x16");
+            Resources.LoadTexture("BulletEffect", "SpriteSheet/Bullet/BulletEffect_16x16");
             Resources.LoadTexture("Walking_Smoke", "SpriteSheet/Effect/Smoke_Walking");
             Resources.LoadTexture("Player_Pistol", "SpriteSheet/Gun/[FULL]PistolV1.01");
             Resources.LoadTexture("Shadow", "SpriteSheet/Effect/Shadow");
@@ -172,6 +173,9 @@ namespace BulletManiac.Managers
             Resources.LoadTexture("Player_Run", "SpriteSheet/Player/Owlet_Monster_Run_6");
             Resources.LoadTexture("Player_Throw", "SpriteSheet/Player/Owlet_Monster_Throw_4");
             Resources.LoadTexture("Player_SpriteSheet", "SpriteSheet/Player/AnimationSheet_Player");
+
+            // Load Enemy Sprites
+            Resources.LoadTexture("Spider", "SpriteSheet/Enemy/Spider Sprite Sheet");
 
             // Load UI Sprites
             Resources.LoadTexture("Crosshair_SpriteSheet", "SpriteSheet/UI/Crosshair");
@@ -222,6 +226,8 @@ namespace BulletManiac.Managers
 
             // Pathfinding
             pathTester = new PathTester(CurrentLevel);
+
+            // Test Enemy
             AddGameObject(new Spider(Tile.ToPosition(new Tile(10, 12), 16, 16)));
         }
          
@@ -251,6 +257,11 @@ namespace BulletManiac.Managers
             // Update debug status
             if (InputManager.GetKey(Keys.F12)) Debug = !Debug;
             if (InputManager.GetKey(Keys.R)) ChangeLevel(); // Test change level
+            if(InputManager.GetKey(Keys.G))
+            {
+                // Test Enemy
+                AddGameObject(new Spider(Tile.ToPosition(new Tile(10, 12), 16, 16)));
+            }
 
             if (Debug)
             {

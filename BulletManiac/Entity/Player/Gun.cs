@@ -33,7 +33,7 @@ namespace BulletManiac.Entity.Player
             scale = new Vector2(0.4f);
             this.holder = holder;
 
-            animation = new Animation(GameManager.Resources.FindTexture("Player_Pistol"), 12, 1, currentShootAnimationSpeed, looping: false);
+            animation = new Animation(GameManager.Resources.FindTexture("Player_Pistol"), 12, 1, 0.001f, looping: false);
             animation.Stop();
             texture = animation.CurrentTexture;
             origin = new Vector2(0f, texture.Bounds.Center.ToVector2().Y);
