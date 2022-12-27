@@ -1,4 +1,5 @@
 ﻿using BulletManiac.Collision;
+using BulletManiac.Managers;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,7 @@ namespace BulletManiac.Entity.Enemy
                 // Deal damaage to the enemy
 
                 // Test
+                GameManager.Resources.FindSoundEffect("Bullet_Hit").Play();
                 Destroy(this);
                 Destroy(other);
             }

@@ -14,12 +14,10 @@ namespace BulletManiac.Entity.Player
         private GameObject holder; // Holder of this gun
 
         private bool shooting = false;
-        private bool reloading = false;
 
         public const int DEFAULT_BULLET = 5;
         public int CurrentBullet { get; private set; } = 5;
         const float DEFAULT_RELOAD_CD = 0.25f;
-        float reloadCD = DEFAULT_RELOAD_CD;
 
         const float MIN_SHOOT_ANIMATION_SPEED = 0.01f;
         const float MAX_SHOOT_ANIMATION_SPEED = 0.05f;
@@ -34,6 +32,7 @@ namespace BulletManiac.Entity.Player
         public bool RenderInfront { get; private set; }
 
         public Megazine Megazine { get; private set; }
+        public bool Reloading { get { return Megazine.Reloading; } }
 
         public Gun(GameObject holder)
         {

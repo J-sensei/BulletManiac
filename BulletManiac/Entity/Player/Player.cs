@@ -287,6 +287,8 @@ namespace BulletManiac.Entity.Player
             base.Update(gameTime);
         }
 
+        Vector2 textOffset = new Vector2(32f, 0f);
+        Vector2 textPosOffset = new Vector2(0f, -16f);
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             shadowEffect.Draw(spriteBatch, gameTime); // Shadow always behind the player
@@ -302,6 +304,10 @@ namespace BulletManiac.Entity.Player
                 base.Draw(spriteBatch, gameTime);
             }
 
+            // Reloading Text
+            if(Gun.Reloading)
+                spriteBatch.DrawString(GameManager.Resources.FindSpriteFont("DebugFont"), "Reloading...", position + textPosOffset, Color.White, 0f, textOffset, 0.3f, SpriteEffects.None, 0f);
+            
             //animationManager.CurrentAnimation.Draw(spriteBatch, position, Color.White, 0f, origin, new Vector2(3f, 3f), SpriteEffects.None, 0f);
         }
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using BulletManiac.Entity.Bullet;
 using BulletManiac.Managers;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 
 namespace BulletManiac.Entity.Player
 {
@@ -27,7 +28,6 @@ namespace BulletManiac.Entity.Player
         public Queue<BulletManiac.Entity.Bullet.Bullet> Bullets { get { return bullets; } }
 
         Queue<BulletManiac.Entity.Bullet.Bullet> bullets = new(); // current bullets in the megazine
-
         public Megazine(int capacity, float bulletCD)
         {
             this.capacity = capacity;
@@ -59,7 +59,6 @@ namespace BulletManiac.Entity.Player
                     bullets.Enqueue(new DefaultBullet(Vector2.Zero, Vector2.Zero));
                     currentBulletCD = bulletCD;
                     GameManager.Resources.FindSoundEffect("Mag_In").Play();
-                    //Console.Write(bullets.Count + " | ");
                 }
             }
             else

@@ -57,6 +57,12 @@
 /processorParam:Quality=Best
 /build:Audio/Footstep/Footstep7.wav
 
+#begin Audio/Gun/Bullet_Hit.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Gun/Bullet_Hit.wav
+
 #begin Audio/Gun/Gun_Shoot.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

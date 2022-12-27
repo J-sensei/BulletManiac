@@ -206,6 +206,7 @@ namespace BulletManiac.Managers
             Resources.LoadSoundEffect("Gun_Shoot", "Audio/Gun/Gun_Shoot");
             Resources.LoadSoundEffect("Mag_In", "Audio/Gun/Mag_In");
             Resources.LoadSoundEffect("Pistol_Cock", "Audio/Gun/Pistol_Cock");
+            Resources.LoadSoundEffect("Bullet_Hit", "Audio/Gun/Bullet_Hit");
         }
 
         // test
