@@ -179,6 +179,7 @@ namespace BulletManiac.Managers
 
             // Load UI Sprites
             Resources.LoadTexture("Crosshair_SpriteSheet", "SpriteSheet/UI/Crosshair");
+            Resources.LoadSpriteFonts("DebugFont", "UI/Font/DebugFont");
 
             // Load Debug UI Sprites
             Resources.LoadTexture("Debug_Direction", "SpriteSheet/DebugUI/direction_16x16");
@@ -202,6 +203,8 @@ namespace BulletManiac.Managers
             Resources.LoadSoundEffect("Footstep6", "Audio/Footstep/Footstep6");
             Resources.LoadSoundEffect("Footstep7", "Audio/Footstep/Footstep7");
             Resources.LoadSoundEffect("Gun_Shoot", "Audio/Gun/Gun_Shoot");
+            Resources.LoadSoundEffect("Mag_In", "Audio/Gun/Mag_In");
+            Resources.LoadSoundEffect("Pistol_Cock", "Audio/Gun/Pistol_Cock");
         }
 
         public static void LoadContent(ContentManager content)
@@ -289,6 +292,9 @@ namespace BulletManiac.Managers
         public static void DrawUI(SpriteBatch spriteBatch, GameTime gameTime)
         {
             entityManager.DrawUI(spriteBatch, gameTime);
+
+            double framerate = (1 / gameTime.ElapsedGameTime.TotalSeconds);
+            spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "FPS: " + framerate.ToString("F2"), new Vector2(5f), Color.Red);
         }
 
         /// <summary>

@@ -33,7 +33,6 @@ namespace BulletManiac.Entity.Enemy
 
         public override void CollisionEvent(GameObject other)
         {
-            Console.WriteLine(other.Name);
             if(other.Name == "Bullet")
             {
                 // Deal damaage to the enemy
@@ -42,6 +41,7 @@ namespace BulletManiac.Entity.Enemy
                 Destroy(this);
                 Destroy(other);
             }
+
             base.CollisionEvent(other);
         }
     }

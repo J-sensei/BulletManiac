@@ -14,6 +14,12 @@ namespace BulletManiac.Entity.Player
         private GameObject holder; // Holder of this gun
 
         private bool shooting = false;
+        private bool reloading = false;
+
+        public const int DEFAULT_BULLET = 5;
+        public int CurrentBullet { get; private set; } = 5;
+        const float DEFAULT_RELOAD_CD = 0.2f;
+        float reloadCD = DEFAULT_RELOAD_CD;
 
         const float MIN_SHOOT_ANIMATION_SPEED = 0.01f;
         const float MAX_SHOOT_ANIMATION_SPEED = 0.05f;
@@ -104,8 +110,34 @@ namespace BulletManiac.Entity.Player
                 animation.Reset(); // Reset the animation once its finish playing
             }
 
+            // Reloading
+            if(CurrentBullet <= 0 || reloading)
+            {
+                reloading = true;
+                reloadCD -= GameManager.DeltaTime;
+
+                if (reloadCD <= 0f)
+                {
+                    GameManager.Resources.FindSoundEffect("Mag_In").Play();
+                    reloadCD = DEFAULT_RELOAD_CD;
+                    CurrentBullet++;
+                }
+
+                if(CurrentBullet == DEFAULT_BULLET)
+                {
+                    GameManager.Resources.FindSoundEffect("Pistol_Cock").Play();
+                    reloadCD = DEFAULT_RELOAD_CD;
+                    reloading = false;
+                    CurrentBullet = DEFAULT_BULLET;
+                }
+            }
+            else
+            {
+                reloading = false;
+            }
+
             // If gun is not shooting and player want to trigger it
-            if (InputManager.MouseLeftHold && !shooting)
+            if (InputManager.MouseLeftHold && !shooting && !reloading)
             {
                 // Player is walking, more accurate shooting
                 if (InputManager.GetKeyDown(Keys.LeftShift))
@@ -133,6 +165,8 @@ namespace BulletManiac.Entity.Player
                 DefaultBullet bullet = new DefaultBullet(position, bulletDirection, 150f, 16f);
                 GameManager.Resources.FindSoundEffect("Gun_Shoot").Play();
                 GameManager.AddGameObject(bullet); // Straight away add bullet to entity manager to run it immediately
+
+                CurrentBullet--; // Minus current bullet in the megazine
             }
         }
     }

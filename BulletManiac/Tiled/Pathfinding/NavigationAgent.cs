@@ -1,4 +1,5 @@
-﻿using BulletManiac.Entity;
+﻿using BulletManiac.Collision;
+using BulletManiac.Entity;
 using BulletManiac.Managers;
 using Microsoft.Xna.Framework;
 using System;
@@ -44,7 +45,7 @@ namespace BulletManiac.Tiled.Pathfinding
         private int tileWidth;
         private int tileHeight;
 
-        private const float DEFAULT_COOLDOWN = 4f;
+        private const float DEFAULT_COOLDOWN = 0.5f;
         private float currentCD = DEFAULT_COOLDOWN;
 
         public NavigationAgent(GameObject user)
@@ -176,6 +177,16 @@ namespace BulletManiac.Tiled.Pathfinding
             }
             else
                 return dest;
+        }
+
+        private void MoveAvoid(Vector2 source, Vector2 target)
+        {
+            float pullDistance = Vector2.Distance(target, source);
+
+            if (pullDistance > 1)
+            {
+
+            }
         }
     }
 }

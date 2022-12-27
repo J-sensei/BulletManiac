@@ -28,6 +28,7 @@ namespace BulletManiac.Managers
         private readonly Dictionary<string, TiledMap> TiledMaps = new();
         private readonly Dictionary<string, Animation> Animations = new();
         private readonly Dictionary<string, SoundEffect> SoundEffects = new();
+        private readonly Dictionary<string, SpriteFont> SpriteFonts = new();
 
         /// <summary>
         /// Initialize the content manager
@@ -109,6 +110,19 @@ namespace BulletManiac.Managers
             }
         }
 
+        public void LoadSpriteFonts(string name, string path)
+        {
+            if (!SpriteFonts.ContainsKey(name))
+            {
+                SpriteFont data = contentManager.Load<SpriteFont>(path);
+                SpriteFonts.Add(name, data);
+            }
+            else
+            {
+                GameManager.Log("Resources Manager", "Duplicate name '" + name + "' is failed to add into Sprite Fonts resources.");
+            }
+        }
+
         /// <summary>
         /// Find and get the texture by the name in the Dictionary
         /// </summary>
@@ -145,6 +159,11 @@ namespace BulletManiac.Managers
         public SoundEffect FindSoundEffect(string name)
         {
             return SoundEffects[name];
+        }
+
+        public SpriteFont FindSpriteFont(string name)
+        {
+            return SpriteFonts[name];
         }
 
         public void RemoveTexture(string name)
