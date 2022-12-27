@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Audio;
 
 namespace BulletManiac.Entity.Player
 {
-    public class Megazine
+    public class Magazine
     {
         private int capacity; // Capacity of the bullet
         private readonly float bulletCD;
@@ -28,7 +28,7 @@ namespace BulletManiac.Entity.Player
         public Queue<BulletManiac.Entity.Bullet.Bullet> Bullets { get { return bullets; } }
 
         Queue<BulletManiac.Entity.Bullet.Bullet> bullets = new(); // current bullets in the megazine
-        public Megazine(int capacity, float bulletCD)
+        public Magazine(int capacity, float bulletCD)
         {
             this.capacity = capacity;
             this.bulletCD = bulletCD;

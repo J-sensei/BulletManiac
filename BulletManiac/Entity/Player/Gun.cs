@@ -31,8 +31,8 @@ namespace BulletManiac.Entity.Player
         /// </summary>
         public bool RenderInfront { get; private set; }
 
-        public Megazine Megazine { get; private set; }
-        public bool Reloading { get { return Megazine.Reloading; } }
+        public Magazine Magazine { get; private set; }
+        public bool Reloading { get { return Magazine.Reloading; } }
 
         public Gun(GameObject holder)
         {
@@ -44,7 +44,7 @@ namespace BulletManiac.Entity.Player
             animation.Stop();
             texture = animation.CurrentTexture;
             origin = new Vector2(0f, texture.Bounds.Center.ToVector2().Y);
-            Megazine = new Megazine(DEFAULT_BULLET, DEFAULT_RELOAD_CD);
+            Magazine = new Magazine(DEFAULT_BULLET, DEFAULT_RELOAD_CD);
         }
 
         protected override Rectangle CalculateBound()
@@ -112,35 +112,10 @@ namespace BulletManiac.Entity.Player
                 animation.Reset(); // Reset the animation once its finish playing
             }
 
-            Megazine.Update(); // Reloading logic
-            // Reloading
-            //if(CurrentBullet <= 0 || reloading)
-            //{
-            //    reloading = true;
-            //    reloadCD -= GameManager.DeltaTime;
-
-            //    if (reloadCD <= 0f)
-            //    {
-            //        GameManager.Resources.FindSoundEffect("Mag_In").Play();
-            //        reloadCD = DEFAULT_RELOAD_CD;
-            //        CurrentBullet++;
-            //    }
-
-            //    if(CurrentBullet == DEFAULT_BULLET)
-            //    {
-            //        GameManager.Resources.FindSoundEffect("Pistol_Cock").Play();
-            //        reloadCD = DEFAULT_RELOAD_CD;
-            //        reloading = false;
-            //        CurrentBullet = DEFAULT_BULLET;
-            //    }
-            //}
-            //else
-            //{
-            //    reloading = false;
-            //}
+            Magazine.Update(); // Reloading logic
 
             // If gun is not shooting and player want to trigger it
-            if (InputManager.MouseLeftHold && !shooting && Megazine.CanShoot)
+            if (InputManager.MouseLeftHold && !shooting && Magazine.CanShoot)
             {
                 // Player is walking, more accurate shooting
                 if (InputManager.GetKeyDown(Keys.LeftShift))
@@ -166,7 +141,7 @@ namespace BulletManiac.Entity.Player
 
                 // Fire Bullet
                 //DefaultBullet bullet = new DefaultBullet(position, bulletDirection, 150f, 16f);
-                Bullet.Bullet bullet = Megazine.Shoot(); // Get the current bullet from the megazine
+                Bullet.Bullet bullet = Magazine.Shoot(); // Get the current bullet from the megazine
                 bullet.UpdateShootPosition(position, bulletDirection, 150f, 16f);
                 GameManager.Resources.FindSoundEffect("Gun_Shoot").Play();
                 GameManager.AddGameObject(bullet); // Straight away add bullet to entity manager to run it immediately

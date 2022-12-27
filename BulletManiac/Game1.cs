@@ -57,11 +57,13 @@ namespace BulletManiac
             GraphicsDevice.Clear(new Color(7, 24, 33)); // Default screen clear color (Same color as the map)
             //GraphicsDevice.Clear(Color.CornflowerBlue); // Default screen clear color (Same color as the map)
 
+            // Game World Layer
             // SpriteBatch Begin settings make sure the texture sprite is clean when scale up
             _spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: GameManager.MainCamera.Transform);
             GameManager.Draw(_spriteBatch, gameTime); // GameManager contains all the stuffs to draw
             _spriteBatch.End();
 
+            // Game UI Layer
             // Render the game UI without affect by the Camera
             _spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp);
             GameManager.DrawUI(_spriteBatch, gameTime);

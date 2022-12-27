@@ -26,9 +26,16 @@ namespace BulletManiac.Managers
         /// Store Tiled Map (Monogame Extended) data 
         /// </summary>
         private readonly Dictionary<string, TiledMap> TiledMaps = new();
-        private readonly Dictionary<string, Animation> Animations = new();
+        /// <summary>
+        /// Sound Effects to use across the game (Load WAV format file)
+        /// </summary>
         private readonly Dictionary<string, SoundEffect> SoundEffects = new();
+        /// <summary>
+        /// Font used to render string as the game ui
+        /// </summary>
         private readonly Dictionary<string, SpriteFont> SpriteFonts = new();
+
+        private readonly Dictionary<string, Animation> Animations = new(); // Test Code
 
         /// <summary>
         /// Initialize the content manager

@@ -17,10 +17,14 @@ using System.Collections.Generic;
 
 namespace BulletManiac.Managers
 {
+    /// <summary>
+    /// Testing using different pathfinding algorithm
+    /// </summary>
     public enum PathfindingAlgorithm
     {
         Dijkstra, AStar
     }
+
     /// <summary>
     /// Global class accessing to various functions
     /// </summary>
@@ -208,9 +212,7 @@ namespace BulletManiac.Managers
             Resources.LoadSoundEffect("Pistol_Cock", "Audio/Gun/Pistol_Cock");
             Resources.LoadSoundEffect("Bullet_Hit", "Audio/Gun/Bullet_Hit");
         }
-
-        // test
-        static MegazineUI megazineUI;
+        
         public static void LoadContent(ContentManager content)
         {
             Resources.Load(content); // Initialize the Resource Manager
@@ -220,7 +222,8 @@ namespace BulletManiac.Managers
             AddGameObjectUI(new Cursor()); // Add the game cursor
             Player = new Player(new Vector2(50f)); // Create Player in the game
             AddGameObject(Player); // Add player
-            megazineUI = new MegazineUI(Player.Gun);
+            MagazineUI megazineUI = new MagazineUI(Player.Gun);
+            AddGameObjectUI(megazineUI);
 
             // Set current level
             Levels.Add(new Level(Resources.FindTiledMap("Level1"), 9, 8));
@@ -252,7 +255,7 @@ namespace BulletManiac.Managers
 
         public static void Update(GameTime gameTime)
         {
-            DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds; // Update the delta time
+            DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds; // Update the delta time variable
             InputManager.Update(gameTime); // Update the input manager
             tiledMapRenderer.Update(gameTime); // Tiled Map Update
             CollisionManager.Update(gameTime); // Collision Update
@@ -277,6 +280,11 @@ namespace BulletManiac.Managers
             }
         }
 
+        /// <summary>
+        /// Draw game objects on the game world layer
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="gameTime"></param>
         public static void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             tiledMapRenderer.Draw(viewMatrix: MainCamera.Transform); // Render the Tiled
@@ -294,10 +302,15 @@ namespace BulletManiac.Managers
 
             entityManager.Draw(spriteBatch, gameTime);       
         }
+
+        /// <summary>
+        /// Draw game object on the UI layer
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="gameTime"></param>
         public static void DrawUI(SpriteBatch spriteBatch, GameTime gameTime)
         {
             entityManager.DrawUI(spriteBatch, gameTime);
-            megazineUI.Draw(spriteBatch, gameTime);
 
             double framerate = (1 / gameTime.ElapsedGameTime.TotalSeconds);
             spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "FPS: " + framerate.ToString("F2"), new Vector2(5f), Color.Red);
