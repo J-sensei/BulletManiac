@@ -26,7 +26,7 @@ namespace BulletManiac.Entity.Player
         private List<SoundEffect> footstepsSound;
         private TextureEffect shadowEffect; // Visual shadow effect
 
-        private Gun gun; // Player gun
+        public Gun Gun { get; private set; } // Player gun
 
         // Player status
         float moveSpeed = 80f;
@@ -75,7 +75,7 @@ namespace BulletManiac.Entity.Player
             Texture2D shadowTexture = Extensions.CropTexture2D(GameManager.Resources.FindTexture("Shadow"), new Rectangle(0, 0, 64, 64)); // Crop a shadow texture
             shadowEffect = new TextureEffect(shadowTexture, this, shadowTexture.Bounds.Center.ToVector2(), new Vector2(0.5f), new Vector2(0f, -3.5f));
 
-            gun = new Gun(this);
+            Gun = new Gun(this);
             CollisionManager.Add(this, "Player");
         }
 
@@ -278,7 +278,7 @@ namespace BulletManiac.Entity.Player
         {
             PlayerMovement();
             // PlayerAttack(); // Now player is using gun to shoot
-            gun.Update(gameTime);
+            Gun.Update(gameTime);
 
             // Update the animations
             animationManager.Update(currentAction, gameTime);
@@ -291,14 +291,14 @@ namespace BulletManiac.Entity.Player
         {
             shadowEffect.Draw(spriteBatch, gameTime); // Shadow always behind the player
             // Draw the gun and player
-            if (gun.RenderInfront)
+            if (Gun.RenderInfront)
             {
                 base.Draw(spriteBatch, gameTime);
-                gun.Draw(spriteBatch, gameTime);
+                Gun.Draw(spriteBatch, gameTime);
             }
             else
             {
-                gun.Draw(spriteBatch, gameTime);
+                Gun.Draw(spriteBatch, gameTime);
                 base.Draw(spriteBatch, gameTime);
             }
 

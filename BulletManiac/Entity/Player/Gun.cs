@@ -18,7 +18,7 @@ namespace BulletManiac.Entity.Player
 
         public const int DEFAULT_BULLET = 5;
         public int CurrentBullet { get; private set; } = 5;
-        const float DEFAULT_RELOAD_CD = 0.2f;
+        const float DEFAULT_RELOAD_CD = 0.25f;
         float reloadCD = DEFAULT_RELOAD_CD;
 
         const float MIN_SHOOT_ANIMATION_SPEED = 0.01f;
@@ -33,6 +33,8 @@ namespace BulletManiac.Entity.Player
         /// </summary>
         public bool RenderInfront { get; private set; }
 
+        public Megazine Megazine { get; private set; }
+
         public Gun(GameObject holder)
         {
             name = "Player Gun";
@@ -43,6 +45,7 @@ namespace BulletManiac.Entity.Player
             animation.Stop();
             texture = animation.CurrentTexture;
             origin = new Vector2(0f, texture.Bounds.Center.ToVector2().Y);
+            Megazine = new Megazine(DEFAULT_BULLET, DEFAULT_RELOAD_CD);
         }
 
         protected override Rectangle CalculateBound()
@@ -110,34 +113,35 @@ namespace BulletManiac.Entity.Player
                 animation.Reset(); // Reset the animation once its finish playing
             }
 
+            Megazine.Update(); // Reloading logic
             // Reloading
-            if(CurrentBullet <= 0 || reloading)
-            {
-                reloading = true;
-                reloadCD -= GameManager.DeltaTime;
+            //if(CurrentBullet <= 0 || reloading)
+            //{
+            //    reloading = true;
+            //    reloadCD -= GameManager.DeltaTime;
 
-                if (reloadCD <= 0f)
-                {
-                    GameManager.Resources.FindSoundEffect("Mag_In").Play();
-                    reloadCD = DEFAULT_RELOAD_CD;
-                    CurrentBullet++;
-                }
+            //    if (reloadCD <= 0f)
+            //    {
+            //        GameManager.Resources.FindSoundEffect("Mag_In").Play();
+            //        reloadCD = DEFAULT_RELOAD_CD;
+            //        CurrentBullet++;
+            //    }
 
-                if(CurrentBullet == DEFAULT_BULLET)
-                {
-                    GameManager.Resources.FindSoundEffect("Pistol_Cock").Play();
-                    reloadCD = DEFAULT_RELOAD_CD;
-                    reloading = false;
-                    CurrentBullet = DEFAULT_BULLET;
-                }
-            }
-            else
-            {
-                reloading = false;
-            }
+            //    if(CurrentBullet == DEFAULT_BULLET)
+            //    {
+            //        GameManager.Resources.FindSoundEffect("Pistol_Cock").Play();
+            //        reloadCD = DEFAULT_RELOAD_CD;
+            //        reloading = false;
+            //        CurrentBullet = DEFAULT_BULLET;
+            //    }
+            //}
+            //else
+            //{
+            //    reloading = false;
+            //}
 
             // If gun is not shooting and player want to trigger it
-            if (InputManager.MouseLeftHold && !shooting && !reloading)
+            if (InputManager.MouseLeftHold && !shooting && Megazine.CanShoot)
             {
                 // Player is walking, more accurate shooting
                 if (InputManager.GetKeyDown(Keys.LeftShift))
@@ -162,7 +166,9 @@ namespace BulletManiac.Entity.Player
                 bulletDirection.Y = Extensions.RandomRangeFloat(bulletDirection.Y - accuracy, bulletDirection.Y + accuracy);
 
                 // Fire Bullet
-                DefaultBullet bullet = new DefaultBullet(position, bulletDirection, 150f, 16f);
+                //DefaultBullet bullet = new DefaultBullet(position, bulletDirection, 150f, 16f);
+                Bullet.Bullet bullet = Megazine.Shoot(); // Get the current bullet from the megazine
+                bullet.UpdateShootPosition(position, bulletDirection, 150f, 16f);
                 GameManager.Resources.FindSoundEffect("Gun_Shoot").Play();
                 GameManager.AddGameObject(bullet); // Straight away add bullet to entity manager to run it immediately
 

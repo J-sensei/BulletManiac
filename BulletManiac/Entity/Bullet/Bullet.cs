@@ -19,6 +19,7 @@ namespace BulletManiac.Entity.Bullet
         protected const float DEFAULT_ANIMATION_SPEED = 0.2f;
 
         private Animation animation;
+        public Texture2D BulletUI { get; protected set; }
         protected float speed = 100f;
 
         /// <summary>
@@ -44,6 +45,14 @@ namespace BulletManiac.Entity.Bullet
             this.speed = speed;
             this.position += Direction * initalSpeed; // Move the bullet by the initial speed
             CollisionManager.Add(this, "Bullet");
+        }
+
+        public void UpdateShootPosition(Vector2 position, Vector2 direction, float speed = DEFAULT_SPEED, float initalSpeed = 0f)
+        {
+            this.position = position;
+            Direction = direction;
+            this.speed = speed;
+            this.position += Direction * initalSpeed; // Move the bullet by the initial speed
         }
 
         public override void Initialize()

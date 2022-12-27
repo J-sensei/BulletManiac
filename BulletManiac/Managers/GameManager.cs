@@ -179,6 +179,7 @@ namespace BulletManiac.Managers
 
             // Load UI Sprites
             Resources.LoadTexture("Crosshair_SpriteSheet", "SpriteSheet/UI/Crosshair");
+            Resources.LoadTexture("Bullet_Fill", "UI/Bullet/bullet_fill");
             Resources.LoadSpriteFonts("DebugFont", "UI/Font/DebugFont");
 
             // Load Debug UI Sprites
@@ -207,6 +208,8 @@ namespace BulletManiac.Managers
             Resources.LoadSoundEffect("Pistol_Cock", "Audio/Gun/Pistol_Cock");
         }
 
+        // test
+        static MegazineUI megazineUI;
         public static void LoadContent(ContentManager content)
         {
             Resources.Load(content); // Initialize the Resource Manager
@@ -216,6 +219,7 @@ namespace BulletManiac.Managers
             AddGameObjectUI(new Cursor()); // Add the game cursor
             Player = new Player(new Vector2(50f)); // Create Player in the game
             AddGameObject(Player); // Add player
+            megazineUI = new MegazineUI(Player.Gun);
 
             // Set current level
             Levels.Add(new Level(Resources.FindTiledMap("Level1"), 9, 8));
@@ -292,6 +296,7 @@ namespace BulletManiac.Managers
         public static void DrawUI(SpriteBatch spriteBatch, GameTime gameTime)
         {
             entityManager.DrawUI(spriteBatch, gameTime);
+            megazineUI.Draw(spriteBatch, gameTime);
 
             double framerate = (1 / gameTime.ElapsedGameTime.TotalSeconds);
             spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "FPS: " + framerate.ToString("F2"), new Vector2(5f), Color.Red);
