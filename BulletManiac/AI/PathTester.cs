@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BulletManiac.Tiled.Pathfinding
+namespace BulletManiac.Tiled.AI
 {
     /// <summary>
     /// Path tester use to test the pathfinding algorithm from player position to the user cursor position

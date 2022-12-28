@@ -30,7 +30,8 @@ namespace BulletManiac.Tiled
         /// <summary>
         /// // 4 directions for the search to walk (Up, Left, Right, Down)
         /// </summary>
-        private readonly int[] directions = { 1, 3, 4, 6 }; 
+        private readonly int[] directions = { 1, 3, 4, 6 };
+        //private readonly int[] directions = { 0, 1, 2, 3, 4, 5, 6, 7 }; // Move diagnosal
 
         private HashSet<Tile> nodes; // Nodes represent a 
         private Dictionary<Tile, ulong[]> connections; // Connection of a tile to other tiles

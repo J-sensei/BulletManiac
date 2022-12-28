@@ -15,6 +15,17 @@ namespace BulletManiac.Utilities
             return (float)val;
         }
 
+        public static float NextFloat()
+        {
+            return (float)random.NextDouble();
+        }
+
+        public static bool Approximately(float a, float b)
+        {
+            return (double)MathF.Abs(b - a) < (double)MathF.Max(1E-06f * MathF.Max(MathF.Abs(a),
+                MathF.Abs(b)), float.Epsilon * 8.0f);
+        }
+
         public static Texture2D CropTexture2D(this Texture2D spriteSheet, Rectangle source)
         {
             Texture2D croppedTexture2d = new Texture2D(spriteSheet.GraphicsDevice, source.Width, source.Height);

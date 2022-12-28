@@ -1,5 +1,6 @@
-﻿using BulletManiac.Managers;
-using BulletManiac.Tiled.Pathfinding;
+﻿using BulletManiac.AI;
+using BulletManiac.Managers;
+using BulletManiac.Tiled.AI;
 using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,16 +11,17 @@ namespace BulletManiac.Entity.Enemy
     public class Spider : Enemy
     {
         private NavigationAgent agent;
+        private SteeringAgent agent2;
         private AnimationManager animationManager;
         public Spider(Vector2 position) : base(position)
         {
             animationManager = new AnimationManager();
             name = "Spider";
             agent = new NavigationAgent(this);
+            agent2 = new SteeringAgent(this);
             //texture = new Texture2D(GameManager.GraphicsDevice, 1, 1);
             //texture.SetData(new Color[] { Color.Blue });
             texture = Extensions.CropTexture2D(GameManager.Resources.FindTexture("Spider"), new Rectangle(0, 0, 32, 32));
-            agent.OnMove += Move;
             origin = new Vector2(16, 16);
             scale = new Vector2(1f);
             spriteEffects = SpriteEffects.FlipHorizontally;
@@ -31,16 +33,11 @@ namespace BulletManiac.Entity.Enemy
             base.Initialize();
         }
 
-        void Move(Vector2 destination)
-        {
-            //Console.WriteLine(Position + " " + destination + " " + GameManager.Player.Position);
-            Position += Vector2.Normalize(destination) * GameManager.DeltaTime;
-            //Position += Vector2.Normalize(destination) * GameManager.DeltaTime * 100f;
-        }
-
         public override void Update(GameTime gameTime)
         {
-            agent.Update(gameTime, GameManager.Player.Position); // Always follow player
+            //agent.Update(gameTime, GameManager.Player); // Always follow player
+            agent2.Update(gameTime, GameManager.Player);
+            Console.WriteLine(agent2.CurrentXDir.ToString());
             base.Update(gameTime);
         }
 

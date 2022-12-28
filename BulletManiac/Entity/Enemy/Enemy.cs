@@ -17,12 +17,13 @@ namespace BulletManiac.Entity.Enemy
         /// <summary>
         /// Enemy actions, used to determine animation
         /// </summary>
-        enum EnemyAction
+        public enum EnemyAction
         {
-            Idle, Move, Attack, Die
+            Idle, Move, Attack, Die, Hit
         }
 
         private AnimationManager animationManager; // Manange the animation based on certain action
+        protected EnemyAction currentAction = EnemyAction.Idle;
 
         public Enemy(Vector2 position)
         {

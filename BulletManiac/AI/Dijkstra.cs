@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace BulletManiac.Tiled.Pathfinding
+namespace BulletManiac.Tiled.AI
 {
     /// <summary>
     /// Algorithm to perform pathfinding on the tile environment

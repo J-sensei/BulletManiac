@@ -18,6 +18,8 @@ namespace BulletManiac.Entity.Bullet
             Animation = new Animation(GameManager.Resources.FindTexture("Bullet1"), 5, 25, 0.1f, 6);
             Animation.Reset();
 
+            origin = Animation.CurrentTexture.Bounds.Center.ToVector2(); // Set the origin to the center of the texture
+            scale = new Vector2(0.8f);
             BulletUI = GameManager.Resources.FindTexture("Bullet_Fill");
         }
 
@@ -36,9 +38,6 @@ namespace BulletManiac.Entity.Bullet
 
         public override void Initialize()
         {
-            
-            origin = Animation.CurrentTexture.Bounds.Center.ToVector2(); // Set the origin to the center of the texture
-            scale = new Vector2(0.8f);
             base.Initialize();
         }
     }

@@ -4,7 +4,7 @@ using BulletManiac.Entity.Enemy;
 using BulletManiac.Entity.Player;
 using BulletManiac.Entity.UI;
 using BulletManiac.Tiled;
-using BulletManiac.Tiled.Pathfinding;
+using BulletManiac.Tiled.AI;
 using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -180,6 +180,9 @@ namespace BulletManiac.Managers
 
             // Load Enemy Sprites
             Resources.LoadTexture("Spider", "SpriteSheet/Enemy/Spider Sprite Sheet");
+            Resources.LoadTexture("Bat_Flying", "SpriteSheet/Enemy/Bat/Flying");
+            Resources.LoadTexture("Bat_Attack", "SpriteSheet/Enemy/Bat/Attack");
+            Resources.LoadTexture("Bat_Hit", "SpriteSheet/Enemy/Bat/Hit");
 
             // Load UI Sprites
             Resources.LoadTexture("Crosshair_SpriteSheet", "SpriteSheet/UI/Crosshair");
@@ -239,7 +242,8 @@ namespace BulletManiac.Managers
             pathTester = new PathTester(CurrentLevel);
 
             // Test Enemy
-            AddGameObject(new Spider(Tile.ToPosition(new Tile(10, 12), 16, 16)));
+            //AddGameObject(new Spider(Tile.ToPosition(new Tile(10, 12), 16, 16)));
+            AddGameObject(new Bat(Tile.ToPosition(new Tile(10, 12), 16, 16)));
         }
          
         // Test change level
@@ -271,7 +275,7 @@ namespace BulletManiac.Managers
             if(InputManager.GetKey(Keys.G))
             {
                 // Test Enemy
-                AddGameObject(new Spider(Tile.ToPosition(new Tile(10, 12), 16, 16)));
+                AddGameObject(new Bat(Tile.ToPosition(new Tile(10, 12), 16, 16)));
             }
 
             if (Debug)

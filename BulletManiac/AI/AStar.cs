@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BulletManiac.Tiled.Pathfinding
+namespace BulletManiac.Tiled.AI
 {
     public class AStar
     {

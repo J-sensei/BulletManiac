@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BulletManiac.Tiled.Pathfinding
+namespace BulletManiac.Tiled.AI
 {
     /// <summary>
     /// NodeRecord is designed to be used for node selection in priority queue. This class is made to support both Dijkstra and A*

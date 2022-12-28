@@ -1,6 +1,7 @@
 ﻿using BulletManiac.Collision;
 using BulletManiac.Entity;
 using BulletManiac.Managers;
+using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BulletManiac.Tiled.Pathfinding
+namespace BulletManiac.Tiled.AI
 {
     /// <summary>
     /// Navigation State to determine certain action for the agent (Finite State Machine)
@@ -45,7 +46,7 @@ namespace BulletManiac.Tiled.Pathfinding
         private int tileWidth;
         private int tileHeight;
 
-        private const float DEFAULT_COOLDOWN = 0.5f;
+        private const float DEFAULT_COOLDOWN = 1f;
         private float currentCD = DEFAULT_COOLDOWN;
 
         public NavigationAgent(GameObject user)
@@ -61,21 +62,24 @@ namespace BulletManiac.Tiled.Pathfinding
 
         }
 
-        public void Update(GameTime gameTime, Vector2 target)
+        public void Update(GameTime gameTime, GameObject target)
         {
             if(currentState == NavigationState.STOP)
             {
                 currentCD -= GameManager.DeltaTime;
                 if(currentCD <= 0)
                 {
-                    CalculatePath(target);
+                    CalculatePath(target.Position);
                     currentCD = DEFAULT_COOLDOWN;
                 }
             }
             else if(currentState == NavigationState.MOVING)
             {
                 // If the user reached the destination
-                if (user.Position.Equals(Tile.ToPosition(destTile, tileWidth, tileHeight)))
+                Vector2 diff2 = Tile.ToPosition(destTile, tileWidth, tileHeight) - user.Position;
+                float distance2 = diff2.Length();
+                //if (user.Position.Equals(Tile.ToPosition(destTile, tileWidth, tileHeight)))
+                if(distance2 < 1f)
                 {
                     // Update source tile to destination tile
                     srcTile = destTile;
@@ -91,12 +95,14 @@ namespace BulletManiac.Tiled.Pathfinding
                         Tile headTile = path.First.Value; // throw exception if path is empty
                         Vector2 headPosition = Tile.ToPosition(headTile, tileWidth, tileHeight);
 
-                        // If current position reached the head position
-                        if (user.Position.Equals(headPosition))
+                        // If current position approximately reached the head position
+                        Vector2 diff = headPosition - user.Position;
+                        float distance = diff.Length();
+                        //Console.WriteLine(distance + " " + Extensions.Approximately(distance, 0.0f));
+                        //if (user.Position.Equals(headPosition))
+                        if (distance <= 1f)
                         {
-                            //Console.WriteLine("Reach head tile. Removing head tile. Get next node from path.");
                             path.RemoveFirst();
-
                             // Get the next destination position
                             headTile = path.First.Value; // throw exception if path is empty
                         }
@@ -104,7 +110,9 @@ namespace BulletManiac.Tiled.Pathfinding
                         // Move
                         //if(OnMove != null)
                         //    OnMove.Invoke(headPosition);
-                        user.Position = Move(user.Position, headPosition, GameManager.DeltaTime, 100.0);
+                        //user.Position = Move(user.Position, headPosition, GameManager.DeltaTime, 100.0);
+                        user.Position += Seek(headPosition, 50f) * GameManager.DeltaTime;
+                        //MoveAvoid(user, headPosition);
                     }
                     catch(Exception ex)
                     {
@@ -161,9 +169,6 @@ namespace BulletManiac.Tiled.Pathfinding
             }
         }
 
-        public delegate void MoveAction(Vector2 destination);
-        public MoveAction OnMove;
-
         private Vector2 Move(Vector2 src, Vector2 dest, double elapsedSeconds, double speed)
         {
             Vector2 dP = dest - src;
@@ -179,14 +184,52 @@ namespace BulletManiac.Tiled.Pathfinding
                 return dest;
         }
 
-        private void MoveAvoid(Vector2 source, Vector2 target)
+        private void MoveAvoid(GameObject source, Vector2 target)
         {
-            float pullDistance = Vector2.Distance(target, source);
+            float pullDistance = Vector2.Distance(target, source.Position);
 
             if (pullDistance > 1)
             {
+                Vector2 pull = (target - source.Position) * (1 / pullDistance); //the target tries to 'pull us in'
+                Vector2 totalPush = Vector2.Zero;
 
+                int contenders = 0;
+                List <Tile> obstacles = CollisionManager.TileBounds;
+                for (int i = 0; i < CollisionManager.TileBounds.Count; ++i)
+                {
+
+                    //draw a vector from the obstacle to the ship, that 'pushes the ship away'
+                    Vector2 push = source.Position - obstacles[i].Position;
+
+                    //calculate how much we are pushed away from this obstacle, the closer, the more push
+                    float distance = (Vector2.Distance(source.Position, obstacles[i].Position) - 2f) - 5f;
+                    //only use push force if this object is close enough such that an effect is needed
+                    if (distance < 2f * 3)
+                    {
+                        ++contenders; //note that this object is actively pushing
+
+                        if (distance < 0.0001f) //prevent division by zero errors and extreme pushes
+                        {
+                            distance = 0.0001f;
+                        }
+                        float weight = 1 / distance;
+
+                        totalPush += push * weight;
+                    }
+                }
+
+                pull *= Math.Max(1, 4 * contenders); //4 * contenders gives the pull enough force to pull stuff trough (tweak this setting for your game!)
+                pull += totalPush;
+
+                //Normalize the vector so that we get a vector that points in a certain direction, which we van multiply by our desired speed
+                pull.Normalize();
+                //Set the ships new position;
+                source.Position += (pull * 50f) * GameManager.DeltaTime;
             }
+        }
+        private Vector2 Seek(Vector2 target, float currentSpeed)
+        {
+            return Vector2.Normalize(target - user.Position) * currentSpeed;
         }
     }
 }
