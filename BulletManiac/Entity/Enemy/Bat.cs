@@ -21,7 +21,7 @@ namespace BulletManiac.Entity.Enemy
         {
             animationManager = new AnimationManager();
             name = "Bat";
-            steerAgent = new SteeringAgent(this, 65f, 5f);
+            steerAgent = new SteeringAgent(this, 65f, 5f, true);
             steerAgent.SteeringBehavior = SteeringBehavior.Arrival;
 
             animationManager.AddAnimation(EnemyAction.Idle, new Animation(GameManager.Resources.FindTexture("Bat_Flying"), 7, 1, animationSpeed));

@@ -8,13 +8,21 @@ using System.Threading.Tasks;
 
 namespace BulletManiac.AI
 {
+    public struct FlockSetting
+    {
+        public bool Seperate { get; set; }
+        public bool Alignment { get; set; }
+        public bool Cohesion { get; set; }
+    }
+
     /// <summary>
-    /// Boid behavior
+    /// Flock behavior
     /// </summary>
     public class Flock
     {
         private GameObject user;
-        public float MaxSpeed { get; set; } = 50.0f;
+        private FlockSetting setting;
+        public float MaxSpeed { get; private set; }
 
         public float NeighbourRadius { get; set; } = 100.0f;
         public float AgentRadius { get; set; } = 16.0f;
@@ -24,10 +32,13 @@ namespace BulletManiac.AI
         public float CohesionWeight { get; set; } = 1.0f;
 
         public Vector2 Acceleration { get; private set; } = Vector2.Zero;
+        public Vector2 CurrentVelocity { get; set; }
 
-        public Flock(GameObject user)
+        public Flock(GameObject user, FlockSetting flockSetting, float speed = 50f)
         {
             this.user = user;
+            setting = flockSetting;
+            MaxSpeed = speed;
         }
 
         public void ResetAcceleration()
@@ -47,11 +58,22 @@ namespace BulletManiac.AI
         public void Process(List<Flock> flocks)
         {
             Vector2 sumForce = new Vector2(0f);
-            sumForce += Separate(flocks) * SeparationWeight;
+
+            if(setting.Seperate)
+                sumForce += Separate(flocks) * SeparationWeight;
+            if (setting.Alignment)
+                sumForce += Align(flocks) * AlignmentWeight;
+            if (setting.Cohesion)
+                sumForce += Cohesion(flocks) * CohesionWeight;
 
             Acceleration = sumForce;
         }
 
+        /// <summary>
+        /// Avoid crowding neighbours (short range repulsion)
+        /// </summary>
+        /// <param name="flocks"></param>
+        /// <returns></returns>
         private Vector2 Separate(List<Flock> flocks)
         {
             Vector2 sum = new();
@@ -95,6 +117,79 @@ namespace BulletManiac.AI
 
             return desiredVelocity;
             //return CalculateForce(desiredVelocity);
+        }
+
+        private Vector2 Align(List<Flock> flocks)
+        {
+            Vector2 sum = new();
+            int count = 0;
+            // Algorithm:
+            // Part 1:
+            // 1. Iterate boids, for each boid
+            // 2. If the boid is this agent, skip
+            // 3. If distance between boid and agent is lesser than neighbourRadius:
+            //    a. add the boid's velocity to sum, and increase count.
+            foreach (Flock flock in flocks)
+            {
+                if (this != flock)
+                {
+                    float distance = Vector2.Distance(user.Position, flock.user.Position);
+                    if (distance < NeighbourRadius)
+                    {
+                        sum += flock.CurrentVelocity;
+                        count++;
+                    }
+                }
+            }
+
+            // Part 2
+            // return Vector2.Zero IF count is 0 OR magnitude of sum is 0.
+            if (count == 0 || sum.Length() == 0) return Vector2.Zero;
+
+            // Part 3
+            // 1. normalize sum and multiply with maxSpeed, that is your desiredVelocity
+            // 2. calculate force using desiredVelocity and return;
+            Vector2 desiredVelocity = Vector2.Normalize(sum) * MaxSpeed;
+
+            return desiredVelocity;
+        }
+
+        private Vector2 Cohesion(List<Flock> flocks)
+        {
+            Vector2 sum = new();
+            int count = 0;
+            // Algorithm:
+            // Part 1:
+            // 1. Iterate boids, for each boid
+            // 2. If the boid is this agent, skip
+            // 3. If distance between boid and agent is lesser than neighbourRadius:
+            //    a. add the boid's position to sum, and increase count.
+            foreach (Flock flock in flocks)
+            {
+                if (this != flock)
+                {
+                    float distance = Vector2.Distance(user.Position, flock.user.Position);
+                    if (distance < NeighbourRadius)
+                    {
+                        sum += flock.user.Position;
+                        count++;
+                    }
+                }
+            }
+
+            // Part 2
+            // return Vector2.Zero IF count is 0 OR magnitude of sum is 0.
+            if (count == 0 || sum.Length() == 0) return Vector2.Zero;
+
+            // Part 3
+            // 1. get the average of sum, using count.
+            // 2. apply Seek to the average sum.
+            Vector2 average = sum / count;
+
+            Vector2 desiredDirection = Vector2.Normalize(average - user.Position);
+            Vector2 desiredVelocity = desiredDirection * MaxSpeed;
+            //return Seek(average);
+            return desiredVelocity;
         }
 
         //private Vector2 CalculateForce(Vector2 desiredVelocity)

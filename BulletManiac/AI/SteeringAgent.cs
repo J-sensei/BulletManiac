@@ -50,17 +50,27 @@ namespace BulletManiac.AI
         /// </summary>
         public XDirection CurrentXDir { get; private set; }
 
-        static List<Flock> flocks = new();
+        static List<Flock> flocks = new(); // TEST, now will all steering behavior will have flock
         private Flock currentFlock;
+        private bool enableFlock;
 
-        public SteeringAgent(GameObject user, float speed = 50f, float arrivalRadius = 10f)
+        public SteeringAgent(GameObject user, float speed = 50f, float arrivalRadius = 10f, bool enableFlock = false)
         {
             this.user = user;
             this.currentSpeed = speed;
             this.arrivalRadius = arrivalRadius;
-
-            currentFlock = new Flock(user);
-            flocks.Add(currentFlock);
+            this.enableFlock = enableFlock;
+            if (enableFlock)
+            {
+                currentFlock = new Flock(user, new FlockSetting
+                {
+                    Seperate = true,
+                    Alignment = true,
+                    Cohesion = false
+                });
+                currentFlock.NeighbourRadius = 10f;
+                flocks.Add(currentFlock);
+            }
         }
 
         public void Update(GameTime gameTime, GameObject target)
@@ -85,8 +95,17 @@ namespace BulletManiac.AI
             //currentVelocity = Arrive(target.Position, currentSpeed, 10f);
             //currentVelocity = Flee(target.Position);
 
-            CurrentFinalVelocity = Extensions.Truncate(CurrentVelocity + currentFlock.Acceleration, currentFlock.MaxSpeed);
-            currentFlock.ResetAcceleration(); // Reset Acceleration to zero for next frame.
+            if (enableFlock)
+            {
+                currentFlock.CurrentVelocity = currentVelocity;
+                CurrentFinalVelocity = Extensions.Truncate(CurrentVelocity + currentFlock.Acceleration, currentFlock.MaxSpeed);
+                currentFlock.ResetAcceleration(); // Reset Acceleration to zero for next frame.
+            }
+            else
+            {
+                CurrentFinalVelocity = currentVelocity;
+            }
+
 
             if (currentVelocity.X >= 0) CurrentXDir = XDirection.Right;
             else CurrentXDir = XDirection.Left;
@@ -238,7 +257,8 @@ namespace BulletManiac.AI
 
         public void Dispose()
         {
-            flocks.Remove(currentFlock);
+            if(currentFlock != null)
+                flocks.Remove(currentFlock);
         }
     }
 }
