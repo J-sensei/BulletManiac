@@ -15,6 +15,46 @@ namespace BulletManiac.Utilities
             return (float)val;
         }
 
+        public static float NextFloat()
+        {
+            return (float)random.NextDouble();
+        }
+
+        /// <summary>
+        /// From Steering Behavior Lab (Game Algorithm)
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="maxLength"></param>
+        /// <returns></returns>
+        public static bool Approximately(float a, float b)
+        {
+            return (double)MathF.Abs(b - a) < (double)MathF.Max(1E-06f * MathF.Max(MathF.Abs(a),
+                MathF.Abs(b)), float.Epsilon * 8.0f);
+        }
+
+        /// <summary>
+        /// From Flock Lab (Game Algorithm)
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="maxLength"></param>
+        /// <returns></returns>
+        public static Vector2 Truncate(Vector2 vector, float maxLength)
+        {
+            float sqrmag = vector.LengthSquared();
+            if (sqrmag > maxLength * maxLength)
+            {
+                float mag = (float)Math.Sqrt(sqrmag);
+                //these intermediate variables force the intermediate result to be
+                //of float precision. without this, the intermediate result can be of higher
+                //precision, which changes behavior.
+                float normalized_x = vector.X / mag;
+                float normalized_y = vector.Y / mag;
+                return new Vector2(normalized_x * maxLength,
+                    normalized_y * maxLength);
+            }
+            return vector;
+        }
+
         public static Texture2D CropTexture2D(this Texture2D spriteSheet, Rectangle source)
         {
             Texture2D croppedTexture2d = new Texture2D(spriteSheet.GraphicsDevice, source.Width, source.Height);

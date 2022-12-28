@@ -36,7 +36,7 @@ namespace BulletManiac.Entity
         /// <summary>
         /// Cropped textures based on the bounds data
         /// </summary>
-        public Texture2D[] croppedTextures;
+        private Texture2D[] croppedTextures;
         /// <summary>
         /// Get the current frame sprite
         /// </summary>
@@ -242,12 +242,15 @@ namespace BulletManiac.Entity
 
         public void Dispose()
         {
-            for(int i = 0; i < croppedTextures.Length; i++)
+            if(croppedTextures != null)
             {
-                croppedTextures[i].Dispose();
-                croppedTextures[i] = null;
+                for (int i = 0; i < croppedTextures.Length; i++)
+                {
+                    croppedTextures[i].Dispose();
+                    croppedTextures[i] = null;
+                }
+                croppedTextures = null;
             }
-            croppedTextures = null;
         }
     }
 }

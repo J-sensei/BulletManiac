@@ -67,7 +67,7 @@ namespace BulletManiac.Entity
         /// <summary>
         /// Is the game object destroyed already?
         /// </summary>
-        public bool IsDestroyed { get { return destroyed; } }
+        public bool IsDestroyed { get { return destroyed; } protected set { destroyed = value; } }
         /// <summary>
         /// Name of the game object
         /// </summary>

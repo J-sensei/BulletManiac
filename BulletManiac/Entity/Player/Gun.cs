@@ -15,6 +15,10 @@ namespace BulletManiac.Entity.Player
 
         private bool shooting = false;
 
+        public const int DEFAULT_BULLET = 5;
+        public int CurrentBullet { get; private set; } = 5;
+        const float DEFAULT_RELOAD_CD = 0.25f;
+
         const float MIN_SHOOT_ANIMATION_SPEED = 0.01f;
         const float MAX_SHOOT_ANIMATION_SPEED = 0.05f;
         float currentShootAnimationSpeed = MIN_SHOOT_ANIMATION_SPEED; // Test
@@ -27,16 +31,20 @@ namespace BulletManiac.Entity.Player
         /// </summary>
         public bool RenderInfront { get; private set; }
 
+        public Magazine Magazine { get; private set; }
+        public bool Reloading { get { return Magazine.Reloading; } }
+
         public Gun(GameObject holder)
         {
             name = "Player Gun";
             scale = new Vector2(0.4f);
             this.holder = holder;
 
-            animation = new Animation(GameManager.Resources.FindTexture("Player_Pistol"), 12, 1, currentShootAnimationSpeed, looping: false);
+            animation = new Animation(GameManager.Resources.FindTexture("Player_Pistol"), 12, 1, 0.001f, looping: false);
             animation.Stop();
             texture = animation.CurrentTexture;
             origin = new Vector2(0f, texture.Bounds.Center.ToVector2().Y);
+            Magazine = new Magazine(DEFAULT_BULLET, DEFAULT_RELOAD_CD);
         }
 
         protected override Rectangle CalculateBound()
@@ -97,6 +105,7 @@ namespace BulletManiac.Entity.Player
 
         public void Shoot()
         {
+            Magazine.Update(shooting); // Reloading logic
             // If the animation is finish playing, then reset it or the gun is not shooting
             if (shooting && animation.Finish || (!shooting && animation.CurrentFrameIndex > 0))
             {
@@ -105,7 +114,7 @@ namespace BulletManiac.Entity.Player
             }
 
             // If gun is not shooting and player want to trigger it
-            if (InputManager.MouseLeftHold && !shooting)
+            if (InputManager.MouseLeftHold && !shooting && Magazine.CanShoot)
             {
                 // Player is walking, more accurate shooting
                 if (InputManager.GetKeyDown(Keys.LeftShift))
@@ -130,7 +139,9 @@ namespace BulletManiac.Entity.Player
                 bulletDirection.Y = Extensions.RandomRangeFloat(bulletDirection.Y - accuracy, bulletDirection.Y + accuracy);
 
                 // Fire Bullet
-                DefaultBullet bullet = new DefaultBullet(position, bulletDirection, 150f, 16f);
+                //DefaultBullet bullet = new DefaultBullet(position, bulletDirection, 150f, 16f);
+                Bullet.Bullet bullet = Magazine.Shoot(); // Get the current bullet from the megazine
+                bullet.UpdateShootPosition(position, bulletDirection, 150f, 16f);
                 GameManager.Resources.FindSoundEffect("Gun_Shoot").Play();
                 GameManager.AddGameObject(bullet); // Straight away add bullet to entity manager to run it immediately
             }

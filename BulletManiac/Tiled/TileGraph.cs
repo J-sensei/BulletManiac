@@ -18,11 +18,11 @@ namespace BulletManiac.Tiled
         /// <summary>
         /// 8 direction of moving row (y axis)
         /// </summary>
-        private readonly int[] moveRow = { -1, -1, -1, 0, 0, 1, 1, 1 };
+        public static readonly int[] MoveRow = { -1, -1, -1, 0, 0, 1, 1, 1 };
         /// <summary>
         /// 8 direction of moving column (x axis)
         /// </summary>
-        private readonly int[] moveCol = { -1, 0, 1, -1, 1, -1, 0, 1 };
+        public static readonly int[] MoveCol = { -1, 0, 1, -1, 1, -1, 0, 1 };
         /// <summary>
         /// Diagonal : 2, Non-Diagonal : 1
         /// </summary>
@@ -30,7 +30,8 @@ namespace BulletManiac.Tiled
         /// <summary>
         /// // 4 directions for the search to walk (Up, Left, Right, Down)
         /// </summary>
-        private readonly int[] directions = { 1, 3, 4, 6 }; 
+        private readonly int[] directions = { 1, 3, 4, 6 };
+        //private readonly int[] directions = { 0, 1, 2, 3, 4, 5, 6, 7 }; // Move diagnosal
 
         private HashSet<Tile> nodes; // Nodes represent a 
         private Dictionary<Tile, ulong[]> connections; // Connection of a tile to other tiles
@@ -86,8 +87,8 @@ namespace BulletManiac.Tiled
                 foreach(int direction in directions)
                 {
                     // Get neigbour tile
-                    int neighbourRow = currentTile.Row + moveRow[direction];
-                    int neighbourCol = currentTile.Col + moveCol[direction];
+                    int neighbourRow = currentTile.Row + MoveRow[direction];
+                    int neighbourCol = currentTile.Col + MoveCol[direction];
 
                     // A valid neighbour satisfies the following criteria:
                     // (1) Row and column is within the number of rows and columns respectively
@@ -140,7 +141,7 @@ namespace BulletManiac.Tiled
                 int index = 0;
 
                 for (int i = 0; i < weights.Length; ++i)
-                    if (weights[i] != 0)
+                    if (weights[i] != 0) // As long as the weight is not 0, it is a valid path
                         index += count[i];
 
                 rect.X = index * debugTexture.Height;

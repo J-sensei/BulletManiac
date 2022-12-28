@@ -1,8 +1,10 @@
 ﻿using BulletManiac.Collision;
 using BulletManiac.Entity;
+using BulletManiac.Entity.Enemy;
 using BulletManiac.Entity.Player;
 using BulletManiac.Entity.UI;
 using BulletManiac.Tiled;
+using BulletManiac.Tiled.AI;
 using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -15,6 +17,14 @@ using System.Collections.Generic;
 
 namespace BulletManiac.Managers
 {
+    /// <summary>
+    /// Testing using different pathfinding algorithm
+    /// </summary>
+    public enum PathfindingAlgorithm
+    {
+        Dijkstra, AStar
+    }
+
     /// <summary>
     /// Global class accessing to various functions
     /// </summary>
@@ -72,9 +82,14 @@ namespace BulletManiac.Managers
         #endregion
 
         // Level
+        public static Player Player { get; private set; }
         public static List<Level> Levels = new();
         public static Level CurrentLevel;
         public static int CurrentLevelIndex;
+
+        // Pathfinding
+        private static PathTester pathTester;
+        public static PathfindingAlgorithm CurrentPathfindingAlgorithm = PathfindingAlgorithm.AStar;
 
         /// <summary>
         /// Load / Unload and Find the resources of the game
@@ -150,6 +165,7 @@ namespace BulletManiac.Managers
         {
             // Load Sprites
             Resources.LoadTexture("Bullet1", "SpriteSheet/Bullet/Bullets1_16x16");
+            Resources.LoadTexture("BulletEffect", "SpriteSheet/Bullet/BulletEffect_16x16");
             Resources.LoadTexture("Walking_Smoke", "SpriteSheet/Effect/Smoke_Walking");
             Resources.LoadTexture("Player_Pistol", "SpriteSheet/Gun/[FULL]PistolV1.01");
             Resources.LoadTexture("Shadow", "SpriteSheet/Effect/Shadow");
@@ -162,11 +178,20 @@ namespace BulletManiac.Managers
             Resources.LoadTexture("Player_Throw", "SpriteSheet/Player/Owlet_Monster_Throw_4");
             Resources.LoadTexture("Player_SpriteSheet", "SpriteSheet/Player/AnimationSheet_Player");
 
+            // Load Enemy Sprites
+            Resources.LoadTexture("Spider", "SpriteSheet/Enemy/Spider Sprite Sheet");
+            Resources.LoadTexture("Bat_Flying", "SpriteSheet/Enemy/Bat/Flying");
+            Resources.LoadTexture("Bat_Attack", "SpriteSheet/Enemy/Bat/Attack");
+            Resources.LoadTexture("Bat_Hit", "SpriteSheet/Enemy/Bat/Hit");
+
             // Load UI Sprites
             Resources.LoadTexture("Crosshair_SpriteSheet", "SpriteSheet/UI/Crosshair");
+            Resources.LoadTexture("Bullet_Fill", "UI/Bullet/bullet_fill");
+            Resources.LoadSpriteFonts("DebugFont", "UI/Font/DebugFont");
 
             // Load Debug UI Sprites
             Resources.LoadTexture("Debug_Direction", "SpriteSheet/DebugUI/direction_16x16");
+            Resources.LoadTexture("Debug_Path", "SpriteSheet/DebugUI/path_16x16");
 
             // Load Tiled Map level
             Resources.LoadTiledMap("Level0", "Tiled/Level0");
@@ -186,8 +211,11 @@ namespace BulletManiac.Managers
             Resources.LoadSoundEffect("Footstep6", "Audio/Footstep/Footstep6");
             Resources.LoadSoundEffect("Footstep7", "Audio/Footstep/Footstep7");
             Resources.LoadSoundEffect("Gun_Shoot", "Audio/Gun/Gun_Shoot");
+            Resources.LoadSoundEffect("Mag_In", "Audio/Gun/Mag_In");
+            Resources.LoadSoundEffect("Pistol_Cock", "Audio/Gun/Pistol_Cock");
+            Resources.LoadSoundEffect("Bullet_Hit", "Audio/Gun/Bullet_Hit");
         }
-
+        
         public static void LoadContent(ContentManager content)
         {
             Resources.Load(content); // Initialize the Resource Manager
@@ -195,7 +223,10 @@ namespace BulletManiac.Managers
 
             // Add cursor and plpayer
             AddGameObjectUI(new Cursor()); // Add the game cursor
-            AddGameObject(new Player(new Vector2(50f))); // Add player
+            Player = new Player(new Vector2(50f)); // Create Player in the game
+            AddGameObject(Player); // Add player
+            MagazineUI megazineUI = new MagazineUI(Player.Gun);
+            AddGameObjectUI(megazineUI);
 
             // Set current level
             Levels.Add(new Level(Resources.FindTiledMap("Level1"), 9, 8));
@@ -206,6 +237,13 @@ namespace BulletManiac.Managers
             CurrentLevel = Levels[0];
             tiledMapRenderer.LoadMap(CurrentLevel.Map);
             Tile.AddTileCollision(CurrentLevel.Map.GetLayer<TiledMapTileLayer>("Wall"), CurrentLevel.Map.Width, CurrentLevel.Map.Height, CurrentLevel.Map.TileWidth, CurrentLevel.Map.TileHeight);
+
+            // Pathfinding
+            pathTester = new PathTester(CurrentLevel);
+
+            // Test Enemy
+            //AddGameObject(new Spider(Tile.ToPosition(new Tile(10, 12), 16, 16)));
+            AddGameObject(new Bat(Tile.ToPosition(new Tile(10, 12), 16, 16)));
         }
          
         // Test change level
@@ -216,11 +254,12 @@ namespace BulletManiac.Managers
             tiledMapRenderer.LoadMap(CurrentLevel.Map);
             CollisionManager.ClearTileCollision();
             Tile.AddTileCollision(CurrentLevel.Map.GetLayer<TiledMapTileLayer>("Wall"), CurrentLevel.Map.Width, CurrentLevel.Map.Height, CurrentLevel.Map.TileWidth, CurrentLevel.Map.TileHeight);
+            pathTester.ChangeLevel(CurrentLevel);
         }
 
         public static void Update(GameTime gameTime)
         {
-            DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds; // Update the delta time
+            DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds; // Update the delta time variable
             InputManager.Update(gameTime); // Update the input manager
             tiledMapRenderer.Update(gameTime); // Tiled Map Update
             CollisionManager.Update(gameTime); // Collision Update
@@ -233,8 +272,23 @@ namespace BulletManiac.Managers
             // Update debug status
             if (InputManager.GetKey(Keys.F12)) Debug = !Debug;
             if (InputManager.GetKey(Keys.R)) ChangeLevel(); // Test change level
+            if(InputManager.GetKey(Keys.G))
+            {
+                // Test Enemy
+                AddGameObject(new Bat(Tile.ToPosition(new Tile(10, 12), 16, 16)));
+            }
+
+            if (Debug)
+            {
+                pathTester.Update(gameTime);
+            }
         }
 
+        /// <summary>
+        /// Draw game objects on the game world layer
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="gameTime"></param>
         public static void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             tiledMapRenderer.Draw(viewMatrix: MainCamera.Transform); // Render the Tiled
@@ -247,13 +301,23 @@ namespace BulletManiac.Managers
                     t.Draw(spriteBatch, gameTime);
                 }
                 TileGraph.DebugDrawGraph(spriteBatch, CurrentLevel.TileGraph);
+                pathTester.Draw(spriteBatch);
             }
 
             entityManager.Draw(spriteBatch, gameTime);       
         }
+
+        /// <summary>
+        /// Draw game object on the UI layer
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="gameTime"></param>
         public static void DrawUI(SpriteBatch spriteBatch, GameTime gameTime)
         {
             entityManager.DrawUI(spriteBatch, gameTime);
+
+            double framerate = (1 / gameTime.ElapsedGameTime.TotalSeconds);
+            spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "FPS: " + framerate.ToString("F2"), new Vector2(5f), Color.Red);
         }
 
         /// <summary>
