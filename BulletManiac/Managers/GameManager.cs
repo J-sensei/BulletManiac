@@ -167,6 +167,7 @@ namespace BulletManiac.Managers
             Resources.LoadTexture("Bullet1", "SpriteSheet/Bullet/Bullets1_16x16");
             Resources.LoadTexture("BulletEffect", "SpriteSheet/Bullet/BulletEffect_16x16");
             Resources.LoadTexture("Walking_Smoke", "SpriteSheet/Effect/Smoke_Walking");
+            Resources.LoadTexture("Destroy_Smoke", "SpriteSheet/Effect/Smoke_Destroy");
             Resources.LoadTexture("Player_Pistol", "SpriteSheet/Gun/[FULL]PistolV1.01");
             Resources.LoadTexture("Shadow", "SpriteSheet/Effect/Shadow");
 

@@ -1,5 +1,6 @@
 ﻿using BulletManiac.Collision;
 using BulletManiac.Managers;
+using BulletManiac.Particle;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -47,8 +48,13 @@ namespace BulletManiac.Entity.Enemy
 
                 // If enemy hp is 0, destroy it
                 if(hp <= 0)
+                {
+                    animationManager.Dispose();
                     Destroy(this);
-
+                    TextureEffect effect = new TextureEffect(new Animation(GameManager.Resources.FindTexture("Destroy_Smoke"), 5, 1, 0.1f, looping: false),
+                        Position, new Vector2(16, 16), new Vector2(1f), true);
+                    GameManager.AddGameObject(effect);
+                }
             }
 
             base.CollisionEvent(other);

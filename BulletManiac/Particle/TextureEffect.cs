@@ -18,7 +18,7 @@ namespace BulletManiac.Particle
         private Animation animation;
         private bool destroyWhenFinish = false;
 
-        public TextureEffect(Animation animation, Vector2 spawnPosition, Vector2 origin, bool destroyWhenFinish = true, SpriteEffects spriteEffects = 0)
+        public TextureEffect(Animation animation, Vector2 spawnPosition, Vector2 origin, Vector2 scale, bool destroyWhenFinish = true, SpriteEffects spriteEffects = 0)
         {
             this.name = "Animated Texture Effect";
             this.animation = animation;
@@ -26,6 +26,7 @@ namespace BulletManiac.Particle
             position = spawnPosition;
             this.origin = origin;
             this.spriteEffects = spriteEffects;
+            this.scale = scale;
             animation.Reset();
         }
 

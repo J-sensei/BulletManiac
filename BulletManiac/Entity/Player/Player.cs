@@ -252,13 +252,13 @@ namespace BulletManiac.Entity.Player
             {
                 if (!moveBackward) smokeSpriteEffects = SpriteEffects.FlipHorizontally;
                 effect = new TextureEffect(new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false),
-                        Position + new Vector2(8f, 5f), new Vector2(32, 32), true, smokeSpriteEffects);
+                        Position + new Vector2(8f, 5f), new Vector2(32, 32), new Vector2(1f), true, smokeSpriteEffects);
             }
             else
             {
                 if (moveBackward) smokeSpriteEffects = SpriteEffects.FlipHorizontally;
                 effect = new TextureEffect(new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false),
-                        Position + new Vector2(-5f, 5f), new Vector2(32, 32), true, smokeSpriteEffects);
+                        Position + new Vector2(-5f, 5f), new Vector2(32, 32), new Vector2(1f), true, smokeSpriteEffects);
             }
 
             GameManager.AddGameObject(effect);

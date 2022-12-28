@@ -13,6 +13,18 @@ namespace BulletManiac.AI
         public bool Seperate { get; set; }
         public bool Alignment { get; set; }
         public bool Cohesion { get; set; }
+
+        float? neighbourRadius;
+        public float NeighbourRadius { get { return neighbourRadius ?? 100f; } set { neighbourRadius = value; } }
+        float? agentRadius;
+        public float AgentRadius { get { return agentRadius ?? 16f; } set { agentRadius = value; } }
+
+        float? separationWeight;
+        public float SeparationWeight { get { return separationWeight ?? 1.2f; } set { separationWeight = value; } }
+        float? alignmentWeight;
+        public float AlignmentWeight { get { return alignmentWeight ?? 1.0f; } set { alignmentWeight = value; } }
+        float? cohesionWeight;
+        public float CohesionWeight { get { return cohesionWeight ?? 1.0f; } set { cohesionWeight = value; } }
     }
 
     /// <summary>
@@ -24,12 +36,12 @@ namespace BulletManiac.AI
         private FlockSetting setting;
         public float MaxSpeed { get; private set; }
 
-        public float NeighbourRadius { get; set; } = 100.0f;
-        public float AgentRadius { get; set; } = 16.0f;
+        public float NeighbourRadius { get; private set; } = 100.0f;
+        public float AgentRadius { get; private set; } = 16.0f;
 
-        public float SeparationWeight { get; set; } = 1.2f;
-        public float AlignmentWeight { get; set; } = 1.0f;
-        public float CohesionWeight { get; set; } = 1.0f;
+        public float SeparationWeight { get; private set; } = 1.2f;
+        public float AlignmentWeight { get; private set; } = 1.0f;
+        public float CohesionWeight { get; private set; } = 1.0f;
 
         public Vector2 Acceleration { get; private set; } = Vector2.Zero;
         public Vector2 CurrentVelocity { get; set; }
@@ -39,6 +51,13 @@ namespace BulletManiac.AI
             this.user = user;
             setting = flockSetting;
             MaxSpeed = speed;
+
+            NeighbourRadius = setting.NeighbourRadius;
+            AgentRadius = setting.AgentRadius;
+
+            SeparationWeight = setting.SeparationWeight;
+            AlignmentWeight = setting.AlignmentWeight;
+            CohesionWeight = setting.CohesionWeight;
         }
 
         public void ResetAcceleration()

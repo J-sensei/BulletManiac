@@ -76,8 +76,10 @@ namespace BulletManiac.Entity.Bullet
             if(CollisionManager.CheckTileCollision(this, Vector2.Zero))
             {
                 // Add smoke effect when bullet is destroy
-                TextureEffect effect = new TextureEffect(new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false),
-                                                        Position, new Vector2(32, 32), true);
+                //TextureEffect effect = new TextureEffect(new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false),
+                //                                        Position, new Vector2(32, 32), true);
+                TextureEffect effect = new TextureEffect(new Animation(GameManager.Resources.FindTexture("Destroy_Smoke"), 5, 1, 0.1f, looping: false),
+                                        Position, new Vector2(16, 16), new Vector2(0.5f) ,true);
                 GameManager.AddGameObject(effect);
                 IsDestroyed = true; // Manually destroyvfor this
             }
@@ -100,7 +102,7 @@ namespace BulletManiac.Entity.Bullet
         public override void DeleteEvent()
         {
             TextureEffect effect = new TextureEffect(new Animation(GameManager.Resources.FindTexture("Bullet1"), 5, 25, 0.05f, 3, false),
-                        Position, new Vector2(8, 8), true);
+                        Position, new Vector2(8, 8), new Vector2(1f), true);
             GameManager.AddGameObject(effect);
             base.DeleteEvent();
         }

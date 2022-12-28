@@ -14,8 +14,12 @@ namespace BulletManiac.AI
 {
     public enum SteeringBehavior
     {
-        Seek, Flee, Arrival, Wander, 
+        Seek, Flee, Arrival, Wander
     }
+
+    /// <summary>
+    /// Use to flip the user sprite
+    /// </summary>
     public enum XDirection
     {
         Left, Right
@@ -23,7 +27,6 @@ namespace BulletManiac.AI
 
     public class SteeringAgent : IDisposable
     {
-        private Flock boid; // Boid behavior
         private GameObject user;
 
         private const float DEFAULT_COOLDOWN = 0.5f;
@@ -49,10 +52,9 @@ namespace BulletManiac.AI
         /// Determine the agent is going left or right currently
         /// </summary>
         public XDirection CurrentXDir { get; private set; }
-
-        static List<Flock> flocks = new(); // TEST, now will all steering behavior will have flock
-        private Flock currentFlock;
-        private bool enableFlock;
+        
+        private Flock currentFlock; // Current Flock of the user (Create when enable flock)
+        private bool enableFlock; // Determine if this steering agent need to enable flock behavior
 
         public SteeringAgent(GameObject user, float speed = 50f, float arrivalRadius = 10f, bool enableFlock = false)
         {
@@ -66,10 +68,10 @@ namespace BulletManiac.AI
                 {
                     Seperate = true,
                     Alignment = true,
-                    Cohesion = false
+                    Cohesion = false,
+                    NeighbourRadius = 10f
                 });
-                currentFlock.NeighbourRadius = 10f;
-                flocks.Add(currentFlock);
+                FlockManager.Add(user.Name, currentFlock); // Add to flock manager
             }
         }
 
@@ -91,6 +93,7 @@ namespace BulletManiac.AI
                     GameManager.Log("Steering Agent", "No Steering Behavior is selected.");
                     break;
             }
+
             //MoveAvoid(user, target.Position);
             //currentVelocity = Arrive(target.Position, currentSpeed, 10f);
             //currentVelocity = Flee(target.Position);
@@ -114,8 +117,14 @@ namespace BulletManiac.AI
             //ApplyMove(currentVelocity, currentSpeed);
             //MoveAvoid(user, target.Position);
 
-            foreach (var f in flocks)
-                f.Process(flocks);
+            if (enableFlock)
+            {
+                var flocks = FlockManager.Find(user.Name);
+                foreach (var flock in flocks)
+                {
+                    flock.Process(flocks);
+                }
+            }
         }
 
         private void MoveAvoid(GameObject source, Vector2 target)
@@ -257,8 +266,8 @@ namespace BulletManiac.AI
 
         public void Dispose()
         {
-            if(currentFlock != null)
-                flocks.Remove(currentFlock);
+            if (currentFlock != null)
+                FlockManager.Remove(user.Name, currentFlock);
         }
     }
 }
