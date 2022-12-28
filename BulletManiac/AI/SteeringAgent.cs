@@ -21,8 +21,9 @@ namespace BulletManiac.AI
         Left, Right
     }
 
-    public class SteeringAgent
+    public class SteeringAgent : IDisposable
     {
+        private Flock boid; // Boid behavior
         private GameObject user;
 
         private const float DEFAULT_COOLDOWN = 0.5f;
@@ -36,6 +37,11 @@ namespace BulletManiac.AI
         private float currentWanderCD = DEFAULT_WANDER_CD;
 
         /// <summary>
+        /// Velocity calculated by agent to move
+        /// </summary>
+        public Vector2 CurrentVelocity { get { return currentVelocity; } }
+        public Vector2 CurrentFinalVelocity { get; private set; }
+        /// <summary>
         /// Current steer behavior of the agent
         /// </summary>
         public SteeringBehavior SteeringBehavior { get; set; } = SteeringBehavior.Seek;
@@ -44,11 +50,17 @@ namespace BulletManiac.AI
         /// </summary>
         public XDirection CurrentXDir { get; private set; }
 
+        static List<Flock> flocks = new();
+        private Flock currentFlock;
+
         public SteeringAgent(GameObject user, float speed = 50f, float arrivalRadius = 10f)
         {
             this.user = user;
             this.currentSpeed = speed;
             this.arrivalRadius = arrivalRadius;
+
+            currentFlock = new Flock(user);
+            flocks.Add(currentFlock);
         }
 
         public void Update(GameTime gameTime, GameObject target)
@@ -73,12 +85,18 @@ namespace BulletManiac.AI
             //currentVelocity = Arrive(target.Position, currentSpeed, 10f);
             //currentVelocity = Flee(target.Position);
 
+            CurrentFinalVelocity = Extensions.Truncate(CurrentVelocity + currentFlock.Acceleration, currentFlock.MaxSpeed);
+            currentFlock.ResetAcceleration(); // Reset Acceleration to zero for next frame.
+
             if (currentVelocity.X >= 0) CurrentXDir = XDirection.Right;
             else CurrentXDir = XDirection.Left;
 
-            user.Position += currentVelocity * GameManager.DeltaTime;
+            //user.Position += currentVelocity * GameManager.DeltaTime;
             //ApplyMove(currentVelocity, currentSpeed);
             //MoveAvoid(user, target.Position);
+
+            foreach (var f in flocks)
+                f.Process(flocks);
         }
 
         private void MoveAvoid(GameObject source, Vector2 target)
@@ -216,6 +234,11 @@ namespace BulletManiac.AI
                 result.Y += moveAmountY.Y;
 
             user.Position += result;
+        }
+
+        public void Dispose()
+        {
+            flocks.Remove(currentFlock);
         }
     }
 }

@@ -50,6 +50,8 @@ namespace BulletManiac.Entity.Enemy
 
             animationManager.Update(currentAction, gameTime);
             texture = animationManager.CurrentAnimation.CurrentTexture; // Update the texture based on the animation
+
+            Position += steerAgent.CurrentFinalVelocity * GameManager.DeltaTime;
             base.Update(gameTime);
         }
 
@@ -71,6 +73,12 @@ namespace BulletManiac.Entity.Enemy
                 Vector2 pos = position - (origin * scale / 1.1f) + new Vector2(2f, 0f);
                 return new Rectangle((int)pos.X, (int)pos.Y + 3, (int)(texture.Width * scale.X / 1.25f), (int)(texture.Height * scale.Y / 1.1f));
             }
+        }
+
+        public override void Dispose()
+        {
+            steerAgent.Dispose();
+            base.Dispose();
         }
     }
 }
