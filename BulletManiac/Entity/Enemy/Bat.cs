@@ -10,6 +10,7 @@ namespace BulletManiac.Entity.Enemy
 {
     public class Bat : Enemy
     {
+        private const int TOTAL_BAT_LEFT_TO_FLEE = 5;
         private SteeringAgent steerAgent;
         private AnimationManager animationManager;
         private TextureEffect shadowEffect; // Visual shadow effect
@@ -22,7 +23,11 @@ namespace BulletManiac.Entity.Enemy
             hp = 30f;
             currentAction = EnemyAction.Move;
 
-            steerAgent = new SteeringAgent(this, 65f, 5f, true);
+            steerAgent = new SteeringAgent(this, new SteeringSetting
+            {
+                DistanceToChase = 1000f,
+                DistanceToFlee = 1000f
+            }, 65f, 5f, true);
             steerAgent.SteeringBehavior = SteeringBehavior.Arrival;
 
             animationManager.AddAnimation(EnemyAction.Idle, new Animation(GameManager.Resources.FindTexture("Bat_Flying"), 7, 1, animationSpeed));
@@ -41,7 +46,16 @@ namespace BulletManiac.Entity.Enemy
 
         public override void Update(GameTime gameTime)
         {
-            if(currentAction == EnemyAction.Move)
+            if (FlockManager.Find(Name).Count <= TOTAL_BAT_LEFT_TO_FLEE)
+            {
+                steerAgent.SteeringBehavior = SteeringBehavior.Flee;
+            }
+            else
+            {
+                steerAgent.SteeringBehavior = SteeringBehavior.Arrival;
+            }
+
+            if (currentAction == EnemyAction.Move)
                 steerAgent.Update(gameTime, GameManager.Player); // Bat is flying toward to the player
 
             // Texture flipping
@@ -60,7 +74,7 @@ namespace BulletManiac.Entity.Enemy
             // Animation update
             animationManager.Update(currentAction, gameTime);
             texture = animationManager.CurrentAnimation.CurrentTexture;
-
+            
             if (currentAction == EnemyAction.Move)
                 Position += steerAgent.CurrentFinalVelocity * GameManager.DeltaTime;
 

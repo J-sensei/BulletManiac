@@ -27,6 +27,7 @@ namespace BulletManiac.Tiled
         /// Initial player spawn position
         /// </summary>
         public Vector2 SpawnPosition;
+        public Rectangle Bound;
 
         public Level(TiledMap map, int colStart, int rowStart)
         {
@@ -35,6 +36,9 @@ namespace BulletManiac.Tiled
             // Construct the TileGraph
             TileGraph = new TileGraph();
             TileGraph.CreatePathsFromMap(wallLayer, colStart, rowStart);
+            Bound = new Rectangle(wallLayer.TileWidth + 10, wallLayer.TileHeight + 10,
+                                    (wallLayer.Width * wallLayer.TileWidth) - (wallLayer.TileWidth + 10),
+                                    (wallLayer.Height * wallLayer.TileHeight) - (wallLayer.TileHeight + 10));
         }
     }
 }
