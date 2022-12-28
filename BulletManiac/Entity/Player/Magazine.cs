@@ -20,7 +20,7 @@ namespace BulletManiac.Entity.Player
         {
             get
             {
-                return (!Reloading);
+                return bullets.Count > 0;
             }
         }
 
@@ -40,25 +40,30 @@ namespace BulletManiac.Entity.Player
             }
         }
 
-        public void Update()
+        public void Update(bool shooting)
         {
-            if (bullets.Count <= 0 || Reloading)
+            if (bullets.Count < capacity && !shooting)
             {
                 Reloading = true;
                 currentBulletCD -= GameManager.DeltaTime;
 
-                if (bullets.Count == capacity && currentBulletCD <= 0f)
-                {
-                    GameManager.Resources.FindSoundEffect("Pistol_Cock").Play();
-                    currentBulletCD = bulletCD;
-                    Reloading = false;
-                }
+                //if (bullets.Count == capacity)
+                //{
+                //    GameManager.Resources.FindSoundEffect("Pistol_Cock").Play();
+                //    currentBulletCD = bulletCD;
+                //    Reloading = false;
+                //}
 
                 if (currentBulletCD <= 0f)
                 {
                     bullets.Enqueue(new DefaultBullet(Vector2.Zero, Vector2.Zero));
                     currentBulletCD = bulletCD;
                     GameManager.Resources.FindSoundEffect("Mag_In").Play();
+                    if (bullets.Count == capacity)
+                    {
+                        //GameManager.Resources.FindSoundEffect("Pistol_Cock").Play();
+                        Reloading = false;
+                    }
                 }
             }
             else

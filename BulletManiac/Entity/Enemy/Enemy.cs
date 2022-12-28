@@ -22,6 +22,7 @@ namespace BulletManiac.Entity.Enemy
             Idle, Move, Attack, Die, Hit
         }
 
+        protected float hp = 100f;
         private AnimationManager animationManager; // Manange the animation based on certain action
         protected EnemyAction currentAction = EnemyAction.Idle;
 
@@ -38,11 +39,16 @@ namespace BulletManiac.Entity.Enemy
             if(other.Name == "Bullet")
             {
                 // Deal damaage to the enemy
+                hp -= (other as Bullet.Bullet).Damage;
 
-                // Test
-                GameManager.Resources.FindSoundEffect("Bullet_Hit").Play();
-                Destroy(this);
-                Destroy(other);
+                GameManager.Resources.FindSoundEffect("Bullet_Hit").Play(); // Bullet Hit sound
+                currentAction = EnemyAction.Hit; // Change player state
+                Destroy(other); // Destroy bullet
+
+                // If enemy hp is 0, destroy it
+                if(hp <= 0)
+                    Destroy(this);
+
             }
 
             base.CollisionEvent(other);

@@ -15,7 +15,7 @@ namespace BulletManiac.Entity.Player
 
         private bool shooting = false;
 
-        public const int DEFAULT_BULLET = 12;
+        public const int DEFAULT_BULLET = 5;
         public int CurrentBullet { get; private set; } = 5;
         const float DEFAULT_RELOAD_CD = 0.25f;
 
@@ -105,14 +105,13 @@ namespace BulletManiac.Entity.Player
 
         public void Shoot()
         {
+            Magazine.Update(shooting); // Reloading logic
             // If the animation is finish playing, then reset it or the gun is not shooting
             if (shooting && animation.Finish || (!shooting && animation.CurrentFrameIndex > 0))
             {
                 shooting = false;
                 animation.Reset(); // Reset the animation once its finish playing
             }
-
-            Magazine.Update(); // Reloading logic
 
             // If gun is not shooting and player want to trigger it
             if (InputManager.MouseLeftHold && !shooting && Magazine.CanShoot)

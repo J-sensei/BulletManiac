@@ -33,7 +33,10 @@ namespace BulletManiac.Entity.Bullet
         /// <summary>
         /// How much damage deal to the enemy
         /// </summary>
-        protected float damage;
+        public float Damage
+        {
+            get { return basedDamage * damageMultiplier; }
+        }
 
         protected Animation Animation { get { return animation; } set { animation = value; } }
 
