@@ -17,7 +17,7 @@ namespace BulletManiac.Entity.Player
 
         public const int DEFAULT_BULLET = 5;
         public int CurrentBullet { get; private set; } = 5;
-        const float DEFAULT_RELOAD_CD = 0.25f;
+        const float DEFAULT_RELOAD_CD = 1f;
 
         const float MIN_SHOOT_ANIMATION_SPEED = 0.01f;
         const float MAX_SHOOT_ANIMATION_SPEED = 0.05f;
@@ -40,10 +40,9 @@ namespace BulletManiac.Entity.Player
             scale = new Vector2(0.4f);
             this.holder = holder;
 
-            animation = new Animation(GameManager.Resources.FindTexture("Player_Pistol"), 12, 1, 0.001f, looping: false);
+            animation = new Animation(GameManager.Resources.FindTexture("Player_Pistol"), 12, 1, currentShootAnimationSpeed, looping: false);
             animation.Stop();
-            texture = animation.CurrentTexture;
-            origin = new Vector2(0f, texture.Bounds.Center.ToVector2().Y);
+            origin = new Vector2(0f, 16f);
             Magazine = new Magazine(DEFAULT_BULLET, DEFAULT_RELOAD_CD);
         }
 
@@ -62,7 +61,6 @@ namespace BulletManiac.Entity.Player
         public override void Update(GameTime gameTime)
         {
             animation.Update(gameTime);
-            texture = animation.CurrentTexture;
 
             // If the gun is shooting, the animation need to play
             if (shooting) animation.Start();
@@ -100,7 +98,7 @@ namespace BulletManiac.Entity.Player
 
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            base.Draw(spriteBatch, gameTime);
+            DrawAnimation(animation, spriteBatch, gameTime);
         }
 
         public void Shoot()

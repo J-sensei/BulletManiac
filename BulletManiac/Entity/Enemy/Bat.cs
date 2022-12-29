@@ -46,13 +46,14 @@ namespace BulletManiac.Entity.Enemy
             animationManager.AddAnimation(EnemyAction.Hit, new Animation(GameManager.Resources.FindTexture("Bat_Hit"), 3, 1, 0.2f, looping: false));
             animationManager.AddAnimation(EnemyAction.Attack, new Animation(GameManager.Resources.FindTexture("Bat_Attack"), 10, 1, animationSpeed, looping: false));
 
-            texture = animationManager.GetAnimation(currentAction).CurrentTexture; // Assign default texture to it (based on default behavior)
-            origin = texture.Bounds.Center.ToVector2();
+            origin = new Vector2(16f);
             scale = new Vector2(0.5f);
 
             // Shadow visual
-            Texture2D shadowTexture = Extensions.CropTexture2D(GameManager.Resources.FindTexture("Shadow"), new Rectangle(0, 0, 64, 64)); // Crop a shadow texture
-            shadowEffect = new TextureEffect(shadowTexture, this, shadowTexture.Bounds.Center.ToVector2(), new Vector2(0.25f), new Vector2(0f, 2f));
+            shadowEffect = new TextureEffect(GameManager.Resources.FindTexture("Shadow"),
+                                new Rectangle(0, 0, 64, 64), // Crop the shadow sprite
+                                this,
+                                new Vector2(32f), new Vector2(0.25f), new Vector2(0f, 2f));
         }
 
         public override void Update(GameTime gameTime)
@@ -84,7 +85,6 @@ namespace BulletManiac.Entity.Enemy
 
             // Animation update
             animationManager.Update(currentAction, gameTime);
-            texture = animationManager.CurrentAnimation.CurrentTexture;
             
             if (currentAction == EnemyAction.Move)
                 Position += steerAgent.CurrentFinalVelocity * GameManager.DeltaTime;
@@ -96,22 +96,23 @@ namespace BulletManiac.Entity.Enemy
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             shadowEffect.Draw(spriteBatch, gameTime); // Shadow always behind the player
-            base.Draw(spriteBatch, gameTime);
+            DrawAnimation(animationManager.CurrentAnimation, spriteBatch, gameTime);
         }
 
         protected override Rectangle CalculateBound()
         {
-            if (texture == null) return Rectangle.Empty;
-            if (spriteEffects == SpriteEffects.None)
-            {
-                Vector2 pos = position - (origin * scale / 1.1f) + new Vector2(2f, 0f); ;
-                return new Rectangle((int)pos.X, (int)pos.Y + 3, (int)(texture.Width * scale.X / 1.25f), (int)(texture.Height * scale.Y / 1.1f));
-            }
-            else
-            {
-                Vector2 pos = position - (origin * scale / 1.1f) + new Vector2(2f, 0f);
-                return new Rectangle((int)pos.X, (int)pos.Y + 3, (int)(texture.Width * scale.X / 1.25f), (int)(texture.Height * scale.Y / 1.1f));
-            }
+            //if (spriteEffects == SpriteEffects.None)
+            //{
+            //    Vector2 pos = position - (origin * scale / 1.1f) + new Vector2(2f, 0f); ;
+            //    return new Rectangle((int)pos.X, (int)pos.Y + 3, (int)(texture.Width * scale.X / 1.25f), (int)(texture.Height * scale.Y / 1.1f));
+            //}
+            //else
+            //{
+            //    Vector2 pos = position - (origin * scale / 1.1f) + new Vector2(2f, 0f);
+            //    return new Rectangle((int)pos.X, (int)pos.Y + 3, (int)(texture.Width * scale.X / 1.25f), (int)(texture.Height * scale.Y / 1.1f));
+            //}
+            Vector2 pos = position - (origin * scale / 1.1f) + new Vector2(2f, 0f);
+            return new Rectangle((int)pos.X, (int)pos.Y + 3, (int)((origin.X * 2) * scale.X / 1.25f), (int)((origin.Y * 2) * scale.Y / 1.1f));
         }
 
         public override void Dispose()
