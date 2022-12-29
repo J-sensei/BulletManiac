@@ -83,7 +83,7 @@ namespace BulletManiac.AI
         /// Process the flock
         /// </summary>
         /// <param name="boids"></param>
-        public void Process(List<Flock> flocks)
+        public void Process(HashSet<Flock> flocks)
         {
             Vector2 sumForce = new Vector2(0f);
 
@@ -102,7 +102,7 @@ namespace BulletManiac.AI
         /// </summary>
         /// <param name="flocks"></param>
         /// <returns></returns>
-        private Vector2 Separate(List<Flock> flocks)
+        private Vector2 Separate(HashSet<Flock> flocks)
         {
             Vector2 sum = new();
             int count = 0;
@@ -147,7 +147,7 @@ namespace BulletManiac.AI
             //return CalculateForce(desiredVelocity);
         }
 
-        private Vector2 Align(List<Flock> flocks)
+        private Vector2 Align(HashSet<Flock> flocks)
         {
             Vector2 sum = new();
             int count = 0;
@@ -183,7 +183,7 @@ namespace BulletManiac.AI
             //return CalculateForce(desiredVelocity);
         }
 
-        private Vector2 Cohesion(List<Flock> flocks)
+        private Vector2 Cohesion(HashSet<Flock> flocks)
         {
             Vector2 sum = new();
             int count = 0;
