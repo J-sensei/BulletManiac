@@ -96,18 +96,19 @@ namespace BulletManiac.Entity.Player
 
         protected override Rectangle CalculateBound()
         {
-            if (texture == null) return Rectangle.Empty;
             // Left and right sprite will have slightly different bound to create accurate bound detection
-            if(spriteEffects == SpriteEffects.None)
-            {
-                Vector2 pos = position - (origin * scale / 1.1f) + new Vector2(2f, 0f); ;
-                return new Rectangle((int)pos.X, (int)pos.Y + 3, (int)(texture.Width * scale.X / 1.25f), (int)(texture.Height * scale.Y / 1.1f));
-            }
-            else
-            {
-                Vector2 pos = position - (origin * scale / 1.1f) + new Vector2(2f, 0f);
-                return new Rectangle((int)pos.X, (int)pos.Y + 3, (int)(texture.Width * scale.X / 1.25f), (int)(texture.Height * scale.Y / 1.1f));
-            }
+            //if(spriteEffects == SpriteEffects.None)
+            //{
+            //    Vector2 pos = position - (origin * scale / 1.1f) + new Vector2(2f, 0f); ;
+            //    return new Rectangle((int)pos.X, (int)pos.Y + 3, (int)((origin.X * 2) * scale.X / 1.25f), (int)((origin.Y * 2) * scale.Y / 1.1f));
+            //}
+            //else
+            //{
+            //    Vector2 pos = position - (origin * scale / 1.1f) + new Vector2(2f, 0f);
+            //    return new Rectangle((int)pos.X, (int)pos.Y + 3, (int)((origin.X * 2) * scale.X / 1.25f), (int)((origin.Y * 2) * scale.Y / 1.1f));
+            //}
+            Vector2 pos = position - (origin * scale / 1.1f) + new Vector2(2f, 0f);
+            return new Rectangle((int)pos.X, (int)pos.Y + 3, (int)((origin.X * 2) * scale.X / 1.25f), (int)((origin.Y * 2) * scale.Y / 1.1f));
         }
 
         private void PlayerAttack()
@@ -314,7 +315,7 @@ namespace BulletManiac.Entity.Player
 
             // Update the animations
             animationManager.Update(currentAction, gameTime);
-            texture = animationManager.CurrentAnimation.CurrentTexture; // Update the texture based on the animation
+            //texture = animationManager.CurrentAnimation.CurrentTexture; // Update the texture based on the animation
             shadowEffect.Update(gameTime);
             base.Update(gameTime);
         }
@@ -327,20 +328,18 @@ namespace BulletManiac.Entity.Player
             // Draw the gun and player
             if (Gun.RenderInfront)
             {
-                base.Draw(spriteBatch, gameTime);
+                DrawAnimation(animationManager.CurrentAnimation, spriteBatch, gameTime);
                 Gun.Draw(spriteBatch, gameTime);
             }
             else
             {
                 Gun.Draw(spriteBatch, gameTime);
-                base.Draw(spriteBatch, gameTime);
+                DrawAnimation(animationManager.CurrentAnimation, spriteBatch, gameTime);
             }
 
             // Reloading Text
             if(Gun.Reloading)
                 spriteBatch.DrawString(GameManager.Resources.FindSpriteFont("DebugFont"), "Reloading...", position + textPosOffset, Color.White, 0f, textOffset, 0.3f, SpriteEffects.None, 0f);
-            
-            //animationManager.CurrentAnimation.Draw(spriteBatch, position, Color.White, 0f, origin, new Vector2(3f, 3f), SpriteEffects.None, 0f);
         }
 
         public override void CollisionEvent(GameObject gameObject)

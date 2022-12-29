@@ -105,7 +105,6 @@ namespace BulletManiac.Entity
                 bounds[i] = bound;
                 croppedTextures[i] = Extensions.CropTexture2D(texture, bound);
             }
-            //this.texture = null; // Texture is no use anymore
         }
 
         public Animation(Texture2D texture, int frameCountX, int width, int height, float frameTime, int row = 1, bool looping = true)
@@ -125,7 +124,6 @@ namespace BulletManiac.Entity
                 bounds[i] = bound;
                 croppedTextures[i] = Extensions.CropTexture2D(texture, bound);
             }
-            this.texture = null; // Texture is no use anymore
         }
 
         /// <summary>
@@ -203,7 +201,7 @@ namespace BulletManiac.Entity
         /// <param name="layerDepth"></param>
         public void Draw(SpriteBatch spriteBatch, Vector2 position, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects spriteEffects, float layerDepth)
         {
-            spriteBatch.Draw(texture, position, bounds[currentFrame], color, rotation, origin, scale, spriteEffects, 0f);
+            spriteBatch.Draw(texture, position, bounds[currentFrame], color, rotation, origin, scale, spriteEffects, layerDepth);
         }
 
         /// <summary>

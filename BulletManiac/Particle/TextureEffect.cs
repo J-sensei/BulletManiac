@@ -47,8 +47,6 @@ namespace BulletManiac.Particle
             if(animation != null)
             {
                 animation.Update(gameTime);
-                texture = animation.CurrentTexture;
-
                 if (animation.Finish)
                 {
                     Destroy(this);
@@ -56,11 +54,17 @@ namespace BulletManiac.Particle
             }
 
             if(parent != null)
-            {
                 Position = parent.Position + offset;
-            }
 
             base.Update(gameTime);
+        }
+
+        public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        {
+            if (texture != null)
+                base.Draw(spriteBatch, gameTime);
+            else
+                DrawAnimation(animation, spriteBatch, gameTime);
         }
 
         protected override Rectangle CalculateBound()

@@ -139,6 +139,16 @@ namespace BulletManiac.Entity
             spriteBatch.Draw(texture, position, null, color, Rotation, origin, scale, spriteEffects, 0f);
         }
 
+        protected void DrawAnimation(Animation animation, SpriteBatch spriteBatch, GameTime gameTime)
+        {
+            if (GameManager.Debug)
+            {
+                Console.WriteLine(Bound);
+                spriteBatch.Draw(debugBox, Bound, Color.White); // Draw the debug red box
+            }
+            animation.Draw(spriteBatch, position, color, Rotation, origin, scale, spriteEffects, 0f);
+        }
+
         /// <summary>
         /// Destroy the game object from the game
         /// </summary>
