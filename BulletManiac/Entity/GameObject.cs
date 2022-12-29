@@ -142,10 +142,8 @@ namespace BulletManiac.Entity
         protected void DrawAnimation(Animation animation, SpriteBatch spriteBatch, GameTime gameTime)
         {
             if (GameManager.Debug)
-            {
-                Console.WriteLine(Bound);
                 spriteBatch.Draw(debugBox, Bound, Color.White); // Draw the debug red box
-            }
+
             animation.Draw(spriteBatch, position, color, Rotation, origin, scale, spriteEffects, 0f);
         }
 
@@ -174,7 +172,7 @@ namespace BulletManiac.Entity
 
         public virtual void Dispose()
         {
-            if(texture != null) texture.Dispose();
+            //if(texture != null) texture.Dispose();
             if(debugBox != null) debugBox.Dispose();
         }
     }

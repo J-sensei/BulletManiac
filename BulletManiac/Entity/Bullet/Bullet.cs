@@ -69,7 +69,6 @@ namespace BulletManiac.Entity.Bullet
             if(animation != null)
             {
                 animation.Update(gameTime);
-                texture = animation.CurrentTexture;
             }
 
             // Destroy the bullet when it hit the wall
@@ -91,7 +90,7 @@ namespace BulletManiac.Entity.Bullet
 
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            base.Draw(spriteBatch, gameTime);
+            DrawAnimation(animation, spriteBatch, gameTime);
         }
 
         public override void CollisionEvent(GameObject other)

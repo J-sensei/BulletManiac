@@ -39,8 +39,7 @@ namespace BulletManiac.Entity.Enemy
             animationManager.AddAnimation(EnemyAction.Attack, new Animation(GameManager.Resources.FindTexture("Shadow_Attack"), 6, 1, animationSpeed, looping: false));
             animationManager.AddAnimation(EnemyAction.Die, new Animation(GameManager.Resources.FindTexture("Shadow_Death"), 6, 1, animationSpeed, looping: false));
 
-            texture = animationManager.GetAnimation(currentAction).CurrentTexture; // Assign default texture to it (based on default behavior)
-            origin = texture.Bounds.Center.ToVector2();
+            origin = new Vector2(32f);
             scale = new Vector2(0.5f);
 
             // Shadow visual
@@ -87,7 +86,6 @@ namespace BulletManiac.Entity.Enemy
 
             // Animation update
             animationManager.Update(currentAction, gameTime);
-            texture = animationManager.CurrentAnimation.CurrentTexture;
 
             shadowEffect.Update(gameTime);
             base.Update(gameTime);
@@ -96,24 +94,13 @@ namespace BulletManiac.Entity.Enemy
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             shadowEffect.Draw(spriteBatch, gameTime); // Shadow always behind the player
-            base.Draw(spriteBatch, gameTime);
+            DrawAnimation(animationManager.CurrentAnimation, spriteBatch, gameTime);
         }
 
         protected override Rectangle CalculateBound()
         {
-            if (texture == null) return Rectangle.Empty;
-            //if (spriteEffects == SpriteEffects.None)
-            //{
-            //    Vector2 pos = position - (origin * scale / 2f) + new Vector2(2f, 0f);
-            //    return new Rectangle((int)pos.X, (int)pos.Y + 3, (int)(texture.Width * scale.X / 2.2f), (int)(texture.Height * scale.Y / 2.2f));
-            //}
-            //else
-            //{
-            //    Vector2 pos = position - (origin * scale / 2f) + new Vector2(2f, 0f);
-            //    return new Rectangle((int)pos.X, (int)pos.Y + 3, (int)(texture.Width * scale.X / 2.2f), (int)(texture.Height * scale.Y / 2.2f));
-            //}
             Vector2 pos = position - (origin * scale / 2f) + new Vector2(2f, 0f);
-            return new Rectangle((int)pos.X, (int)pos.Y + 3, (int)(texture.Width * scale.X / 2.2f), (int)(texture.Height * scale.Y / 2.2f));
+            return new Rectangle((int)pos.X, (int)pos.Y + 3, (int)((origin.X * 2) * scale.X / 2.2f), (int)((origin.Y * 2) * scale.Y / 2.2f));
         }
     }
 }
