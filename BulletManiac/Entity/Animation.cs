@@ -34,19 +34,8 @@ namespace BulletManiac.Entity
         private bool looping;
 
         /// <summary>
-        /// Cropped textures based on the bounds data
+        /// UVs for the textures
         /// </summary>
-        private Texture2D[] croppedTextures;
-        /// <summary>
-        /// Get the current frame sprite
-        /// </summary>
-        public Texture2D CurrentTexture
-        {
-            get
-            {
-                return croppedTextures[currentFrame];
-            }
-        }
         private Rectangle[] bounds;
 
         /// <summary>
@@ -66,6 +55,17 @@ namespace BulletManiac.Entity
         /// </summary>
         public bool Reverse { get; private set; } = false;
 
+        /// <summary>
+        /// Load and Pre calculated animation
+        /// </summary>
+        /// <param name="resources"></param>
+        public static void LoadAnimations(ResourcesManager resources)
+        {
+            resources.LoadAnimation("DefaultBullet_Animation", new Animation(GameManager.Resources.FindTexture("Bullet1"), 5, 25, 0.1f, 6));
+            resources.LoadAnimation("Walking_Smoke_Animation", new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false));
+            resources.LoadAnimation("Destroy_Smoke_Animation", new Animation(GameManager.Resources.FindTexture("Destroy_Smoke"), 5, 1, 0.1f, looping: false));
+        }
+
         public Animation(Animation animation)
         {
             this.texture = animation.texture;
@@ -73,7 +73,7 @@ namespace BulletManiac.Entity
             this.frameTime = animation.frameTime;
             frameTimeLeft = animation.frameTime;
             this.looping = animation.looping;
-            this.croppedTextures = animation.croppedTextures;
+            bounds = animation.bounds; // Skip calculation for the bounds
         }
 
         /// <summary>
@@ -96,14 +96,12 @@ namespace BulletManiac.Entity
             var width = texture.Width / frameCountX;
             var height = texture.Height / frameCountY;
 
-            // Crop the sprite sheet and store into the texture array
-            croppedTextures = new Texture2D[frameCount];
+            // Calculate UV coordinate for each frame
             bounds = new Rectangle[frameCount];
             for (int i = 0; i < frameCount; i++)
             {
                 Rectangle bound = new Rectangle(i * width, (row - 1) * height, width, height);
                 bounds[i] = bound;
-                croppedTextures[i] = Extensions.CropTexture2D(texture, bound);
             }
         }
 
@@ -115,14 +113,12 @@ namespace BulletManiac.Entity
             frameTimeLeft = frameTime;
             this.looping = looping;
 
-            // Crop the sprite sheet and store into the texture array
-            croppedTextures = new Texture2D[frameCount];
+            // Calculate UV coordinate for each frame
             bounds = new Rectangle[frameCount];
             for (int i = 0; i < frameCount; i++)
             {
                 Rectangle bound = new Rectangle(i * width, (row - 1) * height, width, height);
                 bounds[i] = bound;
-                croppedTextures[i] = Extensions.CropTexture2D(texture, bound);
             }
         }
 
@@ -245,15 +241,7 @@ namespace BulletManiac.Entity
 
         public void Dispose()
         {
-            if(croppedTextures != null)
-            {
-                for (int i = 0; i < croppedTextures.Length; i++)
-                {
-                    croppedTextures[i].Dispose();
-                    croppedTextures[i] = null;
-                }
-                croppedTextures = null;
-            }
+            
         }
     }
 }

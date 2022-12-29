@@ -77,9 +77,11 @@ namespace BulletManiac.Entity.Player
                 GameManager.Resources.FindSoundEffect("Footstep6"),
                 GameManager.Resources.FindSoundEffect("Footstep7")
             };
-
-            Texture2D shadowTexture = Extensions.CropTexture2D(GameManager.Resources.FindTexture("Shadow"), new Rectangle(0, 0, 64, 64)); // Crop a shadow texture
-            shadowEffect = new TextureEffect(shadowTexture, this, shadowTexture.Bounds.Center.ToVector2(), new Vector2(0.5f), new Vector2(0f, -3.5f));
+            
+            shadowEffect = new TextureEffect(GameManager.Resources.FindTexture("Shadow"),
+                                            new Rectangle(0, 0, 64, 64), // Crop the shadow sprite
+                                            this, 
+                                            new Vector2(32f), new Vector2(0.5f), new Vector2(0f, -3.5f));
 
             Gun = new Gun(this);
             CollisionManager.Add(this, "Player");
@@ -264,20 +266,21 @@ namespace BulletManiac.Entity.Player
             // Smoke Effect
             TextureEffect effect;
             SpriteEffects smokeSpriteEffects = SpriteEffects.None;
+            Animation smokeAnim = new Animation(GameManager.Resources.FindAnimation("Walking_Smoke_Animation"));
             if (spriteEffects != SpriteEffects.None)
             {
                 if (!moveBackward) smokeSpriteEffects = SpriteEffects.FlipHorizontally;
-                effect = new TextureEffect(new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false),
+                effect = new TextureEffect(smokeAnim,
                         Position + new Vector2(8f, 5f), new Vector2(32, 32), new Vector2(1f), true, smokeSpriteEffects);
             }
             else
             {
                 if (moveBackward) smokeSpriteEffects = SpriteEffects.FlipHorizontally;
-                effect = new TextureEffect(new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false),
+                effect = new TextureEffect(smokeAnim,
                         Position + new Vector2(-5f, 5f), new Vector2(32, 32), new Vector2(1f), true, smokeSpriteEffects);
             }
 
-            GameManager.AddGameObject(effect);
+            GameManager.AddGameObject(effect); // Add smoke to the world
 
             // Audio
             footstepsSound[Extensions.Random.Next(footstepsSound.Count)].Play();

@@ -17,7 +17,7 @@ namespace BulletManiac.Entity.Player
 
         public const int DEFAULT_BULLET = 5;
         public int CurrentBullet { get; private set; } = 5;
-        const float DEFAULT_RELOAD_CD = 0.25f;
+        const float DEFAULT_RELOAD_CD = 1f;
 
         const float MIN_SHOOT_ANIMATION_SPEED = 0.01f;
         const float MAX_SHOOT_ANIMATION_SPEED = 0.05f;
@@ -40,7 +40,7 @@ namespace BulletManiac.Entity.Player
             scale = new Vector2(0.4f);
             this.holder = holder;
 
-            animation = new Animation(GameManager.Resources.FindTexture("Player_Pistol"), 12, 1, 0.001f, looping: false);
+            animation = new Animation(GameManager.Resources.FindTexture("Player_Pistol"), 12, 1, currentShootAnimationSpeed, looping: false);
             animation.Stop();
             origin = new Vector2(0f, 16f);
             Magazine = new Magazine(DEFAULT_BULLET, DEFAULT_RELOAD_CD);

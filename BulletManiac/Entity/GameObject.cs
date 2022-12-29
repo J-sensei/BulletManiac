@@ -24,7 +24,7 @@ namespace BulletManiac.Entity
         /// <summary>
         /// Texture will be draw onto the screen
         /// </summary>
-        protected Texture2D texture;
+        protected readonly Texture2D texture;
         /// <summary>
         /// Current position of the game object
         /// </summary>
@@ -114,6 +114,11 @@ namespace BulletManiac.Entity
             debugBox.SetData(new Color[] { Color.Red });
         }
 
+        public GameObject(Texture2D texture, string name = DEFAULT_NAME)
+        {
+            this.texture = texture;
+        }
+
         /// <summary>
         /// Calculate rectangle bound of the game object (Might be various across different game object)
         /// </summary>
@@ -131,11 +136,8 @@ namespace BulletManiac.Entity
                 spriteBatch.Draw(debugBox, Bound, Color.White); // Draw the debug red box
             }
 
-            if (texture == null)
-            {
-                //GameManager.Log("Game Object", "\"" + Name + "\"" + " Texture is null, skipping to draw it");
-                return;
-            }
+            if (texture == null) return;
+            
             spriteBatch.Draw(texture, position, null, color, Rotation, origin, scale, spriteEffects, 0f);
         }
 
@@ -145,6 +147,11 @@ namespace BulletManiac.Entity
                 spriteBatch.Draw(debugBox, Bound, Color.White); // Draw the debug red box
 
             animation.Draw(spriteBatch, position, color, Rotation, origin, scale, spriteEffects, 0f);
+        }
+
+        protected void DrawTexture(Rectangle uvBound, SpriteBatch spriteBatch, GameTime gameTime)
+        {
+            spriteBatch.Draw(texture, position, uvBound, color, Rotation, origin, scale, spriteEffects, 0f);
         }
 
         /// <summary>
@@ -165,14 +172,10 @@ namespace BulletManiac.Entity
         /// <summary>
         /// Trigger before the object is delete
         /// </summary>
-        public virtual void DeleteEvent()
-        {
-
-        }
+        public virtual void DeleteEvent() { }
 
         public virtual void Dispose()
         {
-            //if(texture != null) texture.Dispose();
             if(debugBox != null) debugBox.Dispose();
         }
     }

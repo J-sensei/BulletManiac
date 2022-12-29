@@ -50,8 +50,10 @@ namespace BulletManiac.Entity.Enemy
             scale = new Vector2(0.5f);
 
             // Shadow visual
-            Texture2D shadowTexture = Extensions.CropTexture2D(GameManager.Resources.FindTexture("Shadow"), new Rectangle(0, 0, 64, 64)); // Crop a shadow texture
-            shadowEffect = new TextureEffect(shadowTexture, this, shadowTexture.Bounds.Center.ToVector2(), new Vector2(0.25f), new Vector2(0f, 2f));
+            shadowEffect = new TextureEffect(GameManager.Resources.FindTexture("Shadow"),
+                                new Rectangle(0, 0, 64, 64), // Crop the shadow sprite
+                                this,
+                                new Vector2(32f), new Vector2(0.25f), new Vector2(0f, 2f));
         }
 
         public override void Update(GameTime gameTime)

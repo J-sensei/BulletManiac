@@ -17,6 +17,7 @@ namespace BulletManiac.Particle
         // Animated Effect
         private Animation animation;
         private bool destroyWhenFinish = false;
+        private Rectangle uvBound;
 
         public TextureEffect(Animation animation, Vector2 spawnPosition, Vector2 origin, Vector2 scale, bool destroyWhenFinish = true, SpriteEffects spriteEffects = 0)
         {
@@ -30,16 +31,27 @@ namespace BulletManiac.Particle
             animation.Reset();
         }
 
-        public TextureEffect(Texture2D texture, GameObject parent, Vector2 origin, Vector2 scale, Vector2 offset, SpriteEffects spriteEffects = 0)
+        public TextureEffect(Texture2D texture, GameObject parent, Vector2 origin, Vector2 scale, Vector2 offset, SpriteEffects spriteEffects = 0) : base(texture)
         {
             this.name = "Texture Effect";
-            this.texture = texture;
             this.parent = parent;
             position = parent.Position;
             this.origin = origin;
             this.scale = scale;
             this.offset = offset;
             this.spriteEffects = spriteEffects;
+        }
+
+        public TextureEffect(Texture2D texture, Rectangle uvBound, GameObject parent, Vector2 origin, Vector2 scale, Vector2 offset, SpriteEffects spriteEffects = 0) : base(texture)
+        {
+            this.name = "Texture Effect";
+            this.parent = parent;
+            position = parent.Position;
+            this.origin = origin;
+            this.scale = scale;
+            this.offset = offset;
+            this.spriteEffects = spriteEffects;
+            this.uvBound = uvBound;
         }
 
         public override void Update(GameTime gameTime)
@@ -62,7 +74,16 @@ namespace BulletManiac.Particle
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             if (texture != null)
-                base.Draw(spriteBatch, gameTime);
+            {
+                if(uvBound.IsEmpty)
+                {
+                    base.Draw(spriteBatch, gameTime);
+                }
+                else
+                {
+                    DrawTexture(uvBound, spriteBatch, gameTime);
+                }
+            }
             else
                 DrawAnimation(animation, spriteBatch, gameTime);
         }

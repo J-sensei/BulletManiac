@@ -3,10 +3,6 @@ using BulletManiac.Managers;
 using BulletManiac.Particle;
 using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BulletManiac.Entity.Enemy
 {
@@ -66,7 +62,7 @@ namespace BulletManiac.Entity.Enemy
 
         public override void DeleteEvent()
         {
-            TextureEffect effect = new TextureEffect(new Animation(GameManager.Resources.FindTexture("Destroy_Smoke"), 5, 1, 0.1f, looping: false),
+            TextureEffect effect = new TextureEffect(new Animation(GameManager.Resources.FindAnimation("Destroy_Smoke_Animation")),
                                                     Position, new Vector2(16, 16), new Vector2(1f), true);
             GameManager.AddGameObject(effect);
             base.DeleteEvent();

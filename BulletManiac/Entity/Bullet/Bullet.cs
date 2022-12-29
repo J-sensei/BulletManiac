@@ -77,7 +77,7 @@ namespace BulletManiac.Entity.Bullet
                 // Add smoke effect when bullet is destroy
                 //TextureEffect effect = new TextureEffect(new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false),
                 //                                        Position, new Vector2(32, 32), true);
-                TextureEffect effect = new TextureEffect(new Animation(GameManager.Resources.FindTexture("Destroy_Smoke"), 5, 1, 0.1f, looping: false),
+                TextureEffect effect = new TextureEffect(new Animation(GameManager.Resources.FindAnimation("Destroy_Smoke_Animation")),
                                         Position, new Vector2(16, 16), new Vector2(0.5f) ,true);
                 GameManager.AddGameObject(effect);
                 IsDestroyed = true; // Manually destroyvfor this

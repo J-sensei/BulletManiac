@@ -224,6 +224,8 @@ namespace BulletManiac.Managers
             Resources.LoadSoundEffect("Pistol_Cock", "Audio/Gun/Pistol_Cock");
             Resources.LoadSoundEffect("Bullet_Hit", "Audio/Gun/Bullet_Hit");
             Resources.LoadSoundEffect("Bat_Death", "Audio/Enemy/Bat Death");
+
+            Animation.LoadAnimations(Resources);
         }
         
         public static void LoadContent(ContentManager content)
