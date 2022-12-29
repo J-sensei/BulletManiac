@@ -75,7 +75,7 @@ namespace BulletManiac.Entity.Enemy
             else
                 spriteEffects = SpriteEffects.None;
 
-            // When hit animation is finish playing
+            // When hit animation is finish playing (Recover from hit animation)
             if(currentAction == EnemyAction.Hit && animationManager.GetAnimation(EnemyAction.Hit).Finish)
             {
                 currentAction = EnemyAction.Move;

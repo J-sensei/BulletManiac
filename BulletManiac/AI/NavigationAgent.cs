@@ -1,4 +1,5 @@
-﻿using BulletManiac.Collision;
+﻿using BulletManiac.AI;
+using BulletManiac.Collision;
 using BulletManiac.Entity;
 using BulletManiac.Managers;
 using BulletManiac.Utilities;
@@ -39,6 +40,7 @@ namespace BulletManiac.Tiled.AI
         /// Current Navigation State of the agent
         /// </summary>
         private NavigationState currentState = NavigationState.STOP; // The agent should stop by default
+        public NavigationState CurrentState { get { return currentState; } }
         private Tile srcTile; // User current standing tile
         private Tile destTile; // Tile that user want to go
         private LinkedList<Tile> path = null; // Calculated path that help to navigate the user to move
@@ -48,10 +50,14 @@ namespace BulletManiac.Tiled.AI
 
         private const float DEFAULT_COOLDOWN = 1f;
         private float currentCD = DEFAULT_COOLDOWN;
+        private float speed;
 
-        public NavigationAgent(GameObject user)
+        public XDirection CurrentXDir { get; private set; }
+
+        public NavigationAgent(GameObject user, float speed = 50f)
         {
             this.user = user;
+            this.speed = speed;
             tileWidth = GameManager.CurrentLevel.Map.TileWidth;
             tileHeight = GameManager.CurrentLevel.Map.TileHeight;
             srcTile = Tile.ToTile(user.Position, tileWidth, tileHeight);
@@ -62,18 +68,32 @@ namespace BulletManiac.Tiled.AI
 
         }
 
-        public void Update(GameTime gameTime, GameObject target)
+        public bool Pathfind(Vector2 position)
         {
-            if(currentState == NavigationState.STOP)
+            if (currentState == NavigationState.STOP)
             {
-                currentCD -= GameManager.DeltaTime;
-                if(currentCD <= 0)
-                {
-                    CalculatePath(target.Position);
-                    currentCD = DEFAULT_COOLDOWN;
-                }
+                CalculatePath(position);
+                return true;
             }
-            else if(currentState == NavigationState.MOVING)
+            else
+            {
+                return false;
+            }
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            //if(currentState == NavigationState.STOP)
+            //{
+            //    currentCD -= GameManager.DeltaTime;
+            //    if(currentCD <= 0)
+            //    {
+            //        CalculatePath(target.Position);
+            //        currentCD = DEFAULT_COOLDOWN;
+            //    }
+            //}
+            //else 
+            if(currentState == NavigationState.MOVING)
             {
                 // If the user reached the destination
                 Vector2 diff2 = Tile.ToPosition(destTile, tileWidth, tileHeight) - user.Position;
@@ -99,8 +119,8 @@ namespace BulletManiac.Tiled.AI
                         Vector2 diff = headPosition - user.Position;
                         float distance = diff.Length();
                         //Console.WriteLine(distance + " " + Extensions.Approximately(distance, 0.0f));
-                        //if (user.Position.Equals(headPosition))
-                        if (distance <= 1f)
+                        if (user.Position.Equals(headPosition))
+                        //if (distance <= 1f)
                         {
                             path.RemoveFirst();
                             // Get the next destination position
@@ -108,11 +128,10 @@ namespace BulletManiac.Tiled.AI
                         }
 
                         // Move
-                        //if(OnMove != null)
-                        //    OnMove.Invoke(headPosition);
-                        //user.Position = Move(user.Position, headPosition, GameManager.DeltaTime, 100.0);
-                        user.Position += Seek(headPosition, 50f) * GameManager.DeltaTime;
-                        //MoveAvoid(user, headPosition);
+                        Vector2 movePos = Move(user.Position, headPosition, GameManager.DeltaTime, speed);
+                        //Vector2 movePos = Seek(headPosition, 50f) * GameManager.DeltaTime;
+                        //user.Position += movePos;
+                        user.Position = movePos;
                     }
                     catch(Exception ex)
                     {
@@ -178,7 +197,14 @@ namespace BulletManiac.Tiled.AI
             if (step < distance)
             {
                 dP.Normalize();
-                return src + (dP * step);
+                Vector2 amount = dP * step;
+
+                if (amount.X > 0f)
+                    CurrentXDir = XDirection.Right;
+                else if (amount.X < 0f)
+                    CurrentXDir = XDirection.Left;
+
+                return src + amount;
             }
             else
                 return dest;

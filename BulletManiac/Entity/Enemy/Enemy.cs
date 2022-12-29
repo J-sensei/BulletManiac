@@ -49,6 +49,7 @@ namespace BulletManiac.Entity.Enemy
                 // If enemy hp is 0, destroy it
                 if(hp <= 0)
                 {
+                    currentAction = EnemyAction.Die;
                     animationManager.Dispose();
                     Destroy(this);
                 }

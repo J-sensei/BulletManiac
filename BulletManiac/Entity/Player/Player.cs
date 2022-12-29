@@ -47,6 +47,8 @@ namespace BulletManiac.Entity.Player
         private bool shooting = false;
         private PlayerAction currentAction = PlayerAction.Idle; // Current action of the player is doing
 
+        public float HP { get; private set; }
+
         public Player(Vector2 position)
         {
             name = "Player";
@@ -54,6 +56,7 @@ namespace BulletManiac.Entity.Player
             animationManager = new AnimationManager(); // Using animation manager to handler different kind of animation
             scale = new Vector2(0.65f); // Scale of the player
             origin = new Vector2(16f); // Origin (Half of the sprite size) 32x32 / 2
+            HP = 100f;
 
             // Define the keys and animations
             animationManager.AddAnimation(PlayerAction.Idle, new Animation(GameManager.Resources.FindTexture("Player_SpriteSheet"), 2, 32, 32, idleAnimationSpeed));
@@ -77,6 +80,11 @@ namespace BulletManiac.Entity.Player
 
             Gun = new Gun(this);
             CollisionManager.Add(this, "Player");
+        }
+
+        public void TakeDamage(float damage)
+        {
+            HP -= damage;
         }
 
         protected override Rectangle CalculateBound()
