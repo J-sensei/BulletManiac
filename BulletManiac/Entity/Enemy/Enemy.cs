@@ -51,13 +51,18 @@ namespace BulletManiac.Entity.Enemy
                 {
                     animationManager.Dispose();
                     Destroy(this);
-                    TextureEffect effect = new TextureEffect(new Animation(GameManager.Resources.FindTexture("Destroy_Smoke"), 5, 1, 0.1f, looping: false),
-                        Position, new Vector2(16, 16), new Vector2(1f), true);
-                    GameManager.AddGameObject(effect);
                 }
             }
 
             base.CollisionEvent(other);
+        }
+
+        public override void DeleteEvent()
+        {
+            TextureEffect effect = new TextureEffect(new Animation(GameManager.Resources.FindTexture("Destroy_Smoke"), 5, 1, 0.1f, looping: false),
+                                                    Position, new Vector2(16, 16), new Vector2(1f), true);
+            GameManager.AddGameObject(effect);
+            base.DeleteEvent();
         }
     }
 }
