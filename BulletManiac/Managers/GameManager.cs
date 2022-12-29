@@ -172,16 +172,9 @@ namespace BulletManiac.Managers
             Resources.LoadTexture("Shadow", "SpriteSheet/Effect/Shadow");
 
             // Load Player Sprites
-            Resources.LoadTexture("Player_Death", "SpriteSheet/Player/Owlet_Monster_Death_8");
-            Resources.LoadTexture("Player_Idle", "SpriteSheet/Player/Owlet_Monster_Idle_4");
-            Resources.LoadTexture("Player_Walk", "SpriteSheet/Player/Owlet_Monster_Walk_6");
-            Resources.LoadTexture("Player_Run", "SpriteSheet/Player/Owlet_Monster_Run_6");
-            Resources.LoadTexture("Player_Throw", "SpriteSheet/Player/Owlet_Monster_Throw_4");
             Resources.LoadTexture("Player_SpriteSheet", "SpriteSheet/Player/AnimationSheet_Player");
 
             // Load Enemy Sprites
-            Resources.LoadTexture("Spider", "SpriteSheet/Enemy/Spider Sprite Sheet");
-
             Resources.LoadTexture("Bat_Flying", "SpriteSheet/Enemy/Bat/Flying");
             Resources.LoadTexture("Bat_Attack", "SpriteSheet/Enemy/Bat/Attack");
             Resources.LoadTexture("Bat_Hit", "SpriteSheet/Enemy/Bat/Hit");
@@ -203,27 +196,21 @@ namespace BulletManiac.Managers
             Resources.LoadTexture("Debug_Path", "SpriteSheet/DebugUI/path_16x16");
 
             // Load Tiled Map level
-            Resources.LoadTiledMap("Level0", "Tiled/Level0");
             Resources.LoadTiledMap("Level1", "Tiled/Level/Level1");
             Resources.LoadTiledMap("Level2", "Tiled/Level/Level2");
             Resources.LoadTiledMap("Level3", "Tiled/Level/Level3");
-
-            // Animation
-            Resources.LoadAnimation("Bullet1", new Animation(Resources.FindTexture("Bullet1"), 5, 25, 0.1f, 6));
 
             // Load Sound Effect
             Resources.LoadSoundEffect("Footstep1", "Audio/Footstep/Footstep1");
             Resources.LoadSoundEffect("Footstep2", "Audio/Footstep/Footstep2");
             Resources.LoadSoundEffect("Footstep3", "Audio/Footstep/Footstep3");
-            Resources.LoadSoundEffect("Footstep4", "Audio/Footstep/Footstep4");
-            Resources.LoadSoundEffect("Footstep5", "Audio/Footstep/Footstep5");
-            Resources.LoadSoundEffect("Footstep6", "Audio/Footstep/Footstep6");
-            Resources.LoadSoundEffect("Footstep7", "Audio/Footstep/Footstep7");
             Resources.LoadSoundEffect("Gun_Shoot", "Audio/Gun/Gun_Shoot");
             Resources.LoadSoundEffect("Mag_In", "Audio/Gun/Mag_In");
             Resources.LoadSoundEffect("Pistol_Cock", "Audio/Gun/Pistol_Cock");
             Resources.LoadSoundEffect("Bullet_Hit", "Audio/Gun/Bullet_Hit");
             Resources.LoadSoundEffect("Bat_Death", "Audio/Enemy/Bat Death");
+
+            Animation.LoadAnimations(Resources);
         }
         
         public static void LoadContent(ContentManager content)
@@ -268,6 +255,7 @@ namespace BulletManiac.Managers
             pathTester.ChangeLevel(CurrentLevel);
         }
 
+        static FrameCounter fpsCounter = new();
         public static void Update(GameTime gameTime)
         {
             DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds; // Update the delta time variable
@@ -293,6 +281,8 @@ namespace BulletManiac.Managers
             {
                 pathTester.Update(gameTime);
             }
+
+            fpsCounter.Update(gameTime);
         }
 
         /// <summary>
@@ -327,9 +317,10 @@ namespace BulletManiac.Managers
         {
             entityManager.DrawUI(spriteBatch, gameTime);
 
-            double framerate = (1 / gameTime.ElapsedGameTime.TotalSeconds);
-            spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "FPS: " + framerate.ToString("F2"), new Vector2(5f), Color.Red);
-            spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "Player HP: " + Player.HP.ToString("N0"), new Vector2(5f, 20f), Color.Red);
+            //double framerate = (1 / gameTime.ElapsedGameTime.TotalSeconds);
+            //spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "FPS: " + framerate.ToString("F2"), new Vector2(5f), Color.Red);
+            fpsCounter.Draw(spriteBatch, Resources.FindSpriteFont("DebugFont"), new Vector2(150f, 5f), Color.Red);
+            spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "Player HP: " + Player.HP.ToString("N0"), new Vector2(5f, 5f), Color.Red);
         }
 
         /// <summary>

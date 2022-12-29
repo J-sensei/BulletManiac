@@ -15,10 +15,12 @@ namespace BulletManiac.Entity.Bullet
     {
         public DefaultBullet(Vector2 position, Vector2 direction, float speed = DEFAULT_SPEED, float initalSpeed = 0f) : base(position, direction, speed, initalSpeed)
         {
-            Animation = new Animation(GameManager.Resources.FindTexture("Bullet1"), 5, 25, 0.1f, 6);
+            //Animation = new Animation(GameManager.Resources.FindTexture("Bullet1"), 5, 25, 0.1f, 6);
+            //Animation = GameManager.Resources.FindAnimation("DefaultBullet_Animation");
+            Animation = new Animation(GameManager.Resources.FindAnimation("DefaultBullet_Animation"));
             Animation.Reset();
 
-            origin = Animation.CurrentTexture.Bounds.Center.ToVector2(); // Set the origin to the center of the texture
+            origin = new Vector2(8f); // Set the origin to the center of the texture
             scale = new Vector2(0.8f);
             BulletUI = GameManager.Resources.FindTexture("Bullet_Fill");
         }
@@ -26,14 +28,7 @@ namespace BulletManiac.Entity.Bullet
         protected override Rectangle CalculateBound()
         {
             Vector2 pos = position - (origin * scale / 1.2f);
-            if(texture != null)
-            {
-                return new Rectangle((int)pos.X + 2, (int)pos.Y + 3, (int)(texture.Width * scale.X / 1.5f), (int)(texture.Height * scale.Y / 1.5f));
-            }
-            else
-            {
-                return Rectangle.Empty;
-            }
+            return new Rectangle((int)pos.X + 2, (int)pos.Y + 3, (int)((origin.X * 2) * scale.X / 1.5f), (int)((origin.Y * 2) * scale.Y / 1.5f));
         }
 
         public override void Initialize()

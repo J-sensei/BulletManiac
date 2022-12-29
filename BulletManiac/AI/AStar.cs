@@ -30,7 +30,7 @@ namespace BulletManiac.Tiled.AI
             priorityQueue.Enqueue(startRecord, startRecord.HeuristicCost);
             startRecord.State = AStarState.Opened;
 
-            NodeRecord endRecord = records[goal];
+            //NodeRecord endRecord = records[goal];
             NodeRecord currentRecord, neighbourRecord;
 
             int[] moveRow = TileGraph.MoveRow;

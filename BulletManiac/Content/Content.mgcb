@@ -39,30 +39,6 @@
 /processorParam:Quality=Best
 /build:Audio/Footstep/Footstep3.wav
 
-#begin Audio/Footstep/Footstep4.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:Audio/Footstep/Footstep4.wav
-
-#begin Audio/Footstep/Footstep5.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:Audio/Footstep/Footstep5.wav
-
-#begin Audio/Footstep/Footstep6.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:Audio/Footstep/Footstep6.wav
-
-#begin Audio/Footstep/Footstep7.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:Audio/Footstep/Footstep7.wav
-
 #begin Audio/Gun/Bullet_Hit.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -267,18 +243,6 @@
 /processorParam:TextureFormat=Color
 /build:SpriteSheet/Enemy/Shadow/Move.png
 
-#begin SpriteSheet/Enemy/Spider Sprite Sheet.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:SpriteSheet/Enemy/Spider Sprite Sheet.png
-
 #begin SpriteSheet/Enemy/Wanderer/Attack.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -351,66 +315,6 @@
 /processorParam:TextureFormat=Color
 /build:SpriteSheet/Player/AnimationSheet_Player.png
 
-#begin SpriteSheet/Player/Owlet_Monster_Death_8.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:SpriteSheet/Player/Owlet_Monster_Death_8.png
-
-#begin SpriteSheet/Player/Owlet_Monster_Idle_4.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:SpriteSheet/Player/Owlet_Monster_Idle_4.png
-
-#begin SpriteSheet/Player/Owlet_Monster_Run_6.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:SpriteSheet/Player/Owlet_Monster_Run_6.png
-
-#begin SpriteSheet/Player/Owlet_Monster_Throw_4.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:SpriteSheet/Player/Owlet_Monster_Throw_4.png
-
-#begin SpriteSheet/Player/Owlet_Monster_Walk_6.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:SpriteSheet/Player/Owlet_Monster_Walk_6.png
-
 #begin SpriteSheet/UI/Crosshair.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -422,18 +326,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:SpriteSheet/UI/Crosshair.png
-
-#begin Tiled/CosmicLilac_Tiles.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Tiled/CosmicLilac_Tiles.png
 
 #begin Tiled/Level/GBDungeon.png
 /importer:TextureImporter
@@ -466,16 +358,6 @@
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Tiled/Level/level3.tmx
-
-#begin Tiled/Level0.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Tiled/Level0.tmx
-
-#begin Tiled/Tileset1.tsx
-/importer:TiledMapTilesetImporter
-/processor:TiledMapTilesetProcessor
-/build:Tiled/Tileset1.tsx
 
 #begin UI/Bullet/bullet_empty.png
 /importer:TextureImporter

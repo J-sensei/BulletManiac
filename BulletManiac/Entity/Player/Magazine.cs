@@ -42,28 +42,48 @@ namespace BulletManiac.Entity.Player
 
         public void Update(bool shooting)
         {
-            if (bullets.Count < capacity && !shooting)
+            //if (bullets.Count < capacity && !shooting)
+            //{
+            //    Reloading = true;
+            //    currentBulletCD -= GameManager.DeltaTime;
+
+            //    //if (bullets.Count == capacity)
+            //    //{
+            //    //    GameManager.Resources.FindSoundEffect("Pistol_Cock").Play();
+            //    //    currentBulletCD = bulletCD;
+            //    //    Reloading = false;
+            //    //}
+
+            //    if (currentBulletCD <= 0f)
+            //    {
+            //        bullets.Enqueue(new DefaultBullet(Vector2.Zero, Vector2.Zero));
+            //        currentBulletCD = bulletCD;
+            //        GameManager.Resources.FindSoundEffect("Mag_In").Play();
+            //        if (bullets.Count == capacity)
+            //        {
+            //            //GameManager.Resources.FindSoundEffect("Pistol_Cock").Play();
+            //            Reloading = false;
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    Reloading = false;
+            //}
+
+            if (bullets.Count == 0)
             {
+                if(Reloading == false) GameManager.Resources.FindSoundEffect("Mag_In").Play();
                 Reloading = true;
                 currentBulletCD -= GameManager.DeltaTime;
 
-                //if (bullets.Count == capacity)
-                //{
-                //    GameManager.Resources.FindSoundEffect("Pistol_Cock").Play();
-                //    currentBulletCD = bulletCD;
-                //    Reloading = false;
-                //}
-
                 if (currentBulletCD <= 0f)
                 {
-                    bullets.Enqueue(new DefaultBullet(Vector2.Zero, Vector2.Zero));
+                    for(int i = 0; i < capacity; i++)
+                        bullets.Enqueue(new DefaultBullet(Vector2.Zero, Vector2.Zero));
+
                     currentBulletCD = bulletCD;
-                    GameManager.Resources.FindSoundEffect("Mag_In").Play();
-                    if (bullets.Count == capacity)
-                    {
-                        //GameManager.Resources.FindSoundEffect("Pistol_Cock").Play();
-                        Reloading = false;
-                    }
+                    GameManager.Resources.FindSoundEffect("Pistol_Cock").Play();
                 }
             }
             else

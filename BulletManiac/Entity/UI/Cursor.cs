@@ -11,15 +11,14 @@ namespace BulletManiac.Entity.UI
     /// </summary>
     public class Cursor : GameObject
     {
-        private Texture2D spriteSheet; // Sprite Sheet of the cursor
+        private Rectangle uvBound;
 
-        public Cursor()
+        public Cursor() : base(GameManager.Resources.FindTexture("Crosshair_SpriteSheet"))
         {
             // Load sprite and set the origin
-            spriteSheet = GameManager.Resources.FindTexture("Crosshair_SpriteSheet");
-            Rectangle cropBound = new Rectangle(0, 32, 16, 16); // Get the target sprite from the spritesheet
-            texture = Extensions.CropTexture2D(spriteSheet, cropBound);
-            origin = texture.Bounds.Center.ToVector2();
+            name = "Cursor";
+            uvBound = new Rectangle(0, 32, 16, 16); // Get the target sprite from the spritesheet
+            origin = new Vector2(8f);
         }
 
         protected override Rectangle CalculateBound()
@@ -44,7 +43,7 @@ namespace BulletManiac.Entity.UI
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             //spriteBatch.Draw(spriteSheet, Position, Color.White);
-            base.Draw(spriteBatch, gameTime);
+            DrawTexture(uvBound, spriteBatch, gameTime);
         }
     }
 }
