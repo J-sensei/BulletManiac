@@ -102,10 +102,6 @@ namespace BulletManiac.AI
                     break;
             }
 
-            //MoveAvoid(user, target.Position);
-            //currentVelocity = Arrive(target.Position, currentSpeed, 10f);
-            //currentVelocity = Flee(target.Position);
-
             if (enableFlock)
             {
                 // Make sure agent will not move the user out of the map
@@ -126,16 +122,11 @@ namespace BulletManiac.AI
             else
             {
                 CurrentFinalVelocity = currentVelocity;
-                //CurrentFinalVelocity = ApplyMove(CurrentFinalVelocity);
             }
 
 
             if (CurrentFinalVelocity.X >= 0) CurrentXDir = XDirection.Right;
             else CurrentXDir = XDirection.Left;
-
-            //user.Position += currentVelocity * GameManager.DeltaTime;
-            //ApplyMove(currentVelocity, currentSpeed);
-            //MoveAvoid(user, target.Position);
 
             if (enableFlock)
             {

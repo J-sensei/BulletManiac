@@ -116,13 +116,13 @@ namespace BulletManiac.Entity.Enemy
 
         public override void Dispose()
         {
-            steerAgent.Dispose();
             base.Dispose();
         }
 
         public override void DeleteEvent()
         {
             GameManager.Resources.FindSoundEffect("Bat_Death").Play();
+            steerAgent.Dispose();
             base.DeleteEvent();
         }
     }
