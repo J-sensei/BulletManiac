@@ -73,9 +73,6 @@ namespace BulletManiac.Entity.Player
                 GameManager.Resources.FindSoundEffect("Footstep1"),
                 GameManager.Resources.FindSoundEffect("Footstep2"),
                 GameManager.Resources.FindSoundEffect("Footstep3"),
-                GameManager.Resources.FindSoundEffect("Footstep5"),
-                GameManager.Resources.FindSoundEffect("Footstep6"),
-                GameManager.Resources.FindSoundEffect("Footstep7")
             };
             
             shadowEffect = new TextureEffect(GameManager.Resources.FindTexture("Shadow"),
