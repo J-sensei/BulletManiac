@@ -10,6 +10,22 @@ namespace BulletManiac.Entity.Enemy
 {
     public class Bat : Enemy
     {
+        private static SteeringSetting BAT_STERRING_SETTING = new SteeringSetting
+        {
+            DistanceToChase = 1000f,
+            DistanceToFlee = 1000f
+        };
+        private static FlockSetting BAT_FLOCK_SETTING = new FlockSetting
+        {
+            Seperate = true,
+            Alignment = true,
+            Cohesion = false,
+            NeighbourRadius = 65f
+        };
+
+        private const float BAT_SPEED = 65f;
+        private const float BAT_ARRIVAL_RADIUS = 5f;
+        private const int TOTAL_BAT_LEFT_TO_FLEE = 5;
         private SteeringAgent steerAgent;
         private AnimationManager animationManager;
         private TextureEffect shadowEffect; // Visual shadow effect
@@ -22,7 +38,7 @@ namespace BulletManiac.Entity.Enemy
             hp = 30f;
             currentAction = EnemyAction.Move;
 
-            steerAgent = new SteeringAgent(this, 65f, 5f, true);
+            steerAgent = new SteeringAgent(this, BAT_STERRING_SETTING, BAT_FLOCK_SETTING, BAT_SPEED, BAT_ARRIVAL_RADIUS, true);
             steerAgent.SteeringBehavior = SteeringBehavior.Arrival;
 
             animationManager.AddAnimation(EnemyAction.Idle, new Animation(GameManager.Resources.FindTexture("Bat_Flying"), 7, 1, animationSpeed));
@@ -41,7 +57,16 @@ namespace BulletManiac.Entity.Enemy
 
         public override void Update(GameTime gameTime)
         {
-            if(currentAction == EnemyAction.Move)
+            if (FlockManager.Find(Name).Count <= TOTAL_BAT_LEFT_TO_FLEE)
+            {
+                steerAgent.SteeringBehavior = SteeringBehavior.Flee;
+            }
+            else
+            {
+                steerAgent.SteeringBehavior = SteeringBehavior.Arrival;
+            }
+
+            if (currentAction == EnemyAction.Move)
                 steerAgent.Update(gameTime, GameManager.Player); // Bat is flying toward to the player
 
             // Texture flipping
@@ -60,7 +85,7 @@ namespace BulletManiac.Entity.Enemy
             // Animation update
             animationManager.Update(currentAction, gameTime);
             texture = animationManager.CurrentAnimation.CurrentTexture;
-
+            
             if (currentAction == EnemyAction.Move)
                 Position += steerAgent.CurrentFinalVelocity * GameManager.DeltaTime;
 
@@ -91,8 +116,14 @@ namespace BulletManiac.Entity.Enemy
 
         public override void Dispose()
         {
-            steerAgent.Dispose();
             base.Dispose();
+        }
+
+        public override void DeleteEvent()
+        {
+            GameManager.Resources.FindSoundEffect("Bat_Death").Play();
+            steerAgent.Dispose();
+            base.DeleteEvent();
         }
     }
 }

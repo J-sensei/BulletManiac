@@ -18,7 +18,7 @@ namespace BulletManiac.Entity.Enemy
             animationManager = new AnimationManager();
             name = "Spider";
             agent = new NavigationAgent(this);
-            agent2 = new SteeringAgent(this);
+            agent2 = new SteeringAgent(this, null, FlockSetting.Default);
             //texture = new Texture2D(GameManager.GraphicsDevice, 1, 1);
             //texture.SetData(new Color[] { Color.Blue });
             texture = Extensions.CropTexture2D(GameManager.Resources.FindTexture("Spider"), new Rectangle(0, 0, 32, 32));

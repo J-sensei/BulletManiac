@@ -15,6 +15,12 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Audio/Enemy/Bat Death.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Enemy/Bat Death.wav
+
 #begin Audio/Footstep/Footstep1.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

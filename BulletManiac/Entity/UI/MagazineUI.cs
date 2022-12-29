@@ -22,7 +22,7 @@ namespace BulletManiac.Entity.UI
             this.name = "Magazine UI";
             this.gun = gun;
             this.megazine = gun.Magazine;
-            capacity = Gun.DEFAULT_BULLET;
+            capacity = megazine.Capacity;
             position = new Vector2(100f, 50f);
         }
 
@@ -34,12 +34,18 @@ namespace BulletManiac.Entity.UI
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             Vector2 offset = Vector2.Zero;
-
+            int c = capacity - megazine.Bullets.Count;
             // Loop each bullet and render the bullet UI
             foreach(Bullet.Bullet b in megazine.Bullets)
             {
                 if(b.BulletUI == null) continue;
                 spriteBatch.Draw(b.BulletUI, position + offset, null, Color.White, angle, Vector2.Zero, Vector2.One * 2, SpriteEffects.None, 0f);
+                offset.Y += 20f;
+            }
+            
+            for(int i = 0; i < c; i++)
+            {
+                spriteBatch.Draw(GameManager.Resources.FindTexture("Bullet_Empty"), position + offset, null, Color.White, angle, Vector2.Zero, Vector2.One * 2, SpriteEffects.None, 0f);
                 offset.Y += 20f;
             }
         }

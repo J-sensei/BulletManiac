@@ -9,7 +9,7 @@ namespace BulletManiac.AI
     /// </summary>
     public static class FlockManager
     {
-        static Dictionary<string, List<Flock>> flockBank = new Dictionary<string, List<Flock>>();
+        static Dictionary<string, HashSet<Flock>> flockBank = new Dictionary<string, HashSet<Flock>>();
 
         public static void Add(string key, Flock flock)
         {
@@ -19,12 +19,12 @@ namespace BulletManiac.AI
             }
             else
             {
-                flockBank.Add(key, new List<Flock>());
+                flockBank.Add(key, new HashSet<Flock>());
                 flockBank[key].Add(flock);
             }
         }
 
-        public static List<Flock> Find(string key)
+        public static HashSet<Flock> Find(string key)
         {
             if (flockBank.ContainsKey(key))
             {
