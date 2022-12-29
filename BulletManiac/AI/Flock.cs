@@ -1,4 +1,5 @@
 ﻿using BulletManiac.Entity;
+using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,17 @@ namespace BulletManiac.AI
 {
     public struct FlockSetting
     {
-        public bool Seperate { get; set; }
-        public bool Alignment { get; set; }
-        public bool Cohesion { get; set; }
+        /// <summary>
+        /// Default Flock Setting
+        /// </summary>
+        public static FlockSetting Default = new FlockSetting(); 
+
+        bool? seperate;
+        public bool Seperate { get { return seperate ?? true; } set { seperate = value; } }
+        bool? alignment;
+        public bool Alignment { get { return alignment ?? true; } set { alignment = value; } }
+        bool? cohesion;
+        public bool Cohesion { get { return cohesion ?? true; } set { cohesion = value; } }
 
         float? neighbourRadius;
         public float NeighbourRadius { get { return neighbourRadius ?? 100f; } set { neighbourRadius = value; } }
@@ -171,6 +180,7 @@ namespace BulletManiac.AI
             Vector2 desiredVelocity = Vector2.Normalize(sum) * MaxSpeed;
 
             return desiredVelocity;
+            //return CalculateForce(desiredVelocity);
         }
 
         private Vector2 Cohesion(List<Flock> flocks)
@@ -207,21 +217,21 @@ namespace BulletManiac.AI
 
             Vector2 desiredDirection = Vector2.Normalize(average - user.Position);
             Vector2 desiredVelocity = desiredDirection * MaxSpeed;
-            //return Seek(average);
-            return desiredVelocity;
+            
+            return CalculateForce(desiredVelocity);
         }
 
-        //private Vector2 CalculateForce(Vector2 desiredVelocity)
-        //{
-        //    // Instead of returning Desired Velocity
-        //    // Calculate SteerVector, this quantity is the amount needed to instantly change
-        //    // CurrentVelocity to head to the target
-        //    Vector2 steerVector = desiredVelocity - CurrentVelocity;
+        private Vector2 CalculateForce(Vector2 desiredVelocity)
+        {
+            // Instead of returning Desired Velocity
+            // Calculate SteerVector, this quantity is the amount needed to instantly change
+            // CurrentVelocity to head to the target
+            Vector2 steerVector = desiredVelocity - CurrentVelocity;
 
-        //    // Instead of using SteerVector, we limit the magnitude to maxForce
-        //    // If amount of maxForce is low, then it needs longer time to turn.
-        //    Vector2 steerForce = Vector2Utils.Truncate(steerVector, maxForce);
-        //    return steerForce;
-        //}
+            // Instead of using SteerVector, we limit the magnitude to maxForce
+            // If amount of maxForce is low, then it needs longer time to turn.
+            Vector2 steerForce = Extensions.Truncate(steerVector, 5.0f);
+            return steerForce;
+        }
     }
 }

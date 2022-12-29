@@ -65,7 +65,7 @@ namespace BulletManiac.AI
         private bool enableFlock; // Determine if this steering agent need to enable flock behavior
         private SteeringSetting? setting;
 
-        public SteeringAgent(GameObject user, SteeringSetting? steeringSetting, float speed = 50f, float arrivalRadius = 10f, bool enableFlock = false)
+        public SteeringAgent(GameObject user, SteeringSetting? steeringSetting, FlockSetting flockSetting, float speed = 50f, float arrivalRadius = 10f, bool enableFlock = false)
         {
             this.user = user;
             this.currentSpeed = speed;
@@ -73,24 +73,14 @@ namespace BulletManiac.AI
             this.enableFlock = enableFlock;
             if (enableFlock)
             {
-                currentFlock = new Flock(user, new FlockSetting
-                {
-                    Seperate = true,
-                    Alignment = true,
-                    Cohesion = false,
-                    NeighbourRadius = 10f
-                });
+                currentFlock = new Flock(user, flockSetting);
                 FlockManager.Add(user.Name, currentFlock); // Add to flock manager
             }
 
             if(steeringSetting == null)
-            {
                 setting = new SteeringSetting();
-            }
             else
-            {
                 setting = steeringSetting;
-            }
         }
 
         public void Update(GameTime gameTime, GameObject target)
@@ -118,10 +108,9 @@ namespace BulletManiac.AI
 
             if (enableFlock)
             {
-                currentFlock.CurrentVelocity = currentVelocity;
-
                 // Make sure agent will not move the user out of the map
                 Vector2 velocity = Extensions.Truncate(CurrentVelocity + currentFlock.Acceleration, currentFlock.MaxSpeed);
+                currentFlock.CurrentVelocity = velocity;
                 if (user.Position.X < GameManager.CurrentLevel.Bound.X && velocity.X < 0f)
                     velocity.X = 0f;
                 if (user.Position.X > GameManager.CurrentLevel.Bound.Width && velocity.X > 0f)
@@ -141,7 +130,7 @@ namespace BulletManiac.AI
             }
 
 
-            if (currentVelocity.X >= 0) CurrentXDir = XDirection.Right;
+            if (CurrentFinalVelocity.X >= 0) CurrentXDir = XDirection.Right;
             else CurrentXDir = XDirection.Left;
 
             //user.Position += currentVelocity * GameManager.DeltaTime;

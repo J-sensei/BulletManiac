@@ -188,6 +188,7 @@ namespace BulletManiac.Managers
             // Load UI Sprites
             Resources.LoadTexture("Crosshair_SpriteSheet", "SpriteSheet/UI/Crosshair");
             Resources.LoadTexture("Bullet_Fill", "UI/Bullet/bullet_fill");
+            Resources.LoadTexture("Bullet_Empty", "UI/Bullet/bullet_empty");
             Resources.LoadSpriteFonts("DebugFont", "UI/Font/DebugFont");
 
             // Load Debug UI Sprites
@@ -215,6 +216,7 @@ namespace BulletManiac.Managers
             Resources.LoadSoundEffect("Mag_In", "Audio/Gun/Mag_In");
             Resources.LoadSoundEffect("Pistol_Cock", "Audio/Gun/Pistol_Cock");
             Resources.LoadSoundEffect("Bullet_Hit", "Audio/Gun/Bullet_Hit");
+            Resources.LoadSoundEffect("Bat_Death", "Audio/Enemy/Bat Death");
         }
         
         public static void LoadContent(ContentManager content)

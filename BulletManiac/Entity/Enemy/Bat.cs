@@ -10,6 +10,21 @@ namespace BulletManiac.Entity.Enemy
 {
     public class Bat : Enemy
     {
+        private static SteeringSetting BAT_STERRING_SETTING = new SteeringSetting
+        {
+            DistanceToChase = 1000f,
+            DistanceToFlee = 1000f
+        };
+        private static FlockSetting BAT_FLOCK_SETTING = new FlockSetting
+        {
+            Seperate = true,
+            Alignment = true,
+            Cohesion = false,
+            NeighbourRadius = 65f
+        };
+
+        private const float BAT_SPEED = 65f;
+        private const float BAT_ARRIVAL_RADIUS = 5f;
         private const int TOTAL_BAT_LEFT_TO_FLEE = 5;
         private SteeringAgent steerAgent;
         private AnimationManager animationManager;
@@ -23,11 +38,7 @@ namespace BulletManiac.Entity.Enemy
             hp = 30f;
             currentAction = EnemyAction.Move;
 
-            steerAgent = new SteeringAgent(this, new SteeringSetting
-            {
-                DistanceToChase = 1000f,
-                DistanceToFlee = 1000f
-            }, 65f, 5f, true);
+            steerAgent = new SteeringAgent(this, BAT_STERRING_SETTING, BAT_FLOCK_SETTING, BAT_SPEED, BAT_ARRIVAL_RADIUS, true);
             steerAgent.SteeringBehavior = SteeringBehavior.Arrival;
 
             animationManager.AddAnimation(EnemyAction.Idle, new Animation(GameManager.Resources.FindTexture("Bat_Flying"), 7, 1, animationSpeed));
@@ -107,6 +118,12 @@ namespace BulletManiac.Entity.Enemy
         {
             steerAgent.Dispose();
             base.Dispose();
+        }
+
+        public override void DeleteEvent()
+        {
+            GameManager.Resources.FindSoundEffect("Bat_Death").Play();
+            base.DeleteEvent();
         }
     }
 }
