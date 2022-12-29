@@ -181,9 +181,16 @@ namespace BulletManiac.Managers
 
             // Load Enemy Sprites
             Resources.LoadTexture("Spider", "SpriteSheet/Enemy/Spider Sprite Sheet");
+
             Resources.LoadTexture("Bat_Flying", "SpriteSheet/Enemy/Bat/Flying");
             Resources.LoadTexture("Bat_Attack", "SpriteSheet/Enemy/Bat/Attack");
             Resources.LoadTexture("Bat_Hit", "SpriteSheet/Enemy/Bat/Hit");
+
+            Resources.LoadTexture("Shadow_Idle", "SpriteSheet/Enemy/Shadow/Idle");
+            Resources.LoadTexture("Shadow_Move", "SpriteSheet/Enemy/Shadow/Move");
+            Resources.LoadTexture("Shadow_Hit", "SpriteSheet/Enemy/Shadow/Hit");
+            Resources.LoadTexture("Shadow_Death", "SpriteSheet/Enemy/Shadow/Death");
+            Resources.LoadTexture("Shadow_Attack", "SpriteSheet/Enemy/Shadow/Attack");
 
             // Load UI Sprites
             Resources.LoadTexture("Crosshair_SpriteSheet", "SpriteSheet/UI/Crosshair");
@@ -246,7 +253,8 @@ namespace BulletManiac.Managers
 
             // Test Enemy
             //AddGameObject(new Spider(Tile.ToPosition(new Tile(10, 12), 16, 16)));
-            AddGameObject(new Bat(Tile.ToPosition(new Tile(10, 12), 16, 16)));
+            //AddGameObject(new Bat(Tile.ToPosition(new Tile(10, 12), 16, 16)));
+            AddGameObject(new Shadow(Tile.ToPosition(new Tile(10, 12), 16, 16)));
         }
          
         // Test change level
@@ -278,7 +286,7 @@ namespace BulletManiac.Managers
             if(InputManager.GetKey(Keys.G))
             {
                 // Test Enemy
-                AddGameObject(new Bat(Tile.ToPosition(new Tile(10, 12), 16, 16)));
+                AddGameObject(new Shadow(Tile.ToPosition(new Tile(10, 12), 16, 16)));
             }
 
             if (Debug)
@@ -321,6 +329,7 @@ namespace BulletManiac.Managers
 
             double framerate = (1 / gameTime.ElapsedGameTime.TotalSeconds);
             spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "FPS: " + framerate.ToString("F2"), new Vector2(5f), Color.Red);
+            spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "Player HP: " + Player.HP.ToString("N0"), new Vector2(5f, 20f), Color.Red);
         }
 
         /// <summary>

@@ -57,6 +57,7 @@ namespace BulletManiac.Entity
         /// Flip horizontally or vertically the texture sprite
         /// </summary>
         protected SpriteEffects spriteEffects = SpriteEffects.None;
+        protected Color color = Color.White;
         #endregion
 
         #region Properties
@@ -135,7 +136,7 @@ namespace BulletManiac.Entity
                 //GameManager.Log("Game Object", "\"" + Name + "\"" + " Texture is null, skipping to draw it");
                 return;
             }
-            spriteBatch.Draw(texture, position, null, Color.White, Rotation, origin, scale, spriteEffects, 0f);
+            spriteBatch.Draw(texture, position, null, color, Rotation, origin, scale, spriteEffects, 0f);
         }
 
         /// <summary>

@@ -49,9 +49,16 @@ namespace BulletManiac.Entity.Enemy
                 // If enemy hp is 0, destroy it
                 if(hp <= 0)
                 {
+                    currentAction = EnemyAction.Die;
                     animationManager.Dispose();
                     Destroy(this);
                 }
+            }
+
+            if(other.Name == "Player")
+            {
+                Player.Player player = (other as Player.Player);
+                player.TakeDamage(10f); // Test take damage
             }
 
             base.CollisionEvent(other);
