@@ -96,10 +96,7 @@ namespace BulletManiac.Tiled.AI
             if(currentState == NavigationState.MOVING)
             {
                 // If the user reached the destination
-                Vector2 diff2 = Tile.ToPosition(destTile, tileWidth, tileHeight) - user.Position;
-                float distance2 = diff2.Length();
-                //if (user.Position.Equals(Tile.ToPosition(destTile, tileWidth, tileHeight)))
-                if(distance2 < 1f)
+                if (user.Position.Equals(Tile.ToPosition(destTile, tileWidth, tileHeight)))
                 {
                     // Update source tile to destination tile
                     srcTile = destTile;
@@ -129,9 +126,7 @@ namespace BulletManiac.Tiled.AI
 
                         // Move
                         Vector2 movePos = Move(user.Position, headPosition, GameManager.DeltaTime, speed);
-                        //Vector2 movePos = Seek(headPosition, 50f) * GameManager.DeltaTime;
-                        //user.Position += movePos;
-                        user.Position = movePos;
+                        user.Position = movePos; // Move the user
                     }
                     catch(Exception ex)
                     {
@@ -171,6 +166,7 @@ namespace BulletManiac.Tiled.AI
                 else if (GameManager.CurrentPathfindingAlgorithm == PathfindingAlgorithm.AStar)
                 {
                     // 1. Compute an A* path
+                    Console.WriteLine("RUN A*");
                     path = AStar.Compute(GameManager.CurrentLevel.TileGraph, srcTile, destTile, AStar.Euclidean);
                     // 2. Remove source tile from path
                     path.RemoveFirst();
@@ -208,54 +204,6 @@ namespace BulletManiac.Tiled.AI
             }
             else
                 return dest;
-        }
-
-        private void MoveAvoid(GameObject source, Vector2 target)
-        {
-            float pullDistance = Vector2.Distance(target, source.Position);
-
-            if (pullDistance > 1)
-            {
-                Vector2 pull = (target - source.Position) * (1 / pullDistance); //the target tries to 'pull us in'
-                Vector2 totalPush = Vector2.Zero;
-
-                int contenders = 0;
-                List <Tile> obstacles = CollisionManager.TileBounds;
-                for (int i = 0; i < CollisionManager.TileBounds.Count; ++i)
-                {
-
-                    //draw a vector from the obstacle to the ship, that 'pushes the ship away'
-                    Vector2 push = source.Position - obstacles[i].Position;
-
-                    //calculate how much we are pushed away from this obstacle, the closer, the more push
-                    float distance = (Vector2.Distance(source.Position, obstacles[i].Position) - 2f) - 5f;
-                    //only use push force if this object is close enough such that an effect is needed
-                    if (distance < 2f * 3)
-                    {
-                        ++contenders; //note that this object is actively pushing
-
-                        if (distance < 0.0001f) //prevent division by zero errors and extreme pushes
-                        {
-                            distance = 0.0001f;
-                        }
-                        float weight = 1 / distance;
-
-                        totalPush += push * weight;
-                    }
-                }
-
-                pull *= Math.Max(1, 4 * contenders); //4 * contenders gives the pull enough force to pull stuff trough (tweak this setting for your game!)
-                pull += totalPush;
-
-                //Normalize the vector so that we get a vector that points in a certain direction, which we van multiply by our desired speed
-                pull.Normalize();
-                //Set the ships new position;
-                source.Position += (pull * 50f) * GameManager.DeltaTime;
-            }
-        }
-        private Vector2 Seek(Vector2 target, float currentSpeed)
-        {
-            return Vector2.Normalize(target - user.Position) * currentSpeed;
         }
     }
 }

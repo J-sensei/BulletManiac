@@ -255,6 +255,7 @@ namespace BulletManiac.Managers
             pathTester.ChangeLevel(CurrentLevel);
         }
 
+        static FrameCounter fpsCounter = new();
         public static void Update(GameTime gameTime)
         {
             DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds; // Update the delta time variable
@@ -280,6 +281,8 @@ namespace BulletManiac.Managers
             {
                 pathTester.Update(gameTime);
             }
+
+            fpsCounter.Update(gameTime);
         }
 
         /// <summary>
@@ -314,9 +317,10 @@ namespace BulletManiac.Managers
         {
             entityManager.DrawUI(spriteBatch, gameTime);
 
-            double framerate = (1 / gameTime.ElapsedGameTime.TotalSeconds);
-            spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "FPS: " + framerate.ToString("F2"), new Vector2(5f), Color.Red);
-            spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "Player HP: " + Player.HP.ToString("N0"), new Vector2(5f, 20f), Color.Red);
+            //double framerate = (1 / gameTime.ElapsedGameTime.TotalSeconds);
+            //spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "FPS: " + framerate.ToString("F2"), new Vector2(5f), Color.Red);
+            fpsCounter.Draw(spriteBatch, Resources.FindSpriteFont("DebugFont"), new Vector2(150f, 5f), Color.Red);
+            spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "Player HP: " + Player.HP.ToString("N0"), new Vector2(5f, 5f), Color.Red);
         }
 
         /// <summary>
