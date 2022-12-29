@@ -55,6 +55,12 @@ namespace BulletManiac.Entity.Enemy
                 }
             }
 
+            if(other.Name == "Player")
+            {
+                Player.Player player = (other as Player.Player);
+                player.TakeDamage(10f); // Test take damage
+            }
+
             base.CollisionEvent(other);
         }
 

@@ -19,7 +19,7 @@ namespace BulletManiac.Entity.Player
         /// </summary>
         enum PlayerAction
         {
-            Idle, Run, Walk, Death, Throw
+            Idle, Run, Walk, Death, Hit, Throw
         }
 
         private AnimationManager animationManager; // Manange the animation based on certain action
@@ -48,6 +48,9 @@ namespace BulletManiac.Entity.Player
         private PlayerAction currentAction = PlayerAction.Idle; // Current action of the player is doing
 
         public float HP { get; private set; }
+        private bool invisible = false;
+        private float invisibleTime = 2f;
+        private float currentInvisibleTime = 2f;
 
         public Player(Vector2 position)
         {
@@ -84,7 +87,11 @@ namespace BulletManiac.Entity.Player
 
         public void TakeDamage(float damage)
         {
-            HP -= damage;
+            if (!invisible)
+            {
+                HP -= damage;
+                invisible = true;
+            }
         }
 
         protected override Rectangle CalculateBound()
@@ -284,6 +291,23 @@ namespace BulletManiac.Entity.Player
 
         public override void Update(GameTime gameTime)
         {
+            // Flickering
+            if (invisible)
+            {
+                currentInvisibleTime -= GameManager.DeltaTime;
+                color = Color.White * 0.7f;
+
+                if (currentInvisibleTime <= 0f)
+                {
+                    invisible = false;
+                    currentInvisibleTime = invisibleTime;
+                }
+            }
+            else
+            {
+                color = Color.White;
+            }
+
             PlayerMovement();
             // PlayerAttack(); // Now player is using gun to shoot
             Gun.Update(gameTime);

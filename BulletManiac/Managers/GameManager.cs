@@ -329,7 +329,7 @@ namespace BulletManiac.Managers
 
             double framerate = (1 / gameTime.ElapsedGameTime.TotalSeconds);
             spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "FPS: " + framerate.ToString("F2"), new Vector2(5f), Color.Red);
-            spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "HP: " + Player.HP.ToString("N0"), new Vector2(5f, 20f), Color.Red);
+            spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "Player HP: " + Player.HP.ToString("N0"), new Vector2(5f, 20f), Color.Red);
         }
 
         /// <summary>

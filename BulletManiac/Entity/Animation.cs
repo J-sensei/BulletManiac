@@ -47,6 +47,7 @@ namespace BulletManiac.Entity
                 return croppedTextures[currentFrame];
             }
         }
+        private Rectangle[] bounds;
 
         /// <summary>
         /// Current frame index in the animation (start from 0)
@@ -97,12 +98,14 @@ namespace BulletManiac.Entity
 
             // Crop the sprite sheet and store into the texture array
             croppedTextures = new Texture2D[frameCount];
+            bounds = new Rectangle[frameCount];
             for (int i = 0; i < frameCount; i++)
             {
                 Rectangle bound = new Rectangle(i * width, (row - 1) * height, width, height);
+                bounds[i] = bound;
                 croppedTextures[i] = Extensions.CropTexture2D(texture, bound);
             }
-            this.texture = null; // Texture is no use anymore
+            //this.texture = null; // Texture is no use anymore
         }
 
         public Animation(Texture2D texture, int frameCountX, int width, int height, float frameTime, int row = 1, bool looping = true)
@@ -115,9 +118,11 @@ namespace BulletManiac.Entity
 
             // Crop the sprite sheet and store into the texture array
             croppedTextures = new Texture2D[frameCount];
+            bounds = new Rectangle[frameCount];
             for (int i = 0; i < frameCount; i++)
             {
                 Rectangle bound = new Rectangle(i * width, (row - 1) * height, width, height);
+                bounds[i] = bound;
                 croppedTextures[i] = Extensions.CropTexture2D(texture, bound);
             }
             this.texture = null; // Texture is no use anymore
@@ -196,10 +201,10 @@ namespace BulletManiac.Entity
         /// <param name="scale"></param>
         /// <param name="spriteEffects"></param>
         /// <param name="layerDepth"></param>
-        //public void Draw(SpriteBatch spriteBatch, Vector2 position, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects spriteEffects, float layerDepth)
-        //{
-        //    spriteBatch.Draw(texture, position, bounds[currentFrame], color, rotation, origin, scale, spriteEffects, 0f);
-        //}
+        public void Draw(SpriteBatch spriteBatch, Vector2 position, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects spriteEffects, float layerDepth)
+        {
+            spriteBatch.Draw(texture, position, bounds[currentFrame], color, rotation, origin, scale, spriteEffects, 0f);
+        }
 
         /// <summary>
         /// Start the animation playing
