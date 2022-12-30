@@ -20,7 +20,7 @@ namespace BulletManiac.Entity.Player
         const float DEFAULT_RELOAD_CD = 1f;
 
         const float MIN_SHOOT_ANIMATION_SPEED = 0.01f;
-        const float MAX_SHOOT_ANIMATION_SPEED = 0.05f;
+        const float MAX_SHOOT_ANIMATION_SPEED = 0.025f;
         float currentShootAnimationSpeed = MIN_SHOOT_ANIMATION_SPEED; // Test
 
         const float DEFAULT_ACCURACY = 0.25f;

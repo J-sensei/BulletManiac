@@ -31,7 +31,7 @@ namespace BulletManiac.Tiled.AI
     /// <summary>
     /// Help to execute pathfinding algorithm and apply move to the game object
     /// </summary>
-    public class NavigationAgent : IDisposable
+    public class NavigationAgent
     {
         /// <summary>
         /// Game Object that is using this agent
@@ -215,11 +215,6 @@ namespace BulletManiac.Tiled.AI
             }
             else
                 return dest;
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
         }
     }
 }

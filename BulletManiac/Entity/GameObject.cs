@@ -14,7 +14,7 @@ namespace BulletManiac.Entity
         const string DEFAULT_NAME = "New GameObject";
         #endregion
 
-        private Texture2D debugBox; // Debug texture, used to draw the red box
+        private static Texture2D debugBox; // Debug texture, used to draw the red box
 
         #region Data fields
         /// <summary>
@@ -110,8 +110,11 @@ namespace BulletManiac.Entity
             this.name = name;
 
             // Initialize debug box
-            debugBox = new Texture2D(GameManager.GraphicsDevice, 1, 1);
-            debugBox.SetData(new Color[] { Color.Red });
+            if(debugBox == null)
+            {
+                debugBox = new Texture2D(GameManager.GraphicsDevice, 1, 1);
+                debugBox.SetData(new Color[] { Color.Red });
+            }
         }
 
         public GameObject(Texture2D texture, string name = DEFAULT_NAME)
@@ -176,7 +179,7 @@ namespace BulletManiac.Entity
 
         public virtual void Dispose()
         {
-            if(debugBox != null) debugBox.Dispose();
+            
         }
     }
 }

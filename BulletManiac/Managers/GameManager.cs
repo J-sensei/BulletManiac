@@ -159,7 +159,6 @@ namespace BulletManiac.Managers
             tiledMapRenderer = new TiledMapRenderer(GraphicsDevice); // Initialize Tiled
 
             InputManager.Initialize();
-            entityManager.Initialize();
         }
 
         private static void LoadDefaultResources()
@@ -205,13 +204,18 @@ namespace BulletManiac.Managers
             Resources.LoadSoundEffect("Footstep1", "Audio/Footstep/Footstep1");
             Resources.LoadSoundEffect("Footstep2", "Audio/Footstep/Footstep2");
             Resources.LoadSoundEffect("Footstep3", "Audio/Footstep/Footstep3");
+            Resources.LoadSoundEffect("Player_Hurt", "Audio/Player/Player_Hurt");
             Resources.LoadSoundEffect("Gun_Shoot", "Audio/Gun/Gun_Shoot");
             Resources.LoadSoundEffect("Mag_In", "Audio/Gun/Mag_In");
             Resources.LoadSoundEffect("Pistol_Cock", "Audio/Gun/Pistol_Cock");
             Resources.LoadSoundEffect("Bullet_Hit", "Audio/Gun/Bullet_Hit");
             Resources.LoadSoundEffect("Bat_Death", "Audio/Enemy/Bat Death");
+            Resources.LoadSoundEffect("Shadow_Death", "Audio/Enemy/Shadow_Death");
 
             Animation.LoadAnimations(Resources);
+
+            // Shader
+            Resources.LoadEffect("Color_Overlay", "Shader/ColorOverlay");
         }
         
         public static void LoadContent(ContentManager content)
@@ -243,6 +247,8 @@ namespace BulletManiac.Managers
             //AddGameObject(new Spider(Tile.ToPosition(new Tile(10, 12), 16, 16)));
             //AddGameObject(new Bat(Tile.ToPosition(new Tile(10, 12), 16, 16)));
             AddGameObject(new Shadow(Tile.ToPosition(new Tile(10, 12), 16, 16)));
+            
+            entityManager.Initialize(); // Initialize default game objects
         }
          
         // Test change level
@@ -278,7 +284,7 @@ namespace BulletManiac.Managers
             if(InputManager.GetKey(Keys.G))
             {
                 // Test Enemy
-                AddGameObject(new Bat(Tile.ToPosition(new Tile(10, 12), 16, 16)));
+                AddGameObject(new Shadow(Tile.ToPosition(new Tile(10, 12), 16, 16)));
             }
 
             if (Debug)

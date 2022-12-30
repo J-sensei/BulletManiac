@@ -19,38 +19,43 @@ namespace BulletManiac.Entity.Player
         /// </summary>
         enum PlayerAction
         {
-            Idle, Run, Walk, Death, Hit, Throw
+            Idle, Run, Walk, Death
         }
 
         private AnimationManager animationManager; // Manange the animation based on certain action
-        private List<SoundEffect> footstepsSound;
-        private TextureEffect shadowEffect; // Visual shadow effect
-
-        public Gun Gun { get; private set; } // Player gun
+        private List<SoundEffect> footstepsSounds; // Footstep sounds to play when walking
+        private TextureEffect shadowEffect; // Visual shadow effect                           
+        private Effect colorOverlay; // Shader for the blink effect
 
         // Player status
-        float moveSpeed = 80f;
+        private float moveSpeed = 80f;
+        const float DEFAULT_HP = 100f;
+        public float HP { get; private set; }
 
         // Animation speed
-        float animationSpeed = 0.2f;
-        float idleAnimationSpeed = 0.2f;
-        float walkAnimationSpeed = 0.2f;
-        float runAnimationSpeed = 0.08f;
-        float attackAnimationSpeed = 0.065f; // Attach speed
-        float shootSpeed = 0.01f;
+        private float animationSpeed = 0.2f;
+        private float idleAnimationSpeed = 0.2f;
+        private float walkAnimationSpeed = 0.2f;
+        private float runAnimationSpeed = 0.08f;
 
-        // Accuracy
-        const float DEFAULT_ACCURACY = 0.25f;
-        float accuracy = DEFAULT_ACCURACY; // The lower the number, the better accuracy
-
-        private bool moveBackward = false;
-        private bool shooting = false;
+        private bool moveBackward = false; // Determine if player is moving backward while facing forward
         private PlayerAction currentAction = PlayerAction.Idle; // Current action of the player is doing
 
-        public float HP { get; private set; }
-        private bool invisible = false;
-        private float invisibleTime = 2f;
-        private float currentInvisibleTime = 2f;
+        // Invincible variables
+        private bool invincible = false;
+        private const float INVINCIBLE_TIME = 2f;
+        private float currentInvincibleTime = INVINCIBLE_TIME;
+
+        // Blink variables
+        private bool blink = false; // Determine whether the character should apply blink effect
+        private const float BLINK_TIME = 0.15f; // How fast blinking is render during after player take damage
+        private float blinkToggleTime = BLINK_TIME;
+
+        // Text position and offset to render with the player
+        private Vector2 textOffset = new Vector2(32f, 0f);
+        private Vector2 textPosOffset = new Vector2(0f, -16f);
+        
+        public Gun Gun { get; private set; } // Player gun
 
         public Player(Vector2 position)
         {
@@ -59,109 +64,25 @@ namespace BulletManiac.Entity.Player
             animationManager = new AnimationManager(); // Using animation manager to handler different kind of animation
             scale = new Vector2(0.65f); // Scale of the player
             origin = new Vector2(16f); // Origin (Half of the sprite size) 32x32 / 2
-            HP = 100f;
-
-            // Define the keys and animations
-            animationManager.AddAnimation(PlayerAction.Idle, new Animation(GameManager.Resources.FindTexture("Player_SpriteSheet"), 2, 32, 32, idleAnimationSpeed));
-            animationManager.AddAnimation(PlayerAction.Run, new Animation(GameManager.Resources.FindTexture("Player_SpriteSheet"), 8, 32, 32, runAnimationSpeed, 4));
-            animationManager.AddAnimation(PlayerAction.Walk, new Animation(GameManager.Resources.FindTexture("Player_SpriteSheet"), 4, 32, 32, walkAnimationSpeed, 3));
-            animationManager.AddAnimation(PlayerAction.Death, new Animation(GameManager.Resources.FindTexture("Player_SpriteSheet"), 8, 32, 32, animationSpeed, 8));
-            animationManager.AddAnimation(PlayerAction.Throw, new Animation(GameManager.Resources.FindTexture("Player_SpriteSheet"), 8, 32, 32, attackAnimationSpeed * shootSpeed, 9, looping: false));
-
-            footstepsSound = new List<SoundEffect>()
-            {
-                GameManager.Resources.FindSoundEffect("Footstep1"),
-                GameManager.Resources.FindSoundEffect("Footstep2"),
-                GameManager.Resources.FindSoundEffect("Footstep3"),
-            };
-            
-            shadowEffect = new TextureEffect(GameManager.Resources.FindTexture("Shadow"),
-                                            new Rectangle(0, 0, 64, 64), // Crop the shadow sprite
-                                            this, 
-                                            new Vector2(32f), new Vector2(0.5f), new Vector2(0f, -3.5f));
+            HP = DEFAULT_HP;
 
             Gun = new Gun(this);
-            CollisionManager.Add(this, "Player");
-        }
-
-        public void TakeDamage(float damage)
-        {
-            if (!invisible)
-            {
-                HP -= damage;
-                invisible = true;
-            }
         }
 
         protected override Rectangle CalculateBound()
         {
-            // Left and right sprite will have slightly different bound to create accurate bound detection
-            //if(spriteEffects == SpriteEffects.None)
-            //{
-            //    Vector2 pos = position - (origin * scale / 1.1f) + new Vector2(2f, 0f); ;
-            //    return new Rectangle((int)pos.X, (int)pos.Y + 3, (int)((origin.X * 2) * scale.X / 1.25f), (int)((origin.Y * 2) * scale.Y / 1.1f));
-            //}
-            //else
-            //{
-            //    Vector2 pos = position - (origin * scale / 1.1f) + new Vector2(2f, 0f);
-            //    return new Rectangle((int)pos.X, (int)pos.Y + 3, (int)((origin.X * 2) * scale.X / 1.25f), (int)((origin.Y * 2) * scale.Y / 1.1f));
-            //}
             Vector2 pos = position - (origin * scale / 1.1f) + new Vector2(2f, 0f);
             return new Rectangle((int)pos.X, (int)pos.Y + 3, (int)((origin.X * 2) * scale.X / 1.25f), (int)((origin.Y * 2) * scale.Y / 1.1f));
-        }
-
-        private void PlayerAttack()
-        {
-            if (shooting && animationManager.GetAnimation(PlayerAction.Throw).Finish)
-            {
-                shooting = false;
-                animationManager.GetAnimation(PlayerAction.Throw).Reset(); // Reset the animation once its finish playing
-            }
-
-            if (InputManager.MouseLeftHold && !shooting)
-            {
-                if (InputManager.GetKeyDown(Keys.LeftShift)) // Player is walking, more accurate shooting
-                {
-                    accuracy = DEFAULT_ACCURACY * 0.2f; // NEED TO CHANGE LATER
-                }
-                else
-                {
-                    accuracy = DEFAULT_ACCURACY;
-                }
-
-                shooting = true;
-                currentAction = PlayerAction.Throw;
-                GameManager.MainCamera.Shake();
-
-                // Spawn Bullet
-                Vector2 mousePos = Camera.ScreenToWorld(InputManager.MousePosition); // Convert mouse screen position to the world position
-                Vector2 bulletDirection = mousePos - position;
-                bulletDirection.Normalize();
-
-                // Random the based on the accuracy of the player
-                bulletDirection.X = Extensions.RandomRangeFloat(bulletDirection.X - accuracy, bulletDirection.X + accuracy);
-                bulletDirection.Y = Extensions.RandomRangeFloat(bulletDirection.Y - accuracy, bulletDirection.Y + accuracy);
-
-                // Fire Bullet
-                DefaultBullet bullet = new DefaultBullet(position, bulletDirection, 100f);
-                GameManager.AddGameObject(bullet); // Straight away add bullet to entity manager to run it immediately
-            }
         }
 
         private void PlayerMovement()
         {
             // Flip the sprite based on the mouse X position
             Vector2 mousePos = Camera.ScreenToWorld(InputManager.MousePosition);
-            if (position.X <= mousePos.X)
-            {
+            if (position.X < mousePos.X)
                 spriteEffects = SpriteEffects.None;
-            }
             else if (position.X > mousePos.X)
-            {
                 spriteEffects = SpriteEffects.FlipHorizontally;
-            }
-
-            if (shooting) return; // No movement when player is shooting
 
             // Updating the speed
             if (InputManager.Moving)
@@ -232,9 +153,9 @@ namespace BulletManiac.Entity.Player
                 position.Y += moveAmountY.Y;
         }
 
-        int lastWalkingAnimIndex = 0; // Play the walking sfx only once
-        List<int> walkFrame = new List<int>() { 0, 2}; // Frame to generate SFX (Walk)
-        List<int> runFrame = new List<int>() { 2, 6 }; // Frame to generate SFX (Run)
+        private int lastWalkingAnimIndex = 0; // Play the walking sfx only once
+        private List<int> walkFrame = new List<int>() { 0, 2}; // Frame to generate SFX (Walk)
+        private List<int> runFrame = new List<int>() { 2, 6 }; // Frame to generate SFX (Run)
         private void WalkingSFX()
         {
             Animation anim;
@@ -276,55 +197,99 @@ namespace BulletManiac.Entity.Player
                 effect = new TextureEffect(smokeAnim,
                         Position + new Vector2(-5f, 5f), new Vector2(32, 32), new Vector2(1f), true, smokeSpriteEffects);
             }
-
             GameManager.AddGameObject(effect); // Add smoke to the world
 
             // Audio
-            footstepsSound[Extensions.Random.Next(footstepsSound.Count)].Play();
+            footstepsSounds[Extensions.Random.Next(footstepsSounds.Count)].Play();
             lastWalkingAnimIndex = currentIndex;
+        }
+
+        private void Invincible()
+        {
+            if (invincible)
+            {
+                currentInvincibleTime -= GameManager.DeltaTime;
+                blinkToggleTime -= GameManager.DeltaTime;
+
+                // Update blink effect
+                if (blinkToggleTime <= 0f)
+                {
+                    blink = !blink;
+                    blinkToggleTime = BLINK_TIME;
+                }
+
+                // Invisible time finish
+                if (currentInvincibleTime <= 0f)
+                {
+                    invincible = false;
+                    currentInvincibleTime = INVINCIBLE_TIME;
+                }
+            }
+        }
+
+        public void TakeDamage(float damage)
+        {
+            // If player is not in invincible 
+            if (!invincible)
+            {
+                HP -= damage;
+                invincible = true; // Player become invincible after damage is taken
+                GameManager.Resources.FindSoundEffect("Player_Hurt").Play();
+            }
         }
 
         public override void Initialize()
         {
             CollisionManager.Add(this, "Player"); // Add player into the collision manager
+
+            // Define the keys and animations
+            animationManager.AddAnimation(PlayerAction.Idle, new Animation(GameManager.Resources.FindTexture("Player_SpriteSheet"), 2, 32, 32, idleAnimationSpeed));
+            animationManager.AddAnimation(PlayerAction.Run, new Animation(GameManager.Resources.FindTexture("Player_SpriteSheet"), 8, 32, 32, runAnimationSpeed, 4));
+            animationManager.AddAnimation(PlayerAction.Walk, new Animation(GameManager.Resources.FindTexture("Player_SpriteSheet"), 4, 32, 32, walkAnimationSpeed, 3));
+            animationManager.AddAnimation(PlayerAction.Death, new Animation(GameManager.Resources.FindTexture("Player_SpriteSheet"), 8, 32, 32, animationSpeed, 8, looping: false));
+
+            // Footstep sounds sample
+            footstepsSounds = new List<SoundEffect>()
+            {
+                GameManager.Resources.FindSoundEffect("Footstep1"),
+                GameManager.Resources.FindSoundEffect("Footstep2"),
+                GameManager.Resources.FindSoundEffect("Footstep3"),
+            };
+
+            // Shadow effect initialize
+            shadowEffect = new TextureEffect(GameManager.Resources.FindTexture("Shadow"),
+                                            new Rectangle(0, 0, 64, 64), // Crop the shadow sprite
+                                            this,
+                                            new Vector2(32f), new Vector2(0.5f), new Vector2(0f, -3.5f));
+
+            // Shader initialize
+            colorOverlay = GameManager.Resources.FindEffect("Color_Overlay");
+            colorOverlay.Parameters["overlayColor"].SetValue(Color.White.ToVector4());
             base.Initialize();
         }
-
+        
         public override void Update(GameTime gameTime)
         {
-            // Flickering
-            if (invisible)
-            {
-                currentInvisibleTime -= GameManager.DeltaTime;
-                color = Color.White * 0.7f;
-
-                if (currentInvisibleTime <= 0f)
-                {
-                    invisible = false;
-                    currentInvisibleTime = invisibleTime;
-                }
-            }
-            else
-            {
-                color = Color.White;
-            }
-
+            Invincible();
             PlayerMovement();
-            // PlayerAttack(); // Now player is using gun to shoot
-            Gun.Update(gameTime);
+            Gun.Update(gameTime); // Gun logic
 
-            // Update the animations
-            animationManager.Update(currentAction, gameTime);
-            //texture = animationManager.CurrentAnimation.CurrentTexture; // Update the texture based on the animation
-            shadowEffect.Update(gameTime);
+            animationManager.Update(currentAction, gameTime); // Update the animations
+            shadowEffect.Update(gameTime); // Shadow of the player
             base.Update(gameTime);
         }
-
-        Vector2 textOffset = new Vector2(32f, 0f);
-        Vector2 textPosOffset = new Vector2(0f, -16f);
+        
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             shadowEffect.Draw(spriteBatch, gameTime); // Shadow always behind the player
+            spriteBatch.End(); // End previous drawing session first inorder to start new one
+
+            // Start new drawing session with shader (Everything between this draw call will be affect by the shader apply)
+            if(invincible && blink)
+                spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: GameManager.MainCamera.Transform, effect: colorOverlay);
+            else
+                spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: GameManager.MainCamera.Transform, effect: null);
+            
             // Draw the gun and player
             if (Gun.RenderInfront)
             {
@@ -337,8 +302,11 @@ namespace BulletManiac.Entity.Player
                 DrawAnimation(animationManager.CurrentAnimation, spriteBatch, gameTime);
             }
 
+            spriteBatch.End(); // End current drawing session
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: GameManager.MainCamera.Transform); // Resume back to normal drawing session
+
             // Reloading Text
-            if(Gun.Reloading)
+            if (Gun.Reloading)
                 spriteBatch.DrawString(GameManager.Resources.FindSpriteFont("DebugFont"), "Reloading...", position + textPosOffset, Color.White, 0f, textOffset, 0.3f, SpriteEffects.None, 0f);
         }
 

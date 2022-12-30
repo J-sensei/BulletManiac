@@ -1,6 +1,4 @@
-﻿using BulletManiac.Entity.Enemy;
-using BulletManiac.Managers;
-using BulletManiac.Tiled.AI;
+﻿using BulletManiac.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -14,7 +12,7 @@ namespace BulletManiac
 
         public Game1()
         {
-            _graphics = new GraphicsDeviceManager(this);
+            _graphics = new GraphicsDeviceManager(this) { PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8 }; ;
             Content.RootDirectory = "Content";
             IsMouseVisible = false;
         }

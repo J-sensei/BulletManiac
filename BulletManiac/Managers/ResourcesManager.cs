@@ -35,7 +35,8 @@ namespace BulletManiac.Managers
         /// </summary>
         private readonly Dictionary<string, SpriteFont> SpriteFonts = new();
 
-        private readonly Dictionary<string, Animation> Animations = new(); // Test Code
+        private readonly Dictionary<string, Animation> Animations = new(); // Loaded Animation (Pre calculated all the uv bounds)
+        private readonly Dictionary<string, Effect> Effects = new();
 
         /// <summary>
         /// Initialize the content manager
@@ -130,6 +131,19 @@ namespace BulletManiac.Managers
             }
         }
 
+        public void LoadEffect(string name, string path)
+        {
+            if (!SpriteFonts.ContainsKey(name))
+            {
+                Effect data = contentManager.Load<Effect>(path);
+                Effects.Add(name, data);
+            }
+            else
+            {
+                GameManager.Log("Resources Manager", "Duplicate name '" + name + "' is failed to add into Effects resources.");
+            }
+        }
+
         /// <summary>
         /// Find and get the texture by the name in the Dictionary
         /// </summary>
@@ -171,6 +185,11 @@ namespace BulletManiac.Managers
         public SpriteFont FindSpriteFont(string name)
         {
             return SpriteFonts[name];
+        }
+
+        public Effect FindEffect(string name)
+        {
+            return Effects[name];
         }
 
         public void RemoveTexture(string name)
