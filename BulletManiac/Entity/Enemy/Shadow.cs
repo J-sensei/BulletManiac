@@ -89,8 +89,6 @@ namespace BulletManiac.Entity.Enemy
                 spriteEffects = SpriteEffects.None;
             else
                 spriteEffects = SpriteEffects.FlipHorizontally;
-
-            shadowEffect.Update(gameTime);
         }
 
         protected override Rectangle CalculateBound()

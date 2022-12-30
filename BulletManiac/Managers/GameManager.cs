@@ -217,6 +217,8 @@ namespace BulletManiac.Managers
             Resources.LoadSoundEffect("Bat_Death", "Audio/Enemy/Bat Death");
             Resources.LoadSoundEffect("Shadow_Death", "Audio/Enemy/Shadow_Death");
             Resources.LoadSoundEffect("SuicideShadow_Explosion", "Audio/Enemy/SuicideShadow_Explosion");
+            Resources.LoadSoundEffect("SuicideShadow_Attacking", "Audio/Enemy/SuicideShadow_Attacking");
+            Resources.LoadSoundEffect("SuicideShadow_AttackStart", "Audio/Enemy/SuicideShadow_AttackStart");
 
             Animation.LoadAnimations(Resources);
             Bat.LoadContent(Resources);

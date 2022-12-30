@@ -86,7 +86,7 @@ namespace BulletManiac.Entity.Enemy
                     blink = false;
                 }
             }
-
+            shadowEffect.Update(gameTime);
             base.Update(gameTime);
         }
 

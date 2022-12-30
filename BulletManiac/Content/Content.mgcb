@@ -27,6 +27,18 @@
 /processorParam:Quality=Best
 /build:Audio/Enemy/Shadow_Death.wav
 
+#begin Audio/Enemy/SuicideShadow_Attacking.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Enemy/SuicideShadow_Attacking.wav
+
+#begin Audio/Enemy/SuicideShadow_AttackStart.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Enemy/SuicideShadow_AttackStart.wav
+
 #begin Audio/Enemy/SuicideShadow_Explosion.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

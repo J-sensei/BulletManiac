@@ -108,9 +108,6 @@ namespace BulletManiac.Entity.Enemy
                 currentAction = EnemyAction.Move;
                 animationManager.GetAnimation(EnemyAction.Hit).Reset();
             }
-
-            shadowEffect.Update(gameTime);
-
         }
 
         protected override Rectangle CalculateBound()
