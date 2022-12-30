@@ -48,12 +48,16 @@ namespace BulletManiac.Tiled.AI
 
         private int tileWidth;
         private int tileHeight;
-
-        private const float DEFAULT_COOLDOWN = 1f;
-        private float currentCD = DEFAULT_COOLDOWN;
+        
         private float speed;
-
         public XDirection CurrentXDir { get; private set; }
+
+        // Pathfinding Execution variables
+        private static Queue<Vector2> targetPosQueue = new();
+        private static Queue<NavigationAgent> pathfindQueue = new();
+        private static Stopwatch stopwatch = new();
+        private static int executeCount = 0;
+        private const int MAX_EXECUTE_COUNT = 5; // Maximum pathfinding to run per frame
 
         public NavigationAgent(GameObject user, float speed = 50f)
         {
@@ -69,12 +73,10 @@ namespace BulletManiac.Tiled.AI
 
         }
 
-        static Queue<Vector2> targetPosQueue = new();
-        static Queue<NavigationAgent> pathfindQueue = new();
-        static Stopwatch stopwatch = new();
-        static int executeCount = 0;
-        const int MAX_EXECUTE_COUNT = 5; // Maximum pathfinding to run per frame
-
+        /// <summary>
+        /// Execute pathfinding with the position provide
+        /// </summary>
+        /// <param name="position"></param>
         public void Pathfind(Vector2 position)
         {
             if (!pathfindQueue.Contains(this))
@@ -84,6 +86,9 @@ namespace BulletManiac.Tiled.AI
             }
         }
 
+        /// <summary>
+        /// Update execution of the pathfinding queue
+        /// </summary>
         public static void GlobalUpdate()
         {
             executeCount = 0;
@@ -92,23 +97,13 @@ namespace BulletManiac.Tiled.AI
                 var agent = pathfindQueue.Dequeue();
                 var targetPos = targetPosQueue.Dequeue();
                 if (GameManager.FindGameObject(agent.user) == null) continue; // If user the destroyed, skip
-                agent.CalculatePath(targetPos);
+                agent.CalculatePath(targetPos); // Will change navigation to moving
                 executeCount++;
             }
         }
 
         public void Update(GameTime gameTime)
         {
-            //if(currentState == NavigationState.STOP)
-            //{
-            //    currentCD -= GameManager.DeltaTime;
-            //    if(currentCD <= 0)
-            //    {
-            //        CalculatePath(target.Position);
-            //        currentCD = DEFAULT_COOLDOWN;
-            //    }
-            //}
-            //else 
             if(currentState == NavigationState.MOVING)
             {
                 // If the user reached the destination
@@ -222,21 +217,9 @@ namespace BulletManiac.Tiled.AI
                 return dest;
         }
 
-        private Vector2 Seek(Vector2 target, float distanceToChase = 100f, float speed = 50f)
-        {
-            if ((target - user.Position).Length() < distanceToChase)
-            {
-                return Vector2.Normalize(target - user.Position) * speed;
-            }
-            else
-            {
-                return Vector2.Zero;
-            }
-        }
-
         public void Dispose()
         {
-            
+            throw new NotImplementedException();
         }
     }
 }

@@ -7,11 +7,7 @@ using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BulletManiac.Entity.Enemy
 {
@@ -24,9 +20,6 @@ namespace BulletManiac.Entity.Enemy
 
         private float pathfindCD = 2f;
         private float currentPathfindCD = 2f;
-
-        private const int MAXIMUM_PATHFIND_PER_FRAME = 2;
-        private static Queue<Shadow> pathfindQueue = new();
 
         public Shadow(Vector2 position) : base(position)
         {

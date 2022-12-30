@@ -6,9 +6,6 @@ using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BulletManiac.AI
 {
@@ -36,9 +33,6 @@ namespace BulletManiac.AI
     public class SteeringAgent : IDisposable
     {
         private GameObject user;
-
-        private const float DEFAULT_COOLDOWN = 0.5f;
-        private float currentCD = DEFAULT_COOLDOWN;
         private float currentSpeed;
         private float arrivalRadius;
 
@@ -65,6 +59,12 @@ namespace BulletManiac.AI
         private bool enableFlock; // Determine if this steering agent need to enable flock behavior
         private SteeringSetting? setting;
 
+        private bool newAgent = true;
+        private static Queue<GameObject> targetQueue = new();
+        private static Queue<SteeringAgent> agentQueue = new();
+        private static int executeCount = 0;
+        private const int MAX_EXECUTE_COUNT = 60;
+
         public SteeringAgent(GameObject user, SteeringSetting? steeringSetting, FlockSetting flockSetting, float speed = 50f, float arrivalRadius = 10f, bool enableFlock = false)
         {
             this.user = user;
@@ -83,11 +83,9 @@ namespace BulletManiac.AI
                 setting = steeringSetting;
         }
 
-        private bool newAgent = true;
-        static Queue<GameObject> targetQueue = new();
-        static Queue<SteeringAgent> agentQueue = new();
-        static int executeCount = 0;
-        const int MAX_EXECUTE_COUNT = 60;
+        /// <summary>
+        /// Update execution of the steering behavior queue
+        /// </summary>
         public static void GlobalUpdate()
         {
             executeCount = 0;
@@ -111,7 +109,7 @@ namespace BulletManiac.AI
         {
             if (newAgent)
             {
-                UpdateVelocity(target);
+                UpdateVelocity(target); // Update immediate when agent first time execute the update
                 newAgent = false;
             }
             agentQueue.Enqueue(this);
