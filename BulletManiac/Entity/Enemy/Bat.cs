@@ -27,8 +27,6 @@ namespace BulletManiac.Entity.Enemy
         private const float BAT_ARRIVAL_RADIUS = 5f;
         private const int TOTAL_BAT_LEFT_TO_FLEE = 5;
         private SteeringAgent steerAgent;
-        private AnimationManager animationManager;
-        private TextureEffect shadowEffect; // Visual shadow effect
 
         private float animationSpeed = 0.05f;
         public Bat(Vector2 position) : base(position)
@@ -46,7 +44,14 @@ namespace BulletManiac.Entity.Enemy
             animationManager.AddAnimation(EnemyAction.Hit, new Animation(GameManager.Resources.FindTexture("Bat_Hit"), 3, 1, 0.2f, looping: false));
             animationManager.AddAnimation(EnemyAction.Attack, new Animation(GameManager.Resources.FindTexture("Bat_Attack"), 10, 1, animationSpeed, looping: false));
 
+            //animationManager.AddAnimation(EnemyAction.Idle, new Animation(GameManager.Resources.FindTexture("FlyingEye_Flying"), 8, 1, animationSpeed));
+            //animationManager.AddAnimation(EnemyAction.Move, new Animation(GameManager.Resources.FindTexture("FlyingEye_Flying"), 8, 1, animationSpeed));
+            //animationManager.AddAnimation(EnemyAction.Hit, new Animation(GameManager.Resources.FindTexture("FlyingEye_Hit"), 4, 1, 0.2f, looping: false));
+            //animationManager.AddAnimation(EnemyAction.Attack, new Animation(GameManager.Resources.FindTexture("FlyingEye_Attack"), 8, 1, animationSpeed, looping: false));
+            //animationManager.AddAnimation(EnemyAction.Die, new Animation(GameManager.Resources.FindTexture("FlyingEye_Death"), 4, 1, animationSpeed, looping: false));
+
             origin = new Vector2(16f);
+            //origin = new Vector2(75f);
             scale = new Vector2(0.5f);
 
             // Shadow visual
@@ -54,10 +59,22 @@ namespace BulletManiac.Entity.Enemy
                                 new Rectangle(0, 0, 64, 64), // Crop the shadow sprite
                                 this,
                                 new Vector2(32f), new Vector2(0.25f), new Vector2(0f, 2f));
+            deathSoundEffect = GameManager.Resources.FindSoundEffect("Bat_Death");
+        }
+
+        public static void LoadContent(ResourcesManager resources)
+        {
+            resources.LoadTexture("FlyingEye_Flying", "SpriteSheet/Enemy/Flying Eye/Flight");
+            resources.LoadTexture("FlyingEye_Death", "SpriteSheet/Enemy/Flying Eye/Death");
+            resources.LoadTexture("FlyingEye_Hit", "SpriteSheet/Enemy/Flying Eye/Take Hit");
+            resources.LoadTexture("FlyingEye_Attack", "SpriteSheet/Enemy/Flying Eye/Attack");
         }
 
         public override void Update(GameTime gameTime)
         {
+            base.Update(gameTime);
+            if (currentAction == EnemyAction.Die) return;
+
             if (FlockManager.Find(Name).Count <= TOTAL_BAT_LEFT_TO_FLEE)
                 steerAgent.SteeringBehavior = SteeringBehavior.Flee;
             else
@@ -92,17 +109,8 @@ namespace BulletManiac.Entity.Enemy
                 animationManager.GetAnimation(EnemyAction.Hit).Reset();
             }
 
-            // Animation update
-            animationManager.Update(currentAction, gameTime);
-
             shadowEffect.Update(gameTime);
-            base.Update(gameTime);
-        }
 
-        public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
-        {
-            shadowEffect.Draw(spriteBatch, gameTime); // Shadow always behind the player
-            DrawAnimation(animationManager.CurrentAnimation, spriteBatch, gameTime);
         }
 
         protected override Rectangle CalculateBound()
@@ -128,7 +136,6 @@ namespace BulletManiac.Entity.Enemy
 
         public override void DeleteEvent()
         {
-            GameManager.Resources.FindSoundEffect("Bat_Death").Play();
             steerAgent.Dispose();
             base.DeleteEvent();
         }

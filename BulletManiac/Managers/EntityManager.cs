@@ -70,6 +70,7 @@ namespace BulletManiac.Managers
             }
             else
             {
+                gameObject.Initialize();
                 gameObjects.Add(gameObject);
             }
         }
@@ -126,13 +127,13 @@ namespace BulletManiac.Managers
             // Queue to be add into the list
             foreach (var gameObject in gameObjectQueue)
             {
-                gameObjects.Add(gameObject);
                 gameObject.Initialize(); // Called the initalize after new game object is added into the list
+                gameObjects.Add(gameObject);
             }
             foreach (var gameObject in gameObjectUIQueue)
             {
-                gameObjectsUI.Add(gameObject);
                 gameObject.Initialize();
+                gameObjectsUI.Add(gameObject);
             }
 
             // Clear the queue

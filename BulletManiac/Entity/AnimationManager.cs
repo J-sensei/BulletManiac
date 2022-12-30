@@ -48,7 +48,10 @@ namespace BulletManiac.Entity
         /// <returns></returns>
         public Animation GetAnimation(object key)
         {
-            return animations[key];
+            if(animations.ContainsKey(key))
+                return animations[key];
+            else 
+                return null;
         }
 
         /// <summary>

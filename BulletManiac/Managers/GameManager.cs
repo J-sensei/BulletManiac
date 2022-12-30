@@ -213,6 +213,7 @@ namespace BulletManiac.Managers
             Resources.LoadSoundEffect("Shadow_Death", "Audio/Enemy/Shadow_Death");
 
             Animation.LoadAnimations(Resources);
+            Bat.LoadContent(Resources);
 
             // Shader
             Resources.LoadEffect("Color_Overlay", "Shader/ColorOverlay");
@@ -248,7 +249,7 @@ namespace BulletManiac.Managers
             //AddGameObject(new Bat(Tile.ToPosition(new Tile(10, 12), 16, 16)));
             AddGameObject(new Shadow(Tile.ToPosition(new Tile(10, 12), 16, 16)));
             
-            entityManager.Initialize(); // Initialize default game objects
+            //entityManager.Initialize(); // Initialize default game objects
         }
          
         // Test change level
@@ -285,6 +286,11 @@ namespace BulletManiac.Managers
             {
                 // Test Enemy
                 AddGameObject(new Shadow(Tile.ToPosition(new Tile(10, 12), 16, 16)));
+            }
+            if (InputManager.GetKey(Keys.F))
+            {
+                // Test Enemy
+                AddGameObject(new Bat(Tile.ToPosition(new Tile(10, 12), 16, 16)));
             }
 
             if (Debug)

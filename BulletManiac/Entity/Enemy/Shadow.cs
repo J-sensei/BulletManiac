@@ -14,8 +14,6 @@ namespace BulletManiac.Entity.Enemy
     public class Shadow : Enemy
     {
         private NavigationAgent navigationAgent;
-        private AnimationManager animationManager;
-        private TextureEffect shadowEffect; // Visual shadow effect
         private float animationSpeed = 0.08f;
 
         private float pathfindCD = 2f;
@@ -29,25 +27,33 @@ namespace BulletManiac.Entity.Enemy
             currentAction = EnemyAction.Move;
 
             navigationAgent = new NavigationAgent(this);
+            origin = new Vector2(32f);
+            scale = new Vector2(0.5f);
+        }
 
+        public override void Initialize()
+        {
             animationManager.AddAnimation(EnemyAction.Idle, new Animation(GameManager.Resources.FindTexture("Shadow_Idle"), 4, 1, 0.1f));
             animationManager.AddAnimation(EnemyAction.Move, new Animation(GameManager.Resources.FindTexture("Shadow_Move"), 8, 1, animationSpeed));
             animationManager.AddAnimation(EnemyAction.Hit, new Animation(GameManager.Resources.FindTexture("Shadow_Hit"), 3, 1, 0.1f, looping: false));
             animationManager.AddAnimation(EnemyAction.Attack, new Animation(GameManager.Resources.FindTexture("Shadow_Attack"), 6, 1, animationSpeed, looping: false));
             animationManager.AddAnimation(EnemyAction.Die, new Animation(GameManager.Resources.FindTexture("Shadow_Death"), 6, 1, animationSpeed, looping: false));
 
-            origin = new Vector2(32f);
-            scale = new Vector2(0.5f);
-            
+            deathSoundEffect = GameManager.Resources.FindSoundEffect("Shadow_Death");
             // Shadow Visual
             shadowEffect = new TextureEffect(GameManager.Resources.FindTexture("Shadow"),
                     new Rectangle(0, 0, 64, 64), // Crop the shadow sprite
                     this,
                     new Vector2(32f), new Vector2(0.5f), new Vector2(0f, -5f));
+
+            base.Initialize();
         }
-        
+
         public override void Update(GameTime gameTime)
-        {
+        {            
+            base.Update(gameTime);
+            if (currentAction == EnemyAction.Die) return; // Dont run anything else because enemy is dead
+
             // When hit animation is finish playing (Recover from hit animation)
             if (currentAction == EnemyAction.Hit && animationManager.GetAnimation(EnemyAction.Hit).Finish)
             {
@@ -57,10 +63,10 @@ namespace BulletManiac.Entity.Enemy
 
             if (navigationAgent.CurrentState == NavigationState.STOP)
             {
-                if(currentAction != EnemyAction.Hit)
+                if (currentAction != EnemyAction.Hit)
                     currentAction = EnemyAction.Idle; // Make enemy idle when its not in hit state
                 currentPathfindCD -= GameManager.DeltaTime;
-                if(currentPathfindCD <= 0f)
+                if (currentPathfindCD <= 0f)
                 {
                     var nodes = GameManager.CurrentLevel.TileGraph.Nodes;
                     Vector2 pos = Tile.ToPosition(nodes.ElementAt(Extensions.Random.Next(nodes.Count)),
@@ -84,17 +90,7 @@ namespace BulletManiac.Entity.Enemy
             else
                 spriteEffects = SpriteEffects.FlipHorizontally;
 
-            // Animation update
-            animationManager.Update(currentAction, gameTime);
-
             shadowEffect.Update(gameTime);
-            base.Update(gameTime);
-        }
-
-        public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
-        {
-            shadowEffect.Draw(spriteBatch, gameTime); // Shadow always behind the player
-            DrawAnimation(animationManager.CurrentAnimation, spriteBatch, gameTime);
         }
 
         protected override Rectangle CalculateBound()
@@ -105,7 +101,6 @@ namespace BulletManiac.Entity.Enemy
 
         public override void DeleteEvent()
         {
-            GameManager.Resources.FindSoundEffect("Shadow_Death").Play();
             base.DeleteEvent();
         }
     }
