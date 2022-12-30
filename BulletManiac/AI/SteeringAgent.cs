@@ -83,7 +83,94 @@ namespace BulletManiac.AI
                 setting = steeringSetting;
         }
 
+        private bool newAgent = true;
+        static Queue<GameObject> targetQueue = new();
+        static Queue<SteeringAgent> agentQueue = new();
+        static int executeCount = 0;
+        const int MAX_EXECUTE_COUNT = 60;
+        public static void GlobalUpdate()
+        {
+            executeCount = 0;
+            while (agentQueue.Count > 0 && executeCount <= MAX_EXECUTE_COUNT)
+            {
+                var agent = agentQueue.Dequeue();
+                var target = targetQueue.Dequeue();
+
+                if (GameManager.FindGameObject(agent.user) == null) continue; // If user the destroyed, skip
+                agent.UpdateVelocity(target); // Execute the steering behavior
+
+                // Put back to the queue
+                agentQueue.Enqueue(agent);
+                targetQueue.Enqueue(target);
+
+                executeCount++;
+            }
+        }
+
         public void Update(GameTime gameTime, GameObject target)
+        {
+            if (newAgent)
+            {
+                UpdateVelocity(target);
+                newAgent = false;
+            }
+            agentQueue.Enqueue(this);
+            targetQueue.Enqueue(target);
+
+            //switch (SteeringBehavior)
+            //{
+            //    case SteeringBehavior.Seek:
+            //        currentVelocity = Seek(target.Position, setting.Value.DistanceToChase);
+            //        break;
+            //    case SteeringBehavior.Flee:
+            //        currentVelocity = Flee(target.Position, setting.Value.DistanceToFlee);
+            //        break;
+            //    case SteeringBehavior.Arrival:
+            //        currentVelocity = Arrive(target.Position, currentSpeed, arrivalRadius, setting.Value.DistanceToChase);
+            //        break;
+            //    default:
+            //        currentVelocity = Vector2.Zero;
+            //        GameManager.Log("Steering Agent", "No Steering Behavior is selected.");
+            //        break;
+            //}
+
+            //if (enableFlock)
+            //{
+            //    // Make sure agent will not move the user out of the map
+            //    Vector2 velocity = Extensions.Truncate(CurrentVelocity + currentFlock.Acceleration, currentFlock.MaxSpeed);
+            //    currentFlock.CurrentVelocity = velocity;
+            //    if (user.Position.X < GameManager.CurrentLevel.Bound.X && velocity.X < 0f)
+            //        velocity.X = 0f;
+            //    if (user.Position.X > GameManager.CurrentLevel.Bound.Width && velocity.X > 0f)
+            //        velocity.X = 0f;
+            //    if (user.Position.Y < GameManager.CurrentLevel.Bound.Y && velocity.Y < 0f)
+            //        velocity.Y = 0f;
+            //    if (user.Position.Y > GameManager.CurrentLevel.Bound.Height && velocity.Y > 0f)
+            //        velocity.Y = 0f;
+
+            //    CurrentFinalVelocity = velocity;
+            //    currentFlock.ResetAcceleration(); // Reset Acceleration to zero for next frame.
+            //}
+            //else
+            //{
+            //    CurrentFinalVelocity = currentVelocity;
+            //}
+
+
+            //if (CurrentFinalVelocity.X >= 0) CurrentXDir = XDirection.Right;
+            //else CurrentXDir = XDirection.Left;
+
+            //if (enableFlock)
+            //{
+            //    var flocks = FlockManager.Find(user.Name);
+            //    foreach (var flock in flocks)
+            //    {
+            //        flock.Process(flocks);
+            //    }
+            //}
+        }
+
+        void UpdateVelocity(GameObject target)
         {
             switch (SteeringBehavior)
             {
@@ -107,14 +194,7 @@ namespace BulletManiac.AI
                 // Make sure agent will not move the user out of the map
                 Vector2 velocity = Extensions.Truncate(CurrentVelocity + currentFlock.Acceleration, currentFlock.MaxSpeed);
                 currentFlock.CurrentVelocity = velocity;
-                if (user.Position.X < GameManager.CurrentLevel.Bound.X && velocity.X < 0f)
-                    velocity.X = 0f;
-                if (user.Position.X > GameManager.CurrentLevel.Bound.Width && velocity.X > 0f)
-                    velocity.X = 0f;
-                if (user.Position.Y < GameManager.CurrentLevel.Bound.Y && velocity.Y < 0f)
-                    velocity.Y = 0f;
-                if (user.Position.Y > GameManager.CurrentLevel.Bound.Height && velocity.Y > 0f)
-                    velocity.Y = 0f;
+
 
                 CurrentFinalVelocity = velocity;
                 currentFlock.ResetAcceleration(); // Reset Acceleration to zero for next frame.

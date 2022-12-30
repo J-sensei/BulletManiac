@@ -52,35 +52,7 @@ namespace BulletManiac.Entity.Enemy
                     this,
                     new Vector2(32f), new Vector2(0.5f), new Vector2(0f, -5f));
         }
-
-        public void Pathfind(Shadow shadow)
-        {
-            // Get Random tile location
-            var nodes = GameManager.CurrentLevel.TileGraph.Nodes;
-            Vector2 pos = Tile.ToPosition(nodes.ElementAt(Extensions.Random.Next(nodes.Count)),
-                                GameManager.CurrentLevel.Map.TileWidth,
-                                GameManager.CurrentLevel.Map.TileHeight);
-
-
-            shadow.navigationAgent.Pathfind(pos);
-            shadow.currentPathfindCD = shadow.pathfindCD;
-            shadow.currentAction = EnemyAction.Move;
-        }
-
-        //static int update = 0;
-        //public static void GlobalUpdate()
-        //{
-        //    if (pathfindQueue.Count > 0 && update >= 42)
-        //    {
-        //        Console.WriteLine("A*" + " " + update);
-        //        Pathfind(pathfindQueue.Dequeue());
-        //        update = 0;
-        //    }
-
-
-        //    update++;
-        //}
-        Stopwatch stopwatch = new();
+        
         public override void Update(GameTime gameTime)
         {
             // When hit animation is finish playing (Recover from hit animation)
@@ -92,14 +64,18 @@ namespace BulletManiac.Entity.Enemy
 
             if (navigationAgent.CurrentState == NavigationState.STOP)
             {
-                currentAction = EnemyAction.Idle;
+                if(currentAction != EnemyAction.Hit)
+                    currentAction = EnemyAction.Idle; // Make enemy idle when its not in hit state
                 currentPathfindCD -= GameManager.DeltaTime;
                 if(currentPathfindCD <= 0f)
                 {
-                    // Add to queue
-                    //if(!pathfindQueue.Contains(this))
-                    //    pathfindQueue.Enqueue(this);
-                    Pathfind(this);
+                    var nodes = GameManager.CurrentLevel.TileGraph.Nodes;
+                    Vector2 pos = Tile.ToPosition(nodes.ElementAt(Extensions.Random.Next(nodes.Count)),
+                                        GameManager.CurrentLevel.Map.TileWidth,
+                                        GameManager.CurrentLevel.Map.TileHeight);
+                    navigationAgent.Pathfind(pos); // Execute pathfinding
+                    currentPathfindCD = pathfindCD;
+                    currentAction = EnemyAction.Move;
                 }
             }
 

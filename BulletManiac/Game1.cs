@@ -42,7 +42,6 @@ namespace BulletManiac
                 Exit();
 
             GameManager.Update(gameTime); // Update all the game stuffs
-            NavigationAgent.CalculatePathfind();
             base.Update(gameTime);
 
             // Teat Resolution change

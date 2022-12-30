@@ -84,7 +84,7 @@ namespace BulletManiac.Tiled.AI
             }
         }
 
-        public static void CalculatePathfind()
+        public static void GlobalUpdate()
         {
             executeCount = 0;
             while(pathfindQueue.Count > 0 && executeCount <= MAX_EXECUTE_COUNT)
