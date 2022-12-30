@@ -76,16 +76,14 @@ namespace BulletManiac.Entity.Enemy
                     Destroy(this);
                 }
             }
-            else
+
+            if (blink)
             {
-                if (blink)
+                blinkTime -= GameManager.DeltaTime;
+                if (blinkTime <= 0f)
                 {
-                    blinkTime -= GameManager.DeltaTime;
-                    if (blinkTime <= 0f)
-                    {
-                        blinkTime = BLINK_TIME;
-                        blink = false;
-                    }
+                    blinkTime = BLINK_TIME;
+                    blink = false;
                 }
             }
 

@@ -27,6 +27,12 @@
 /processorParam:Quality=Best
 /build:Audio/Enemy/Shadow_Death.wav
 
+#begin Audio/Enemy/SuicideShadow_Explosion.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Enemy/SuicideShadow_Explosion.wav
+
 #begin Audio/Footstep/Footstep1.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

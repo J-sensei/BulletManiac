@@ -1,5 +1,6 @@
 ﻿using BulletManiac.Collision;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,10 @@ namespace BulletManiac.Entity.Enemy
         private readonly Animation animation;
         private readonly List<int> frameToDrawBound;
 
+        private SoundEffect soundEffect;
+        private bool soundEffectPlay = false;
+        private int frameToPlay;
+
         public HitBox(Animation animation, Vector2 position, Vector2 scale, List<int> frameToDrawBound, float damage = 50f)
         {
             name = "Hit Box";
@@ -29,9 +34,26 @@ namespace BulletManiac.Entity.Enemy
             CollisionManager.Add(this, "Hit Box");
         }
 
+        /// <summary>
+        /// Add sound effect to the hitbox to play at certain frame
+        /// </summary>
+        /// <param name="soundEffect"></param>
+        /// <param name="frameToPlay"></param>
+        public void AddSoundEffect(SoundEffect soundEffect, int frameToPlay = 0)
+        {
+            this.soundEffect = soundEffect;
+            this.frameToPlay = frameToPlay;
+        }
+
         public override void Update(GameTime gameTime)
         {
             animation.Update(gameTime);
+            if(animation.CurrentFrameIndex == frameToPlay && !soundEffectPlay)
+            {
+                soundEffect.Play();
+                soundEffectPlay = true;
+            }
+
             if (animation.Finish)
             {
                 Destroy(this);

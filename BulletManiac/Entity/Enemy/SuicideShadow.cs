@@ -29,7 +29,7 @@ namespace BulletManiac.Entity.Enemy
             animationManager.AddAnimation(EnemyAction.Attack, new Animation(GameManager.Resources.FindTexture("SuicideShadow_Attack"), 58, 1, 0.05f, looping: false));
             //animationManager.AddAnimation(EnemyAction.Die, new Animation(GameManager.Resources.FindTexture("SuicideShadow_Attack"), 58, 1, 0.08f, looping: false));
 
-            deathSoundEffect = GameManager.Resources.FindSoundEffect("Shadow_Death");
+            //deathSoundEffect = GameManager.Resources.FindSoundEffect("Shadow_Death");
             // Shadow Visual
             shadowEffect = new TextureEffect(GameManager.Resources.FindTexture("Shadow"),
                     new Rectangle(0, 0, 64, 64), // Crop the shadow sprite
@@ -55,8 +55,10 @@ namespace BulletManiac.Entity.Enemy
 
         public override void DeleteEvent()
         {
-            GameManager.AddGameObject(new HitBox(new Animation(GameManager.Resources.FindTexture("SuicideShadow_Explode"), 8, 1, animationSpeed, looping: false),
-                                        Position, new Vector2(1f), new List<int>() { 3, 4 }));
+            HitBox hitBox = new HitBox(new Animation(GameManager.Resources.FindTexture("SuicideShadow_Explode"), 8, 1, animationSpeed, looping: false),
+                                        Position, new Vector2(1f), new List<int>() { 3, 4 });
+            hitBox.AddSoundEffect(GameManager.Resources.FindSoundEffect("SuicideShadow_Explosion"), 1);
+            GameManager.AddGameObject(hitBox);
 
             base.DeleteEvent();
         }
