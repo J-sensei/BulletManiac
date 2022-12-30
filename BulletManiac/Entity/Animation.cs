@@ -54,6 +54,16 @@ namespace BulletManiac.Entity
         /// Play the animation in reverse order
         /// </summary>
         public bool Reverse { get; private set; } = false;
+        /// <summary>
+        /// Get the bound of the animation texture
+        /// </summary>
+        public Vector2 TextureBound 
+        { 
+            get 
+            {
+                return new Vector2(bounds[0].Width, bounds[0].Height);
+            } 
+        }
 
         /// <summary>
         /// Load and Pre calculated animation

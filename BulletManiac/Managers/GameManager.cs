@@ -185,6 +185,11 @@ namespace BulletManiac.Managers
             Resources.LoadTexture("Shadow_Death", "SpriteSheet/Enemy/Shadow/Death");
             Resources.LoadTexture("Shadow_Attack", "SpriteSheet/Enemy/Shadow/Attack");
 
+            Resources.LoadTexture("SuicideShadow_Idle", "SpriteSheet/Enemy/Suicide Shadow/Idle");
+            Resources.LoadTexture("SuicideShadow_Move", "SpriteSheet/Enemy/Suicide Shadow/Move");
+            Resources.LoadTexture("SuicideShadow_Attack", "SpriteSheet/Enemy/Suicide Shadow/Attack");
+            Resources.LoadTexture("SuicideShadow_Explode", "SpriteSheet/Enemy/Suicide Shadow/Explode");
+
             // Load UI Sprites
             Resources.LoadTexture("Crosshair_SpriteSheet", "SpriteSheet/UI/Crosshair");
             Resources.LoadTexture("Bullet_Fill", "UI/Bullet/bullet_fill");
@@ -211,6 +216,9 @@ namespace BulletManiac.Managers
             Resources.LoadSoundEffect("Bullet_Hit", "Audio/Gun/Bullet_Hit");
             Resources.LoadSoundEffect("Bat_Death", "Audio/Enemy/Bat Death");
             Resources.LoadSoundEffect("Shadow_Death", "Audio/Enemy/Shadow_Death");
+            Resources.LoadSoundEffect("SuicideShadow_Explosion", "Audio/Enemy/SuicideShadow_Explosion");
+            Resources.LoadSoundEffect("SuicideShadow_Attacking", "Audio/Enemy/SuicideShadow_Attacking");
+            Resources.LoadSoundEffect("SuicideShadow_AttackStart", "Audio/Enemy/SuicideShadow_AttackStart");
 
             Animation.LoadAnimations(Resources);
             Bat.LoadContent(Resources);
@@ -247,7 +255,7 @@ namespace BulletManiac.Managers
             // Test Enemy
             //AddGameObject(new Spider(Tile.ToPosition(new Tile(10, 12), 16, 16)));
             //AddGameObject(new Bat(Tile.ToPosition(new Tile(10, 12), 16, 16)));
-            AddGameObject(new Shadow(Tile.ToPosition(new Tile(10, 12), 16, 16)));
+            //AddGameObject(new SuicideShadow(Tile.ToPosition(new Tile(10, 12), 16, 16)));
             
             //entityManager.Initialize(); // Initialize default game objects
         }
@@ -282,16 +290,13 @@ namespace BulletManiac.Managers
             // Update debug status
             if (InputManager.GetKey(Keys.F12)) Debug = !Debug;
             if (InputManager.GetKey(Keys.R)) ChangeLevel(); // Test change level
+            // Test Enemy
             if(InputManager.GetKey(Keys.G))
-            {
-                // Test Enemy
                 AddGameObject(new Shadow(Tile.ToPosition(new Tile(10, 12), 16, 16)));
-            }
             if (InputManager.GetKey(Keys.F))
-            {
-                // Test Enemy
                 AddGameObject(new Bat(Tile.ToPosition(new Tile(10, 12), 16, 16)));
-            }
+            if (InputManager.GetKey(Keys.H))
+                AddGameObject(new SuicideShadow(Tile.ToPosition(new Tile(10, 12), 16, 16)));
 
             if (Debug)
             {

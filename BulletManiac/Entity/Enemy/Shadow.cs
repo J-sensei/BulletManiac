@@ -89,19 +89,12 @@ namespace BulletManiac.Entity.Enemy
                 spriteEffects = SpriteEffects.None;
             else
                 spriteEffects = SpriteEffects.FlipHorizontally;
-
-            shadowEffect.Update(gameTime);
         }
 
         protected override Rectangle CalculateBound()
         {
             Vector2 pos = position - (origin * scale / 2f) + new Vector2(2f, 0f);
             return new Rectangle((int)pos.X, (int)pos.Y + 3, (int)((origin.X * 2) * scale.X / 2.2f), (int)((origin.Y * 2) * scale.Y / 2.2f));
-        }
-
-        public override void DeleteEvent()
-        {
-            base.DeleteEvent();
         }
     }
 }
