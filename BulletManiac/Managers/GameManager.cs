@@ -255,7 +255,7 @@ namespace BulletManiac.Managers
             // Test Enemy
             //AddGameObject(new Spider(Tile.ToPosition(new Tile(10, 12), 16, 16)));
             //AddGameObject(new Bat(Tile.ToPosition(new Tile(10, 12), 16, 16)));
-            AddGameObject(new SuicideShadow(Tile.ToPosition(new Tile(10, 12), 16, 16)));
+            //AddGameObject(new SuicideShadow(Tile.ToPosition(new Tile(10, 12), 16, 16)));
             
             //entityManager.Initialize(); // Initialize default game objects
         }
