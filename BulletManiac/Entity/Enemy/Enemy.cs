@@ -131,6 +131,25 @@ namespace BulletManiac.Entity.Enemy
             }
         }
 
+        float takeDamageCD = 0f;
+        /// <summary>
+        /// Take Damage every 1 second
+        /// </summary>
+        /// <param name="damage"></param>
+        public void TakeDamage(float damage)
+        {
+            if (takeDamageCD <= 0f)
+            {
+                Console.WriteLine(takeDamageCD + " " + (takeDamageCD <= 0f).ToString());
+                hp -= damage;
+                takeDamageCD = 0.1f; // 0.1 second cooldown
+            }
+            else
+            {
+                takeDamageCD -= GameManager.DeltaTime;
+            }
+        }
+
         public override void DeleteEvent()
         {
             TextureEffect effect = new TextureEffect(new Animation(GameManager.Resources.FindAnimation("Destroy_Smoke_Animation")),

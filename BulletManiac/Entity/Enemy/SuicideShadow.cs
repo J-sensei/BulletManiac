@@ -88,7 +88,7 @@ namespace BulletManiac.Entity.Enemy
                 // Explode and delete enemy
                 Destroy(this);
                 HitBox hitBox = new HitBox(new Animation(GameManager.Resources.FindTexture("SuicideShadow_Explode"), 8, 1, animationSpeed, looping: false),
-                            Position, new Vector2(1f), new List<int>() { 3, 4 });
+                            Position, new Vector2(1f), new List<int>() { 3, 4 }, enableEnemyDamage: true);
                 hitBox.AddSoundEffect(GameManager.Resources.FindSoundEffect("SuicideShadow_Explosion"), 1);
                 GameManager.AddGameObject(hitBox);
             }
@@ -133,7 +133,7 @@ namespace BulletManiac.Entity.Enemy
         public override void DeleteEvent()
         {
             HitBox hitBox = new HitBox(new Animation(GameManager.Resources.FindTexture("SuicideShadow_Explode"), 8, 1, animationSpeed, looping: false),
-                                        Position, new Vector2(1f), new List<int>() { 3, 4 });
+                                        Position, new Vector2(1f), new List<int>() { 3, 4 }, enableEnemyDamage: true);
             hitBox.AddSoundEffect(GameManager.Resources.FindSoundEffect("SuicideShadow_Explosion"), 1);
             GameManager.AddGameObject(hitBox);
 

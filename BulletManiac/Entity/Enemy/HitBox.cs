@@ -19,11 +19,12 @@ namespace BulletManiac.Entity.Enemy
         private readonly Animation animation;
         private readonly List<int> frameToDrawBound;
 
+        private readonly bool enableEnemyDamage = false;
         private SoundEffect soundEffect;
         private bool soundEffectPlay = false;
         private int frameToPlay;
 
-        public HitBox(Animation animation, Vector2 position, Vector2 scale, List<int> frameToDrawBound, float damage = 50f)
+        public HitBox(Animation animation, Vector2 position, Vector2 scale, List<int> frameToDrawBound, float damage = 50f, bool enableEnemyDamage = false)
         {
             name = "Hit Box";
             this.position = position;
@@ -32,6 +33,7 @@ namespace BulletManiac.Entity.Enemy
             this.frameToDrawBound = frameToDrawBound;
             this.damage = damage;
             CollisionManager.Add(this, "Hit Box");
+            this.enableEnemyDamage = enableEnemyDamage;
         }
 
         /// <summary>
@@ -79,6 +81,7 @@ namespace BulletManiac.Entity.Enemy
             }
         }
 
+        List<Enemy> takenDamage = new();
         public override void CollisionEvent(GameObject other)
         {
             if (other.Name == "Player")
@@ -87,7 +90,23 @@ namespace BulletManiac.Entity.Enemy
                 player.TakeDamage(damage); // Test take damage
             }
 
+            if(other is Enemy && enableEnemyDamage)
+            {
+                Enemy enemy = (other as Enemy);
+                if (!takenDamage.Contains(enemy)) // do not damage some enemy again
+                {
+                    enemy.TakeDamage(damage);
+                    takenDamage.Add(enemy);
+                }
+            }
+
             base.CollisionEvent(other);
+        }
+
+        public override void Dispose()
+        {
+            takenDamage.Clear();
+            base.Dispose();
         }
     }
 }
