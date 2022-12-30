@@ -6,6 +6,7 @@ using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,7 +31,7 @@ namespace BulletManiac.Tiled.AI
     /// <summary>
     /// Help to execute pathfinding algorithm and apply move to the game object
     /// </summary>
-    public class NavigationAgent
+    public class NavigationAgent : IDisposable
     {
         /// <summary>
         /// Game Object that is using this agent
@@ -68,16 +69,31 @@ namespace BulletManiac.Tiled.AI
 
         }
 
-        public bool Pathfind(Vector2 position)
+        static Queue<Vector2> targetPosQueue = new();
+        static Queue<NavigationAgent> pathfindQueue = new();
+        static Stopwatch stopwatch = new();
+        static int executeCount = 0;
+        const int MAX_EXECUTE_COUNT = 5; // Maximum pathfinding to run per frame
+
+        public void Pathfind(Vector2 position)
         {
-            if (currentState == NavigationState.STOP)
+            if (!pathfindQueue.Contains(this))
             {
-                CalculatePath(position);
-                return true;
+                pathfindQueue.Enqueue(this);
+                targetPosQueue.Enqueue(position);
             }
-            else
+        }
+
+        public static void CalculatePathfind()
+        {
+            executeCount = 0;
+            while(pathfindQueue.Count > 0 && executeCount <= MAX_EXECUTE_COUNT)
             {
-                return false;
+                var agent = pathfindQueue.Dequeue();
+                var targetPos = targetPosQueue.Dequeue();
+                if (GameManager.FindGameObject(agent.user) == null) continue; // If user the destroyed, skip
+                agent.CalculatePath(targetPos);
+                executeCount++;
             }
         }
 
@@ -166,7 +182,7 @@ namespace BulletManiac.Tiled.AI
                 else if (GameManager.CurrentPathfindingAlgorithm == PathfindingAlgorithm.AStar)
                 {
                     // 1. Compute an A* path
-                    Console.WriteLine("RUN A*");
+                    //Console.WriteLine("RUN A*");
                     path = AStar.Compute(GameManager.CurrentLevel.TileGraph, srcTile, destTile, AStar.Euclidean);
                     // 2. Remove source tile from path
                     path.RemoveFirst();
@@ -204,6 +220,23 @@ namespace BulletManiac.Tiled.AI
             }
             else
                 return dest;
+        }
+
+        private Vector2 Seek(Vector2 target, float distanceToChase = 100f, float speed = 50f)
+        {
+            if ((target - user.Position).Length() < distanceToChase)
+            {
+                return Vector2.Normalize(target - user.Position) * speed;
+            }
+            else
+            {
+                return Vector2.Zero;
+            }
+        }
+
+        public void Dispose()
+        {
+            
         }
     }
 }

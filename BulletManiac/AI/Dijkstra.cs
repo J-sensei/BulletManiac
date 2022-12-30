@@ -29,7 +29,7 @@ namespace BulletManiac.Tiled.AI
                 NodeRecord currentRecord = priorityQueue.Dequeue();
                 Tile currentTile = currentRecord.Self;
 
-                if (currentTile == goal) break; // Found the goal
+                if (currentRecord.Self.Col == goal.Col && currentRecord.Self.Row == goal.Row) break; // Found the goal
 
                 // Get the cost to neighbours of "currentTile" or "curRecord.self
                 ulong[] connections = tileGraph.Connections[currentTile];

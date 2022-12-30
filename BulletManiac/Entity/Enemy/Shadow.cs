@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,10 +20,13 @@ namespace BulletManiac.Entity.Enemy
         private NavigationAgent navigationAgent;
         private AnimationManager animationManager;
         private TextureEffect shadowEffect; // Visual shadow effect
-        private float animationSpeed = 0.06f;
+        private float animationSpeed = 0.08f;
 
         private float pathfindCD = 2f;
         private float currentPathfindCD = 2f;
+
+        private const int MAXIMUM_PATHFIND_PER_FRAME = 2;
+        private static Queue<Shadow> pathfindQueue = new();
 
         public Shadow(Vector2 position) : base(position)
         {
@@ -33,7 +37,7 @@ namespace BulletManiac.Entity.Enemy
 
             navigationAgent = new NavigationAgent(this);
 
-            animationManager.AddAnimation(EnemyAction.Idle, new Animation(GameManager.Resources.FindTexture("Shadow_Idle"), 4, 1, animationSpeed));
+            animationManager.AddAnimation(EnemyAction.Idle, new Animation(GameManager.Resources.FindTexture("Shadow_Idle"), 4, 1, 0.1f));
             animationManager.AddAnimation(EnemyAction.Move, new Animation(GameManager.Resources.FindTexture("Shadow_Move"), 8, 1, animationSpeed));
             animationManager.AddAnimation(EnemyAction.Hit, new Animation(GameManager.Resources.FindTexture("Shadow_Hit"), 3, 1, 0.1f, looping: false));
             animationManager.AddAnimation(EnemyAction.Attack, new Animation(GameManager.Resources.FindTexture("Shadow_Attack"), 6, 1, animationSpeed, looping: false));
@@ -49,6 +53,34 @@ namespace BulletManiac.Entity.Enemy
                     new Vector2(32f), new Vector2(0.5f), new Vector2(0f, -5f));
         }
 
+        public void Pathfind(Shadow shadow)
+        {
+            // Get Random tile location
+            var nodes = GameManager.CurrentLevel.TileGraph.Nodes;
+            Vector2 pos = Tile.ToPosition(nodes.ElementAt(Extensions.Random.Next(nodes.Count)),
+                                GameManager.CurrentLevel.Map.TileWidth,
+                                GameManager.CurrentLevel.Map.TileHeight);
+
+
+            shadow.navigationAgent.Pathfind(pos);
+            shadow.currentPathfindCD = shadow.pathfindCD;
+            shadow.currentAction = EnemyAction.Move;
+        }
+
+        //static int update = 0;
+        //public static void GlobalUpdate()
+        //{
+        //    if (pathfindQueue.Count > 0 && update >= 42)
+        //    {
+        //        Console.WriteLine("A*" + " " + update);
+        //        Pathfind(pathfindQueue.Dequeue());
+        //        update = 0;
+        //    }
+
+
+        //    update++;
+        //}
+        Stopwatch stopwatch = new();
         public override void Update(GameTime gameTime)
         {
             // When hit animation is finish playing (Recover from hit animation)
@@ -58,27 +90,24 @@ namespace BulletManiac.Entity.Enemy
                 animationManager.GetAnimation(EnemyAction.Hit).Reset();
             }
 
-            if(navigationAgent.CurrentState == NavigationState.STOP)
+            if (navigationAgent.CurrentState == NavigationState.STOP)
             {
                 currentAction = EnemyAction.Idle;
                 currentPathfindCD -= GameManager.DeltaTime;
-                if(currentPathfindCD <= 0f && (GameManager.Player.Position - Position).Length() < 100f)
+                if(currentPathfindCD <= 0f)
                 {
-                    // Get Random tile location
-                    var nodes = GameManager.CurrentLevel.TileGraph.Nodes;
-                    Vector2 pos = Tile.ToPosition(nodes.ElementAt(Extensions.Random.Next(nodes.Count)), 
-                                        GameManager.CurrentLevel.Map.TileWidth, 
-                                        GameManager.CurrentLevel.Map.TileHeight);
-
-                    navigationAgent.Pathfind(pos);
-                    currentPathfindCD = pathfindCD;
-                    currentAction = EnemyAction.Move;
+                    // Add to queue
+                    //if(!pathfindQueue.Contains(this))
+                    //    pathfindQueue.Enqueue(this);
+                    Pathfind(this);
                 }
             }
 
             // Navigate the enemy when its moving state
             if (currentAction == EnemyAction.Move)
+            {
                 navigationAgent.Update(gameTime);
+            }
 
             // Flip sprite
             if (navigationAgent.CurrentXDir == XDirection.Left)
