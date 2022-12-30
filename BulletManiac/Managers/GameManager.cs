@@ -1,4 +1,5 @@
-﻿using BulletManiac.Collision;
+﻿using BulletManiac.AI;
+using BulletManiac.Collision;
 using BulletManiac.Entity;
 using BulletManiac.Entity.Enemy;
 using BulletManiac.Entity.Player;
@@ -261,6 +262,9 @@ namespace BulletManiac.Managers
             DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds; // Update the delta time variable
             InputManager.Update(gameTime); // Update the input manager
             tiledMapRenderer.Update(gameTime); // Tiled Map Update
+
+            NavigationAgent.GlobalUpdate();
+            SteeringAgent.GlobalUpdate();
             CollisionManager.Update(gameTime); // Collision Update
             entityManager.Update(gameTime); // Entity Manager Update
 
@@ -274,7 +278,7 @@ namespace BulletManiac.Managers
             if(InputManager.GetKey(Keys.G))
             {
                 // Test Enemy
-                AddGameObject(new Shadow(Tile.ToPosition(new Tile(10, 12), 16, 16)));
+                AddGameObject(new Bat(Tile.ToPosition(new Tile(10, 12), 16, 16)));
             }
 
             if (Debug)

@@ -1,16 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BulletManiac.Tiled.AI
 {
     public class AStar
     {
         public delegate ulong Heuristic(Tile start, Tile end);
-
         public static LinkedList<Tile> Compute(TileGraph tileGraph, Tile start, Tile goal, Heuristic heuristic)
         {
             // Create node records to store data used by AStar
@@ -30,18 +26,15 @@ namespace BulletManiac.Tiled.AI
             priorityQueue.Enqueue(startRecord, startRecord.HeuristicCost);
             startRecord.State = AStarState.Opened;
 
-            //NodeRecord endRecord = records[goal];
+            NodeRecord endRecord = records[goal];
             NodeRecord currentRecord, neighbourRecord;
-
-            int[] moveRow = TileGraph.MoveRow;
-            int[] moveCol = TileGraph.MoveCol;
 
             while(priorityQueue.Count > 0)
             {
                 currentRecord = priorityQueue.Dequeue();
                 currentRecord.State = AStarState.Closed;
 
-                if (currentRecord.Self == goal) break; // Found the goal
+                if (currentRecord.Self.Col == goal.Col && currentRecord.Self.Row == goal.Row) break; // Found the goal
 
                 // Get the cost to neighbours of "curRecord.self"
                 ulong[] connections = tileGraph.Connections[currentRecord.Self];
@@ -50,8 +43,8 @@ namespace BulletManiac.Tiled.AI
                 {
                     if (connections[i] != 0)
                     {
-                        int col = currentRecord.Self.Col + moveCol[i];
-                        int row = currentRecord.Self.Row + moveRow[i];
+                        int col = currentRecord.Self.Col + TileGraph.MoveCol[i];
+                        int row = currentRecord.Self.Row + TileGraph.MoveRow[i];
 
                         Tile neighbourTile = new Tile(col, row);
                         neighbourRecord = records[neighbourTile];
@@ -82,6 +75,70 @@ namespace BulletManiac.Tiled.AI
             }
             return ConstructPath(records, start, goal);
         }
+
+        //public static LinkedList<Tile> Compute(TileGraph tileGraph, Tile start, Tile goal, Heuristic heuristic)
+        //{
+        //    // Create records to store data used by this pathfinding algorithm
+        //    Dictionary<Tile, NodeRecord> records = new Dictionary<Tile, NodeRecord>();
+        //    // Priority queue use to decide which node to process
+        //    PriorityQueue<NodeRecord, ulong> priorityQueue = new PriorityQueue<NodeRecord, ulong>();
+            
+        //    NodeRecord startNode = new NodeRecord(start, null, ulong.MaxValue, heuristic(start, goal)); // Start node (from nothing so its null) and no cost and heuristic (Not A*)
+        //    priorityQueue.Enqueue(startNode, 0);
+        //    records[start] = startNode; // Add start nodes to records
+
+        //    // Move data
+        //    int[] moveRow = TileGraph.MoveRow;
+        //    int[] moveCol = TileGraph.MoveCol;
+
+        //    while (priorityQueue.Count > 0)
+        //    {
+        //        NodeRecord currentRecord = priorityQueue.Dequeue();
+        //        Tile currentTile = currentRecord.Self;
+
+        //        if (currentRecord.Self.Col == goal.Col && currentRecord.Self.Row == goal.Row) break; // Found the goal
+
+        //        // Get the cost to neighbours of "currentTile" or "curRecord.self
+        //        ulong[] connections = tileGraph.Connections[currentTile];
+
+        //        // Loop each connection
+        //        for (int i = 0; i < connections.Length; i++)
+        //        {
+        //            // cost of 0 is treated as no connection, so skip iteration.
+        //            if (connections[i] == 0) continue;
+                    
+        //            ulong newCost = currentRecord.CostSoFar + connections[i];
+        //            Tile neighbourTile = new Tile(currentTile.Col + moveCol[i], currentTile.Row + moveRow[i]);
+
+        //            bool successGetValue = records.TryGetValue(neighbourTile, out NodeRecord neighbourRecord); // Try to get neighbour node from the records
+
+        //            // We only want to enqueue new elements to priority queue if either one condition is true:
+        //            // 1. record exist, and newCost is lower than recorded cost
+        //            // 2. record does not exist
+        //            bool shouldEnqueue = false;
+
+        //            // 1. record exist, and newCost is lower than recorded cost
+        //            if (successGetValue && newCost < neighbourRecord.CostSoFar)
+        //            {
+        //                shouldEnqueue = true;
+        //                neighbourRecord.CostSoFar = newCost;
+        //            }
+        //            else if (!successGetValue)
+        //            {
+        //                shouldEnqueue = true;
+        //                neighbourRecord = new NodeRecord(neighbourTile, currentTile, newCost, heuristic(neighbourTile, goal));
+        //                records[neighbourTile] = neighbourRecord;
+        //            }
+
+        //            if (shouldEnqueue)
+        //            {
+        //                priorityQueue.Enqueue(neighbourRecord, neighbourRecord.HeuristicCost);
+        //            }
+        //        }
+        //    }
+
+        //    return ConstructPath(records, start, goal);
+        //}
 
         private static LinkedList<Tile> ConstructPath(Dictionary<Tile, NodeRecord> nodeRecords, Tile start, Tile end)
         {

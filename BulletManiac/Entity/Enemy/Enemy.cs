@@ -22,6 +22,7 @@ namespace BulletManiac.Entity.Enemy
         protected float hp = 100f;
         private AnimationManager animationManager; // Manange the animation based on certain action
         protected EnemyAction currentAction = EnemyAction.Idle;
+        public EnemyAction CurrentAction { get { return currentAction; } }
 
         public Enemy(Vector2 position)
         {

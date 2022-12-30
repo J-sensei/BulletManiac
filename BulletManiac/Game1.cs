@@ -1,4 +1,6 @@
-﻿using BulletManiac.Managers;
+﻿using BulletManiac.Entity.Enemy;
+using BulletManiac.Managers;
+using BulletManiac.Tiled.AI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;

@@ -6,6 +6,7 @@ using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,7 +31,7 @@ namespace BulletManiac.Tiled.AI
     /// <summary>
     /// Help to execute pathfinding algorithm and apply move to the game object
     /// </summary>
-    public class NavigationAgent
+    public class NavigationAgent : IDisposable
     {
         /// <summary>
         /// Game Object that is using this agent
@@ -47,12 +48,16 @@ namespace BulletManiac.Tiled.AI
 
         private int tileWidth;
         private int tileHeight;
-
-        private const float DEFAULT_COOLDOWN = 1f;
-        private float currentCD = DEFAULT_COOLDOWN;
+        
         private float speed;
-
         public XDirection CurrentXDir { get; private set; }
+
+        // Pathfinding Execution variables
+        private static Queue<Vector2> targetPosQueue = new();
+        private static Queue<NavigationAgent> pathfindQueue = new();
+        private static Stopwatch stopwatch = new();
+        private static int executeCount = 0;
+        private const int MAX_EXECUTE_COUNT = 5; // Maximum pathfinding to run per frame
 
         public NavigationAgent(GameObject user, float speed = 50f)
         {
@@ -68,31 +73,37 @@ namespace BulletManiac.Tiled.AI
 
         }
 
-        public bool Pathfind(Vector2 position)
+        /// <summary>
+        /// Execute pathfinding with the position provide
+        /// </summary>
+        /// <param name="position"></param>
+        public void Pathfind(Vector2 position)
         {
-            if (currentState == NavigationState.STOP)
+            if (!pathfindQueue.Contains(this))
             {
-                CalculatePath(position);
-                return true;
+                pathfindQueue.Enqueue(this);
+                targetPosQueue.Enqueue(position);
             }
-            else
+        }
+
+        /// <summary>
+        /// Update execution of the pathfinding queue
+        /// </summary>
+        public static void GlobalUpdate()
+        {
+            executeCount = 0;
+            while(pathfindQueue.Count > 0 && executeCount <= MAX_EXECUTE_COUNT)
             {
-                return false;
+                var agent = pathfindQueue.Dequeue();
+                var targetPos = targetPosQueue.Dequeue();
+                if (GameManager.FindGameObject(agent.user) == null) continue; // If user the destroyed, skip
+                agent.CalculatePath(targetPos); // Will change navigation to moving
+                executeCount++;
             }
         }
 
         public void Update(GameTime gameTime)
         {
-            //if(currentState == NavigationState.STOP)
-            //{
-            //    currentCD -= GameManager.DeltaTime;
-            //    if(currentCD <= 0)
-            //    {
-            //        CalculatePath(target.Position);
-            //        currentCD = DEFAULT_COOLDOWN;
-            //    }
-            //}
-            //else 
             if(currentState == NavigationState.MOVING)
             {
                 // If the user reached the destination
@@ -166,7 +177,7 @@ namespace BulletManiac.Tiled.AI
                 else if (GameManager.CurrentPathfindingAlgorithm == PathfindingAlgorithm.AStar)
                 {
                     // 1. Compute an A* path
-                    Console.WriteLine("RUN A*");
+                    //Console.WriteLine("RUN A*");
                     path = AStar.Compute(GameManager.CurrentLevel.TileGraph, srcTile, destTile, AStar.Euclidean);
                     // 2. Remove source tile from path
                     path.RemoveFirst();
@@ -204,6 +215,11 @@ namespace BulletManiac.Tiled.AI
             }
             else
                 return dest;
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
         }
     }
 }

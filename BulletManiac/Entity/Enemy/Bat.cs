@@ -59,19 +59,28 @@ namespace BulletManiac.Entity.Enemy
         public override void Update(GameTime gameTime)
         {
             if (FlockManager.Find(Name).Count <= TOTAL_BAT_LEFT_TO_FLEE)
-            {
                 steerAgent.SteeringBehavior = SteeringBehavior.Flee;
-            }
             else
-            {
                 steerAgent.SteeringBehavior = SteeringBehavior.Arrival;
-            }
 
             if (currentAction == EnemyAction.Move)
+            {
                 steerAgent.Update(gameTime, GameManager.Player); // Bat is flying toward to the player
+                Vector2 velocity = steerAgent.CurrentFinalVelocity;
+                if (Position.X < GameManager.CurrentLevel.Bound.X && velocity.X < 0f)
+                    velocity.X = 0f;
+                if (Position.X > GameManager.CurrentLevel.Bound.Width && velocity.X > 0f)
+                    velocity.X = 0f;
+                if (Position.Y < GameManager.CurrentLevel.Bound.Y && velocity.Y < 0f)
+                    velocity.Y = 0f;
+                if (Position.Y > GameManager.CurrentLevel.Bound.Height && velocity.Y > 0f)
+                    velocity.Y = 0f;
+
+                Position += velocity * GameManager.DeltaTime;
+            }
 
             // Texture flipping
-            if(steerAgent.CurrentXDir == XDirection.Left)
+            if (steerAgent.CurrentXDir == XDirection.Left)
                 spriteEffects = SpriteEffects.FlipHorizontally;
             else
                 spriteEffects = SpriteEffects.None;
@@ -85,9 +94,6 @@ namespace BulletManiac.Entity.Enemy
 
             // Animation update
             animationManager.Update(currentAction, gameTime);
-            
-            if (currentAction == EnemyAction.Move)
-                Position += steerAgent.CurrentFinalVelocity * GameManager.DeltaTime;
 
             shadowEffect.Update(gameTime);
             base.Update(gameTime);
