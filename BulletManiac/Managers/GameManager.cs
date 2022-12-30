@@ -189,6 +189,7 @@ namespace BulletManiac.Managers
             Resources.LoadTexture("SuicideShadow_Move", "SpriteSheet/Enemy/Suicide Shadow/Move");
             Resources.LoadTexture("SuicideShadow_Attack", "SpriteSheet/Enemy/Suicide Shadow/Attack");
             Resources.LoadTexture("SuicideShadow_Explode", "SpriteSheet/Enemy/Suicide Shadow/Explode");
+            Resources.LoadTexture("Summoner_SpriteSheet", "SpriteSheet/Enemy/Summoner/SpriteSheet");
 
             // Load UI Sprites
             Resources.LoadTexture("Crosshair_SpriteSheet", "SpriteSheet/UI/Crosshair");
@@ -255,7 +256,7 @@ namespace BulletManiac.Managers
             // Test Enemy
             //AddGameObject(new Spider(Tile.ToPosition(new Tile(10, 12), 16, 16)));
             //AddGameObject(new Bat(Tile.ToPosition(new Tile(10, 12), 16, 16)));
-            //AddGameObject(new SuicideShadow(Tile.ToPosition(new Tile(10, 12), 16, 16)));
+            AddGameObject(new Summoner(Tile.ToPosition(new Tile(10, 12), 16, 16)));
             
             //entityManager.Initialize(); // Initialize default game objects
         }
@@ -297,6 +298,8 @@ namespace BulletManiac.Managers
                 AddGameObject(new Bat(Tile.ToPosition(new Tile(10, 12), 16, 16)));
             if (InputManager.GetKey(Keys.H))
                 AddGameObject(new SuicideShadow(Tile.ToPosition(new Tile(10, 12), 16, 16)));
+            if (InputManager.GetKey(Keys.J))
+                AddGameObject(new Summoner(Tile.ToPosition(new Tile(10, 12), 16, 16)));
 
             if (Debug)
             {

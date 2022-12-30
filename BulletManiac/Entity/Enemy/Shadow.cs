@@ -24,7 +24,7 @@ namespace BulletManiac.Entity.Enemy
             animationManager = new AnimationManager();
             name = "Shadow";
             hp = 80f;
-            currentAction = EnemyAction.Move;
+            currentAction = EnemyAction.Idle;
 
             navigationAgent = new NavigationAgent(this);
             origin = new Vector2(32f);

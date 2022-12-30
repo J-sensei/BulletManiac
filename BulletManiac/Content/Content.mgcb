@@ -375,7 +375,7 @@
 /processorParam:TextureFormat=Color
 /build:SpriteSheet/Enemy/Suicide Shadow/Move.png
 
-#begin SpriteSheet/Enemy/Summoner/MAGE.png
+#begin SpriteSheet/Enemy/Summoner/SpriteSheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -385,7 +385,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:SpriteSheet/Enemy/Summoner/MAGE.png
+/build:SpriteSheet/Enemy/Summoner/SpriteSheet.png
 
 #begin SpriteSheet/Enemy/Wanderer/Attack.png
 /importer:TextureImporter
