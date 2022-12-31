@@ -140,7 +140,7 @@ namespace BulletManiac.Entity.Enemy
         {
             if (takeDamageCD <= 0f)
             {
-                Console.WriteLine(takeDamageCD + " " + (takeDamageCD <= 0f).ToString());
+                //Console.WriteLine(takeDamageCD + " " + (takeDamageCD <= 0f).ToString());
                 hp -= damage;
                 takeDamageCD = 0.1f; // 0.1 second cooldown
             }
