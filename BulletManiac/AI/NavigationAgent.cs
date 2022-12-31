@@ -124,15 +124,12 @@ namespace BulletManiac.Tiled.AI
                         Vector2 headPosition = Tile.ToPosition(headTile, tileWidth, tileHeight);
 
                         // If current position approximately reached the head position
-                        Vector2 diff = headPosition - user.Position;
-                        float distance = diff.Length();
-                        //Console.WriteLine(distance + " " + Extensions.Approximately(distance, 0.0f));
                         if (user.Position.Equals(headPosition))
-                        //if (distance <= 1f)
                         {
                             path.RemoveFirst();
                             // Get the next destination position
                             headTile = path.First.Value; // throw exception if path is empty
+                            Console.WriteLine(path.Count);
                         }
 
                         // Move
@@ -159,6 +156,14 @@ namespace BulletManiac.Tiled.AI
                     }
                 }
             }
+        }
+
+        public void Reset()
+        {
+            destTile = null;
+            currentState = NavigationState.STOP;
+            if(path != null)
+                path.Clear();
         }
 
         private void CalculatePath(Vector2 target)

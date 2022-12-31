@@ -1,7 +1,12 @@
 ﻿using BulletManiac.AI;
+using BulletManiac.Collision;
 using BulletManiac.Managers;
 using BulletManiac.Particle;
+using BulletManiac.Tiled;
+using BulletManiac.Tiled.AI;
+using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,14 +18,22 @@ namespace BulletManiac.Entity.Enemy
     // Idle => Moving => Attack => Idle (Repeat)
     public class Summoner : Enemy
     {
+        const float MIN_TILE_DISTANCE_FROM_PLAYER = 200f;
+        private static SteeringSetting SUMMONER_STERRING_SETTING = new SteeringSetting
+        {
+            DistanceToChase = 1000f,
+            DistanceToFlee = 1000f
+        };
+        private SteeringAgent steerAgent;
+        private NavigationAgent navigationAgent;
+
+        float speed = 70f;
         const int MAXIMUM_BAT_SUMMON = 30;
         float animationSpeed = 0.1f;
         const float SUMMON_CD = 2f;
         float summonCD = SUMMON_CD;
-        const float IDLE_CD = 2f;
-        float idleCD = IDLE_CD;
-        const float MOVING_CD = 2f;
-        float movingCD = MOVING_CD;
+        const float CHANGE_STATE_CD = 4f;
+        float changeStateCD = CHANGE_STATE_CD;
         public Summoner(Vector2 position) : base(position)
         {
             animationManager = new AnimationManager();
@@ -28,6 +41,12 @@ namespace BulletManiac.Entity.Enemy
             hp = 150f;
             currentAction = EnemyAction.Idle;
             scale = new Vector2(0.8f);
+
+            steerAgent = new SteeringAgent(this, SUMMONER_STERRING_SETTING, FlockSetting.Default, speed);
+            steerAgent.SteeringBehavior = SteeringBehavior.Flee;
+
+            navigationAgent = new NavigationAgent(this, speed);
+            deathSmokeOffset = new Vector2(0f, 22f);
         }
 
         public override void Initialize()
@@ -57,20 +76,105 @@ namespace BulletManiac.Entity.Enemy
             {
                 if (!attacking)
                 {
-                    currentAction = EnemyAction.Idle;
+                    currentAction = state;
                 }
                 else
                     currentAction = EnemyAction.Attack;
             }
 
-            summonCD -= GameManager.DeltaTime;
-            if(summonCD <= 0f && !attacking)
+            changeStateCD -= GameManager.DeltaTime;
+            if(changeStateCD <= 0f)
             {
-                if(FlockManager.Find("Bat") == null || FlockManager.Find("Bat").Count <= MAXIMUM_BAT_SUMMON)
+                // Change State
+                StateLogic();
+                changeStateCD = CHANGE_STATE_CD;
+            }
+
+            if(currentAction == EnemyAction.Attack)
+                Summon();
+
+            if(currentAction == EnemyAction.Move)
+            {
+                //Vector2 velocity = steerAgent.Update(gameTime, GameManager.Player);
+                //steerAgent.Update(gameTime, GameManager.Player);
+
+                //Vector2 velocity = steerAgent.CurrentFinalVelocity * GameManager.DeltaTime;
+                //Vector2 v = velocity;
+
+                //bool colX, colY;
+
+                //if (velocity.X >= 0)
+                //    colX = CollisionManager.CheckTileCollision(this, new Vector2(velocity.X, 0) * 1.5f);
+                //else
+                //    colX = CollisionManager.CheckTileCollision(this, new Vector2(velocity.X, 0) * 1f);
+
+                //if (velocity.Y >= 0)
+                //    colY = CollisionManager.CheckTileCollision(this, new Vector2(0, velocity.Y) * 1.5f);
+                //else
+                //    colY = CollisionManager.CheckTileCollision(this, new Vector2(0, velocity.Y) * 1f);
+
+                //if (colX && colY)
+                //{
+                //    v.X = 0f;
+                //    v.Y = 0f;
+                //}
+                //else
+                //{
+                //    if (colX)
+                //    {
+                //        v.X = 0f;
+                //        v.Y = (velocity.Y >= 0f ? speed : -speed) * GameManager.DeltaTime;
+                //    }
+
+                //    if (colY)
+                //    {
+                //        v.X = (velocity.X > 0f ? speed : -speed) * GameManager.DeltaTime;
+                //        v.Y = 0f;
+                //    }
+                //}
+
+                //Console.WriteLine(steerAgent.CurrentFinalVelocity + " " + velocity + " " + v + " Col:(" + colX.ToString() +","+ colY.ToString() + ")");
+                //Position += v;
+                //if(steerAgent.CurrentXDir == XDirection.Left)
+                //{
+                //    spriteEffects = SpriteEffects.FlipHorizontally;
+                //}
+                //else
+                //{
+                //    spriteEffects = SpriteEffects.None;
+                //}
+
+                // Find random path that is x distance more than the player
+                if(navigationAgent.CurrentState == NavigationState.STOP)
+                {
+                    // Get target nodes
+                    HashSet<Tile> targetNodes = GameManager.CurrentLevel.TileGraph.Nodes.Where(x => (GameManager.Player.Position - Tile.ToPosition(x, GameManager.CurrentLevel.Map.TileWidth,
+                            GameManager.CurrentLevel.Map.TileHeight)).Length() > MIN_TILE_DISTANCE_FROM_PLAYER).ToHashSet();
+                    if(targetNodes.Count() > 0)
+                    {
+                        Vector2 pos = Tile.ToPosition(targetNodes.ElementAt(Extensions.Random.Next(targetNodes.Count)),
+                            GameManager.CurrentLevel.Map.TileWidth,
+                            GameManager.CurrentLevel.Map.TileHeight);
+                        navigationAgent.Pathfind(pos); // Execute pathfinding
+                    }
+                }
+                else
+                {
+                    navigationAgent.Update(gameTime);
+                }
+            }
+
+            base.Update(gameTime);
+        }
+
+        private void Summon()
+        {
+            if (!attacking)
+            {
+                if (FlockManager.Find("Bat") == null || FlockManager.Find("Bat").Count <= MAXIMUM_BAT_SUMMON)
                 {
                     currentAction = EnemyAction.Attack;
                     attacking = true;
-                    summonCD = SUMMON_CD;
                 }
             }
 
@@ -87,8 +191,28 @@ namespace BulletManiac.Entity.Enemy
                                         Position + summonOffset, new Vector2(16, 16), new Vector2(1.5f), true);
                 GameManager.AddGameObject(effect);
             }
+        }
 
-            base.Update(gameTime);
+        EnemyAction state;
+        void StateLogic()
+        {
+            switch (currentAction)
+            {
+                case EnemyAction.Idle:
+                    navigationAgent.Reset();
+                    state = EnemyAction.Move;
+                    break;
+                case EnemyAction.Attack:
+                    state = EnemyAction.Idle;
+                    break;
+                case EnemyAction.Move:
+                    state = EnemyAction.Attack;
+                    break;
+                default:
+                    state = EnemyAction.Idle;
+                    break;
+            }
+            currentAction = state;
         }
 
         protected override Rectangle CalculateBound()
