@@ -1,4 +1,5 @@
 ﻿using BulletManiac.Entity;
+using BulletManiac.Tiled;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -37,6 +38,7 @@ namespace BulletManiac.Managers
 
         private readonly Dictionary<string, Animation> Animations = new(); // Loaded Animation (Pre calculated all the uv bounds)
         private readonly Dictionary<string, Effect> Effects = new();
+        private readonly Dictionary<string, Level> Levels = new();
 
         /// <summary>
         /// Initialize the content manager
@@ -144,6 +146,18 @@ namespace BulletManiac.Managers
             }
         }
 
+        public void LoadLevel(string name, Level level)
+        {
+            if (!Levels.ContainsKey(name))
+            {
+                Levels.Add(name, level);
+            }
+            else
+            {
+                GameManager.Log("Resources Manager", "Duplicate name '" + name + "' is failed to add into Level resources.");
+            }
+        }
+
         /// <summary>
         /// Find and get the texture by the name in the Dictionary
         /// </summary>
@@ -190,6 +204,11 @@ namespace BulletManiac.Managers
         public Effect FindEffect(string name)
         {
             return Effects[name];
+        }
+
+        public Level FindLevel(string name)
+        {
+            return Levels[name];
         }
 
         public void RemoveTexture(string name)

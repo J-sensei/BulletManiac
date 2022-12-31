@@ -85,7 +85,7 @@ namespace BulletManiac.Managers
         // Level
         public static Player Player { get; private set; }
         public static List<Level> Levels = new();
-        public static Level CurrentLevel;
+        public static Level CurrentLevel { get { return levelManager.CurrentLevel; } }
         public static int CurrentLevelIndex;
 
         // Pathfinding
@@ -104,6 +104,7 @@ namespace BulletManiac.Managers
         /// Managing entities in the game
         /// </summary>
         private static EntityManager entityManager = new();
+        private static LevelManager levelManager;
 
         /// <summary>
         /// Change resolution of the game
@@ -223,6 +224,7 @@ namespace BulletManiac.Managers
 
             Animation.LoadAnimations(Resources);
             Bat.LoadContent(Resources);
+            LevelManager.LoadContent(Resources);
 
             // Shader
             Resources.LoadEffect("Color_Overlay", "Shader/ColorOverlay");
@@ -240,36 +242,12 @@ namespace BulletManiac.Managers
             MagazineUI megazineUI = new MagazineUI(Player.Gun);
             AddGameObjectUI(megazineUI);
 
-            // Set current level
-            Levels.Add(new Level(Resources.FindTiledMap("Level1"), 9, 8));
-            Levels.Add(new Level(Resources.FindTiledMap("Level2"), 9, 8));
-            Levels.Add(new Level(Resources.FindTiledMap("Level3"), 9, 8));
-
-            // Assign the current level
-            CurrentLevel = Levels[0];
-            tiledMapRenderer.LoadMap(CurrentLevel.Map);
-            Tile.AddTileCollision(CurrentLevel.Map.GetLayer<TiledMapTileLayer>("Wall"), CurrentLevel.Map.Width, CurrentLevel.Map.Height, CurrentLevel.Map.TileWidth, CurrentLevel.Map.TileHeight);
-
             // Pathfinding
-            pathTester = new PathTester(CurrentLevel);
+            pathTester = new PathTester(Resources.FindLevel("Level1"));
+            levelManager = new LevelManager(Resources.FindLevel("Level1"), tiledMapRenderer, pathTester);
 
             // Test Enemy
-            //AddGameObject(new Spider(Tile.ToPosition(new Tile(10, 12), 16, 16)));
-            //AddGameObject(new Bat(Tile.ToPosition(new Tile(10, 12), 16, 16)));
-            AddGameObject(new Summoner(Tile.ToPosition(new Tile(10, 12), 16, 16)));
-            
-            //entityManager.Initialize(); // Initialize default game objects
-        }
-         
-        // Test change level
-        public static void ChangeLevel()
-        {
-            CurrentLevelIndex = (CurrentLevelIndex + 1) % Levels.Count;
-            CurrentLevel = Levels[CurrentLevelIndex];
-            tiledMapRenderer.LoadMap(CurrentLevel.Map);
-            CollisionManager.ClearTileCollision();
-            Tile.AddTileCollision(CurrentLevel.Map.GetLayer<TiledMapTileLayer>("Wall"), CurrentLevel.Map.Width, CurrentLevel.Map.Height, CurrentLevel.Map.TileWidth, CurrentLevel.Map.TileHeight);
-            pathTester.ChangeLevel(CurrentLevel);
+            //AddGameObject(new Summoner(Tile.ToPosition(new Tile(10, 12), 16, 16)));
         }
 
         static FrameCounter fpsCounter = new();
@@ -290,21 +268,19 @@ namespace BulletManiac.Managers
 
             // Update debug status
             if (InputManager.GetKey(Keys.F12)) Debug = !Debug;
-            if (InputManager.GetKey(Keys.R)) ChangeLevel(); // Test change level
+            if (InputManager.GetKey(Keys.R)) levelManager.ChangeLevel(); // Test change level
             // Test Enemy
             if(InputManager.GetKey(Keys.G))
-                AddGameObject(new Shadow(Tile.ToPosition(new Tile(10, 12), 16, 16)));
+                AddGameObject(new Shadow(Tile.ToPosition(new Tile(3, 12), 16, 16)));
             if (InputManager.GetKey(Keys.F))
-                AddGameObject(new Bat(Tile.ToPosition(new Tile(10, 12), 16, 16)));
+                AddGameObject(new Bat(Tile.ToPosition(new Tile(3, 12), 16, 16)));
             if (InputManager.GetKey(Keys.H))
-                AddGameObject(new SuicideShadow(Tile.ToPosition(new Tile(10, 12), 16, 16)));
+                AddGameObject(new SuicideShadow(Tile.ToPosition(new Tile(3, 12), 16, 16)));
             if (InputManager.GetKey(Keys.J))
-                AddGameObject(new Summoner(Tile.ToPosition(new Tile(10, 12), 16, 16)));
+                AddGameObject(new Summoner(Tile.ToPosition(new Tile(3, 12), 16, 16)));
 
             if (Debug)
-            {
                 pathTester.Update(gameTime);
-            }
 
             fpsCounter.Update(gameTime);
         }
@@ -340,9 +316,7 @@ namespace BulletManiac.Managers
         public static void DrawUI(SpriteBatch spriteBatch, GameTime gameTime)
         {
             entityManager.DrawUI(spriteBatch, gameTime);
-
-            //double framerate = (1 / gameTime.ElapsedGameTime.TotalSeconds);
-            //spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "FPS: " + framerate.ToString("F2"), new Vector2(5f), Color.Red);
+            
             fpsCounter.Draw(spriteBatch, Resources.FindSpriteFont("DebugFont"), new Vector2(150f, 5f), Color.Red);
             spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "Player HP: " + Player.HP.ToString("N0"), new Vector2(5f, 5f), Color.Red);
         }
