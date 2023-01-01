@@ -33,7 +33,8 @@ namespace BulletManiac.AI
             else
             {
                 GameManager.Log("Flock Manager", "Key '" + key + "' is not found in the flock bank.");
-                throw new NullReferenceException("Key is not found");
+                //throw new NullReferenceException("Key is not found");
+                return null;
             }
         }
 

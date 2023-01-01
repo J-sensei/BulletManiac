@@ -3,6 +3,7 @@ using BulletManiac.Entity;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Tiled;
 using System;
+using System.Collections.Generic;
 
 namespace BulletManiac.Tiled
 {
@@ -105,6 +106,25 @@ namespace BulletManiac.Tiled
                     }
                 }
             }
+        }
+
+        public static List<Tile> CalculateTileCollision(TiledMapTileLayer mapLayer, int width, int height, int tileWidth, int tileHeight)
+        {
+            List<Tile> results = new();
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    bool hasTile = mapLayer.TryGetTile((ushort)i, (ushort)j, out TiledMapTile? tile);
+                    if (hasTile && tile.Value.GlobalIdentifier != 0)
+                    {
+                        // Add collision tile to the collision manager
+                        Tile t = new Tile(i, j, tileWidth, tileHeight, "Collision Tile");
+                        results.Add(t);
+                    }
+                }
+            }
+            return results;
         }
 
         /// <summary>

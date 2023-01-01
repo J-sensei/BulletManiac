@@ -24,7 +24,7 @@ namespace BulletManiac.Entity.Enemy
             animationManager = new AnimationManager();
             name = "Shadow";
             hp = 80f;
-            currentAction = EnemyAction.Move;
+            currentAction = EnemyAction.Idle;
 
             navigationAgent = new NavigationAgent(this);
             origin = new Vector2(32f);
@@ -68,11 +68,7 @@ namespace BulletManiac.Entity.Enemy
                 currentPathfindCD -= GameManager.DeltaTime;
                 if (currentPathfindCD <= 0f)
                 {
-                    var nodes = GameManager.CurrentLevel.TileGraph.Nodes;
-                    Vector2 pos = Tile.ToPosition(nodes.ElementAt(Extensions.Random.Next(nodes.Count)),
-                                        GameManager.CurrentLevel.Map.TileWidth,
-                                        GameManager.CurrentLevel.Map.TileHeight);
-                    navigationAgent.Pathfind(pos); // Execute pathfinding
+                    navigationAgent.Pathfind(GameManager.CurrentLevel.TileGraph.RandomPosition); // Execute pathfinding
                     currentPathfindCD = pathfindCD;
                     currentAction = EnemyAction.Move;
                 }

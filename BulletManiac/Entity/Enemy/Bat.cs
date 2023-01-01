@@ -123,7 +123,7 @@ namespace BulletManiac.Entity.Enemy
             //    return new Rectangle((int)pos.X, (int)pos.Y + 3, (int)(texture.Width * scale.X / 1.25f), (int)(texture.Height * scale.Y / 1.1f));
             //}
             Vector2 pos = position - (origin * scale / 1.1f) + new Vector2(2f, 0f);
-            return new Rectangle((int)pos.X, (int)pos.Y + 3, (int)((origin.X * 2) * scale.X / 1.25f), (int)((origin.Y * 2) * scale.Y / 1.1f));
+            return new Rectangle((int)pos.X - 1, (int)pos.Y, (int)((origin.X * 2.2) * scale.X / 1.25f), (int)((origin.Y * 2.2) * scale.Y / 1.1f));
         }
 
         public override void Dispose()

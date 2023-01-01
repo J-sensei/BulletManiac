@@ -140,7 +140,7 @@ namespace BulletManiac.Entity.Enemy
         {
             if (takeDamageCD <= 0f)
             {
-                Console.WriteLine(takeDamageCD + " " + (takeDamageCD <= 0f).ToString());
+                //Console.WriteLine(takeDamageCD + " " + (takeDamageCD <= 0f).ToString());
                 hp -= damage;
                 takeDamageCD = 0.1f; // 0.1 second cooldown
             }
@@ -150,10 +150,11 @@ namespace BulletManiac.Entity.Enemy
             }
         }
 
+        protected Vector2 deathSmokeOffset = Vector2.Zero;
         public override void DeleteEvent()
         {
             TextureEffect effect = new TextureEffect(new Animation(GameManager.Resources.FindAnimation("Destroy_Smoke_Animation")),
-                                                    Position, new Vector2(16, 16), new Vector2(1f), true);
+                                                    Position + deathSmokeOffset, new Vector2(16, 16), new Vector2(1.25f), true);
             GameManager.AddGameObject(effect);
             base.DeleteEvent();
         }
