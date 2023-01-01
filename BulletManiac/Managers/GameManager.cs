@@ -245,9 +245,6 @@ namespace BulletManiac.Managers
             // Pathfinding
             pathTester = new PathTester(Resources.FindLevel("Level1-1"));
             levelManager = new LevelManager(tiledMapRenderer, pathTester);
-
-            // Test Enemy
-            //AddGameObject(new Summoner(Tile.ToPosition(new Tile(10, 12), 16, 16)));
         }
 
         static FrameCounter fpsCounter = new();

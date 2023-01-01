@@ -83,17 +83,17 @@ namespace BulletManiac.Entity.Enemy
             }
 
             changeStateCD -= GameManager.DeltaTime;
-            if(changeStateCD <= 0f)
+            if (changeStateCD <= 0f)
             {
                 // Change State
                 StateLogic();
                 changeStateCD = CHANGE_STATE_CD;
             }
 
-            if(currentAction == EnemyAction.Attack)
+            if (currentAction == EnemyAction.Attack)
                 Summon();
 
-            if(currentAction == EnemyAction.Move)
+            if (currentAction == EnemyAction.Move)
             {
                 //Vector2 velocity = steerAgent.Update(gameTime, GameManager.Player);
                 //steerAgent.Update(gameTime, GameManager.Player);
@@ -145,12 +145,12 @@ namespace BulletManiac.Entity.Enemy
                 //}
 
                 // Find random path that is x distance more than the player
-                if(navigationAgent.CurrentState == NavigationState.STOP)
+                if (navigationAgent.CurrentState == NavigationState.STOP)
                 {
                     // Get target nodes
                     HashSet<Tile> targetNodes = GameManager.CurrentLevel.TileGraph.Nodes.Where(x => (GameManager.Player.Position - Tile.ToPosition(x, GameManager.CurrentLevel.Map.TileWidth,
                             GameManager.CurrentLevel.Map.TileHeight)).Length() > MIN_TILE_DISTANCE_FROM_PLAYER).ToHashSet();
-                    if(targetNodes.Count() > 0)
+                    if (targetNodes.Count() > 0)
                     {
                         Vector2 pos = Tile.ToPosition(targetNodes.ElementAt(Extensions.Random.Next(targetNodes.Count)),
                             GameManager.CurrentLevel.Map.TileWidth,
