@@ -121,6 +121,7 @@ namespace BulletManiac.Entity.Enemy
                         if (FlockManager.Find("Bat") == null || FlockManager.Find("Bat").Count <= MAXIMUM_BAT_SUMMON)
                         {
                             currentAction = EnemyAction.Attack;
+                            state = currentAction;
                             attacking = true;
                         }
                     }

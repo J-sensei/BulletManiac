@@ -105,6 +105,7 @@ namespace BulletManiac.Managers
         /// </summary>
         private static EntityManager entityManager = new();
         private static LevelManager levelManager;
+        private static Spawner spawner = new();
 
         /// <summary>
         /// Change resolution of the game
@@ -169,6 +170,7 @@ namespace BulletManiac.Managers
             Resources.LoadTexture("BulletEffect", "SpriteSheet/Bullet/BulletEffect_16x16");
             Resources.LoadTexture("Walking_Smoke", "SpriteSheet/Effect/Smoke_Walking");
             Resources.LoadTexture("Destroy_Smoke", "SpriteSheet/Effect/Smoke_Destroy");
+            Resources.LoadTexture("Spawn_Smoke", "SpriteSheet/Effect/Smoke_Spawn");
             Resources.LoadTexture("Player_Pistol", "SpriteSheet/Gun/[FULL]PistolV1.01");
             Resources.LoadTexture("Shadow", "SpriteSheet/Effect/Shadow");
 
@@ -263,18 +265,41 @@ namespace BulletManiac.Managers
             MainCamera.Update(GraphicsDevice.Viewport);
             MainCamera.Follow(FindGameObject("Player")); // Always follow the player
 
+            spawner.Update(gameTime);
+
             // Update debug status
             if (InputManager.GetKey(Keys.F12)) Debug = !Debug;
             if (InputManager.GetKey(Keys.R)) levelManager.ChangeLevel(); // Test change level
             // Test Enemy
-            if(InputManager.GetKey(Keys.G))
-                AddGameObject(new Shadow(CurrentLevel.TileGraph.RandomPosition));
-            if (InputManager.GetKey(Keys.F))
-                AddGameObject(new Bat(CurrentLevel.TileGraph.RandomPosition));
+            //if(InputManager.GetKey(Keys.G))
+            //    AddGameObject(new Shadow(CurrentLevel.TileGraph.RandomPosition));
+            //if (InputManager.GetKey(Keys.F))
+            //    AddGameObject(new Bat(CurrentLevel.TileGraph.RandomPosition));
+            //if (InputManager.GetKey(Keys.H))
+            //    AddGameObject(new SuicideShadow(CurrentLevel.TileGraph.RandomPosition));
+            //if (InputManager.GetKey(Keys.J))
+            //    AddGameObject(new Summoner(CurrentLevel.TileGraph.RandomPosition));
+
+            if (InputManager.GetKey(Keys.G))
+            {
+                var pos = CurrentLevel.TileGraph.RandomPosition;
+                spawner.Spawn(new Bat(pos), pos);
+            }
+            if (InputManager.GetKey(Keys.G))
+            {
+                var pos = CurrentLevel.TileGraph.RandomPosition;
+                spawner.Spawn(new Shadow(pos), pos);
+            }
             if (InputManager.GetKey(Keys.H))
-                AddGameObject(new SuicideShadow(CurrentLevel.TileGraph.RandomPosition));
+            {
+                var pos = CurrentLevel.TileGraph.RandomPosition;
+                spawner.Spawn(new SuicideShadow(pos), pos);
+            }
             if (InputManager.GetKey(Keys.J))
-                AddGameObject(new Summoner(CurrentLevel.TileGraph.RandomPosition));
+            {
+                var pos = CurrentLevel.TileGraph.RandomPosition;
+                spawner.Spawn(new Summoner(pos), pos);
+            }
 
             if (Debug)
                 pathTester.Update(gameTime);
