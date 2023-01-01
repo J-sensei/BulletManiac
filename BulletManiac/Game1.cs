@@ -54,7 +54,7 @@ namespace BulletManiac
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(new Color(7, 24, 33)); // Default screen clear color (Same color as the map)
+            GraphicsDevice.Clear(GameManager.CurrentLevel.BackgroundColor); // Default screen clear color (Same color as the map)
             //GraphicsDevice.Clear(Color.CornflowerBlue); // Default screen clear color (Same color as the map)
 
             // Game World Layer

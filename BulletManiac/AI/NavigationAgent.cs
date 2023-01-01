@@ -129,7 +129,7 @@ namespace BulletManiac.Tiled.AI
                             path.RemoveFirst();
                             // Get the next destination position
                             headTile = path.First.Value; // throw exception if path is empty
-                            Console.WriteLine(path.Count);
+                            //Console.WriteLine(path.Count);
                         }
 
                         // Move

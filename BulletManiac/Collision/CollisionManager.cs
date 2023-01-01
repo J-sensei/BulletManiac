@@ -17,7 +17,7 @@ namespace BulletManiac.Collision
         /// <summary>
         /// List of tile bound to check the collision with tile
         /// </summary>
-        public static readonly List<Tile> TileBounds = new();
+        public static List<Tile> TileBounds { get; private set; } =  new();
 
         /// <summary>
         /// Add the tile into the collision count
@@ -64,6 +64,12 @@ namespace BulletManiac.Collision
                 TileBounds[i] = null;
             }
             TileBounds.Clear();
+        }
+
+        public static void ChangeTileCollision(List<Tile> collisionTiles)
+        {
+            //ClearTileCollision();
+            TileBounds = collisionTiles;
         }
 
         public static ICollidable Add(GameObject gameObject, string tag = "")

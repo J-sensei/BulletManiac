@@ -93,6 +93,154 @@
 /processorParam:Quality=Best
 /build:Audio/Player/Player_Hurt.wav
 
+#begin Level/AnimationSheet_Items.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Level/AnimationSheet_Items.png
+
+#begin Level/AssetSheet_UI.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Level/AssetSheet_UI.png
+
+#begin Level/GBDungeon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Level/GBDungeon.png
+
+#begin Level/GBDungeon.tsx
+/importer:TiledMapTilesetImporter
+/processor:TiledMapTilesetProcessor
+/build:Level/GBDungeon.tsx
+
+#begin Level/ItemSheet_Items.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Level/ItemSheet_Items.png
+
+#begin Level/Level1-1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Level/Level1-1.tmx
+
+#begin Level/Level1-2.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Level/Level1-2.tmx
+
+#begin Level/Level1-3.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Level/Level1-3.tmx
+
+#begin Level/Level2-1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Level/Level2-1.tmx
+
+#begin Level/Level2-2.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Level/Level2-2.tmx
+
+#begin Level/Path.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Level/Path.png
+
+#begin Level/Path.tsx
+/importer:TiledMapTilesetImporter
+/processor:TiledMapTilesetProcessor
+/build:Level/Path.tsx
+
+#begin Level/TileSheet_DungeonGreen.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Level/TileSheet_DungeonGreen.png
+
+#begin Level/TileSheet_DungeonGreen.tsx
+/importer:TiledMapTilesetImporter
+/processor:TiledMapTilesetProcessor
+/build:Level/TileSheet_DungeonGreen.tsx
+
+#begin Level/TileSheet_DungeonPink.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Level/TileSheet_DungeonPink.png
+
+#begin Level/TileSheet_DungeonPurple.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Level/TileSheet_DungeonPurple.png
+
+#begin Level/TileSheet_DungeonYellow.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Level/TileSheet_DungeonYellow.png
+
 #begin Shader/ColorOverlay.fx
 /importer:EffectImporter
 /processor:EffectProcessor
