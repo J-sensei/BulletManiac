@@ -316,6 +316,7 @@ namespace BulletManiac.Managers
             
             fpsCounter.Draw(spriteBatch, Resources.FindSpriteFont("DebugFont"), new Vector2(150f, 5f), Color.Red);
             spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "Player HP: " + Player.HP.ToString("N0"), new Vector2(5f, 5f), Color.Red);
+            spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "Enenmy Count: " + entityManager.EnemyCount, new Vector2(5f, 20f), Color.Red);
         }
 
         /// <summary>
