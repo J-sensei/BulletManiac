@@ -18,7 +18,7 @@ namespace BulletManiac.Tiled
         /// <summary>
         /// The difficulty value
         /// </summary>
-        public float Difficulty { get; private set; }
+        public int Difficulty { get; private set; }
         /// <summary>
         /// Map of the level
         /// </summary>
@@ -35,9 +35,10 @@ namespace BulletManiac.Tiled
         public List<Tile> Obstacles { get; private set; }
         public Color BackgroundColor { get; private set; } = Color.CornflowerBlue;
 
-        public Level(TiledMap map, int colStart, int rowStart)
+        public Level(TiledMap map, int colStart, int rowStart, int difficulty = 0)
         {
             Map = map;
+            Difficulty = difficulty;
             TiledMapTileLayer wallLayer = Map.GetLayer<TiledMapTileLayer>(WALL_LAYER_NAME);
             // Construct the TileGraph
             TileGraph = new TileGraph();
@@ -50,20 +51,9 @@ namespace BulletManiac.Tiled
             Obstacles = Tile.CalculateTileCollision(obstacleLayer, Map.Width, Map.Height, Map.TileWidth, Map.TileHeight);
         }
 
-        public Level(TiledMap map, int colStart, int rowStart, Color backgroundColor)
+        public Level(TiledMap map, int colStart, int rowStart, Color backgroundColor, int difficulty = 0) : this(map, colStart, rowStart, difficulty)
         {
             BackgroundColor = backgroundColor;
-            Map = map;
-            TiledMapTileLayer wallLayer = Map.GetLayer<TiledMapTileLayer>(WALL_LAYER_NAME);
-            // Construct the TileGraph
-            TileGraph = new TileGraph();
-            TileGraph.CreatePathsFromMap(wallLayer, colStart, rowStart);
-            Bound = new Rectangle(wallLayer.TileWidth + 10, wallLayer.TileHeight + 10,
-                                    (wallLayer.Width * wallLayer.TileWidth) - (wallLayer.TileWidth + 10),
-                                    (wallLayer.Height * wallLayer.TileHeight) - (wallLayer.TileHeight + 10));
-
-            TiledMapTileLayer obstacleLayer = Map.GetLayer<TiledMapTileLayer>(OBSTACLE_LAYER_NAME);
-            Obstacles = Tile.CalculateTileCollision(obstacleLayer, Map.Width, Map.Height, Map.TileWidth, Map.TileHeight);
         }
     }
 }

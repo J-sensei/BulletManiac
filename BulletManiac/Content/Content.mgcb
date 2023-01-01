@@ -146,15 +146,30 @@
 /processorParam:TextureFormat=Color
 /build:Level/ItemSheet_Items.png
 
-#begin Level/Level1.tmx
+#begin Level/Level1-1.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
-/build:Level/Level1.tmx
+/build:Level/Level1-1.tmx
 
-#begin Level/Level2.tmx
+#begin Level/Level1-2.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
-/build:Level/Level2.tmx
+/build:Level/Level1-2.tmx
+
+#begin Level/Level1-3.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Level/Level1-3.tmx
+
+#begin Level/Level2-1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Level/Level2-1.tmx
+
+#begin Level/Level2-2.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Level/Level2-2.tmx
 
 #begin Level/Path.png
 /importer:TextureImporter

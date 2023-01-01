@@ -34,32 +34,41 @@ namespace BulletManiac.Managers
         /// <param name="resources"></param>
         public static void LoadContent(ResourcesManager resources)
         {
-            //resources.LoadLevel("Level1", new Level(GameManager.Resources.FindTiledMap("Level1"), 9, 8));
-            //resources.LoadLevel("Level2", new Level(GameManager.Resources.FindTiledMap("Level2"), 9, 8));
-            //resources.LoadLevel("Level3", new Level(GameManager.Resources.FindTiledMap("Level3"), 9, 8));
+            resources.LoadTiledMap("Level1-1", "Level/Level1-1");
+            resources.LoadTiledMap("Level1-2", "Level/Level1-2");
+            resources.LoadTiledMap("Level1-3", "Level/Level1-3");
+            resources.LoadTiledMap("Level2-1", "Level/Level2-1");
+            resources.LoadTiledMap("Level2-2", "Level/Level2-2");
 
-            resources.LoadTiledMap("DefaultMap", "Level/Level1");
-            resources.LoadTiledMap("DefaultMap2", "Level/Level2");
-            resources.LoadLevel("Level1", new Level(GameManager.Resources.FindTiledMap("DefaultMap"), 9, 8, new Color(7, 24, 33)));
-            resources.LoadLevel("Level2", new Level(GameManager.Resources.FindTiledMap("DefaultMap2"), 9, 8, new Color(7, 24, 33)));
+            resources.LoadLevel("Level1-1", new Level(GameManager.Resources.FindTiledMap("Level1-1"), 8, 9, new Color(7, 24, 33)));
+            resources.LoadLevel("Level1-2", new Level(GameManager.Resources.FindTiledMap("Level1-2"), 3, 9, new Color(7, 24, 33)));
+            resources.LoadLevel("Level1-3", new Level(GameManager.Resources.FindTiledMap("Level1-3"), 8, 9, new Color(7, 24, 33)));
+            resources.LoadLevel("Level2-1", new Level(GameManager.Resources.FindTiledMap("Level2-1"), 10, 4, new Color(7, 24, 33)));
+            resources.LoadLevel("Level2-2", new Level(GameManager.Resources.FindTiledMap("Level2-2"), 10, 12, new Color(7, 24, 33)));
         }
 
         /// <summary>
         /// Initialize level manager with a inital level
         /// </summary>
         /// <param name="level"></param>
-        public LevelManager(Level level, TiledMapRenderer tiledMapRenderer, PathTester pathTester)
+        public LevelManager(TiledMapRenderer tiledMapRenderer, PathTester pathTester)
         {
             levels = new List<Level>();
             currentLevelIndex = 0;
-            levels.Add(level);
-            levels.Add(GameManager.Resources.FindLevel("Level2"));
+            
+            // Load all the levels
+            levels.Add(GameManager.Resources.FindLevel("Level1-1"));
+            levels.Add(GameManager.Resources.FindLevel("Level1-2"));
+            levels.Add(GameManager.Resources.FindLevel("Level1-3"));
+            levels.Add(GameManager.Resources.FindLevel("Level2-1"));
+            levels.Add(GameManager.Resources.FindLevel("Level2-2"));
+
             this.tiledMapRenderer = tiledMapRenderer;
             this.pathTester = pathTester;
 
-            tiledMapRenderer.LoadMap(CurrentLevel.Map);
-            CollisionManager.ChangeTileCollision(CurrentLevel.Obstacles);
-            pathTester.ChangeLevel(CurrentLevel);
+            tiledMapRenderer.LoadMap(CurrentLevel.Map); // Load tile map into the tile renderer
+            CollisionManager.ChangeTileCollision(CurrentLevel.Obstacles); // Load the obstacles
+            pathTester.ChangeLevel(CurrentLevel); // Change the debug path tester
         }
 
         public void Add(Level level)

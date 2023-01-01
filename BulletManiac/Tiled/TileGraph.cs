@@ -1,4 +1,5 @@
 ﻿using BulletManiac.Managers;
+using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tiled;
@@ -38,6 +39,21 @@ namespace BulletManiac.Tiled
 
         public HashSet<Tile> Nodes { get { return nodes; } }
         public Dictionary<Tile, ulong[]> Connections { get { return connections; } }
+
+        public Vector2 RandomPosition
+        {
+            get
+            {
+                return Tile.ToPosition(nodes.ElementAt(Extensions.Random.Next(nodes.Count)),
+                        GameManager.CurrentLevel.Map.TileWidth,
+                        GameManager.CurrentLevel.Map.TileHeight);
+            }
+        }
+
+        public Tile RandomNode
+        {
+            get { return nodes.ElementAt(Extensions.Random.Next(nodes.Count)); }
+        }
 
         public TileGraph()
         {

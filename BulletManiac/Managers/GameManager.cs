@@ -243,8 +243,8 @@ namespace BulletManiac.Managers
             AddGameObjectUI(megazineUI);
 
             // Pathfinding
-            pathTester = new PathTester(Resources.FindLevel("Level1"));
-            levelManager = new LevelManager(Resources.FindLevel("Level1"), tiledMapRenderer, pathTester);
+            pathTester = new PathTester(Resources.FindLevel("Level1-1"));
+            levelManager = new LevelManager(tiledMapRenderer, pathTester);
 
             // Test Enemy
             //AddGameObject(new Summoner(Tile.ToPosition(new Tile(10, 12), 16, 16)));
@@ -271,13 +271,13 @@ namespace BulletManiac.Managers
             if (InputManager.GetKey(Keys.R)) levelManager.ChangeLevel(); // Test change level
             // Test Enemy
             if(InputManager.GetKey(Keys.G))
-                AddGameObject(new Shadow(Tile.ToPosition(new Tile(3, 12), 16, 16)));
+                AddGameObject(new Shadow(CurrentLevel.TileGraph.RandomPosition));
             if (InputManager.GetKey(Keys.F))
-                AddGameObject(new Bat(Tile.ToPosition(new Tile(3, 12), 16, 16)));
+                AddGameObject(new Bat(CurrentLevel.TileGraph.RandomPosition));
             if (InputManager.GetKey(Keys.H))
-                AddGameObject(new SuicideShadow(Tile.ToPosition(new Tile(3, 12), 16, 16)));
+                AddGameObject(new SuicideShadow(CurrentLevel.TileGraph.RandomPosition));
             if (InputManager.GetKey(Keys.J))
-                AddGameObject(new Summoner(Tile.ToPosition(new Tile(3, 12), 16, 16)));
+                AddGameObject(new Summoner(CurrentLevel.TileGraph.RandomPosition));
 
             if (Debug)
                 pathTester.Update(gameTime);
