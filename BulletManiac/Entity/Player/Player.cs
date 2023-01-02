@@ -273,7 +273,7 @@ namespace BulletManiac.Entity.Player
         
         public override void Update(GameTime gameTime)
         {
-            if (GameManager.CurrentLevel.TouchingDoor(Bound)) Console.WriteLine("Touching Door");
+            if (GameManager.CurrentLevel.TouchingDoor(Bound)) GameManager.UpdateLevel(); // Update level
             Invincible();
             PlayerMovement();
             Gun.Update(gameTime); // Gun logic

@@ -106,6 +106,10 @@ namespace BulletManiac.Managers
         private static EntityManager entityManager = new();
         private static LevelManager levelManager;
         private static Spawner spawner = new();
+        /// <summary>
+        /// Is player eliminated all the enemies
+        /// </summary>
+        public static bool IsLevelFinish { get { return spawner.IsFinish && entityManager.EnemyCount <= 0; } }
 
         /// <summary>
         /// Change resolution of the game
@@ -248,6 +252,7 @@ namespace BulletManiac.Managers
             // Pathfinding
             pathTester = new PathTester(Resources.FindLevel("Level1-1"));
             levelManager = new LevelManager(tiledMapRenderer, pathTester);
+            spawner.Start();
         }
 
         static FrameCounter fpsCounter = new();
@@ -266,7 +271,7 @@ namespace BulletManiac.Managers
             MainCamera.Update(GraphicsDevice.Viewport);
             MainCamera.Follow(FindGameObject("Player")); // Always follow the player
 
-            //spawner.Update(gameTime);
+            spawner.Update(gameTime);
 
             // Update debug status
             if (InputManager.GetKey(Keys.F12)) Debug = !Debug;
@@ -298,6 +303,14 @@ namespace BulletManiac.Managers
                 pathTester.Update(gameTime);
 
             fpsCounter.Update(gameTime);
+        }
+
+        static int floor = 1;
+        public static void UpdateLevel()
+        {
+            levelManager.ChangeLevel(0);
+            spawner.Start();
+            floor++;
         }
 
         /// <summary>
@@ -334,7 +347,9 @@ namespace BulletManiac.Managers
             
             fpsCounter.Draw(spriteBatch, Resources.FindSpriteFont("DebugFont"), new Vector2(150f, 5f), Color.Red);
             spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "Player HP: " + Player.HP.ToString("N0"), new Vector2(5f, 5f), Color.Red);
-            spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "Enenmy Count: " + entityManager.EnemyCount, new Vector2(5f, 20f), Color.Red);
+            spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "Enemy Count: " + entityManager.EnemyCount, new Vector2(5f, 20f), Color.Red);
+            spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "Floor: " + floor, new Vector2(5f, 40f), Color.Red);
+            spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "Is Level Finish: " + IsLevelFinish, new Vector2(5f, 60f), Color.Red);
         }
 
         /// <summary>

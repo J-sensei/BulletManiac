@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using BulletManiac.Managers;
+using Microsoft.Xna.Framework;
 using MonoGame.Extended.Tiled;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,8 @@ namespace BulletManiac.Tiled
         /// The difficulty value
         /// </summary>
         public int Difficulty { get; private set; }
+        public int EnemySpawned { get; private set; }
+
         /// <summary>
         /// Map of the level
         /// </summary>
@@ -36,7 +39,7 @@ namespace BulletManiac.Tiled
         public Color BackgroundColor { get; private set; } = Color.CornflowerBlue;
         public List<Rectangle> DoorBound { get; private set; } = new();
 
-        public Level(TiledMap map, int colStart, int rowStart, int difficulty = 0)
+        public Level(TiledMap map, int colStart, int rowStart, int difficulty = 0, int enemySpawned = 10)
         {
             Map = map;
             Difficulty = difficulty;
@@ -63,10 +66,12 @@ namespace BulletManiac.Tiled
                     }
                 }
             }
+            EnemySpawned = enemySpawned;
         }
 
         public bool TouchingDoor(Rectangle rect)
         {
+            if (!GameManager.IsLevelFinish) return false; // Make sure the level is finished in order to access the door
             for(int i = 0; i < DoorBound.Count; i++)
             {
                 if (rect.Intersects(DoorBound[i]))

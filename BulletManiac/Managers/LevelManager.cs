@@ -1,6 +1,7 @@
 ﻿using BulletManiac.Collision;
 using BulletManiac.Tiled;
 using BulletManiac.Tiled.AI;
+using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
@@ -34,17 +35,19 @@ namespace BulletManiac.Managers
         /// <param name="resources"></param>
         public static void LoadContent(ResourcesManager resources)
         {
+            // Map 
             resources.LoadTiledMap("Level1-1", "Level/Level1-1");
             resources.LoadTiledMap("Level1-2", "Level/Level1-2");
             resources.LoadTiledMap("Level1-3", "Level/Level1-3");
             resources.LoadTiledMap("Level2-1", "Level/Level2-1");
             resources.LoadTiledMap("Level2-2", "Level/Level2-2");
 
-            resources.LoadLevel("Level1-1", new Level(GameManager.Resources.FindTiledMap("Level1-1"), 8, 9, new Color(7, 24, 33)));
-            resources.LoadLevel("Level1-2", new Level(GameManager.Resources.FindTiledMap("Level1-2"), 3, 9, new Color(7, 24, 33)));
-            resources.LoadLevel("Level1-3", new Level(GameManager.Resources.FindTiledMap("Level1-3"), 8, 9, new Color(7, 24, 33)));
-            resources.LoadLevel("Level2-1", new Level(GameManager.Resources.FindTiledMap("Level2-1"), 10, 4, new Color(7, 24, 33)));
-            resources.LoadLevel("Level2-2", new Level(GameManager.Resources.FindTiledMap("Level2-2"), 10, 12, new Color(7, 24, 33)));
+            // Level
+            resources.LoadLevel("Level1-1", new Level(GameManager.Resources.FindTiledMap("Level1-1"), 8, 9, new Color(7, 24, 33), 1));
+            resources.LoadLevel("Level1-2", new Level(GameManager.Resources.FindTiledMap("Level1-2"), 3, 9, new Color(7, 24, 33), 1));
+            resources.LoadLevel("Level1-3", new Level(GameManager.Resources.FindTiledMap("Level1-3"), 8, 9, new Color(7, 24, 33), 2));
+            resources.LoadLevel("Level2-1", new Level(GameManager.Resources.FindTiledMap("Level2-1"), 10, 4, new Color(7, 24, 33), 3));
+            resources.LoadLevel("Level2-2", new Level(GameManager.Resources.FindTiledMap("Level2-2"), 10, 12, new Color(7, 24, 33), 4));
         }
 
         /// <summary>
@@ -74,6 +77,18 @@ namespace BulletManiac.Managers
         public void Add(Level level)
         {
             levels.Add(level);
+        }
+
+        /// <summary>
+        /// Change level based on the current difficulty
+        /// </summary>
+        /// <param name="difficulty"></param>
+        public void ChangeLevel(int difficulty)
+        {
+            currentLevelIndex = Extensions.Random.Next(levels.Count); // Testing
+            tiledMapRenderer.LoadMap(CurrentLevel.Map);
+            CollisionManager.ChangeTileCollision(CurrentLevel.Obstacles);
+            pathTester.ChangeLevel(CurrentLevel);
         }
 
         public void ChangeLevel()

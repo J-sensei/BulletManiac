@@ -68,24 +68,28 @@ namespace BulletManiac.Tiled
         private int spawnNumber = 2;
         private int currentNumber;
 
-        int batCount = 0;
-        int shadowCount = 0;
-        int suicideShadowCount = 0;
-        int summnerCount = 0;
+        private bool active = false;
+        public bool IsFinish { get { return currentNumber <= 0; } }
 
         public Spawner()
         {
-            //batCount = 10;
-            //shadowCount = 5;
-            //suicideShadowCount = 3;
-            //summnerCount = 1;
-
             spawnNumber = 5;
             currentNumber = spawnNumber;
+            active = true;
         }
+
+        public void Start()
+        {
+            currentNumber = GameManager.CurrentLevel.EnemySpawned; // Largest possible number will be 110 enemy for a level
+            active = true;
+        }
+
+        public void Stop() => active = false;
+
 
         public void Update(GameTime gameTime)
         {
+            if (!active) return;
             // Every X second spawn x enemy from list
             if(currentNumber > 0)
             {
@@ -93,7 +97,10 @@ namespace BulletManiac.Tiled
                 if (currentSpawnCD <= 0f)
                 {
                     Vector2 pos = GameManager.CurrentLevel.TileGraph.RandomPositionAwayFromDistance(100f);
-                    int r = Extensions.Random.Next(0, 4);
+
+                    // Difficulty 0 - 2 (Bat) 3 - 5 (Shadow) 6 - 8 (Suicide Shadow) 9 - 11 (Summoner) 
+                    int difficulty = GameManager.CurrentLevel.Difficulty;
+                    int r = Extensions.Random.Next(0, difficulty); // 4 enemy type * 3 difficulty gap for each enemy
                     switch (r)
                     {
                         case 0:
