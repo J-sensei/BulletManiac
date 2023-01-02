@@ -55,6 +55,24 @@ namespace BulletManiac.Tiled
             get { return nodes.ElementAt(Extensions.Random.Next(nodes.Count)); }
         }
 
+        public Vector2 RandomPositionAwayFromDistance(float distance)
+        {
+            HashSet<Tile> targetNodes = nodes.Where(x => (GameManager.Player.Position - Tile.ToPosition(x, GameManager.CurrentLevel.Map.TileWidth,
+                                        GameManager.CurrentLevel.Map.TileHeight)).Length() > distance).ToHashSet();
+            if (targetNodes.Count() > 0)
+            {
+                Vector2 pos = Tile.ToPosition(targetNodes.ElementAt(Extensions.Random.Next(targetNodes.Count)),
+                    GameManager.CurrentLevel.Map.TileWidth,
+                    GameManager.CurrentLevel.Map.TileHeight);
+                return pos;
+            }
+            else
+            {
+                GameManager.Log("Tile Graph", "RandomPositionAwayFromDistance - Distance is too large, returning Zero.");
+                return Vector2.Zero;
+            }
+        }
+
         public TileGraph()
         {
             nodes = new HashSet<Tile>();
