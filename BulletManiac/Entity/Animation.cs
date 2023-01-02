@@ -74,6 +74,7 @@ namespace BulletManiac.Entity
             resources.LoadAnimation("DefaultBullet_Animation", new Animation(GameManager.Resources.FindTexture("Bullet1"), 5, 25, 0.1f, 6));
             resources.LoadAnimation("Walking_Smoke_Animation", new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false));
             resources.LoadAnimation("Destroy_Smoke_Animation", new Animation(GameManager.Resources.FindTexture("Destroy_Smoke"), 5, 1, 0.1f, looping: false));
+            resources.LoadAnimation("Spawn_Smoke_Animation", new Animation(GameManager.Resources.FindTexture("Spawn_Smoke"), 8, 1, 0.1f, looping: false));
         }
 
         public Animation(Animation animation)

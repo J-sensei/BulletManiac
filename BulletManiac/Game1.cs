@@ -15,6 +15,8 @@ namespace BulletManiac
             _graphics = new GraphicsDeviceManager(this) { PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8 }; ;
             Content.RootDirectory = "Content";
             IsMouseVisible = false;
+            //_graphics.SynchronizeWithVerticalRetrace = true; //Vsync
+            //IsFixedTimeStep = false;
         }
 
         protected override void Initialize()

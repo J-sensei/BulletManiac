@@ -21,6 +21,12 @@
 /processorParam:Quality=Best
 /build:Audio/Enemy/Bat Death.wav
 
+#begin Audio/Enemy/Enemy_Spawn.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Enemy/Enemy_Spawn.wav
+
 #begin Audio/Enemy/Shadow_Death.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -318,6 +324,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:SpriteSheet/Effect/Smoke_Destroy.png
+
+#begin SpriteSheet/Effect/Smoke_Spawn.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:SpriteSheet/Effect/Smoke_Spawn.png
 
 #begin SpriteSheet/Effect/Smoke_Walking.png
 /importer:TextureImporter
@@ -681,4 +699,16 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:UI/Font/DebugFont.spritefont
+
+#begin UI/Transition_Texture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/Transition_Texture.png
 

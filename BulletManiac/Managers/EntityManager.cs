@@ -1,4 +1,5 @@
 ﻿using BulletManiac.Entity;
+using BulletManiac.Entity.Enemy;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -22,6 +23,11 @@ namespace BulletManiac.Managers
         /// Game objects waiting to be add into the current list
         /// </summary>
         private readonly List<GameObject> gameObjectQueue = new List<GameObject>();
+        private readonly List<Enemy> enemyGameObjects = new();
+        public int EnemyCount
+        {
+            get { return enemyGameObjects.Count; }
+        }
 
         /// <summary>
         /// Current running UI related game object
@@ -72,6 +78,11 @@ namespace BulletManiac.Managers
             {
                 gameObject.Initialize();
                 gameObjects.Add(gameObject);
+            }
+
+            if(gameObject is Enemy)
+            {
+                enemyGameObjects.Add((Enemy)gameObject);
             }
         }
 
@@ -148,6 +159,10 @@ namespace BulletManiac.Managers
             {
                 gameObj.Dispose(); // Test dispose the destroyed entity
                 gameObjects.Remove(gameObj);
+
+                // If the object is inside the enemy list, delete it
+                if (enemyGameObjects.Contains(gameObj))
+                    enemyGameObjects.Remove((Enemy)gameObj);
             }
         }
 
