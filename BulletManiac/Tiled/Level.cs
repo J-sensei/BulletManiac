@@ -82,9 +82,10 @@ namespace BulletManiac.Tiled
             return false;
         }
 
-        public Level(TiledMap map, int colStart, int rowStart, Color backgroundColor, int difficulty = 0) : this(map, colStart, rowStart, difficulty)
+        public Level(TiledMap map, int colStart, int rowStart, Color backgroundColor, Vector2 spawnPosition, int difficulty = 0) : this(map, colStart, rowStart, difficulty)
         {
             BackgroundColor = backgroundColor;
+            SpawnPosition = spawnPosition;
         }
     }
 }

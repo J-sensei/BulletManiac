@@ -43,11 +43,16 @@ namespace BulletManiac.Managers
             resources.LoadTiledMap("Level2-2", "Level/Level2-2");
 
             // Level
-            resources.LoadLevel("Level1-1", new Level(GameManager.Resources.FindTiledMap("Level1-1"), 8, 9, new Color(7, 24, 33), 1));
-            resources.LoadLevel("Level1-2", new Level(GameManager.Resources.FindTiledMap("Level1-2"), 3, 9, new Color(7, 24, 33), 1));
-            resources.LoadLevel("Level1-3", new Level(GameManager.Resources.FindTiledMap("Level1-3"), 8, 9, new Color(7, 24, 33), 2));
-            resources.LoadLevel("Level2-1", new Level(GameManager.Resources.FindTiledMap("Level2-1"), 10, 4, new Color(7, 24, 33), 3));
-            resources.LoadLevel("Level2-2", new Level(GameManager.Resources.FindTiledMap("Level2-2"), 10, 12, new Color(7, 24, 33), 4));
+            resources.LoadLevel("Level1-1", new Level(GameManager.Resources.FindTiledMap("Level1-1"), 8, 9, new Color(7, 24, 33), 
+                                                        Tile.ToPosition(new Tile(8 ,15), 16, 16), 1));
+            resources.LoadLevel("Level1-2", new Level(GameManager.Resources.FindTiledMap("Level1-2"), 3, 9, new Color(7, 24, 33),
+                                                        Tile.ToPosition(new Tile(8, 15), 16, 16), 1));
+            resources.LoadLevel("Level1-3", new Level(GameManager.Resources.FindTiledMap("Level1-3"), 8, 9, new Color(7, 24, 33),
+                                                        Tile.ToPosition(new Tile(8, 15), 16, 16), 2));
+            resources.LoadLevel("Level2-1", new Level(GameManager.Resources.FindTiledMap("Level2-1"), 10, 4, new Color(7, 24, 33),
+                                                        Tile.ToPosition(new Tile(10, 20), 16, 16), 3));
+            resources.LoadLevel("Level2-2", new Level(GameManager.Resources.FindTiledMap("Level2-2"), 10, 12, new Color(7, 24, 33),
+                                                        Tile.ToPosition(new Tile(10, 20), 16, 16), 4));
         }
 
         /// <summary>

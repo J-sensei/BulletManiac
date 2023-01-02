@@ -4,6 +4,7 @@ using BulletManiac.Entity;
 using BulletManiac.Entity.Enemy;
 using BulletManiac.Entity.Player;
 using BulletManiac.Entity.UI;
+using BulletManiac.Particle;
 using BulletManiac.Tiled;
 using BulletManiac.Tiled.AI;
 using BulletManiac.Utilities;
@@ -110,6 +111,7 @@ namespace BulletManiac.Managers
         /// Is player eliminated all the enemies
         /// </summary>
         public static bool IsLevelFinish { get { return spawner.IsFinish && entityManager.EnemyCount <= 0; } }
+        private static TransitionEffect transitionEffect;
 
         /// <summary>
         /// Change resolution of the game
@@ -200,6 +202,7 @@ namespace BulletManiac.Managers
 
             // Load UI Sprites
             Resources.LoadTexture("Crosshair_SpriteSheet", "SpriteSheet/UI/Crosshair");
+            Resources.LoadTexture("Transition_Texture", "UI/Transition_Texture");
             Resources.LoadTexture("Bullet_Fill", "UI/Bullet/bullet_fill");
             Resources.LoadTexture("Bullet_Empty", "UI/Bullet/bullet_empty");
             Resources.LoadSpriteFonts("DebugFont", "UI/Font/DebugFont");
@@ -252,7 +255,11 @@ namespace BulletManiac.Managers
             // Pathfinding
             pathTester = new PathTester(Resources.FindLevel("Level1-1"));
             levelManager = new LevelManager(tiledMapRenderer, pathTester);
+            Player.Position = CurrentLevel.SpawnPosition;
             spawner.Start();
+
+            transitionEffect = new TransitionEffect(Resources.FindTexture("Transition_Texture"));
+            transitionEffect.Initialize();
         }
 
         static FrameCounter fpsCounter = new();
@@ -262,16 +269,17 @@ namespace BulletManiac.Managers
             InputManager.Update(gameTime); // Update the input manager
             tiledMapRenderer.Update(gameTime); // Tiled Map Update
 
-            NavigationAgent.GlobalUpdate();
-            SteeringAgent.GlobalUpdate();
-            CollisionManager.Update(gameTime); // Collision Update
-            entityManager.Update(gameTime); // Entity Manager Update
-
+            if (transitionEffect.Finish)
+            {
+                NavigationAgent.GlobalUpdate();
+                SteeringAgent.GlobalUpdate();
+                CollisionManager.Update(gameTime); // Collision Update
+                entityManager.Update(gameTime); // Entity Manager Update
+                spawner.Update(gameTime);
+            }
             // Camera Update
             MainCamera.Update(GraphicsDevice.Viewport);
             MainCamera.Follow(FindGameObject("Player")); // Always follow the player
-
-            spawner.Update(gameTime);
 
             // Update debug status
             if (InputManager.GetKey(Keys.F12)) Debug = !Debug;
@@ -299,17 +307,27 @@ namespace BulletManiac.Managers
                 spawner.Spawn(new Summoner(pos), pos);
             }
 
+            if (InputManager.GetKey(Keys.Q))
+            {
+                transitionEffect.Reset();
+                transitionEffect.Start();
+            }
+
             if (Debug)
                 pathTester.Update(gameTime);
 
             fpsCounter.Update(gameTime);
+            transitionEffect.Update(gameTime);
         }
 
         static int floor = 1;
         public static void UpdateLevel()
         {
             levelManager.ChangeLevel(0);
+            transitionEffect.Reset();
+            transitionEffect.Start();
             spawner.Start();
+            Player.Position = CurrentLevel.SpawnPosition;
             floor++;
         }
 
@@ -350,6 +368,7 @@ namespace BulletManiac.Managers
             spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "Enemy Count: " + entityManager.EnemyCount, new Vector2(5f, 20f), Color.Red);
             spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "Floor: " + floor, new Vector2(5f, 40f), Color.Red);
             spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "Is Level Finish: " + IsLevelFinish, new Vector2(5f, 60f), Color.Red);
+            transitionEffect.Draw(spriteBatch, gameTime);
         }
 
         /// <summary>
