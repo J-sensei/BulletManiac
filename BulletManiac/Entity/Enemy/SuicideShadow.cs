@@ -56,8 +56,13 @@ namespace BulletManiac.Entity.Enemy
             // Recover from hit state
             if (currentAction == EnemyAction.Hit)
             {
-                if(!attackSoundPlay)
-                    currentAction = EnemyAction.Idle;
+                if (!attackSoundPlay)
+                {
+                    if (navigationAgent.CurrentState == NavigationState.MOVING)
+                        currentAction = EnemyAction.Move;
+                    else
+                        currentAction = EnemyAction.Idle;
+                }
                 else
                     currentAction = EnemyAction.Attack;
             }
