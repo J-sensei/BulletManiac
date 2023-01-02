@@ -1,10 +1,5 @@
-﻿using BulletManiac.Managers;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BulletManiac.Particle
 {
@@ -28,6 +23,9 @@ namespace BulletManiac.Particle
         public float Radian { get; set; } = MathHelper.Pi;
         private float delay;
 
+        /// <summary>
+        /// Reset a fade item to its original state
+        /// </summary>
         public void Reset()
         {
             delay = Delay;

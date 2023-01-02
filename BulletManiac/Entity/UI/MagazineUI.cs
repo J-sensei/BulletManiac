@@ -17,13 +17,13 @@ namespace BulletManiac.Entity.UI
         private readonly Magazine megazine;
         private readonly float angle = (float)Math.PI / 2.0f;  // 90 degrees
 
-        public MagazineUI(Gun gun)
+        public MagazineUI(Gun gun, Vector2 position)
         {
             this.name = "Magazine UI";
             this.gun = gun;
             this.megazine = gun.Magazine;
             capacity = megazine.Capacity;
-            position = new Vector2(100f, 50f);
+            this.position = position;
         }
 
         //public override void Update(GameTime gameTime)

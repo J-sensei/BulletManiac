@@ -46,6 +46,14 @@ namespace BulletManiac.Managers
         /// </summary>
         public static float DeltaTime { get; private set; }
         public static Camera MainCamera { get; private set; }
+        /// <summary>
+        /// Global accessible player
+        /// </summary>
+        public static Player Player { get; private set; }
+        /// <summary>
+        /// Current Level of the game
+        /// </summary>
+        public static Level CurrentLevel { get { return levelManager.CurrentLevel; } }
         #endregion
 
         #region Resolution Settings
@@ -83,12 +91,6 @@ namespace BulletManiac.Managers
         public static float CurrentCameraZoom { get { return gameZoomLevelList[CurrentResolutionIndex]; } }
         #endregion
 
-        // Level
-        public static Player Player { get; private set; }
-        public static List<Level> Levels = new();
-        public static Level CurrentLevel { get { return levelManager.CurrentLevel; } }
-        public static int CurrentLevelIndex;
-
         // Pathfinding
         private static PathTester pathTester;
         public static PathfindingAlgorithm CurrentPathfindingAlgorithm = PathfindingAlgorithm.AStar;
@@ -106,12 +108,25 @@ namespace BulletManiac.Managers
         /// </summary>
         private static EntityManager entityManager = new();
         private static LevelManager levelManager;
+
+        /// <summary>
+        /// Spawner, responsible to handle the spawn
+        /// </summary>
         private static Spawner spawner = new();
+
         /// <summary>
         /// Is player eliminated all the enemies
         /// </summary>
         public static bool IsLevelFinish { get { return spawner.IsFinish && entityManager.EnemyCount <= 0; } }
+
+        /// <summary>
+        /// Play the transition effect of the game
+        /// </summary>
         private static TransitionEffect transitionEffect;
+        /// <summary>
+        /// Frame and Update counter for the game
+        /// </summary>
+        private static FrameCounter fpsCounter = new();
 
         /// <summary>
         /// Change resolution of the game
@@ -249,26 +264,27 @@ namespace BulletManiac.Managers
             AddGameObjectUI(new Cursor()); // Add the game cursor
             Player = new Player(new Vector2(50f)); // Create Player in the game
             AddGameObject(Player); // Add player
-            MagazineUI megazineUI = new MagazineUI(Player.Gun);
-            AddGameObjectUI(megazineUI);
+            MagazineUI megazineUI = new MagazineUI(Player.Gun, new Vector2(CurrentResolution.X - 100, CurrentResolution.Y - 200)); // Gun Megazine UI
+            AddGameObjectUI(megazineUI); 
 
-            // Pathfinding
-            pathTester = new PathTester(Resources.FindLevel("Level1-1"));
-            levelManager = new LevelManager(tiledMapRenderer, pathTester);
+            pathTester = new PathTester(Resources.FindLevel("Level1-1")); // Pathfinding Tester
+            levelManager = new LevelManager(tiledMapRenderer, pathTester); // Level Manager 
             Player.Position = CurrentLevel.SpawnPosition;
-            spawner.Start();
 
+            spawner.Start(); // Start the spawner immediately
+
+            // Transition Effect initialization
             transitionEffect = new TransitionEffect(Resources.FindTexture("Transition_Texture"));
             transitionEffect.Initialize();
         }
 
-        static FrameCounter fpsCounter = new();
         public static void Update(GameTime gameTime)
         {
             DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds; // Update the delta time variable
             InputManager.Update(gameTime); // Update the input manager
             tiledMapRenderer.Update(gameTime); // Tiled Map Update
 
+            // If transition is ongoing, dont update these things
             if (transitionEffect.Finish)
             {
                 NavigationAgent.GlobalUpdate();
@@ -277,9 +293,10 @@ namespace BulletManiac.Managers
                 entityManager.Update(gameTime); // Entity Manager Update
                 spawner.Update(gameTime);
             }
+
             // Camera Update
             MainCamera.Update(GraphicsDevice.Viewport);
-            MainCamera.Follow(FindGameObject("Player")); // Always follow the player
+            MainCamera.Follow(Player); // Always follow the player
 
             // Update debug status
             if (InputManager.GetKey(Keys.F12)) Debug = !Debug;
@@ -317,17 +334,36 @@ namespace BulletManiac.Managers
                 pathTester.Update(gameTime);
 
             fpsCounter.Update(gameTime);
+
+            // Execute transition logics
+            if(transitionDuration <= 0f && levelUpdated)
+            {
+                transitionEffect.Start();
+                levelUpdated = false;
+                transitionDuration = TRANSITION_DURATION;
+            }
+            else if(transitionDuration > 0f && levelUpdated)
+            {
+                transitionDuration -= DeltaTime;
+            }
             transitionEffect.Update(gameTime);
         }
 
-        static int floor = 1;
+        // Test Level variables
+        private static int floor = 1; // Record how many floor player has cleared
+        static bool levelUpdated = false;
+        const float TRANSITION_DURATION = 0.5f;
+        static float transitionDuration = TRANSITION_DURATION;
+        /// <summary>
+        /// Switch to a new level when player cleated a level
+        /// </summary>
         public static void UpdateLevel()
         {
             levelManager.ChangeLevel(0);
             transitionEffect.Reset();
-            transitionEffect.Start();
             spawner.Start();
             Player.Position = CurrentLevel.SpawnPosition;
+            levelUpdated = true;
             floor++;
         }
 

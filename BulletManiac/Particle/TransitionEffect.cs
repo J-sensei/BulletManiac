@@ -4,11 +4,12 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BulletManiac.Particle
 {
+    /// <summary>
+    /// Apply transition effect on top of every game objects and elements
+    /// </summary>
     public class TransitionEffect
     {
         private readonly Texture2D texture;

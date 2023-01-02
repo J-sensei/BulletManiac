@@ -15,7 +15,7 @@ namespace BulletManiac.Entity.Player
 
         private bool shooting = false;
 
-        public const int DEFAULT_BULLET = 5;
+        public const int DEFAULT_BULLET = 30;
         public int CurrentBullet { get; private set; } = 5;
         const float DEFAULT_RELOAD_CD = 1f;
 
