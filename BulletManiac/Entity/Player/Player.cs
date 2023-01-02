@@ -113,8 +113,10 @@ namespace BulletManiac.Entity.Player
                     currentSpeed = moveSpeed;
                     currentAction = PlayerAction.Run;
                 }
-                
+
                 ApplyMove(InputManager.Direction, currentSpeed); // Move the player and apply the collision to tiles
+                //Vector2 move = Vector2.Normalize(InputManager.Direction) * GameManager.DeltaTime * currentSpeed;
+                //Position += CollisionManager.Move(Bound, move);
                 WalkingSFX(); // Update Moving SFX
             }
             else
@@ -135,16 +137,17 @@ namespace BulletManiac.Entity.Player
             moveAmountY.X = 0;
 
             // Check the collisioni for x and y axis
-            if(direction.X >= 0)
-                moveX = !CollisionManager.CheckTileCollision(this, moveAmountX * 1.5f);
-            else
-                moveX = !CollisionManager.CheckTileCollision(this, moveAmountX * 1f);
+            //if(direction.X >= 0)
+            //    moveX = !CollisionManager.CheckTileCollision(this, moveAmountX * 3f);
+            //else
+            //    moveX = !CollisionManager.CheckTileCollision(this, moveAmountX * 3f);
 
-            if(direction.Y >= 0)
-                moveY = !CollisionManager.CheckTileCollision(this, moveAmountY * 1.5f);
-            else
-                moveY = !CollisionManager.CheckTileCollision(this, moveAmountY * 1f);
-    
+            //if(direction.Y >= 0)
+            //    moveY = !CollisionManager.CheckTileCollision(this, moveAmountY * 3f);
+            //else
+            //    moveY = !CollisionManager.CheckTileCollision(this, moveAmountY * 3f);
+            moveX = !CollisionManager.CheckTileCollision(this, moveAmountX * 3f);
+            moveY = !CollisionManager.CheckTileCollision(this, moveAmountY * 3f);
             // Move the character according to the result
             if (moveX)
                 position.X += moveAmountX.X;
@@ -270,6 +273,7 @@ namespace BulletManiac.Entity.Player
         
         public override void Update(GameTime gameTime)
         {
+            if (GameManager.CurrentLevel.TouchingDoor(Bound)) Console.WriteLine("Touching Door");
             Invincible();
             PlayerMovement();
             Gun.Update(gameTime); // Gun logic

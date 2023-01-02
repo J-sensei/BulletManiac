@@ -34,6 +34,7 @@ namespace BulletManiac.Tiled
         /// </summary>
         public List<Tile> Obstacles { get; private set; }
         public Color BackgroundColor { get; private set; } = Color.CornflowerBlue;
+        public List<Rectangle> DoorBound { get; private set; } = new();
 
         public Level(TiledMap map, int colStart, int rowStart, int difficulty = 0)
         {
@@ -49,6 +50,31 @@ namespace BulletManiac.Tiled
 
             TiledMapTileLayer obstacleLayer = Map.GetLayer<TiledMapTileLayer>(OBSTACLE_LAYER_NAME);
             Obstacles = Tile.CalculateTileCollision(obstacleLayer, Map.Width, Map.Height, Map.TileWidth, Map.TileHeight);
+            TiledMapTileLayer door = Map.GetLayer<TiledMapTileLayer>("Door Open");
+            for (int i = 0; i < Map.Width; i++)
+            {
+                for (int j = 0; j < Map.Height; j++)
+                {
+                    bool hasTile = door.TryGetTile((ushort)i, (ushort)j, out TiledMapTile? tile);
+                    if (hasTile && tile.Value.GlobalIdentifier != 0)
+                    {
+                        DoorBound.Add(new Rectangle(i * Map.TileWidth, j * Map.TileHeight, Map.TileWidth, Map.TileHeight));
+                        break;
+                    }
+                }
+            }
+        }
+
+        public bool TouchingDoor(Rectangle rect)
+        {
+            for(int i = 0; i < DoorBound.Count; i++)
+            {
+                if (rect.Intersects(DoorBound[i]))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public Level(TiledMap map, int colStart, int rowStart, Color backgroundColor, int difficulty = 0) : this(map, colStart, rowStart, difficulty)

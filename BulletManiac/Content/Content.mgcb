@@ -21,6 +21,12 @@
 /processorParam:Quality=Best
 /build:Audio/Enemy/Bat Death.wav
 
+#begin Audio/Enemy/Enemy_Spawn.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Enemy/Enemy_Spawn.wav
+
 #begin Audio/Enemy/Shadow_Death.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

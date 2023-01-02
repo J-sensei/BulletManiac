@@ -223,6 +223,7 @@ namespace BulletManiac.Managers
             Resources.LoadSoundEffect("SuicideShadow_Explosion", "Audio/Enemy/SuicideShadow_Explosion");
             Resources.LoadSoundEffect("SuicideShadow_Attacking", "Audio/Enemy/SuicideShadow_Attacking");
             Resources.LoadSoundEffect("SuicideShadow_AttackStart", "Audio/Enemy/SuicideShadow_AttackStart");
+            Resources.LoadSoundEffect("Enemy_Spawn", "Audio/Enemy/Enemy_Spawn");
 
             Animation.LoadAnimations(Resources);
             Bat.LoadContent(Resources);
@@ -265,22 +266,14 @@ namespace BulletManiac.Managers
             MainCamera.Update(GraphicsDevice.Viewport);
             MainCamera.Follow(FindGameObject("Player")); // Always follow the player
 
-            spawner.Update(gameTime);
+            //spawner.Update(gameTime);
 
             // Update debug status
             if (InputManager.GetKey(Keys.F12)) Debug = !Debug;
             if (InputManager.GetKey(Keys.R)) levelManager.ChangeLevel(); // Test change level
-            // Test Enemy
-            //if(InputManager.GetKey(Keys.G))
-            //    AddGameObject(new Shadow(CurrentLevel.TileGraph.RandomPosition));
-            //if (InputManager.GetKey(Keys.F))
-            //    AddGameObject(new Bat(CurrentLevel.TileGraph.RandomPosition));
-            //if (InputManager.GetKey(Keys.H))
-            //    AddGameObject(new SuicideShadow(CurrentLevel.TileGraph.RandomPosition));
-            //if (InputManager.GetKey(Keys.J))
-            //    AddGameObject(new Summoner(CurrentLevel.TileGraph.RandomPosition));
 
-            if (InputManager.GetKey(Keys.G))
+            // Test Enemy
+            if (InputManager.GetKey(Keys.F))
             {
                 var pos = CurrentLevel.TileGraph.RandomPosition;
                 spawner.Spawn(new Bat(pos), pos);

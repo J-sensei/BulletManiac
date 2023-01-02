@@ -67,11 +67,11 @@ namespace BulletManiac.Entity.Enemy
             if(distance < DISTANCE_TO_EXPLODE)
             {
                 currentAction = EnemyAction.Attack;
-                if (!attackSoundPlay)
-                {
-                    GameManager.Resources.FindSoundEffect("SuicideShadow_AttackStart").Play();
-                    attackSoundPlay = true;
-                }
+                //if (!attackSoundPlay)
+                //{
+                //    GameManager.Resources.FindSoundEffect("SuicideShadow_AttackStart").Play();
+                //    attackSoundPlay = true;
+                //}
             }
 
             if(currentAction == EnemyAction.Attack)

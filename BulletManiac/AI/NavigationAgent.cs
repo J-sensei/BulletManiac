@@ -196,7 +196,7 @@ namespace BulletManiac.Tiled.AI
             }
             else
             {
-                GameManager.Log("Navigation Agent", "Destination Tile is not in the Tile Graph or Destination Tile is same with Source Tile.");
+                GameManager.Log("Navigation Agent", "Destination Tile is not in the Tile Graph or Destination Tile is same with Source Tile. (" + user.Name + ")");
             }
         }
 

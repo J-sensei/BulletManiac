@@ -45,6 +45,7 @@ namespace BulletManiac.Tiled
             if(spawnDelay <= 0f && !spawn) // Add the enemy only once
             {
                 GameManager.AddGameObject(enemy);
+                GameManager.Resources.FindSoundEffect("Enemy_Spawn").Play();
                 spawn = true;
             }
 
