@@ -141,7 +141,7 @@ namespace BulletManiac.Entity.Enemy
         public override void DeleteEvent()
         {
             HitBox hitBox = new HitBox(new Animation(ResourcesManager.FindTexture("SuicideShadow_Explode"), 8, 1, animationSpeed, looping: false),
-                                        Position, new Vector2(1f), new List<int>() { 3, 4 }, enableEnemyDamage: true, enablePlayerDamage: true);
+                                        Position, new Vector2(1f), new List<int>() { 3, 4 }, enableEnemyDamage: true);
             hitBox.AddSoundEffect(ResourcesManager.FindSoundEffect("SuicideShadow_Explosion"), 1);
             GameManager.AddGameObject(hitBox);
 

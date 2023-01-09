@@ -109,26 +109,26 @@ namespace BulletManiac.Entity.Enemy
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: Camera.Main.Transform); // Resume back to normal drawing session
         }
 
-        public override void CollisionEvent(ICollidable other)
+        public override void CollisionEvent(GameObject other)
         {
             base.CollisionEvent(other);
             if (hp <= 0) return; // If enemy is dead, no need to calculate the collision event anymore
 
             // Deal damage to the enemy
-            if (other.Tag == "Bullet")
+            if (other.Name == "Bullet")
             {
                 // Deal damaage to the enemy
-                hp -= (other.GameObject as Bullet.Bullet).Damage;
+                hp -= (other as Bullet.Bullet).Damage;
 
                 ResourcesManager.FindSoundEffect("Bullet_Hit").Play(); // Bullet Hit sound
                 currentAction = EnemyAction.Hit; // Change player state
-                Destroy(other.GameObject); // Destroy bullet
+                Destroy(other); // Destroy bullet
                 blink = true;
             }
 
-            if(other.Tag == "Player")
+            if(other.Name == "Player")
             {
-                Player.Player player = (other.GameObject as Player.Player);
+                Player.Player player = (other as Player.Player);
                 player.TakeDamage(10f); // Test take damage
             }
         }

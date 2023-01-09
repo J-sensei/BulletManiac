@@ -113,8 +113,8 @@ namespace BulletManiac.Collision
                     {
                         GameManager.Log("Collision Manager", go1.GameObject.Name + " and " + go2.GameObject.Name + " is COLLIDING");
 
-                        go1.GameObject.CollisionEvent(go2);
-                        go2.GameObject.CollisionEvent(go1);
+                        go1.GameObject.CollisionEvent(go2.GameObject);
+                        go2.GameObject.CollisionEvent(go1.GameObject);
                     }
                 }
             }

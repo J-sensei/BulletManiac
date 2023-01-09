@@ -114,7 +114,7 @@ namespace BulletManiac.Entity.Bullet
             DrawAnimation(animation, spriteBatch, gameTime);
         }
 
-        public override void CollisionEvent(ICollidable other)
+        public override void CollisionEvent(GameObject other)
         {
             base.CollisionEvent(other);
         }
