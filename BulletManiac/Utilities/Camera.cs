@@ -52,10 +52,14 @@ namespace BulletManiac.Utilities
         private void UpdateMatrix()
         {
             //// Constraint the camera to move (TEST)
-            //float minX = 0f;
+            //float minX = 0;
             //float maxX = 1280f * 2f;
             //float minY = 0f;
             //float maxY = 720f * 2f;
+            //float minX = GameManager.CurrentLevel.Bound.Left;
+            //float maxX = GameManager.CurrentLevel.Bound.Right;
+            //float minY = GameManager.CurrentLevel.Bound.Top;
+            //float maxY = GameManager.CurrentLevel.Bound.Bottom;
 
             //float xLeft = Position.X - Bounds.Width * 0.5f;
             //float xRight = Position.X + Bounds.Width * 0.5f;
@@ -126,7 +130,7 @@ namespace BulletManiac.Utilities
             // Test If Statament
             if (followPosition != Vector2.Zero)
             {
-                pos = followPosition + offset;
+                pos = followPosition;
             }
             else
             {
@@ -134,7 +138,27 @@ namespace BulletManiac.Utilities
                 pos = newPosition;
             }
             //Position = new Vector2((int)pos.X, (int)pos.Y); // No Tearing with int
-            Position = Vector2.Lerp(Position, pos, 5f * GameManager.DeltaTime);
+
+            // Camera constraint
+            // HARDCODED **NEED TO UPDATE**
+            float amount = 80f;
+            float minX = GameManager.CurrentLevel.Bound.Left;
+            float maxX = GameManager.CurrentLevel.Bound.Right;
+            float minY = GameManager.CurrentLevel.Bound.Top;
+            float maxY = GameManager.CurrentLevel.Bound.Bottom;
+
+            float xLeft = pos.X - (VisibleArea.Width * 0.5f);
+            float xRight = pos.X + (VisibleArea.Width * 0.5f);
+            float yUp = pos.Y - VisibleArea.Height * 0.5f;
+            float yDown = pos.Y + VisibleArea.Height * 0.5f;
+            Console.WriteLine(VisibleArea);
+            //Console.WriteLine("xLeft: " + xLeft + " xRight: " + xRight + " yUp: " + yUp + " yDown: " + yDown);
+            Vector2 limit = pos;
+            if (xLeft < minX) limit.X = minX + amount;
+            if (xRight > maxX) limit.X = maxX - amount * 1.3f;
+            if (yUp < minY) limit.Y = minY + amount * 0.5f;
+            if (yDown > maxY) limit.Y = maxY - amount * 0.8f;
+            Position = Vector2.Lerp(Position + offset, limit, 5f * GameManager.DeltaTime); // Update the camera position
         }
 
         public void AdjustZoom(float zoomAmount)
@@ -168,33 +192,33 @@ namespace BulletManiac.Utilities
             Vector2 screenSize = GameManager.CurrentResolution.ToVector2() / 2f;
 
             //Console.WriteLine(Vector2.Normalize(mousePos) + " " + screenSize);
-            float amount = 350f;
+            //float amount = 350f;
             offset = new Vector2(0f);
             if (InputManager.GetKeyDown(Keys.LeftShift)) return; // Test
 
             float x, y;
-            if(mousePos.X > screenSize.X)
-            {
-                x = (Vector2.Normalize(mousePos).X / 2) * amount;
+            //if(mousePos.X > screenSize.X)
+            //{
+            //    x = mousePos.X - screenSize.X;
+            //}
+            //else
+            //{
+            //    x = mousePos.X - screenSize.X;
+            //}
 
-            }
-            else
-            {
-                x = -amount;
-            }
+            //if (mousePos.Y > screenSize.Y)
+            //{
+            //    y = amount;
+            //}
+            //else
+            //{
+            //    y = -amount;
+            //}
+            x = mousePos.X - screenSize.X;
+            y = mousePos.Y - screenSize.Y;
 
-            if (mousePos.Y > screenSize.Y)
-            {
-                y = amount;
-            }
-            else
-            {
-                y = -amount;
-            }
-
-            Vector2 target = new Vector2(x, y);
+            Vector2 target = new Vector2(x, y) * 0.2f;
             offset = Vector2.Lerp(offset, target, 2f * GameManager.DeltaTime);
-            //Console.WriteLine(target + " " + offset);
         }
 
         /// <summary>

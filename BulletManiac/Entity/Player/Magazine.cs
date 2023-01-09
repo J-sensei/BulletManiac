@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BulletManiac.Entity.Bullet;
 using BulletManiac.Managers;
+using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 
@@ -36,7 +37,7 @@ namespace BulletManiac.Entity.Player
 
             // Add the initial bullets
             for(int i = 0; i < capacity; i++)
-                bullets.Enqueue(new ShotgunBullet());
+                bullets.Enqueue(LoadBullet());
         }
 
         public void Update(bool shooting)
@@ -80,7 +81,7 @@ namespace BulletManiac.Entity.Player
                 {
                     // Add the bullets
                     for (int i = 0; i < capacity; i++)
-                        bullets.Enqueue(new ShotgunBullet());
+                        bullets.Enqueue(LoadBullet());
 
                     currentBulletCD = bulletCD; // Reset CD
                     GameManager.Resources.FindSoundEffect("Pistol_Cock").Play(); // Play a sound when reload is finish
@@ -89,6 +90,23 @@ namespace BulletManiac.Entity.Player
             else
             {
                 Reloading = false;
+            }
+        }
+
+        Bullet.Bullet LoadBullet()
+        {
+            int rand = Extensions.Random.Next(3);
+            Console.WriteLine(rand);
+            switch (rand)
+            {
+                case 0:
+                    return new DefaultBullet();
+                case 1:
+                    return new TrackBullet();
+                case 2:
+                    return new ShotgunBullet();
+                default:
+                    throw new Exception("Random bullet reload is out of bound");
             }
         }
 

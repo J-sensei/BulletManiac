@@ -59,7 +59,7 @@ namespace BulletManiac.AI
         private bool enableFlock; // Determine if this steering agent need to enable flock behavior
         private SteeringSetting? setting;
 
-        private bool newAgent = true;
+        //private bool newAgent = true;
         private static Queue<GameObject> targetQueue = new();
         private static Queue<SteeringAgent> agentQueue = new();
         private static int executeCount = 0;
