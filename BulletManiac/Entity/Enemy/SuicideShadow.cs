@@ -7,9 +7,6 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BulletManiac.Entity.Enemy
 {
@@ -96,6 +93,10 @@ namespace BulletManiac.Entity.Enemy
                             Position, new Vector2(1f), new List<int>() { 3, 4 }, enableEnemyDamage: true, enablePlayerDamage: true);
                 hitBox.AddSoundEffect(GameManager.Resources.FindSoundEffect("SuicideShadow_Explosion"), 1);
                 GameManager.AddGameObject(hitBox);
+
+                // Shake the camera is the explosion is happen inside the visible area
+                if (GameManager.MainCamera.InViewBound(Position))
+                    GameManager.MainCamera.Shake(2f);
             }
             base.Update(gameTime);
 
@@ -141,6 +142,10 @@ namespace BulletManiac.Entity.Enemy
                                         Position, new Vector2(1f), new List<int>() { 3, 4 }, enableEnemyDamage: true);
             hitBox.AddSoundEffect(GameManager.Resources.FindSoundEffect("SuicideShadow_Explosion"), 1);
             GameManager.AddGameObject(hitBox);
+
+            // Shake the camera is the explosion is happen inside the visible area
+            if (GameManager.MainCamera.InViewBound(Position))
+                GameManager.MainCamera.Shake(2f);
 
             base.DeleteEvent();
         }

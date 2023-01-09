@@ -33,6 +33,10 @@ namespace BulletManiac.Entity.Bullet
             Position, new Vector2(1f), new List<int>() { 3, 4 }, enableEnemyDamage: true, enablePlayerDamage: false);
             //hitBox.AddSoundEffect(GameManager.Resources.FindSoundEffect("SuicideShadow_Explosion"), 1); // Add new sound effect later
             GameManager.AddGameObject(hitBox);
+
+            // Shake the camera is the explosion is happen inside the visible area
+            if (GameManager.MainCamera.InViewBound(Position))
+                GameManager.MainCamera.Shake(2f);
         }
 
         protected override void DeleteEventWall()

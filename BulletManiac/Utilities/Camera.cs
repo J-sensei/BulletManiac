@@ -31,6 +31,7 @@ namespace BulletManiac.Utilities
             Position = Vector2.Zero;
         }
 
+
         private void UpdateVisibleArea()
         {
             var inverseViewMatrix = Matrix.Invert(Transform);
@@ -90,14 +91,22 @@ namespace BulletManiac.Utilities
 
         bool shakeViewport = false;
         float shakeStartAngle = 0;
-        const float shakeRadiusInit = 1f;
-        float shakeRadius = shakeRadiusInit;
+        const float SHAKE_RADIUS = 1f;
+        float currentShakeRadius = SHAKE_RADIUS;
+        float shakeRadius = SHAKE_RADIUS;
         float shakeTime = 0.15f;
-        float currentShakeTime =0.15f;
+        float currentShakeTime = 0.15f;
 
-        public void Shake()
+        public void Shake(float radius = SHAKE_RADIUS)
         {
+            shakeRadius = radius;
+            currentShakeRadius = radius;
             shakeViewport = true;
+        }
+
+        public bool InViewBound(Vector2 pos)
+        {
+            return VisibleArea.Contains((int)pos.X, (int)pos.Y);
         }
 
         private void UpdateShaking()
@@ -107,15 +116,15 @@ namespace BulletManiac.Utilities
             if (shakeViewport)
             {
                 //Console.WriteLine("Radius: " + shakeRadius + " Time: " + shakeTime);
-                offset = new Vector2((float)(Math.Sin(shakeStartAngle) * shakeRadius), (float)(Math.Cos(shakeStartAngle) * shakeRadius));
-                shakeRadius -= 0.25f;
+                offset = new Vector2((float)(Math.Sin(shakeStartAngle) * currentShakeRadius), (float)(Math.Cos(shakeStartAngle) * currentShakeRadius));
+                currentShakeRadius -= 0.25f;
                 shakeStartAngle += (150 + rand.Next(60));
                 currentShakeTime -= GameManager.DeltaTime;
 
-                if (currentShakeTime <= 0 || shakeRadius <= 0)
+                if (currentShakeTime <= 0 || currentShakeRadius <= 0)
                 {
                     shakeViewport = false;
-                    shakeRadius = shakeRadiusInit;
+                    currentShakeRadius = shakeRadius;
                     currentShakeTime = shakeTime;
                 }
             }
