@@ -80,7 +80,7 @@ namespace BulletManiac.Entity
             resources.LoadAnimation("ExplosionBullet_Animation", new Animation(GameManager.Resources.FindTexture("Bullet1"), 5, 25, 0.1f, 16));
 
             resources.LoadTexture("Bullet_Explosion", "SpriteSheet/Effect/Bullet_Explosion");
-            resources.LoadAnimation("BulletExplode_Animation", new Animation(GameManager.Resources.FindTexture("Bullet_Explosion"), 8, 1, 0.1f, looping: false));
+            resources.LoadAnimation("BulletExplode_Animation", new Animation(GameManager.Resources.FindTexture("Bullet_Explosion"), 8, 1, 0.07f, looping: false));
         }
 
         public Animation(Animation animation)

@@ -1,4 +1,5 @@
-﻿using BulletManiac.Managers;
+﻿using BulletManiac.Entity.Enemy;
+using BulletManiac.Managers;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,21 @@ namespace BulletManiac.Entity.Bullet
 
         void CreateExplosion()
         {
+            HitBox hitBox = new HitBox(new Animation(GameManager.Resources.FindAnimation("BulletExplode_Animation")),
+            Position, new Vector2(1f), new List<int>() { 3, 4 }, enableEnemyDamage: true, enablePlayerDamage: false);
+            //hitBox.AddSoundEffect(GameManager.Resources.FindSoundEffect("SuicideShadow_Explosion"), 1); // Add new sound effect later
+            GameManager.AddGameObject(hitBox);
+        }
 
+        protected override void DeleteEventWall()
+        {
+            CreateExplosion();
+            IsDestroyed = true;
+        }
+
+        public override void DeleteEvent()
+        {
+            CreateExplosion();
         }
 
         public override void Initialize()
