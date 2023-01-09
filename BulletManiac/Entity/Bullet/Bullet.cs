@@ -60,16 +60,18 @@ namespace BulletManiac.Entity.Bullet
             CollisionManager.Add(this, "Bullet");
         }
 
-        public virtual void UpdateShootPosition(Vector2 position, Vector2 direction, float speed = DEFAULT_SPEED, float initalSpeed = 0f)
+        public Bullet() : base("Bullet")
+        {
+            
+        }
+
+        public virtual void Shoot(Vector2 position, Vector2 direction, float speed = DEFAULT_SPEED, float initalSpeed = 0f)
         {
             this.position = position;
             Direction = direction;
             this.speed = speed;
             this.position += Direction * initalSpeed; // Move the bullet by the initial speed
-        }
-
-        public virtual void Shoot()
-        {
+            CollisionManager.Add(this, "Bullet");
             GameManager.AddGameObject(this);
         }
 

@@ -34,10 +34,9 @@ namespace BulletManiac.Entity.Player
             this.bulletCD = bulletCD;
             currentBulletCD = bulletCD;
 
+            // Add the initial bullets
             for(int i = 0; i < capacity; i++)
-            {
-                bullets.Enqueue(new TrackBullet(Vector2.Zero, Vector2.Zero));
-            }
+                bullets.Enqueue(new ShotgunBullet());
         }
 
         public void Update(bool shooting)
@@ -73,17 +72,18 @@ namespace BulletManiac.Entity.Player
 
             if (bullets.Count == 0)
             {
-                if(Reloading == false) GameManager.Resources.FindSoundEffect("Mag_In").Play();
+                if(Reloading == false) GameManager.Resources.FindSoundEffect("Mag_In").Play(); // When bullet is empty, play a sound
                 Reloading = true;
                 currentBulletCD -= GameManager.DeltaTime;
 
                 if (currentBulletCD <= 0f)
                 {
-                    for(int i = 0; i < capacity; i++)
-                        bullets.Enqueue(new TrackBullet(Vector2.Zero, Vector2.Zero));
+                    // Add the bullets
+                    for (int i = 0; i < capacity; i++)
+                        bullets.Enqueue(new ShotgunBullet());
 
-                    currentBulletCD = bulletCD;
-                    GameManager.Resources.FindSoundEffect("Pistol_Cock").Play();
+                    currentBulletCD = bulletCD; // Reset CD
+                    GameManager.Resources.FindSoundEffect("Pistol_Cock").Play(); // Play a sound when reload is finish
                 }
             }
             else

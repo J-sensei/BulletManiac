@@ -30,7 +30,7 @@ namespace BulletManiac.Entity.Bullet
         /// </summary>
         private Vector2 velocity;
 
-        public TrackBullet(Vector2 position, Vector2 direction, float speed = DEFAULT_SPEED, float initalSpeed = 0f) : base(position, direction, speed, initalSpeed)
+        public TrackBullet() : base()
         {
             Animation = new Animation(GameManager.Resources.FindAnimation("TrackBullet_Animation"));
             Animation.Reset();

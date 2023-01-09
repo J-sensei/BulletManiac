@@ -74,23 +74,15 @@ namespace BulletManiac.Entity.Player
             // Flip the gun
             float rotationDegree = MathHelper.ToDegrees(Rotation);
             if ((rotationDegree >= 90 && rotationDegree <= 180) || (rotationDegree <= -90 && rotationDegree >= -180))
-            {
                 spriteEffects = SpriteEffects.FlipVertically;
-            }
             else
-            {
                 spriteEffects = SpriteEffects.None;
-            }
 
             // Determine whether the gun need to render front to back of the holder sprite
             if (rotationDegree <= -15f && rotationDegree >= -160f)
-            {
                 RenderInfront = false;
-            }
             else
-            {
                 RenderInfront = true;
-            }
 
             Shoot(); // Gun shooting
             base.Update(gameTime);
@@ -137,12 +129,9 @@ namespace BulletManiac.Entity.Player
                 bulletDirection.Y = Extensions.RandomRangeFloat(bulletDirection.Y - accuracy, bulletDirection.Y + accuracy);
 
                 // Fire Bullet
-                //DefaultBullet bullet = new DefaultBullet(position, bulletDirection, 150f, 16f);
                 Bullet.Bullet bullet = Magazine.Shoot(); // Get the current bullet from the megazine
-                bullet.UpdateShootPosition(position, bulletDirection, 150f, 16f);
+                bullet.Shoot(position, bulletDirection, 150f, 16f);
                 GameManager.Resources.FindSoundEffect("Gun_Shoot").Play();
-                //GameManager.AddGameObject(bullet); // Straight away add bullet to entity manager to run it immediately
-                bullet.Shoot();
             }
         }
     }

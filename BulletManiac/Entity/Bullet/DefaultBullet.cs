@@ -13,7 +13,7 @@ namespace BulletManiac.Entity.Bullet
     /// </summary>
     public class DefaultBullet : Bullet
     {
-        public DefaultBullet(Vector2 position, Vector2 direction, float speed = DEFAULT_SPEED, float initalSpeed = 0f) : base(position, direction, speed, initalSpeed)
+        public DefaultBullet() : base()
         {
             //Animation = new Animation(GameManager.Resources.FindTexture("Bullet1"), 5, 25, 0.1f, 6);
             //Animation = GameManager.Resources.FindAnimation("DefaultBullet_Animation");
