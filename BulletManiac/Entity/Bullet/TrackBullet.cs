@@ -52,7 +52,7 @@ namespace BulletManiac.Entity.Bullet
                 isTarget = true;
             }
 
-            if(target != null && !target.IsDestroyed && (target.Position - position).Length() > 10f)
+            if(target != null && !target.IsDestroyed && (target.Position - position).Length() > 30f)
             {
                 steeringAgent.Update(gameTime, target);
                 velocity = steeringAgent.CurrentVelocity;
