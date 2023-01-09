@@ -36,7 +36,7 @@ namespace BulletManiac.AI
         private float currentSpeed;
         private float arrivalRadius;
 
-        private Vector2 currentVelocity;
+        private Vector2 accleration;
 
         const float DEFAULT_WANDER_CD = 2f;
         private float currentWanderCD = DEFAULT_WANDER_CD;
@@ -44,8 +44,8 @@ namespace BulletManiac.AI
         /// <summary>
         /// Velocity calculated by agent to move
         /// </summary>
-        public Vector2 CurrentVelocity { get { return currentVelocity; } }
-        public Vector2 CurrentFinalVelocity { get; private set; }
+        //public Vector2 CurrentVelocity { get { return accleration; } }
+        public Vector2 CurrentVelocity { get; private set; }
         /// <summary>
         /// Current steer behavior of the agent
         /// </summary>
@@ -104,16 +104,24 @@ namespace BulletManiac.AI
                 executeCount++;
             }
         }
-
+        
         public void Update(GameTime gameTime, GameObject target)
         {
-            if (newAgent)
-            {
-                UpdateVelocity(target); // Update immediate when agent first time execute the update
-                newAgent = false;
-            }
-            agentQueue.Enqueue(this);
-            targetQueue.Enqueue(target);
+            //if (newAgent)
+            //{
+            //    UpdateVelocity(target); // Update immediate when agent first time execute the update
+            //    newAgent = false;
+            //}
+            //agentQueue.Enqueue(this);
+            //targetQueue.Enqueue(target);
+            //cd -= GameManager.DeltaTime;
+            //if(cd <= 0f)
+            //{
+            //    UpdateVelocity(target);
+            //    //cd = 0.25f;
+            //}
+            UpdateVelocity(target);
+
 
             //switch (SteeringBehavior)
             //{
@@ -173,16 +181,16 @@ namespace BulletManiac.AI
             switch (SteeringBehavior)
             {
                 case SteeringBehavior.Seek:
-                    currentVelocity = Seek(target.Position, setting.Value.DistanceToChase);
+                    accleration = Seek(target.Position, setting.Value.DistanceToChase);
                     break;
                 case SteeringBehavior.Flee:
-                    currentVelocity = Flee(target.Position, setting.Value.DistanceToFlee);
+                    accleration = Flee(target.Position, setting.Value.DistanceToFlee);
                     break;
                 case SteeringBehavior.Arrival:
-                    currentVelocity = Arrive(target.Position, currentSpeed, arrivalRadius, setting.Value.DistanceToChase);
+                    accleration = Arrive(target.Position, currentSpeed, arrivalRadius, setting.Value.DistanceToChase);
                     break;
                 default:
-                    currentVelocity = Vector2.Zero;
+                    accleration = Vector2.Zero;
                     GameManager.Log("Steering Agent", "No Steering Behavior is selected.");
                     break;
             }
@@ -190,20 +198,21 @@ namespace BulletManiac.AI
             if (enableFlock)
             {
                 // Make sure agent will not move the user out of the map
-                Vector2 velocity = Extensions.Truncate(CurrentVelocity + currentFlock.Acceleration, currentFlock.MaxSpeed);
+                Vector2 velocity = Extensions.Truncate(accleration + currentFlock.Acceleration, currentFlock.MaxSpeed);
                 currentFlock.CurrentVelocity = velocity;
-
-
-                CurrentFinalVelocity = velocity;
+                
+                CurrentVelocity = velocity;
                 currentFlock.ResetAcceleration(); // Reset Acceleration to zero for next frame.
             }
             else
             {
-                CurrentFinalVelocity = currentVelocity;
+                Vector2 velocity = accleration - CurrentVelocity;
+                velocity = Extensions.Truncate(velocity, currentSpeed);
+                CurrentVelocity = Extensions.Truncate(CurrentVelocity + velocity, currentSpeed);
+                accleration *= 0;
             }
 
-
-            if (CurrentFinalVelocity.X >= 0) CurrentXDir = XDirection.Right;
+            if (CurrentVelocity.X >= 0) CurrentXDir = XDirection.Right;
             else CurrentXDir = XDirection.Left;
 
             if (enableFlock)
@@ -311,7 +320,7 @@ namespace BulletManiac.AI
             }
             else
             {
-                return currentVelocity;
+                return accleration;
             }
         }
 
@@ -320,12 +329,12 @@ namespace BulletManiac.AI
         /// </summary>
         /// <param name="currentVelocity"></param>
         /// <returns></returns>
-        private Vector2 GetHeading(Vector2 currentVelocity)
-        {
-            float speed = currentVelocity.Length();
-            Vector2 turnVelocity = Extensions.Approximately(speed, 0.0f) ? Vector2.Zero : currentVelocity / speed;
-            return Extensions.Approximately(turnVelocity.Length(), 0.0f) ? user.Direction : turnVelocity;
-        }
+        //private Vector2 GetHeading(Vector2 currentVelocity)
+        //{
+        //    float speed = currentVelocity.Length();
+        //    Vector2 turnVelocity = Extensions.Approximately(speed, 0.0f) ? Vector2.Zero : currentVelocity / speed;
+        //    return Extensions.Approximately(turnVelocity.Length(), 0.0f) ? user.Direction : turnVelocity;
+        //}
 
         private Vector2 ApplyMove(Vector2 velocity)
         {
@@ -363,6 +372,13 @@ namespace BulletManiac.AI
         {
             if (currentFlock != null)
                 FlockManager.Remove(user.Name, currentFlock);
+        }
+
+        public static Vector2 GetHeading(Vector2 currentVelocity)
+        {
+            float speed = currentVelocity.Length();
+            Vector2 TurnVelocity = Extensions.Approximately(speed, 0.0f) ? Vector2.Zero : currentVelocity / speed;
+            return Extensions.Approximately(TurnVelocity.Length(), 0.0f) ? Vector2.Zero : TurnVelocity;
         }
     }
 }

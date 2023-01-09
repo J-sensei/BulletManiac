@@ -36,7 +36,7 @@ namespace BulletManiac.Entity
         /// <summary>
         /// UVs for the textures
         /// </summary>
-        private Rectangle[] bounds;
+        private readonly Rectangle[] bounds;
 
         /// <summary>
         /// Current frame index in the animation (start from 0)
@@ -75,6 +75,8 @@ namespace BulletManiac.Entity
             resources.LoadAnimation("Walking_Smoke_Animation", new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false));
             resources.LoadAnimation("Destroy_Smoke_Animation", new Animation(GameManager.Resources.FindTexture("Destroy_Smoke"), 5, 1, 0.1f, looping: false));
             resources.LoadAnimation("Spawn_Smoke_Animation", new Animation(GameManager.Resources.FindTexture("Spawn_Smoke"), 8, 1, 0.1f, looping: false));
+
+            resources.LoadAnimation("TrackBullet_Animation", new Animation(GameManager.Resources.FindTexture("Bullet1"), 5, 25, 0.1f, 5));
         }
 
         public Animation(Animation animation)

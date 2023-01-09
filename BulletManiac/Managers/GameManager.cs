@@ -175,7 +175,11 @@ namespace BulletManiac.Managers
         {
             return entityManager.Find(gameObject);
         }
-        
+        public static GameObject FindNearestEnemy(GameObject gameObject)
+        {
+            return entityManager.FindNearestEnemy(gameObject);
+        }
+
         public static void Initialize()
         {
             MainCamera = new Camera(); // Create main camera for the game (Controlling zoom level to zoom in the tiles)

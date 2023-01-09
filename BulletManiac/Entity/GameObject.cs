@@ -77,6 +77,9 @@ namespace BulletManiac.Entity
         /// Current position of the game object
         /// </summary>
         public Vector2 Position { get { return position; } set { position = value; } }
+        /// <summary>
+        /// Rotation of the game object (Radian)
+        /// </summary>
         public float Rotation { 
             get 
             {
@@ -89,6 +92,9 @@ namespace BulletManiac.Entity
                 return rotation;
             }
         }
+        /// <summary>
+        /// Direction / Heading of the game object, normalized value
+        /// </summary>
         public Vector2 Direction
         {
             get => direction;
