@@ -43,10 +43,6 @@ namespace BulletManiac.Managers
         /// </summary>
         public static GraphicsDevice GraphicsDevice { get; set; }
         /// <summary>
-        /// Time different between each frames of the game
-        /// </summary>
-        public static Camera MainCamera { get; private set; }
-        /// <summary>
         /// Global accessible player
         /// </summary>
         public static Player Player { get; private set; }
@@ -134,7 +130,7 @@ namespace BulletManiac.Managers
             graphics.PreferredBackBufferHeight = CurrentResolution.Y;
             graphics.ApplyChanges();
 
-            MainCamera.AdjustZoom(CurrentCameraZoom); // Adjust the Camera zoom level after the resolution changed
+            Camera.Main.AdjustZoom(CurrentCameraZoom); // Adjust the Camera zoom level after the resolution changed
         }
 
         /// <summary>
@@ -178,7 +174,6 @@ namespace BulletManiac.Managers
 
         public static void Initialize()
         {
-            MainCamera = new Camera(); // Create main camera for the game (Controlling zoom level to zoom in the tiles)
             tiledMapRenderer = new TiledMapRenderer(GraphicsDevice); // Initialize Tiled
 
             InputManager.Initialize();
@@ -293,8 +288,8 @@ namespace BulletManiac.Managers
             }
 
             // Camera Update
-            MainCamera.Update(GraphicsDevice.Viewport);
-            MainCamera.Follow(Player); // Always follow the player
+            Camera.Main.Update(GraphicsDevice.Viewport);
+            Camera.Main.Follow(Player); // Always follow the player
 
             // Update debug status
             if (InputManager.GetKey(Keys.F12)) Debug = !Debug;
@@ -372,7 +367,7 @@ namespace BulletManiac.Managers
         /// <param name="gameTime"></param>
         public static void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            tiledMapRenderer.Draw(viewMatrix: MainCamera.Transform); // Render the Tiled
+            tiledMapRenderer.Draw(viewMatrix: Camera.Main.Transform); // Render the Tiled
 
             // Debug draw for the tiles collision
             if (Debug)

@@ -1,6 +1,7 @@
 ﻿using BulletManiac.Entity.Enemy;
 using BulletManiac.Managers;
 using BulletManiac.SpriteAnimation;
+using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -36,8 +37,8 @@ namespace BulletManiac.Entity.Bullet
             GameManager.AddGameObject(hitBox);
 
             // Shake the camera is the explosion is happen inside the visible area
-            if (GameManager.MainCamera.InViewBound(Position))
-                GameManager.MainCamera.Shake(2f);
+            if (Camera.Main.InViewBound(Position))
+                Camera.Main.Shake(2f);
         }
 
         protected override void DeleteEventWall()

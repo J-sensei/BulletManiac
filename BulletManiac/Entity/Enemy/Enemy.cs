@@ -99,14 +99,14 @@ namespace BulletManiac.Entity.Enemy
 
             // Start new drawing session with shader (Everything between this draw call will be affect by the shader apply)
             if (blink)
-                spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: GameManager.MainCamera.Transform, effect: colorOverlay);
+                spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: Camera.Main.Transform, effect: colorOverlay);
             else
-                spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: GameManager.MainCamera.Transform, effect: null);
+                spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: Camera.Main.Transform, effect: null);
 
             DrawAnimation(animationManager.CurrentAnimation, spriteBatch, gameTime);
 
             spriteBatch.End(); // End current drawing session
-            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: GameManager.MainCamera.Transform); // Resume back to normal drawing session
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: Camera.Main.Transform); // Resume back to normal drawing session
         }
 
         public override void CollisionEvent(GameObject other)

@@ -97,8 +97,8 @@ namespace BulletManiac.Entity.Enemy
                 GameManager.AddGameObject(hitBox);
 
                 // Shake the camera is the explosion is happen inside the visible area
-                if (GameManager.MainCamera.InViewBound(Position))
-                    GameManager.MainCamera.Shake(2f);
+                if (Camera.Main.InViewBound(Position))
+                    Camera.Main.Shake(2f);
             }
             base.Update(gameTime);
 
@@ -146,8 +146,8 @@ namespace BulletManiac.Entity.Enemy
             GameManager.AddGameObject(hitBox);
 
             // Shake the camera is the explosion is happen inside the visible area
-            if (GameManager.MainCamera.InViewBound(Position))
-                GameManager.MainCamera.Shake(2f);
+            if (Camera.Main.InViewBound(Position))
+                Camera.Main.Shake(2f);
 
             base.DeleteEvent();
         }

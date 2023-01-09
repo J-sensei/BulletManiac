@@ -118,7 +118,7 @@ namespace BulletManiac.Entity.Player
                 }
 
                 shooting = true; // Gun is shooting now
-                GameManager.MainCamera.Shake();
+                Camera.Main.Shake();
 
                 // Spawn Bullet
                 Vector2 mousePos = Camera.ScreenToWorld(InputManager.MousePosition); // Convert mouse screen position to the world position

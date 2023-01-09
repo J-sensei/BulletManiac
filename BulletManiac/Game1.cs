@@ -66,7 +66,7 @@ namespace BulletManiac
 
             // Game World Layer
             // SpriteBatch Begin settings make sure the texture sprite is clean when scale up
-            _spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: GameManager.MainCamera.Transform);
+            _spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: Camera.Main.Transform);
             GameManager.Draw(_spriteBatch, gameTime); // GameManager contains all the stuffs to draw
             _spriteBatch.End();
 

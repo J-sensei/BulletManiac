@@ -10,6 +10,10 @@ namespace BulletManiac.Utilities
     public class Camera
     {
         /// <summary>
+        /// Main camera of the game, access anywhere in the code
+        /// </summary>
+        public static Camera Main { get; private set; } = new();
+        /// <summary>
         /// Matrix to apply to the sprite batch to draw the correct position of graphics
         /// </summary>
         public Matrix Transform { get; set; }
@@ -317,7 +321,7 @@ namespace BulletManiac.Utilities
         /// <returns></returns>
         public static Vector2 ScreenToWorld(Vector2 position)
         {
-            var matrix = Matrix.Invert(GameManager.MainCamera.Transform); // Inverted matrix from the main camera
+            var matrix = Matrix.Invert(Main.Transform); // Inverted matrix from the main camera
             return Vector2.Transform(position, matrix); // The world position
         }
     }
