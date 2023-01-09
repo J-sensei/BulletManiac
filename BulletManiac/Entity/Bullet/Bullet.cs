@@ -91,11 +91,7 @@ namespace BulletManiac.Entity.Bullet
             // Destroy the bullet when it hit the wall
             if(CollisionManager.CheckTileCollision(this, Vector2.Zero))
             {
-                // Add smoke effect when bullet is destroy
-                TextureEffect effect = new TextureEffect(new Animation(GameManager.Resources.FindAnimation("Destroy_Smoke_Animation")),
-                                        Position, new Vector2(16, 16), new Vector2(0.65f) ,true);
-                GameManager.AddGameObject(effect);
-                IsDestroyed = true; // Destroy the bullet without trigger the delete event (as delete event is using when collide with enemy)
+                DeleteEventWall();
             }
 
             // Default bahavior of the bullet, which is moving to the desired direction
@@ -128,6 +124,18 @@ namespace BulletManiac.Entity.Bullet
                         Position, new Vector2(8, 8), new Vector2(1f), true);
             GameManager.AddGameObject(effect);
             base.DeleteEvent();
+        }
+
+        /// <summary>
+        /// Delete event for bullet when colliding with the wall
+        /// </summary>
+        protected virtual void DeleteEventWall()
+        {
+            // Add smoke effect when bullet is destroy
+            TextureEffect effect = new TextureEffect(new Animation(GameManager.Resources.FindAnimation("Destroy_Smoke_Animation")),
+                                    Position, new Vector2(16, 16), new Vector2(0.65f), true);
+            GameManager.AddGameObject(effect);
+            IsDestroyed = true; // Destroy the bullet without trigger the delete event (as delete event is using when collide with enemy)
         }
 
         public override void Dispose()

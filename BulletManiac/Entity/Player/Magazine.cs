@@ -95,6 +95,7 @@ namespace BulletManiac.Entity.Player
 
         Bullet.Bullet LoadBullet()
         {
+            return new ExplosionBullet();
             int rand = Extensions.Random.Next(3);
             Console.WriteLine(rand);
             switch (rand)
