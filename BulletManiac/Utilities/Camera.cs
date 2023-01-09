@@ -160,7 +160,7 @@ namespace BulletManiac.Utilities
             float xRight = pos.X + (VisibleArea.Width * 0.5f);
             float yUp = pos.Y - VisibleArea.Height * 0.5f;
             float yDown = pos.Y + VisibleArea.Height * 0.5f;
-            Console.WriteLine(VisibleArea);
+            //Console.WriteLine(VisibleArea);
             //Console.WriteLine("xLeft: " + xLeft + " xRight: " + xRight + " yUp: " + yUp + " yDown: " + yDown);
             Vector2 limit = pos;
             if (xLeft < minX) limit.X = minX + amount;

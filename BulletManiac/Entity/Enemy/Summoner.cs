@@ -135,6 +135,15 @@ namespace BulletManiac.Entity.Enemy
                     navigationAgent.Update(gameTime);
             }
 
+            if(navigationAgent.CurrentXDir == XDirection.Left)
+            {
+                spriteEffects = SpriteEffects.FlipHorizontally;
+            }
+            else
+            {
+                spriteEffects = SpriteEffects.None;
+            }
+
             base.Update(gameTime);
         }
 

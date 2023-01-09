@@ -95,9 +95,7 @@ namespace BulletManiac.Entity.Player
 
         Bullet.Bullet LoadBullet()
         {
-            return new DefaultBullet();
-            int rand = Extensions.Random.Next(3);
-            Console.WriteLine(rand);
+            int rand = Extensions.Random.Next(4);
             switch (rand)
             {
                 case 0:
@@ -106,6 +104,8 @@ namespace BulletManiac.Entity.Player
                     return new TrackBullet();
                 case 2:
                     return new ShotgunBullet();
+                case 3:
+                    return new ExplosionBullet();
                 default:
                     throw new Exception("Random bullet reload is out of bound");
             }
