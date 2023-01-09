@@ -301,6 +301,18 @@
 /processorParam:TextureFormat=Color
 /build:SpriteSheet/DebugUI/path_16x16.png
 
+#begin SpriteSheet/Effect/Bullet_Destroy.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:SpriteSheet/Effect/Bullet_Destroy.png
+
 #begin SpriteSheet/Effect/Bullet_Explosion.png
 /importer:TextureImporter
 /processor:TextureProcessor
