@@ -188,7 +188,7 @@ namespace BulletManiac.Entity.Player
             // Smoke Effect
             TextureEffect effect;
             SpriteEffects smokeSpriteEffects = SpriteEffects.None;
-            Animation smokeAnim = new Animation(GameManager.Resources.FindAnimation("Walking_Smoke_Animation"));
+            Animation smokeAnim = new Animation(ResourcesManager.FindAnimation("Walking_Smoke_Animation"));
             if (spriteEffects != SpriteEffects.None)
             {
                 if (!moveBackward) smokeSpriteEffects = SpriteEffects.FlipHorizontally;
@@ -238,7 +238,7 @@ namespace BulletManiac.Entity.Player
             {
                 HP -= damage;
                 invincible = true; // Player become invincible after damage is taken
-                GameManager.Resources.FindSoundEffect("Player_Hurt").Play();
+                ResourcesManager.FindSoundEffect("Player_Hurt").Play();
             }
         }
 
@@ -247,27 +247,27 @@ namespace BulletManiac.Entity.Player
             CollisionManager.Add(this, "Player"); // Add player into the collision manager
 
             // Define the keys and animations
-            animationManager.AddAnimation(PlayerAction.Idle, new Animation(GameManager.Resources.FindTexture("Player_SpriteSheet"), 2, 32, 32, idleAnimationSpeed));
-            animationManager.AddAnimation(PlayerAction.Run, new Animation(GameManager.Resources.FindTexture("Player_SpriteSheet"), 8, 32, 32, runAnimationSpeed, 4));
-            animationManager.AddAnimation(PlayerAction.Walk, new Animation(GameManager.Resources.FindTexture("Player_SpriteSheet"), 4, 32, 32, walkAnimationSpeed, 3));
-            animationManager.AddAnimation(PlayerAction.Death, new Animation(GameManager.Resources.FindTexture("Player_SpriteSheet"), 8, 32, 32, animationSpeed, 8, looping: false));
+            animationManager.AddAnimation(PlayerAction.Idle, new Animation(ResourcesManager.FindTexture("Player_SpriteSheet"), 2, 32, 32, idleAnimationSpeed));
+            animationManager.AddAnimation(PlayerAction.Run, new Animation(ResourcesManager.FindTexture("Player_SpriteSheet"), 8, 32, 32, runAnimationSpeed, 4));
+            animationManager.AddAnimation(PlayerAction.Walk, new Animation(ResourcesManager.FindTexture("Player_SpriteSheet"), 4, 32, 32, walkAnimationSpeed, 3));
+            animationManager.AddAnimation(PlayerAction.Death, new Animation(ResourcesManager.FindTexture("Player_SpriteSheet"), 8, 32, 32, animationSpeed, 8, looping: false));
 
             // Footstep sounds sample
             footstepsSounds = new List<SoundEffect>()
             {
-                GameManager.Resources.FindSoundEffect("Footstep1"),
-                GameManager.Resources.FindSoundEffect("Footstep2"),
-                GameManager.Resources.FindSoundEffect("Footstep3"),
+                ResourcesManager.FindSoundEffect("Footstep1"),
+                ResourcesManager.FindSoundEffect("Footstep2"),
+                ResourcesManager.FindSoundEffect("Footstep3"),
             };
 
             // Shadow effect initialize
-            shadowEffect = new TextureEffect(GameManager.Resources.FindTexture("Shadow"),
+            shadowEffect = new TextureEffect(ResourcesManager.FindTexture("Shadow"),
                                             new Rectangle(0, 0, 64, 64), // Crop the shadow sprite
                                             this,
                                             new Vector2(32f), new Vector2(0.5f), new Vector2(0f, -3.5f));
 
             // Shader initialize
-            colorOverlay = GameManager.Resources.FindEffect("Color_Overlay");
+            colorOverlay = ResourcesManager.FindEffect("Color_Overlay");
             colorOverlay.Parameters["overlayColor"].SetValue(Color.White.ToVector4());
             base.Initialize();
         }
@@ -312,7 +312,7 @@ namespace BulletManiac.Entity.Player
 
             // Reloading Text
             if (Gun.Reloading)
-                spriteBatch.DrawString(GameManager.Resources.FindSpriteFont("DebugFont"), "Reloading...", position + textPosOffset, Color.White, 0f, textOffset, 0.3f, SpriteEffects.None, 0f);
+                spriteBatch.DrawString(ResourcesManager.FindSpriteFont("DebugFont"), "Reloading...", position + textPosOffset, Color.White, 0f, textOffset, 0.3f, SpriteEffects.None, 0f);
         }
 
         public override void CollisionEvent(GameObject gameObject)

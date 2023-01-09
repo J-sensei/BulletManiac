@@ -121,7 +121,7 @@ namespace BulletManiac.Entity.Bullet
 
         public override void DeleteEvent()
         {
-            TextureEffect effect = new TextureEffect(new Animation(GameManager.Resources.FindTexture("Bullet1"), 5, 25, 0.05f, 3, false),
+            TextureEffect effect = new TextureEffect(new Animation(ResourcesManager.FindTexture("Bullet1"), 5, 25, 0.05f, 3, false),
                         Position, new Vector2(8, 8), new Vector2(1f), true);
             GameManager.AddGameObject(effect);
             base.DeleteEvent();
@@ -133,7 +133,7 @@ namespace BulletManiac.Entity.Bullet
         protected virtual void DeleteEventWall()
         {
             // Add smoke effect when bullet is destroy
-            TextureEffect effect = new TextureEffect(new Animation(GameManager.Resources.FindAnimation("Destroy_Smoke_Animation")),
+            TextureEffect effect = new TextureEffect(new Animation(ResourcesManager.FindAnimation("Destroy_Smoke_Animation")),
                                     Position, new Vector2(16, 16), new Vector2(0.65f), true);
             GameManager.AddGameObject(effect);
             IsDestroyed = true; // Destroy the bullet without trigger the delete event (as delete event is using when collide with enemy)

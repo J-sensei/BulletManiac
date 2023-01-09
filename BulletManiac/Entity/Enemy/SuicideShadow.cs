@@ -34,18 +34,18 @@ namespace BulletManiac.Entity.Enemy
 
         public override void Initialize()
         {
-            animationManager.AddAnimation(EnemyAction.Idle, new Animation(GameManager.Resources.FindTexture("SuicideShadow_Idle"), 8, 1, 0.1f));
-            animationManager.AddAnimation(EnemyAction.Move, new Animation(GameManager.Resources.FindTexture("SuicideShadow_Move"), 8, 1, animationSpeed));
-            animationManager.AddAnimation(EnemyAction.Attack, new Animation(GameManager.Resources.FindTexture("SuicideShadow_Attack"), 15, 1, 0.15f, looping: false));
+            animationManager.AddAnimation(EnemyAction.Idle, new Animation(ResourcesManager.FindTexture("SuicideShadow_Idle"), 8, 1, 0.1f));
+            animationManager.AddAnimation(EnemyAction.Move, new Animation(ResourcesManager.FindTexture("SuicideShadow_Move"), 8, 1, animationSpeed));
+            animationManager.AddAnimation(EnemyAction.Attack, new Animation(ResourcesManager.FindTexture("SuicideShadow_Attack"), 15, 1, 0.15f, looping: false));
             
             // Shadow Visual
-            shadowEffect = new TextureEffect(GameManager.Resources.FindTexture("Shadow"),
+            shadowEffect = new TextureEffect(ResourcesManager.FindTexture("Shadow"),
                     new Rectangle(0, 0, 64, 64), // Crop the shadow sprite
                     this,
                     new Vector2(32f), new Vector2(0.5f), new Vector2(0f, -5f));
 
             origin = animationManager.CurrentAnimation.TextureBound / 2f;
-            attackingSound = GameManager.Resources.FindSoundEffect("SuicideShadow_Attacking").CreateInstance();
+            attackingSound = ResourcesManager.FindSoundEffect("SuicideShadow_Attacking").CreateInstance();
             attackingSound.IsLooped = true;
             base.Initialize();
         }
@@ -91,9 +91,9 @@ namespace BulletManiac.Entity.Enemy
             {
                 // Explode and delete enemy
                 Destroy(this);
-                HitBox hitBox = new HitBox(new Animation(GameManager.Resources.FindTexture("SuicideShadow_Explode"), 8, 1, animationSpeed, looping: false),
+                HitBox hitBox = new HitBox(new Animation(ResourcesManager.FindTexture("SuicideShadow_Explode"), 8, 1, animationSpeed, looping: false),
                             Position, new Vector2(1f), new List<int>() { 3, 4 }, enableEnemyDamage: true, enablePlayerDamage: true);
-                hitBox.AddSoundEffect(GameManager.Resources.FindSoundEffect("SuicideShadow_Explosion"), 1);
+                hitBox.AddSoundEffect(ResourcesManager.FindSoundEffect("SuicideShadow_Explosion"), 1);
                 GameManager.AddGameObject(hitBox);
 
                 // Shake the camera is the explosion is happen inside the visible area
@@ -140,9 +140,9 @@ namespace BulletManiac.Entity.Enemy
 
         public override void DeleteEvent()
         {
-            HitBox hitBox = new HitBox(new Animation(GameManager.Resources.FindTexture("SuicideShadow_Explode"), 8, 1, animationSpeed, looping: false),
+            HitBox hitBox = new HitBox(new Animation(ResourcesManager.FindTexture("SuicideShadow_Explode"), 8, 1, animationSpeed, looping: false),
                                         Position, new Vector2(1f), new List<int>() { 3, 4 }, enableEnemyDamage: true);
-            hitBox.AddSoundEffect(GameManager.Resources.FindSoundEffect("SuicideShadow_Explosion"), 1);
+            hitBox.AddSoundEffect(ResourcesManager.FindSoundEffect("SuicideShadow_Explosion"), 1);
             GameManager.AddGameObject(hitBox);
 
             // Shake the camera is the explosion is happen inside the visible area

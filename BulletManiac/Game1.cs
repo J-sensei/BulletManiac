@@ -34,6 +34,7 @@ namespace BulletManiac
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            ResourcesManager.Initialize(Content);
             GameManager.LoadContent(Content);
         }
 

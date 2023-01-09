@@ -47,7 +47,7 @@ namespace BulletManiac.Entity.Enemy
         public override void Initialize()
         {
             // Shader initialize
-            colorOverlay = GameManager.Resources.FindEffect("Color_Overlay");
+            colorOverlay = ResourcesManager.FindEffect("Color_Overlay");
             colorOverlay.Parameters["overlayColor"].SetValue(Color.White.ToVector4());
 
             base.Initialize();
@@ -120,7 +120,7 @@ namespace BulletManiac.Entity.Enemy
                 // Deal damaage to the enemy
                 hp -= (other as Bullet.Bullet).Damage;
 
-                GameManager.Resources.FindSoundEffect("Bullet_Hit").Play(); // Bullet Hit sound
+                ResourcesManager.FindSoundEffect("Bullet_Hit").Play(); // Bullet Hit sound
                 currentAction = EnemyAction.Hit; // Change player state
                 Destroy(other); // Destroy bullet
                 blink = true;
@@ -155,7 +155,7 @@ namespace BulletManiac.Entity.Enemy
         protected Vector2 deathSmokeOffset = Vector2.Zero;
         public override void DeleteEvent()
         {
-            TextureEffect effect = new TextureEffect(new Animation(GameManager.Resources.FindAnimation("Destroy_Smoke_Animation")),
+            TextureEffect effect = new TextureEffect(new Animation(ResourcesManager.FindAnimation("Destroy_Smoke_Animation")),
                                                     Position + deathSmokeOffset, new Vector2(16, 16), new Vector2(1.25f), true);
             GameManager.AddGameObject(effect);
             base.DeleteEvent();

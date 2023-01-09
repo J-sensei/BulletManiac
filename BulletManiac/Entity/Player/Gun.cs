@@ -41,7 +41,7 @@ namespace BulletManiac.Entity.Player
             scale = new Vector2(0.4f);
             this.holder = holder;
 
-            animation = new Animation(GameManager.Resources.FindTexture("Player_Pistol"), 12, 1, currentShootAnimationSpeed, looping: false);
+            animation = new Animation(ResourcesManager.FindTexture("Player_Pistol"), 12, 1, currentShootAnimationSpeed, looping: false);
             animation.Stop();
             origin = new Vector2(0f, 16f);
             Magazine = new Magazine(DEFAULT_BULLET, DEFAULT_RELOAD_CD);
@@ -132,7 +132,7 @@ namespace BulletManiac.Entity.Player
                 // Fire Bullet
                 Bullet.Bullet bullet = Magazine.Shoot(); // Get the current bullet from the megazine
                 bullet.Shoot(position, bulletDirection, 150f, 16f);
-                GameManager.Resources.FindSoundEffect("Gun_Shoot").Play();
+                ResourcesManager.FindSoundEffect("Gun_Shoot").Play();
             }
         }
     }

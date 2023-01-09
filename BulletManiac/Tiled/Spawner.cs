@@ -25,7 +25,7 @@ namespace BulletManiac.Tiled
         {
             this.spawnDelay = spawnDelay;
             this.enemy = enemy;
-            Animation smokeAnim = new Animation(GameManager.Resources.FindAnimation("Spawn_Smoke_Animation"));
+            Animation smokeAnim = new Animation(ResourcesManager.FindAnimation("Spawn_Smoke_Animation"));
             effect = new TextureEffect(smokeAnim, position, new Vector2(16, 16), new Vector2(1.5f), true);
             GameManager.AddGameObject(effect);
         }
@@ -34,7 +34,7 @@ namespace BulletManiac.Tiled
         {
             this.spawnDelay = spawnDelay;
             this.enemy = enemy;
-            Animation smokeAnim = new Animation(GameManager.Resources.FindAnimation("Spawn_Smoke_Animation"));
+            Animation smokeAnim = new Animation(ResourcesManager.FindAnimation("Spawn_Smoke_Animation"));
             effect = new TextureEffect(smokeAnim, position + smokeOffset, new Vector2(16, 16), new Vector2(1.5f), true);
             GameManager.AddGameObject(effect);
             this.smokeOffset = smokeOffset;
@@ -46,7 +46,7 @@ namespace BulletManiac.Tiled
             if(spawnDelay <= 0f && !spawn) // Add the enemy only once
             {
                 GameManager.AddGameObject(enemy);
-                GameManager.Resources.FindSoundEffect("Enemy_Spawn").Play();
+                ResourcesManager.FindSoundEffect("Enemy_Spawn").Play();
                 spawn = true;
             }
 

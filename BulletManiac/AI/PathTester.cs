@@ -36,7 +36,7 @@ namespace BulletManiac.Tiled.AI
             destPosition = Point.Zero;
             path = new LinkedList<Tile>();
 
-            pathTexture = GameManager.Resources.FindTexture("Debug_Path");
+            pathTexture = ResourcesManager.FindTexture("Debug_Path");
         }
 
         public PathTester(Level gameLevel) : this(gameLevel.TileGraph, gameLevel.Map)

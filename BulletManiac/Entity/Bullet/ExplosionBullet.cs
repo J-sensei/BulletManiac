@@ -14,12 +14,12 @@ namespace BulletManiac.Entity.Bullet
     {
         public ExplosionBullet() : base()
         {
-            Animation = new Animation(GameManager.Resources.FindAnimation("ExplosionBullet_Animation"));
+            Animation = new Animation(ResourcesManager.FindAnimation("ExplosionBullet_Animation"));
             Animation.Reset();
 
             origin = Animation.TextureBound / 2f; // Set the origin to the center of the texture
             scale = new Vector2(0.8f);
-            BulletUI = GameManager.Resources.FindTexture("Bullet_Fill");
+            BulletUI = ResourcesManager.FindTexture("Bullet_Fill");
         }
 
         protected override Rectangle CalculateBound()
@@ -30,9 +30,9 @@ namespace BulletManiac.Entity.Bullet
 
         void CreateExplosion()
         {
-            HitBox hitBox = new HitBox(new Animation(GameManager.Resources.FindAnimation("BulletExplode_Animation")),
+            HitBox hitBox = new HitBox(new Animation(ResourcesManager.FindAnimation("BulletExplode_Animation")),
             Position, new Vector2(1f), new List<int>() { 3, 4 }, enableEnemyDamage: true, enablePlayerDamage: false);
-            hitBox.AddSoundEffect(GameManager.Resources.FindSoundEffect("SuicideShadow_Explosion"), 1); // Add new sound effect later
+            hitBox.AddSoundEffect(ResourcesManager.FindSoundEffect("SuicideShadow_Explosion"), 1); // Add new sound effect later
             GameManager.AddGameObject(hitBox);
 
             // Shake the camera is the explosion is happen inside the visible area

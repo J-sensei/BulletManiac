@@ -13,7 +13,7 @@ namespace BulletManiac.Entity.UI
     {
         private Rectangle uvBound;
 
-        public Cursor() : base(GameManager.Resources.FindTexture("Crosshair_SpriteSheet"))
+        public Cursor() : base(ResourcesManager.FindTexture("Crosshair_SpriteSheet"))
         {
             // Load sprite and set the origin
             name = "Cursor";
