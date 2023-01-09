@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
-namespace BulletManiac.Entity
+namespace BulletManiac.SpriteAnimation
 {
     /// <summary>
     /// Animation for a single sprite sheet
@@ -57,12 +57,12 @@ namespace BulletManiac.Entity
         /// <summary>
         /// Get the bound of the animation texture
         /// </summary>
-        public Vector2 TextureBound 
-        { 
-            get 
+        public Vector2 TextureBound
+        {
+            get
             {
                 return new Vector2(bounds[0].Width, bounds[0].Height);
-            } 
+            }
         }
 
         /// <summary>
@@ -85,11 +85,11 @@ namespace BulletManiac.Entity
 
         public Animation(Animation animation)
         {
-            this.texture = animation.texture;
-            this.frameCount = animation.frameCount;
-            this.frameTime = animation.frameTime;
+            texture = animation.texture;
+            frameCount = animation.frameCount;
+            frameTime = animation.frameTime;
             frameTimeLeft = animation.frameTime;
-            this.looping = animation.looping;
+            looping = animation.looping;
             bounds = animation.bounds; // Skip calculation for the bounds
         }
 
@@ -104,7 +104,7 @@ namespace BulletManiac.Entity
         public Animation(Texture2D texture, int frameCountX, int frameCountY, float frameTime, int row = 1, bool looping = true)
         {
             this.texture = texture;
-            this.frameCount = frameCountX;
+            frameCount = frameCountX;
             this.frameTime = frameTime;
             frameTimeLeft = frameTime;
             this.looping = looping;
@@ -125,7 +125,7 @@ namespace BulletManiac.Entity
         public Animation(Texture2D texture, int frameCountX, int width, int height, float frameTime, int row = 1, bool looping = true)
         {
             this.texture = texture;
-            this.frameCount = frameCountX;
+            frameCount = frameCountX;
             this.frameTime = frameTime;
             frameTimeLeft = frameTime;
             this.looping = looping;
@@ -149,7 +149,7 @@ namespace BulletManiac.Entity
             float totalSeconds = Time.DeltaTime;
             frameTimeLeft -= totalSeconds;
 
-            if(frameTimeLeft <= 0)
+            if (frameTimeLeft <= 0)
             {
                 if (looping)
                 {
@@ -167,7 +167,7 @@ namespace BulletManiac.Entity
             if (Reverse)
             {
                 // Reverse animation frmae
-                if(currentFrame == 0)
+                if (currentFrame == 0)
                 {
                     currentFrame = frameCount - 1;
                 }
@@ -258,7 +258,7 @@ namespace BulletManiac.Entity
 
         public void Dispose()
         {
-            
+
         }
     }
 }

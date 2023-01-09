@@ -1,4 +1,4 @@
-﻿using BulletManiac.Entity;
+﻿using BulletManiac.SpriteAnimation;
 using BulletManiac.Tiled;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;

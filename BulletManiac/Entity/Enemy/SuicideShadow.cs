@@ -1,6 +1,7 @@
 ﻿using BulletManiac.AI;
 using BulletManiac.Managers;
 using BulletManiac.Particle;
+using BulletManiac.SpriteAnimation;
 using BulletManiac.Tiled.AI;
 using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;

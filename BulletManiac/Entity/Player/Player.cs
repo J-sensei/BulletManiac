@@ -9,6 +9,7 @@ using System;
 using BulletManiac.Particle;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Audio;
+using BulletManiac.SpriteAnimation;
 
 namespace BulletManiac.Entity.Player
 {

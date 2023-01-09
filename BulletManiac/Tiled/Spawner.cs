@@ -2,6 +2,7 @@
 using BulletManiac.Entity.Enemy;
 using BulletManiac.Managers;
 using BulletManiac.Particle;
+using BulletManiac.SpriteAnimation;
 using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using System;

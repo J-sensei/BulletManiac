@@ -1,5 +1,6 @@
 ﻿using BulletManiac.Entity.Enemy;
 using BulletManiac.Managers;
+using BulletManiac.SpriteAnimation;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;

@@ -1,5 +1,6 @@
 ﻿using BulletManiac.AI;
 using BulletManiac.Managers;
+using BulletManiac.SpriteAnimation;
 using Microsoft.Xna.Framework;
 using System;
 
