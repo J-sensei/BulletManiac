@@ -1,6 +1,7 @@
 ﻿using BulletManiac.AI;
 using BulletManiac.Managers;
 using BulletManiac.Particle;
+using BulletManiac.SpriteAnimation;
 using BulletManiac.Tiled;
 using BulletManiac.Tiled.AI;
 using BulletManiac.Utilities;
@@ -33,15 +34,15 @@ namespace BulletManiac.Entity.Enemy
 
         public override void Initialize()
         {
-            animationManager.AddAnimation(EnemyAction.Idle, new Animation(GameManager.Resources.FindTexture("Shadow_Idle"), 4, 1, 0.1f));
-            animationManager.AddAnimation(EnemyAction.Move, new Animation(GameManager.Resources.FindTexture("Shadow_Move"), 8, 1, animationSpeed));
-            animationManager.AddAnimation(EnemyAction.Hit, new Animation(GameManager.Resources.FindTexture("Shadow_Hit"), 3, 1, 0.1f, looping: false));
-            animationManager.AddAnimation(EnemyAction.Attack, new Animation(GameManager.Resources.FindTexture("Shadow_Attack"), 6, 1, animationSpeed, looping: false));
-            animationManager.AddAnimation(EnemyAction.Die, new Animation(GameManager.Resources.FindTexture("Shadow_Death"), 6, 1, animationSpeed, looping: false));
+            animationManager.AddAnimation(EnemyAction.Idle, new Animation(ResourcesManager.FindTexture("Shadow_Idle"), 4, 1, 0.1f));
+            animationManager.AddAnimation(EnemyAction.Move, new Animation(ResourcesManager.FindTexture("Shadow_Move"), 8, 1, animationSpeed));
+            animationManager.AddAnimation(EnemyAction.Hit, new Animation(ResourcesManager.FindTexture("Shadow_Hit"), 3, 1, 0.1f, looping: false));
+            animationManager.AddAnimation(EnemyAction.Attack, new Animation(ResourcesManager.FindTexture("Shadow_Attack"), 6, 1, animationSpeed, looping: false));
+            animationManager.AddAnimation(EnemyAction.Die, new Animation(ResourcesManager.FindTexture("Shadow_Death"), 6, 1, animationSpeed, looping: false));
 
-            deathSoundEffect = GameManager.Resources.FindSoundEffect("Shadow_Death");
+            deathSoundEffect = ResourcesManager.FindSoundEffect("Shadow_Death");
             // Shadow Visual
-            shadowEffect = new TextureEffect(GameManager.Resources.FindTexture("Shadow"),
+            shadowEffect = new TextureEffect(ResourcesManager.FindTexture("Shadow"),
                     new Rectangle(0, 0, 64, 64), // Crop the shadow sprite
                     this,
                     new Vector2(32f), new Vector2(0.5f), new Vector2(0f, -5f));
@@ -65,7 +66,7 @@ namespace BulletManiac.Entity.Enemy
             {
                 if (currentAction != EnemyAction.Hit)
                     currentAction = EnemyAction.Idle; // Make enemy idle when its not in hit state
-                currentPathfindCD -= GameManager.DeltaTime;
+                currentPathfindCD -= Time.DeltaTime;
                 if (currentPathfindCD <= 0f)
                 {
                     navigationAgent.Pathfind(GameManager.CurrentLevel.TileGraph.RandomPosition); // Execute pathfinding

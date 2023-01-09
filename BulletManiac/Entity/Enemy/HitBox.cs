@@ -1,4 +1,5 @@
 ﻿using BulletManiac.Collision;
+using BulletManiac.SpriteAnimation;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;

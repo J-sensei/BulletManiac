@@ -1,6 +1,8 @@
 ﻿using BulletManiac.Collision;
 using BulletManiac.Managers;
 using BulletManiac.Particle;
+using BulletManiac.SpriteAnimation;
+using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -45,7 +47,7 @@ namespace BulletManiac.Entity.Enemy
         public override void Initialize()
         {
             // Shader initialize
-            colorOverlay = GameManager.Resources.FindEffect("Color_Overlay");
+            colorOverlay = ResourcesManager.FindEffect("Color_Overlay");
             colorOverlay.Parameters["overlayColor"].SetValue(Color.White.ToVector4());
 
             base.Initialize();
@@ -79,7 +81,7 @@ namespace BulletManiac.Entity.Enemy
 
             if (blink)
             {
-                blinkTime -= GameManager.DeltaTime;
+                blinkTime -= Time.DeltaTime;
                 if (blinkTime <= 0f)
                 {
                     blinkTime = BLINK_TIME;
@@ -97,14 +99,14 @@ namespace BulletManiac.Entity.Enemy
 
             // Start new drawing session with shader (Everything between this draw call will be affect by the shader apply)
             if (blink)
-                spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: GameManager.MainCamera.Transform, effect: colorOverlay);
+                spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: Camera.Main.Transform, effect: colorOverlay);
             else
-                spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: GameManager.MainCamera.Transform, effect: null);
+                spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: Camera.Main.Transform, effect: null);
 
             DrawAnimation(animationManager.CurrentAnimation, spriteBatch, gameTime);
 
             spriteBatch.End(); // End current drawing session
-            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: GameManager.MainCamera.Transform); // Resume back to normal drawing session
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: Camera.Main.Transform); // Resume back to normal drawing session
         }
 
         public override void CollisionEvent(GameObject other)
@@ -118,7 +120,7 @@ namespace BulletManiac.Entity.Enemy
                 // Deal damaage to the enemy
                 hp -= (other as Bullet.Bullet).Damage;
 
-                GameManager.Resources.FindSoundEffect("Bullet_Hit").Play(); // Bullet Hit sound
+                ResourcesManager.FindSoundEffect("Bullet_Hit").Play(); // Bullet Hit sound
                 currentAction = EnemyAction.Hit; // Change player state
                 Destroy(other); // Destroy bullet
                 blink = true;
@@ -146,14 +148,14 @@ namespace BulletManiac.Entity.Enemy
             }
             else
             {
-                takeDamageCD -= GameManager.DeltaTime;
+                takeDamageCD -= Time.DeltaTime;
             }
         }
 
         protected Vector2 deathSmokeOffset = Vector2.Zero;
         public override void DeleteEvent()
         {
-            TextureEffect effect = new TextureEffect(new Animation(GameManager.Resources.FindAnimation("Destroy_Smoke_Animation")),
+            TextureEffect effect = new TextureEffect(new Animation(ResourcesManager.FindAnimation("Destroy_Smoke_Animation")),
                                                     Position + deathSmokeOffset, new Vector2(16, 16), new Vector2(1.25f), true);
             GameManager.AddGameObject(effect);
             base.DeleteEvent();

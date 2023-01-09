@@ -5,6 +5,7 @@ using BulletManiac.Entity.Enemy;
 using BulletManiac.Entity.Player;
 using BulletManiac.Entity.UI;
 using BulletManiac.Particle;
+using BulletManiac.SpriteAnimation;
 using BulletManiac.Tiled;
 using BulletManiac.Tiled.AI;
 using BulletManiac.Utilities;
@@ -41,11 +42,6 @@ namespace BulletManiac.Managers
         /// Global reference of the Graphics Device of the game
         /// </summary>
         public static GraphicsDevice GraphicsDevice { get; set; }
-        /// <summary>
-        /// Time different between each frames of the game
-        /// </summary>
-        public static float DeltaTime { get; private set; }
-        public static Camera MainCamera { get; private set; }
         /// <summary>
         /// Global accessible player
         /// </summary>
@@ -94,11 +90,7 @@ namespace BulletManiac.Managers
         // Pathfinding
         private static PathTester pathTester;
         public static PathfindingAlgorithm CurrentPathfindingAlgorithm = PathfindingAlgorithm.AStar;
-
-        /// <summary>
-        /// Load / Unload and Find the resources of the game
-        /// </summary>
-        public static ResourcesManager Resources { get; set; } = new ResourcesManager();
+        
         /// <summary>
         /// Render the Tiled map (Monogame Extended)
         /// </summary>
@@ -138,7 +130,7 @@ namespace BulletManiac.Managers
             graphics.PreferredBackBufferHeight = CurrentResolution.Y;
             graphics.ApplyChanges();
 
-            MainCamera.AdjustZoom(CurrentCameraZoom); // Adjust the Camera zoom level after the resolution changed
+            Camera.Main.AdjustZoom(CurrentCameraZoom); // Adjust the Camera zoom level after the resolution changed
         }
 
         /// <summary>
@@ -182,7 +174,6 @@ namespace BulletManiac.Managers
 
         public static void Initialize()
         {
-            MainCamera = new Camera(); // Create main camera for the game (Controlling zoom level to zoom in the tiles)
             tiledMapRenderer = new TiledMapRenderer(GraphicsDevice); // Initialize Tiled
 
             InputManager.Initialize();
@@ -191,77 +182,76 @@ namespace BulletManiac.Managers
         private static void LoadDefaultResources()
         {
             // Load Sprites
-            Resources.LoadTexture("Bullet1", "SpriteSheet/Bullet/Bullets1_16x16");
-            Resources.LoadTexture("BulletEffect", "SpriteSheet/Bullet/BulletEffect_16x16");
-            Resources.LoadTexture("Walking_Smoke", "SpriteSheet/Effect/Smoke_Walking");
-            Resources.LoadTexture("Destroy_Smoke", "SpriteSheet/Effect/Smoke_Destroy");
-            Resources.LoadTexture("Spawn_Smoke", "SpriteSheet/Effect/Smoke_Spawn");
-            Resources.LoadTexture("Player_Pistol", "SpriteSheet/Gun/[FULL]PistolV1.01");
-            Resources.LoadTexture("Shadow", "SpriteSheet/Effect/Shadow");
+            ResourcesManager.LoadTexture("Bullet1", "SpriteSheet/Bullet/Bullets1_16x16");
+            ResourcesManager.LoadTexture("BulletEffect", "SpriteSheet/Bullet/BulletEffect_16x16");
+            ResourcesManager.LoadTexture("Walking_Smoke", "SpriteSheet/Effect/Smoke_Walking");
+            ResourcesManager.LoadTexture("Destroy_Smoke", "SpriteSheet/Effect/Smoke_Destroy");
+            ResourcesManager.LoadTexture("Spawn_Smoke", "SpriteSheet/Effect/Smoke_Spawn");
+            ResourcesManager.LoadTexture("Player_Pistol", "SpriteSheet/Gun/[FULL]PistolV1.01");
+            ResourcesManager.LoadTexture("Shadow", "SpriteSheet/Effect/Shadow");
 
             // Load Player Sprites
-            Resources.LoadTexture("Player_SpriteSheet", "SpriteSheet/Player/AnimationSheet_Player");
+            ResourcesManager.LoadTexture("Player_SpriteSheet", "SpriteSheet/Player/AnimationSheet_Player");
 
             // Load Enemy Sprites
-            Resources.LoadTexture("Bat_Flying", "SpriteSheet/Enemy/Bat/Flying");
-            Resources.LoadTexture("Bat_Attack", "SpriteSheet/Enemy/Bat/Attack");
-            Resources.LoadTexture("Bat_Hit", "SpriteSheet/Enemy/Bat/Hit");
+            ResourcesManager.LoadTexture("Bat_Flying", "SpriteSheet/Enemy/Bat/Flying");
+            ResourcesManager.LoadTexture("Bat_Attack", "SpriteSheet/Enemy/Bat/Attack");
+            ResourcesManager.LoadTexture("Bat_Hit", "SpriteSheet/Enemy/Bat/Hit");
 
-            Resources.LoadTexture("Shadow_Idle", "SpriteSheet/Enemy/Shadow/Idle");
-            Resources.LoadTexture("Shadow_Move", "SpriteSheet/Enemy/Shadow/Move");
-            Resources.LoadTexture("Shadow_Hit", "SpriteSheet/Enemy/Shadow/Hit");
-            Resources.LoadTexture("Shadow_Death", "SpriteSheet/Enemy/Shadow/Death");
-            Resources.LoadTexture("Shadow_Attack", "SpriteSheet/Enemy/Shadow/Attack");
+            ResourcesManager.LoadTexture("Shadow_Idle", "SpriteSheet/Enemy/Shadow/Idle");
+            ResourcesManager.LoadTexture("Shadow_Move", "SpriteSheet/Enemy/Shadow/Move");
+            ResourcesManager.LoadTexture("Shadow_Hit", "SpriteSheet/Enemy/Shadow/Hit");
+            ResourcesManager.LoadTexture("Shadow_Death", "SpriteSheet/Enemy/Shadow/Death");
+            ResourcesManager.LoadTexture("Shadow_Attack", "SpriteSheet/Enemy/Shadow/Attack");
 
-            Resources.LoadTexture("SuicideShadow_Idle", "SpriteSheet/Enemy/Suicide Shadow/Idle");
-            Resources.LoadTexture("SuicideShadow_Move", "SpriteSheet/Enemy/Suicide Shadow/Move");
-            Resources.LoadTexture("SuicideShadow_Attack", "SpriteSheet/Enemy/Suicide Shadow/Attack");
-            Resources.LoadTexture("SuicideShadow_Explode", "SpriteSheet/Enemy/Suicide Shadow/Explode");
-            Resources.LoadTexture("Summoner_SpriteSheet", "SpriteSheet/Enemy/Summoner/SpriteSheet");
+            ResourcesManager.LoadTexture("SuicideShadow_Idle", "SpriteSheet/Enemy/Suicide Shadow/Idle");
+            ResourcesManager.LoadTexture("SuicideShadow_Move", "SpriteSheet/Enemy/Suicide Shadow/Move");
+            ResourcesManager.LoadTexture("SuicideShadow_Attack", "SpriteSheet/Enemy/Suicide Shadow/Attack");
+            ResourcesManager.LoadTexture("SuicideShadow_Explode", "SpriteSheet/Enemy/Suicide Shadow/Explode");
+            ResourcesManager.LoadTexture("Summoner_SpriteSheet", "SpriteSheet/Enemy/Summoner/SpriteSheet");
 
             // Load UI Sprites
-            Resources.LoadTexture("Crosshair_SpriteSheet", "SpriteSheet/UI/Crosshair");
-            Resources.LoadTexture("Transition_Texture", "UI/Transition_Texture");
-            Resources.LoadTexture("Bullet_Fill", "UI/Bullet/bullet_fill");
-            Resources.LoadTexture("Bullet_Empty", "UI/Bullet/bullet_empty");
-            Resources.LoadSpriteFonts("DebugFont", "UI/Font/DebugFont");
+            ResourcesManager.LoadTexture("Crosshair_SpriteSheet", "SpriteSheet/UI/Crosshair");
+            ResourcesManager.LoadTexture("Transition_Texture", "UI/Transition_Texture");
+            ResourcesManager.LoadTexture("Bullet_Fill", "UI/Bullet/bullet_fill");
+            ResourcesManager.LoadTexture("Bullet_Empty", "UI/Bullet/bullet_empty");
+            ResourcesManager.LoadSpriteFonts("DebugFont", "UI/Font/DebugFont");
 
             // Load Debug UI Sprites
-            Resources.LoadTexture("Debug_Direction", "SpriteSheet/DebugUI/direction_16x16");
-            Resources.LoadTexture("Debug_Path", "SpriteSheet/DebugUI/path_16x16");
+            ResourcesManager.LoadTexture("Debug_Direction", "SpriteSheet/DebugUI/direction_16x16");
+            ResourcesManager.LoadTexture("Debug_Path", "SpriteSheet/DebugUI/path_16x16");
 
             // Load Tiled Map level
-            Resources.LoadTiledMap("Level1", "Tiled/Level/Level1");
-            Resources.LoadTiledMap("Level2", "Tiled/Level/Level2");
-            Resources.LoadTiledMap("Level3", "Tiled/Level/Level3");
+            ResourcesManager.LoadTiledMap("Level1", "Tiled/Level/Level1");
+            ResourcesManager.LoadTiledMap("Level2", "Tiled/Level/Level2");
+            ResourcesManager.LoadTiledMap("Level3", "Tiled/Level/Level3");
 
             // Load Sound Effect
-            Resources.LoadSoundEffect("Footstep1", "Audio/Footstep/Footstep1");
-            Resources.LoadSoundEffect("Footstep2", "Audio/Footstep/Footstep2");
-            Resources.LoadSoundEffect("Footstep3", "Audio/Footstep/Footstep3");
-            Resources.LoadSoundEffect("Player_Hurt", "Audio/Player/Player_Hurt");
-            Resources.LoadSoundEffect("Gun_Shoot", "Audio/Gun/Gun_Shoot");
-            Resources.LoadSoundEffect("Mag_In", "Audio/Gun/Mag_In");
-            Resources.LoadSoundEffect("Pistol_Cock", "Audio/Gun/Pistol_Cock");
-            Resources.LoadSoundEffect("Bullet_Hit", "Audio/Gun/Bullet_Hit");
-            Resources.LoadSoundEffect("Bat_Death", "Audio/Enemy/Bat Death");
-            Resources.LoadSoundEffect("Shadow_Death", "Audio/Enemy/Shadow_Death");
-            Resources.LoadSoundEffect("SuicideShadow_Explosion", "Audio/Enemy/SuicideShadow_Explosion");
-            Resources.LoadSoundEffect("SuicideShadow_Attacking", "Audio/Enemy/SuicideShadow_Attacking");
-            Resources.LoadSoundEffect("SuicideShadow_AttackStart", "Audio/Enemy/SuicideShadow_AttackStart");
-            Resources.LoadSoundEffect("Enemy_Spawn", "Audio/Enemy/Enemy_Spawn");
+            ResourcesManager.LoadSoundEffect("Footstep1", "Audio/Footstep/Footstep1");
+            ResourcesManager.LoadSoundEffect("Footstep2", "Audio/Footstep/Footstep2");
+            ResourcesManager.LoadSoundEffect("Footstep3", "Audio/Footstep/Footstep3");
+            ResourcesManager.LoadSoundEffect("Player_Hurt", "Audio/Player/Player_Hurt");
+            ResourcesManager.LoadSoundEffect("Gun_Shoot", "Audio/Gun/Gun_Shoot");
+            ResourcesManager.LoadSoundEffect("Mag_In", "Audio/Gun/Mag_In");
+            ResourcesManager.LoadSoundEffect("Pistol_Cock", "Audio/Gun/Pistol_Cock");
+            ResourcesManager.LoadSoundEffect("Bullet_Hit", "Audio/Gun/Bullet_Hit");
+            ResourcesManager.LoadSoundEffect("Bat_Death", "Audio/Enemy/Bat Death");
+            ResourcesManager.LoadSoundEffect("Shadow_Death", "Audio/Enemy/Shadow_Death");
+            ResourcesManager.LoadSoundEffect("SuicideShadow_Explosion", "Audio/Enemy/SuicideShadow_Explosion");
+            ResourcesManager.LoadSoundEffect("SuicideShadow_Attacking", "Audio/Enemy/SuicideShadow_Attacking");
+            ResourcesManager.LoadSoundEffect("SuicideShadow_AttackStart", "Audio/Enemy/SuicideShadow_AttackStart");
+            ResourcesManager.LoadSoundEffect("Enemy_Spawn", "Audio/Enemy/Enemy_Spawn");
 
-            Animation.LoadAnimations(Resources);
-            Bat.LoadContent(Resources);
-            LevelManager.LoadContent(Resources);
+            Animation.LoadAnimations();
+            Bat.LoadContent();
+            LevelManager.LoadContent();
 
             // Shader
-            Resources.LoadEffect("Color_Overlay", "Shader/ColorOverlay");
+            ResourcesManager.LoadEffect("Color_Overlay", "Shader/ColorOverlay");
         }
         
         public static void LoadContent(ContentManager content)
         {
-            Resources.Load(content); // Initialize the Resource Manager
             LoadDefaultResources(); // Load default resources needed for the game to start
 
             // Add cursor and plpayer
@@ -269,22 +259,21 @@ namespace BulletManiac.Managers
             Player = new Player(new Vector2(50f)); // Create Player in the game
             AddGameObject(Player); // Add player
             MagazineUI megazineUI = new MagazineUI(Player.Gun, new Vector2(CurrentResolution.X - 100, CurrentResolution.Y - 200)); // Gun Megazine UI
-            AddGameObjectUI(megazineUI); 
+            AddGameObjectUI(megazineUI);
 
-            pathTester = new PathTester(Resources.FindLevel("Level1-1")); // Pathfinding Tester
+            pathTester = new PathTester(ResourcesManager.FindLevel("Level1-1")); // Pathfinding Tester
             levelManager = new LevelManager(tiledMapRenderer, pathTester); // Level Manager 
             Player.Position = CurrentLevel.SpawnPosition;
 
             spawner.Start(); // Start the spawner immediately
 
             // Transition Effect initialization
-            transitionEffect = new TransitionEffect(Resources.FindTexture("Transition_Texture"));
+            transitionEffect = new TransitionEffect(ResourcesManager.FindTexture("Transition_Texture"));
             transitionEffect.Initialize();
         }
 
         public static void Update(GameTime gameTime)
         {
-            DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds; // Update the delta time variable
             InputManager.Update(gameTime); // Update the input manager
             tiledMapRenderer.Update(gameTime); // Tiled Map Update
 
@@ -299,8 +288,8 @@ namespace BulletManiac.Managers
             }
 
             // Camera Update
-            MainCamera.Update(GraphicsDevice.Viewport);
-            MainCamera.Follow(Player); // Always follow the player
+            Camera.Main.Update(GraphicsDevice.Viewport);
+            Camera.Main.Follow(Player); // Always follow the player
 
             // Update debug status
             if (InputManager.GetKey(Keys.F12)) Debug = !Debug;
@@ -348,7 +337,7 @@ namespace BulletManiac.Managers
             }
             else if(transitionDuration > 0f && levelUpdated)
             {
-                transitionDuration -= DeltaTime;
+                transitionDuration -= Time.DeltaTime;
             }
             transitionEffect.Update(gameTime);
         }
@@ -378,7 +367,7 @@ namespace BulletManiac.Managers
         /// <param name="gameTime"></param>
         public static void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            tiledMapRenderer.Draw(viewMatrix: MainCamera.Transform); // Render the Tiled
+            tiledMapRenderer.Draw(viewMatrix: Camera.Main.Transform); // Render the Tiled
 
             // Debug draw for the tiles collision
             if (Debug)
@@ -402,12 +391,12 @@ namespace BulletManiac.Managers
         public static void DrawUI(SpriteBatch spriteBatch, GameTime gameTime)
         {
             entityManager.DrawUI(spriteBatch, gameTime);
-            
-            fpsCounter.Draw(spriteBatch, Resources.FindSpriteFont("DebugFont"), new Vector2(150f, 5f), Color.Red);
-            spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "Player HP: " + Player.HP.ToString("N0"), new Vector2(5f, 5f), Color.Red);
-            spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "Enemy Count: " + entityManager.EnemyCount, new Vector2(5f, 20f), Color.Red);
-            spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "Floor: " + floor, new Vector2(5f, 40f), Color.Red);
-            spriteBatch.DrawString(Resources.FindSpriteFont("DebugFont"), "Is Level Finish: " + IsLevelFinish, new Vector2(5f, 60f), Color.Red);
+
+            fpsCounter.Draw(spriteBatch, ResourcesManager.FindSpriteFont("DebugFont"), new Vector2(150f, 5f), Color.Red);
+            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("DebugFont"), "Player HP: " + Player.HP.ToString("N0"), new Vector2(5f, 5f), Color.Red);
+            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("DebugFont"), "Enemy Count: " + entityManager.EnemyCount, new Vector2(5f, 20f), Color.Red);
+            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("DebugFont"), "Floor: " + floor, new Vector2(5f, 40f), Color.Red);
+            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("DebugFont"), "Is Level Finish: " + IsLevelFinish, new Vector2(5f, 60f), Color.Red);
             transitionEffect.Draw(spriteBatch, gameTime);
         }
 

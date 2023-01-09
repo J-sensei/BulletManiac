@@ -10,6 +10,10 @@ namespace BulletManiac.Utilities
     public class Camera
     {
         /// <summary>
+        /// Main camera of the game, access anywhere in the code
+        /// </summary>
+        public static Camera Main { get; private set; } = new();
+        /// <summary>
         /// Matrix to apply to the sprite batch to draw the correct position of graphics
         /// </summary>
         public Matrix Transform { get; set; }
@@ -119,7 +123,7 @@ namespace BulletManiac.Utilities
                 offset = new Vector2((float)(Math.Sin(shakeStartAngle) * currentShakeRadius), (float)(Math.Cos(shakeStartAngle) * currentShakeRadius));
                 currentShakeRadius -= 0.25f;
                 shakeStartAngle += (150 + rand.Next(60));
-                currentShakeTime -= GameManager.DeltaTime;
+                currentShakeTime -= Time.DeltaTime;
 
                 if (currentShakeTime <= 0 || currentShakeRadius <= 0)
                 {
@@ -167,7 +171,7 @@ namespace BulletManiac.Utilities
             if (xRight > maxX) limit.X = maxX - amount * 1.3f;
             if (yUp < minY) limit.Y = minY + amount * 0.5f;
             if (yDown > maxY) limit.Y = maxY - amount * 0.8f;
-            Position = Vector2.Lerp(Position + offset, limit, 5f * GameManager.DeltaTime); // Update the camera position
+            Position = Vector2.Lerp(Position + offset, limit, 5f * Time.DeltaTime); // Update the camera position
         }
 
         public void AdjustZoom(float zoomAmount)
@@ -227,7 +231,7 @@ namespace BulletManiac.Utilities
             y = mousePos.Y - screenSize.Y;
 
             Vector2 target = new Vector2(x, y) * 0.2f;
-            offset = Vector2.Lerp(offset, target, 2f * GameManager.DeltaTime);
+            offset = Vector2.Lerp(offset, target, 2f * Time.DeltaTime);
         }
 
         /// <summary>
@@ -317,7 +321,7 @@ namespace BulletManiac.Utilities
         /// <returns></returns>
         public static Vector2 ScreenToWorld(Vector2 position)
         {
-            var matrix = Matrix.Invert(GameManager.MainCamera.Transform); // Inverted matrix from the main camera
+            var matrix = Matrix.Invert(Main.Transform); // Inverted matrix from the main camera
             return Vector2.Transform(position, matrix); // The world position
         }
     }

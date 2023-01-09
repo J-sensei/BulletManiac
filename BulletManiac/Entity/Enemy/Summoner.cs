@@ -2,6 +2,7 @@
 using BulletManiac.Collision;
 using BulletManiac.Managers;
 using BulletManiac.Particle;
+using BulletManiac.SpriteAnimation;
 using BulletManiac.Tiled;
 using BulletManiac.Tiled.AI;
 using BulletManiac.Utilities;
@@ -53,13 +54,13 @@ namespace BulletManiac.Entity.Enemy
             const int WIDTH = 64;
             const int HEIGHT = 64;
             // Define the keys and animations
-            animationManager.AddAnimation(EnemyAction.Idle, new Animation(GameManager.Resources.FindTexture("Summoner_SpriteSheet"), 8, WIDTH, HEIGHT, animationSpeed));
-            animationManager.AddAnimation(EnemyAction.Move, new Animation(GameManager.Resources.FindTexture("Summoner_SpriteSheet"), 7, WIDTH, HEIGHT, animationSpeed, 3));
-            animationManager.AddAnimation(EnemyAction.Die, new Animation(GameManager.Resources.FindTexture("Summoner_SpriteSheet"), 8, WIDTH, HEIGHT, animationSpeed, 9, looping: false));
-            animationManager.AddAnimation(EnemyAction.Attack, new Animation(GameManager.Resources.FindTexture("Summoner_SpriteSheet"), 8, WIDTH, HEIGHT, animationSpeed, 5, looping: false));
+            animationManager.AddAnimation(EnemyAction.Idle, new Animation(ResourcesManager.FindTexture("Summoner_SpriteSheet"), 8, WIDTH, HEIGHT, animationSpeed));
+            animationManager.AddAnimation(EnemyAction.Move, new Animation(ResourcesManager.FindTexture("Summoner_SpriteSheet"), 7, WIDTH, HEIGHT, animationSpeed, 3));
+            animationManager.AddAnimation(EnemyAction.Die, new Animation(ResourcesManager.FindTexture("Summoner_SpriteSheet"), 8, WIDTH, HEIGHT, animationSpeed, 9, looping: false));
+            animationManager.AddAnimation(EnemyAction.Attack, new Animation(ResourcesManager.FindTexture("Summoner_SpriteSheet"), 8, WIDTH, HEIGHT, animationSpeed, 5, looping: false));
 
             // Shadow Visual
-            shadowEffect = new TextureEffect(GameManager.Resources.FindTexture("Shadow"),
+            shadowEffect = new TextureEffect(ResourcesManager.FindTexture("Shadow"),
                     new Rectangle(0, 0, 64, 64), // Crop the shadow sprite
                     this,
                     new Vector2(32f), new Vector2(0.6f), new Vector2(0f, 10f));
@@ -82,7 +83,7 @@ namespace BulletManiac.Entity.Enemy
 
             if(currentAction == EnemyAction.Idle)
             {
-                idleCD -= GameManager.DeltaTime;
+                idleCD -= Time.DeltaTime;
                 if(idleCD <= 0f)
                 {
                     currentAction = EnemyAction.Move;
@@ -157,7 +158,7 @@ namespace BulletManiac.Entity.Enemy
                 attacking = false;
 
                 // Smoke effect
-                TextureEffect effect = new TextureEffect(new Animation(GameManager.Resources.FindAnimation("Destroy_Smoke_Animation")),
+                TextureEffect effect = new TextureEffect(new Animation(ResourcesManager.FindAnimation("Destroy_Smoke_Animation")),
                                         Position + summonOffset, new Vector2(16, 16), new Vector2(1.5f), true);
                 GameManager.AddGameObject(effect);
                 currentAction = EnemyAction.Idle;

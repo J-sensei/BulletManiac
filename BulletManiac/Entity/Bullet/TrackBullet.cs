@@ -1,5 +1,6 @@
 ﻿using BulletManiac.AI;
 using BulletManiac.Managers;
+using BulletManiac.SpriteAnimation;
 using Microsoft.Xna.Framework;
 using System;
 
@@ -32,12 +33,12 @@ namespace BulletManiac.Entity.Bullet
 
         public TrackBullet() : base()
         {
-            Animation = new Animation(GameManager.Resources.FindAnimation("TrackBullet_Animation"));
+            Animation = new Animation(ResourcesManager.FindAnimation("TrackBullet_Animation"));
             Animation.Reset();
 
             origin = Animation.TextureBound / 2f; // Set the origin to the center of the texture
             scale = new Vector2(0.8f);
-            BulletUI = GameManager.Resources.FindTexture("Bullet_Fill");
+            BulletUI = ResourcesManager.FindTexture("Bullet_Fill");
             traceSpeed = speed * 1.2f;
             steeringAgent = new SteeringAgent(this, setting, FlockSetting.Default, traceSpeed);
             steeringAgent.SteeringBehavior = SteeringBehavior.Seek;

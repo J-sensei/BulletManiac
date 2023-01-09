@@ -1,6 +1,8 @@
 ﻿using BulletManiac.AI;
 using BulletManiac.Managers;
 using BulletManiac.Particle;
+using BulletManiac.SpriteAnimation;
+using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -38,10 +40,10 @@ namespace BulletManiac.Entity.Enemy
             steerAgent = new SteeringAgent(this, BAT_STERRING_SETTING, BAT_FLOCK_SETTING, BAT_SPEED, BAT_ARRIVAL_RADIUS, true);
             steerAgent.SteeringBehavior = SteeringBehavior.Arrival;
 
-            animationManager.AddAnimation(EnemyAction.Idle, new Animation(GameManager.Resources.FindTexture("Bat_Flying"), 7, 1, animationSpeed));
-            animationManager.AddAnimation(EnemyAction.Move, new Animation(GameManager.Resources.FindTexture("Bat_Flying"), 7, 1, animationSpeed));
-            animationManager.AddAnimation(EnemyAction.Hit, new Animation(GameManager.Resources.FindTexture("Bat_Hit"), 3, 1, 0.2f, looping: false));
-            animationManager.AddAnimation(EnemyAction.Attack, new Animation(GameManager.Resources.FindTexture("Bat_Attack"), 10, 1, animationSpeed, looping: false));
+            animationManager.AddAnimation(EnemyAction.Idle, new Animation(ResourcesManager.FindTexture("Bat_Flying"), 7, 1, animationSpeed));
+            animationManager.AddAnimation(EnemyAction.Move, new Animation(ResourcesManager.FindTexture("Bat_Flying"), 7, 1, animationSpeed));
+            animationManager.AddAnimation(EnemyAction.Hit, new Animation(ResourcesManager.FindTexture("Bat_Hit"), 3, 1, 0.2f, looping: false));
+            animationManager.AddAnimation(EnemyAction.Attack, new Animation(ResourcesManager.FindTexture("Bat_Attack"), 10, 1, animationSpeed, looping: false));
 
             //animationManager.AddAnimation(EnemyAction.Idle, new Animation(GameManager.Resources.FindTexture("FlyingEye_Flying"), 8, 1, animationSpeed));
             //animationManager.AddAnimation(EnemyAction.Move, new Animation(GameManager.Resources.FindTexture("FlyingEye_Flying"), 8, 1, animationSpeed));
@@ -54,19 +56,19 @@ namespace BulletManiac.Entity.Enemy
             scale = new Vector2(0.5f);
 
             // Shadow visual
-            shadowEffect = new TextureEffect(GameManager.Resources.FindTexture("Shadow"),
+            shadowEffect = new TextureEffect(ResourcesManager.FindTexture("Shadow"),
                                 new Rectangle(0, 0, 64, 64), // Crop the shadow sprite
                                 this,
                                 new Vector2(32f), new Vector2(0.25f), new Vector2(0f, 2f));
-            deathSoundEffect = GameManager.Resources.FindSoundEffect("Bat_Death");
+            deathSoundEffect = ResourcesManager.FindSoundEffect("Bat_Death");
         }
 
-        public static void LoadContent(ResourcesManager resources)
+        public static void LoadContent()
         {
-            resources.LoadTexture("FlyingEye_Flying", "SpriteSheet/Enemy/Flying Eye/Flight");
-            resources.LoadTexture("FlyingEye_Death", "SpriteSheet/Enemy/Flying Eye/Death");
-            resources.LoadTexture("FlyingEye_Hit", "SpriteSheet/Enemy/Flying Eye/Take Hit");
-            resources.LoadTexture("FlyingEye_Attack", "SpriteSheet/Enemy/Flying Eye/Attack");
+            ResourcesManager.LoadTexture("FlyingEye_Flying", "SpriteSheet/Enemy/Flying Eye/Flight");
+            ResourcesManager.LoadTexture("FlyingEye_Death", "SpriteSheet/Enemy/Flying Eye/Death");
+            ResourcesManager.LoadTexture("FlyingEye_Hit", "SpriteSheet/Enemy/Flying Eye/Take Hit");
+            ResourcesManager.LoadTexture("FlyingEye_Attack", "SpriteSheet/Enemy/Flying Eye/Attack");
         }
 
         const float MOVE_CD = 0.25f;
@@ -84,7 +86,7 @@ namespace BulletManiac.Entity.Enemy
             if (currentAction == EnemyAction.Move)
             {
                 // The steering behavior will update every MOVE_CD second
-                moveCD -= GameManager.DeltaTime;
+                moveCD -= Time.DeltaTime;
                 if(moveCD <= 0f)
                 {
                     steerAgent.Update(gameTime, GameManager.Player); // Bat is flying toward to the player
@@ -102,7 +104,7 @@ namespace BulletManiac.Entity.Enemy
                 if (Position.Y > GameManager.CurrentLevel.Bound.Height && velocity.Y > 0f)
                     velocity.Y = 0f;
 
-                Position += velocity * GameManager.DeltaTime; // Update the position of the bat
+                Position += velocity * Time.DeltaTime; // Update the position of the bat
             }
 
             // Texture flipping

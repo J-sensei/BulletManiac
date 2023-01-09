@@ -1,4 +1,5 @@
 ﻿using BulletManiac.Managers;
+using BulletManiac.SpriteAnimation;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -17,12 +18,12 @@ namespace BulletManiac.Entity.Bullet
         {
             //Animation = new Animation(GameManager.Resources.FindTexture("Bullet1"), 5, 25, 0.1f, 6);
             //Animation = GameManager.Resources.FindAnimation("DefaultBullet_Animation");
-            Animation = new Animation(GameManager.Resources.FindAnimation("DefaultBullet_Animation"));
+            Animation = new Animation(ResourcesManager.FindAnimation("DefaultBullet_Animation"));
             Animation.Reset();
 
             origin = new Vector2(8f); // Set the origin to the center of the texture
             scale = new Vector2(0.8f);
-            BulletUI = GameManager.Resources.FindTexture("Bullet_Fill");
+            BulletUI = ResourcesManager.FindTexture("Bullet_Fill");
         }
 
         protected override Rectangle CalculateBound()

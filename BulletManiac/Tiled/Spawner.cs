@@ -2,6 +2,7 @@
 using BulletManiac.Entity.Enemy;
 using BulletManiac.Managers;
 using BulletManiac.Particle;
+using BulletManiac.SpriteAnimation;
 using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using System;
@@ -24,7 +25,7 @@ namespace BulletManiac.Tiled
         {
             this.spawnDelay = spawnDelay;
             this.enemy = enemy;
-            Animation smokeAnim = new Animation(GameManager.Resources.FindAnimation("Spawn_Smoke_Animation"));
+            Animation smokeAnim = new Animation(ResourcesManager.FindAnimation("Spawn_Smoke_Animation"));
             effect = new TextureEffect(smokeAnim, position, new Vector2(16, 16), new Vector2(1.5f), true);
             GameManager.AddGameObject(effect);
         }
@@ -33,7 +34,7 @@ namespace BulletManiac.Tiled
         {
             this.spawnDelay = spawnDelay;
             this.enemy = enemy;
-            Animation smokeAnim = new Animation(GameManager.Resources.FindAnimation("Spawn_Smoke_Animation"));
+            Animation smokeAnim = new Animation(ResourcesManager.FindAnimation("Spawn_Smoke_Animation"));
             effect = new TextureEffect(smokeAnim, position + smokeOffset, new Vector2(16, 16), new Vector2(1.5f), true);
             GameManager.AddGameObject(effect);
             this.smokeOffset = smokeOffset;
@@ -41,11 +42,11 @@ namespace BulletManiac.Tiled
 
         public override void Update(GameTime gameTime)
         {
-            spawnDelay -= GameManager.DeltaTime;
+            spawnDelay -= Time.DeltaTime;
             if(spawnDelay <= 0f && !spawn) // Add the enemy only once
             {
                 GameManager.AddGameObject(enemy);
-                GameManager.Resources.FindSoundEffect("Enemy_Spawn").Play();
+                ResourcesManager.FindSoundEffect("Enemy_Spawn").Play();
                 spawn = true;
             }
 
@@ -93,7 +94,7 @@ namespace BulletManiac.Tiled
             // Every X second spawn x enemy from list
             if(currentNumber > 0)
             {
-                currentSpawnCD -= GameManager.DeltaTime;
+                currentSpawnCD -= Time.DeltaTime;
                 if (currentSpawnCD <= 0f)
                 {
                     Vector2 pos = GameManager.CurrentLevel.TileGraph.RandomPositionAwayFromDistance(100f);

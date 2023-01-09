@@ -9,18 +9,20 @@ using System;
 using BulletManiac.Particle;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Audio;
+using BulletManiac.SpriteAnimation;
 
 namespace BulletManiac.Entity.Player
 {
+    /// <summary>
+    /// Player actions, used to determine animation
+    /// </summary>
+    public enum PlayerAction
+    {
+        Idle, Run, Walk, Dash, Death
+    }
+
     public class Player : GameObject
     {
-        /// <summary>
-        /// Player actions, used to determine animation
-        /// </summary>
-        enum PlayerAction
-        {
-            Idle, Run, Walk, Death
-        }
 
         private AnimationManager animationManager; // Manange the animation based on certain action
         private List<SoundEffect> footstepsSounds; // Footstep sounds to play when walking
@@ -29,6 +31,7 @@ namespace BulletManiac.Entity.Player
 
         // Player status
         private float moveSpeed = 80f;
+        private float dashSpeed = 180f;
         const float DEFAULT_HP = 100f;
         public float HP { get; private set; }
 
@@ -37,9 +40,11 @@ namespace BulletManiac.Entity.Player
         private float idleAnimationSpeed = 0.2f;
         private float walkAnimationSpeed = 0.2f;
         private float runAnimationSpeed = 0.08f;
+        private float dashAnimationSpeed = 0.08f;
 
         private bool moveBackward = false; // Determine if player is moving backward while facing forward
         private PlayerAction currentAction = PlayerAction.Idle; // Current action of the player is doing
+        public PlayerAction CurrentAction { get => currentAction; }
 
         // Invincible variables
         private bool invincible = false;
@@ -54,7 +59,12 @@ namespace BulletManiac.Entity.Player
         // Text position and offset to render with the player
         private Vector2 textOffset = new Vector2(32f, 0f);
         private Vector2 textPosOffset = new Vector2(0f, -16f);
-        
+
+        // Dashing variables
+        private Vector2 dashDirection;
+        private bool dashing = false;
+        private float dashCD = 0f;
+
         public Gun Gun { get; private set; } // Player gun
 
         public Player(Vector2 position)
@@ -73,6 +83,52 @@ namespace BulletManiac.Entity.Player
         {
             Vector2 pos = position - (origin * scale / 1.1f) + new Vector2(2f, 0f);
             return new Rectangle((int)pos.X, (int)pos.Y + 3, (int)((origin.X * 2) * scale.X / 1.25f), (int)((origin.Y * 2) * scale.Y / 1.1f));
+        }
+
+        private void Dash()
+        {
+            if (InputManager.MouseRightClick && !dashing && dashCD <= 0f)
+            {
+                currentAction = PlayerAction.Dash;
+                dashing = true;
+                if (InputManager.Moving)
+                {
+                    dashDirection = InputManager.Direction;
+                }
+                else
+                {
+                    if (spriteEffects == SpriteEffects.None)
+                        dashDirection.X = 1f;
+                    else
+                        dashDirection.X = -1f;
+
+                    float offset = 150f;
+                    if(InputManager.MousePosition.Y > (GameManager.CurrentResolution.Y / 2f) + offset)
+                        dashDirection.Y = 1f;
+                    else if(InputManager.MousePosition.Y < (GameManager.CurrentResolution.Y / 2f) - offset)
+                        dashDirection.Y = -1f;
+                    else
+                        dashDirection.Y = 0f;
+                }
+                dashDirection.Normalize();
+            }
+
+            if (dashing)
+            {
+                ApplyMove(dashDirection, dashSpeed); // Move to the dashDirection when dashing
+
+                if (animationManager.CurrentAnimation.Finish)
+                {
+                    dashing = false;
+                    animationManager.GetAnimation(PlayerAction.Dash).Reset();
+                    dashCD = 0.5f;
+                }
+            }
+            else
+            {
+                if(dashCD > 0f)
+                    dashCD -= Time.DeltaTime;
+            }
         }
 
         private void PlayerMovement()
@@ -130,7 +186,7 @@ namespace BulletManiac.Entity.Player
             bool moveX = false; // Determine if the player can move left / right
             bool moveY = false; // Determine if the player can move up / down
 
-            Vector2 moveAmount = Vector2.Normalize(direction) * moveSpeed * GameManager.DeltaTime; // Amount of move in this frmae
+            Vector2 moveAmount = Vector2.Normalize(direction) * moveSpeed * Time.DeltaTime; // Amount of move in this frmae
             Vector2 moveAmountX = moveAmount; // Amount of move for x axis
             moveAmountX.Y = 0;
             Vector2 moveAmountY = moveAmount; // Amount of move for y axis
@@ -187,7 +243,7 @@ namespace BulletManiac.Entity.Player
             // Smoke Effect
             TextureEffect effect;
             SpriteEffects smokeSpriteEffects = SpriteEffects.None;
-            Animation smokeAnim = new Animation(GameManager.Resources.FindAnimation("Walking_Smoke_Animation"));
+            Animation smokeAnim = new Animation(ResourcesManager.FindAnimation("Walking_Smoke_Animation"));
             if (spriteEffects != SpriteEffects.None)
             {
                 if (!moveBackward) smokeSpriteEffects = SpriteEffects.FlipHorizontally;
@@ -211,8 +267,8 @@ namespace BulletManiac.Entity.Player
         {
             if (invincible)
             {
-                currentInvincibleTime -= GameManager.DeltaTime;
-                blinkToggleTime -= GameManager.DeltaTime;
+                currentInvincibleTime -= Time.DeltaTime;
+                blinkToggleTime -= Time.DeltaTime;
 
                 // Update blink effect
                 if (blinkToggleTime <= 0f)
@@ -233,11 +289,11 @@ namespace BulletManiac.Entity.Player
         public void TakeDamage(float damage)
         {
             // If player is not in invincible 
-            if (!invincible)
+            if (!invincible && !dashing)
             {
                 HP -= damage;
                 invincible = true; // Player become invincible after damage is taken
-                GameManager.Resources.FindSoundEffect("Player_Hurt").Play();
+                ResourcesManager.FindSoundEffect("Player_Hurt").Play();
             }
         }
 
@@ -246,27 +302,28 @@ namespace BulletManiac.Entity.Player
             CollisionManager.Add(this, "Player"); // Add player into the collision manager
 
             // Define the keys and animations
-            animationManager.AddAnimation(PlayerAction.Idle, new Animation(GameManager.Resources.FindTexture("Player_SpriteSheet"), 2, 32, 32, idleAnimationSpeed));
-            animationManager.AddAnimation(PlayerAction.Run, new Animation(GameManager.Resources.FindTexture("Player_SpriteSheet"), 8, 32, 32, runAnimationSpeed, 4));
-            animationManager.AddAnimation(PlayerAction.Walk, new Animation(GameManager.Resources.FindTexture("Player_SpriteSheet"), 4, 32, 32, walkAnimationSpeed, 3));
-            animationManager.AddAnimation(PlayerAction.Death, new Animation(GameManager.Resources.FindTexture("Player_SpriteSheet"), 8, 32, 32, animationSpeed, 8, looping: false));
+            animationManager.AddAnimation(PlayerAction.Idle, new Animation(ResourcesManager.FindTexture("Player_SpriteSheet"), 2, 32, 32, idleAnimationSpeed));
+            animationManager.AddAnimation(PlayerAction.Run, new Animation(ResourcesManager.FindTexture("Player_SpriteSheet"), 8, 32, 32, runAnimationSpeed, 4));
+            animationManager.AddAnimation(PlayerAction.Walk, new Animation(ResourcesManager.FindTexture("Player_SpriteSheet"), 4, 32, 32, walkAnimationSpeed, 3));
+            animationManager.AddAnimation(PlayerAction.Death, new Animation(ResourcesManager.FindTexture("Player_SpriteSheet"), 8, 32, 32, animationSpeed, 8, looping: false));
+            animationManager.AddAnimation(PlayerAction.Dash, new Animation(ResourcesManager.FindTexture("Player_SpriteSheet"), 3, 32, 32, dashAnimationSpeed, 7, looping: false));
 
             // Footstep sounds sample
             footstepsSounds = new List<SoundEffect>()
             {
-                GameManager.Resources.FindSoundEffect("Footstep1"),
-                GameManager.Resources.FindSoundEffect("Footstep2"),
-                GameManager.Resources.FindSoundEffect("Footstep3"),
+                ResourcesManager.FindSoundEffect("Footstep1"),
+                ResourcesManager.FindSoundEffect("Footstep2"),
+                ResourcesManager.FindSoundEffect("Footstep3"),
             };
 
             // Shadow effect initialize
-            shadowEffect = new TextureEffect(GameManager.Resources.FindTexture("Shadow"),
+            shadowEffect = new TextureEffect(ResourcesManager.FindTexture("Shadow"),
                                             new Rectangle(0, 0, 64, 64), // Crop the shadow sprite
                                             this,
                                             new Vector2(32f), new Vector2(0.5f), new Vector2(0f, -3.5f));
 
             // Shader initialize
-            colorOverlay = GameManager.Resources.FindEffect("Color_Overlay");
+            colorOverlay = ResourcesManager.FindEffect("Color_Overlay");
             colorOverlay.Parameters["overlayColor"].SetValue(Color.White.ToVector4());
             base.Initialize();
         }
@@ -274,8 +331,10 @@ namespace BulletManiac.Entity.Player
         public override void Update(GameTime gameTime)
         {
             if (GameManager.CurrentLevel.TouchingDoor(Bound)) GameManager.UpdateLevel(); // Update level
+            Dash();
             Invincible();
-            PlayerMovement();
+            if(!dashing)
+                PlayerMovement();
             Gun.Update(gameTime); // Gun logic
 
             animationManager.Update(currentAction, gameTime); // Update the animations
@@ -290,9 +349,9 @@ namespace BulletManiac.Entity.Player
 
             // Start new drawing session with shader (Everything between this draw call will be affect by the shader apply)
             if(invincible && blink)
-                spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: GameManager.MainCamera.Transform, effect: colorOverlay);
+                spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: Camera.Main.Transform, effect: colorOverlay);
             else
-                spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: GameManager.MainCamera.Transform, effect: null);
+                spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: Camera.Main.Transform, effect: null);
             
             // Draw the gun and player
             if (Gun.RenderInfront)
@@ -307,11 +366,11 @@ namespace BulletManiac.Entity.Player
             }
 
             spriteBatch.End(); // End current drawing session
-            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: GameManager.MainCamera.Transform); // Resume back to normal drawing session
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: Camera.Main.Transform); // Resume back to normal drawing session
 
             // Reloading Text
             if (Gun.Reloading)
-                spriteBatch.DrawString(GameManager.Resources.FindSpriteFont("DebugFont"), "Reloading...", position + textPosOffset, Color.White, 0f, textOffset, 0.3f, SpriteEffects.None, 0f);
+                spriteBatch.DrawString(ResourcesManager.FindSpriteFont("DebugFont"), "Reloading...", position + textPosOffset, Color.White, 0f, textOffset, 0.3f, SpriteEffects.None, 0f);
         }
 
         public override void CollisionEvent(GameObject gameObject)

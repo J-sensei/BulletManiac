@@ -163,7 +163,7 @@ namespace BulletManiac.Tiled
         /// <param name="spriteBatch"></param>
         public static void DebugDrawGraph(SpriteBatch spriteBatch, TileGraph tileGraph)
         {
-            Texture2D debugTexture = GameManager.Resources.FindTexture("Debug_Direction");
+            Texture2D debugTexture = ResourcesManager.FindTexture("Debug_Direction");
             int[] count = { 0, 1, 0, 8, 2, 0, 4, 0 }; // Direction texture crop position
             
             foreach (Tile tile in tileGraph.Nodes)

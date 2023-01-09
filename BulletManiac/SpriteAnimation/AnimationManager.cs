@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
-namespace BulletManiac.Entity
+namespace BulletManiac.SpriteAnimation
 {
     /// <summary>
     /// Handle animation in different situations
@@ -21,11 +21,12 @@ namespace BulletManiac.Entity
         /// <summary>
         /// Current animation need to be draw
         /// </summary>
-        public Animation CurrentAnimation { 
+        public Animation CurrentAnimation
+        {
             get
             {
                 return animations[lastKey];
-            } 
+            }
         }
 
         private bool active = true;
@@ -48,9 +49,9 @@ namespace BulletManiac.Entity
         /// <returns></returns>
         public Animation GetAnimation(object key)
         {
-            if(animations.ContainsKey(key))
+            if (animations.ContainsKey(key))
                 return animations[key];
-            else 
+            else
                 return null;
         }
 
@@ -85,7 +86,7 @@ namespace BulletManiac.Entity
 
         public void Dispose()
         {
-            foreach(var animation in animations.Values)
+            foreach (var animation in animations.Values)
             {
                 animation.Dispose();
             }

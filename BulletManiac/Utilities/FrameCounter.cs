@@ -23,7 +23,7 @@ namespace BulletManiac.Utilities
             elapsed = (double)(now - last);
             if (elapsed > msgFrequency)
             {
-                msg = " Fps: " + (frames / elapsed).ToString() + "\n Elapsed time: " + elapsed.ToString() + "\n Updates (UPS): " + updates.ToString() + "\n Frames (FPS): " + frames.ToString() + "\n Delta Time: " + GameManager.DeltaTime.ToString();
+                msg = " Fps: " + (frames / elapsed).ToString() + "\n Elapsed time: " + elapsed.ToString() + "\n Updates (UPS): " + updates.ToString() + "\n Frames (FPS): " + frames.ToString() + "\n Delta Time: " + Time.DeltaTime.ToString();
                 //Console.WriteLine(msg);
                 elapsed = 0;
                 frames = 0;

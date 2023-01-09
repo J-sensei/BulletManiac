@@ -45,7 +45,7 @@ namespace BulletManiac.Entity.UI
             
             for(int i = 0; i < c; i++)
             {
-                spriteBatch.Draw(GameManager.Resources.FindTexture("Bullet_Empty"), position + offset, null, Color.White, angle, Vector2.Zero, Vector2.One * 2, SpriteEffects.None, 0f);
+                spriteBatch.Draw(ResourcesManager.FindTexture("Bullet_Empty"), position + offset, null, Color.White, angle, Vector2.Zero, Vector2.One * 2, SpriteEffects.None, 0f);
                 offset.Y += 20f;
             }
         }
