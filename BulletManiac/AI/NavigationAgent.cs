@@ -133,7 +133,7 @@ namespace BulletManiac.Tiled.AI
                         }
 
                         // Move
-                        Vector2 movePos = Move(user.Position, headPosition, GameManager.DeltaTime, speed);
+                        Vector2 movePos = Move(user.Position, headPosition, Time.DeltaTime, speed);
                         user.Position = movePos; // Move the user
                     }
                     catch(Exception ex)

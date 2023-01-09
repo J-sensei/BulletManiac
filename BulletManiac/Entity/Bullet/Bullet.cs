@@ -95,7 +95,7 @@ namespace BulletManiac.Entity.Bullet
             }
 
             // Default bahavior of the bullet, which is moving to the desired direction
-            position += CalculateVelocity() * GameManager.DeltaTime; // Move the bullet
+            position += CalculateVelocity() * Time.DeltaTime; // Move the bullet
             base.Update(gameTime);
         }
 

@@ -146,7 +146,7 @@ namespace BulletManiac.Entity
         public void Update(GameTime gameTime)
         {
             if (!active) return;
-            float totalSeconds = GameManager.DeltaTime;
+            float totalSeconds = Time.DeltaTime;
             frameTimeLeft -= totalSeconds;
 
             if(frameTimeLeft <= 0)

@@ -41,7 +41,7 @@ namespace BulletManiac.Tiled
 
         public override void Update(GameTime gameTime)
         {
-            spawnDelay -= GameManager.DeltaTime;
+            spawnDelay -= Time.DeltaTime;
             if(spawnDelay <= 0f && !spawn) // Add the enemy only once
             {
                 GameManager.AddGameObject(enemy);
@@ -93,7 +93,7 @@ namespace BulletManiac.Tiled
             // Every X second spawn x enemy from list
             if(currentNumber > 0)
             {
-                currentSpawnCD -= GameManager.DeltaTime;
+                currentSpawnCD -= Time.DeltaTime;
                 if (currentSpawnCD <= 0f)
                 {
                     Vector2 pos = GameManager.CurrentLevel.TileGraph.RandomPositionAwayFromDistance(100f);

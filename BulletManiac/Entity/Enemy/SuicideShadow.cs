@@ -2,6 +2,7 @@
 using BulletManiac.Managers;
 using BulletManiac.Particle;
 using BulletManiac.Tiled.AI;
+using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -106,7 +107,7 @@ namespace BulletManiac.Entity.Enemy
             {
                 if (currentAction != EnemyAction.Hit)
                     currentAction = EnemyAction.Idle; // Make enemy idle when its not in hit state
-                currentPathfindCD -= GameManager.DeltaTime;
+                currentPathfindCD -= Time.DeltaTime;
                 if (currentPathfindCD <= 0f)
                 {
                     var nodes = GameManager.CurrentLevel.TileGraph.Nodes;

@@ -265,7 +265,7 @@ namespace BulletManiac.AI
                 //Normalize the vector so that we get a vector that points in a certain direction, which we van multiply by our desired speed
                 pull.Normalize();
                 //Set the ships new position;
-                source.Position += (pull * currentSpeed) * GameManager.DeltaTime;
+                source.Position += (pull * currentSpeed) * Time.DeltaTime;
             }
         }
 
@@ -304,7 +304,7 @@ namespace BulletManiac.AI
 
         private Vector2 Wander(float radius, float distance)
         {
-            currentWanderCD -= GameManager.DeltaTime;
+            currentWanderCD -= Time.DeltaTime;
             if (currentWanderCD <= 0f)
             {
                 Vector2 circle = new Vector2(Extensions.NextFloat() * 2 - 1, Extensions.NextFloat() * 2 - 1);

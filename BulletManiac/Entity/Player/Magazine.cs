@@ -75,7 +75,7 @@ namespace BulletManiac.Entity.Player
             {
                 if(Reloading == false) GameManager.Resources.FindSoundEffect("Mag_In").Play(); // When bullet is empty, play a sound
                 Reloading = true;
-                currentBulletCD -= GameManager.DeltaTime;
+                currentBulletCD -= Time.DeltaTime;
 
                 if (currentBulletCD <= 0f)
                 {

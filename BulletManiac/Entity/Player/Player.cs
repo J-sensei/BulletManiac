@@ -130,7 +130,7 @@ namespace BulletManiac.Entity.Player
             bool moveX = false; // Determine if the player can move left / right
             bool moveY = false; // Determine if the player can move up / down
 
-            Vector2 moveAmount = Vector2.Normalize(direction) * moveSpeed * GameManager.DeltaTime; // Amount of move in this frmae
+            Vector2 moveAmount = Vector2.Normalize(direction) * moveSpeed * Time.DeltaTime; // Amount of move in this frmae
             Vector2 moveAmountX = moveAmount; // Amount of move for x axis
             moveAmountX.Y = 0;
             Vector2 moveAmountY = moveAmount; // Amount of move for y axis
@@ -211,8 +211,8 @@ namespace BulletManiac.Entity.Player
         {
             if (invincible)
             {
-                currentInvincibleTime -= GameManager.DeltaTime;
-                blinkToggleTime -= GameManager.DeltaTime;
+                currentInvincibleTime -= Time.DeltaTime;
+                blinkToggleTime -= Time.DeltaTime;
 
                 // Update blink effect
                 if (blinkToggleTime <= 0f)

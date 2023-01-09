@@ -82,7 +82,7 @@ namespace BulletManiac.Entity.Enemy
 
             if(currentAction == EnemyAction.Idle)
             {
-                idleCD -= GameManager.DeltaTime;
+                idleCD -= Time.DeltaTime;
                 if(idleCD <= 0f)
                 {
                     currentAction = EnemyAction.Move;

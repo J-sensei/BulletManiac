@@ -1,6 +1,7 @@
 ﻿using BulletManiac.AI;
 using BulletManiac.Managers;
 using BulletManiac.Particle;
+using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -84,7 +85,7 @@ namespace BulletManiac.Entity.Enemy
             if (currentAction == EnemyAction.Move)
             {
                 // The steering behavior will update every MOVE_CD second
-                moveCD -= GameManager.DeltaTime;
+                moveCD -= Time.DeltaTime;
                 if(moveCD <= 0f)
                 {
                     steerAgent.Update(gameTime, GameManager.Player); // Bat is flying toward to the player
@@ -102,7 +103,7 @@ namespace BulletManiac.Entity.Enemy
                 if (Position.Y > GameManager.CurrentLevel.Bound.Height && velocity.Y > 0f)
                     velocity.Y = 0f;
 
-                Position += velocity * GameManager.DeltaTime; // Update the position of the bat
+                Position += velocity * Time.DeltaTime; // Update the position of the bat
             }
 
             // Texture flipping

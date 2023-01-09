@@ -1,4 +1,5 @@
 ﻿using BulletManiac.Managers;
+using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -41,10 +42,13 @@ namespace BulletManiac
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            Time.totalTime = (float)gameTime.TotalGameTime.TotalSeconds; // Total time of the program
+            Time.deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds; // Update the delta time variable
+
             GameManager.Update(gameTime); // Update all the game stuffs
             base.Update(gameTime);
 
-            // Teat Resolution change
+            // Test Resolution change
             if (InputManager.GetKey(Keys.P))
             {
                 GameManager.CurrentResolutionIndex = ++GameManager.CurrentResolutionIndex % 4;

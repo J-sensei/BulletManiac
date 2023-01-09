@@ -119,7 +119,7 @@ namespace BulletManiac.Utilities
                 offset = new Vector2((float)(Math.Sin(shakeStartAngle) * currentShakeRadius), (float)(Math.Cos(shakeStartAngle) * currentShakeRadius));
                 currentShakeRadius -= 0.25f;
                 shakeStartAngle += (150 + rand.Next(60));
-                currentShakeTime -= GameManager.DeltaTime;
+                currentShakeTime -= Time.DeltaTime;
 
                 if (currentShakeTime <= 0 || currentShakeRadius <= 0)
                 {
@@ -167,7 +167,7 @@ namespace BulletManiac.Utilities
             if (xRight > maxX) limit.X = maxX - amount * 1.3f;
             if (yUp < minY) limit.Y = minY + amount * 0.5f;
             if (yDown > maxY) limit.Y = maxY - amount * 0.8f;
-            Position = Vector2.Lerp(Position + offset, limit, 5f * GameManager.DeltaTime); // Update the camera position
+            Position = Vector2.Lerp(Position + offset, limit, 5f * Time.DeltaTime); // Update the camera position
         }
 
         public void AdjustZoom(float zoomAmount)
@@ -227,7 +227,7 @@ namespace BulletManiac.Utilities
             y = mousePos.Y - screenSize.Y;
 
             Vector2 target = new Vector2(x, y) * 0.2f;
-            offset = Vector2.Lerp(offset, target, 2f * GameManager.DeltaTime);
+            offset = Vector2.Lerp(offset, target, 2f * Time.DeltaTime);
         }
 
         /// <summary>

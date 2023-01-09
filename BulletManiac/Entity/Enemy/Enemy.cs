@@ -1,6 +1,7 @@
 ﻿using BulletManiac.Collision;
 using BulletManiac.Managers;
 using BulletManiac.Particle;
+using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -79,7 +80,7 @@ namespace BulletManiac.Entity.Enemy
 
             if (blink)
             {
-                blinkTime -= GameManager.DeltaTime;
+                blinkTime -= Time.DeltaTime;
                 if (blinkTime <= 0f)
                 {
                     blinkTime = BLINK_TIME;
@@ -146,7 +147,7 @@ namespace BulletManiac.Entity.Enemy
             }
             else
             {
-                takeDamageCD -= GameManager.DeltaTime;
+                takeDamageCD -= Time.DeltaTime;
             }
         }
 

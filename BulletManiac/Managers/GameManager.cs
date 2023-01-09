@@ -44,7 +44,6 @@ namespace BulletManiac.Managers
         /// <summary>
         /// Time different between each frames of the game
         /// </summary>
-        public static float DeltaTime { get; private set; }
         public static Camera MainCamera { get; private set; }
         /// <summary>
         /// Global accessible player
@@ -284,7 +283,6 @@ namespace BulletManiac.Managers
 
         public static void Update(GameTime gameTime)
         {
-            DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds; // Update the delta time variable
             InputManager.Update(gameTime); // Update the input manager
             tiledMapRenderer.Update(gameTime); // Tiled Map Update
 
@@ -348,7 +346,7 @@ namespace BulletManiac.Managers
             }
             else if(transitionDuration > 0f && levelUpdated)
             {
-                transitionDuration -= DeltaTime;
+                transitionDuration -= Time.DeltaTime;
             }
             transitionEffect.Update(gameTime);
         }
