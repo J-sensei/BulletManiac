@@ -36,7 +36,7 @@ namespace BulletManiac.Entity.Player
 
             for(int i = 0; i < capacity; i++)
             {
-                bullets.Enqueue(new DefaultBullet(Vector2.Zero, Vector2.Zero));
+                bullets.Enqueue(new TrackBullet(Vector2.Zero, Vector2.Zero));
             }
         }
 
@@ -80,7 +80,7 @@ namespace BulletManiac.Entity.Player
                 if (currentBulletCD <= 0f)
                 {
                     for(int i = 0; i < capacity; i++)
-                        bullets.Enqueue(new DefaultBullet(Vector2.Zero, Vector2.Zero));
+                        bullets.Enqueue(new TrackBullet(Vector2.Zero, Vector2.Zero));
 
                     currentBulletCD = bulletCD;
                     GameManager.Resources.FindSoundEffect("Pistol_Cock").Play();

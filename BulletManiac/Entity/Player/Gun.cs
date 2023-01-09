@@ -15,7 +15,7 @@ namespace BulletManiac.Entity.Player
 
         private bool shooting = false;
 
-        public const int DEFAULT_BULLET = 30;
+        public const int DEFAULT_BULLET = 5;
         public int CurrentBullet { get; private set; } = 5;
         const float DEFAULT_RELOAD_CD = 1f;
 
@@ -141,7 +141,8 @@ namespace BulletManiac.Entity.Player
                 Bullet.Bullet bullet = Magazine.Shoot(); // Get the current bullet from the megazine
                 bullet.UpdateShootPosition(position, bulletDirection, 150f, 16f);
                 GameManager.Resources.FindSoundEffect("Gun_Shoot").Play();
-                GameManager.AddGameObject(bullet); // Straight away add bullet to entity manager to run it immediately
+                //GameManager.AddGameObject(bullet); // Straight away add bullet to entity manager to run it immediately
+                bullet.Shoot();
             }
         }
     }

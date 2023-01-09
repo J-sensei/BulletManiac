@@ -120,6 +120,22 @@ namespace BulletManiac.Managers
             }
         }
 
+        public GameObject FindNearestEnemy(GameObject finder)
+        {
+            GameObject result = null;
+            float min = -1f;
+            for(int i = 0; i < enemyGameObjects.Count; i++)
+            {
+                float distance = (enemyGameObjects[i].Position - finder.Position).Length();
+                if (distance < min || min == -1f)
+                {
+                    result = enemyGameObjects[i];
+                    min = distance;
+                }
+            }
+            return result;
+        }
+
         public void Update(GameTime gameTime)
         {
             updating = true; // Game objects is start to update

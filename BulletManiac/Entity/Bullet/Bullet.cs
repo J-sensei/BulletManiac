@@ -13,14 +13,22 @@ namespace BulletManiac.Entity.Bullet
     /// </summary>
     public abstract class Bullet : GameObject
     {
+        #region Constants
         protected const float DEFAULT_SPEED = 100f;
         protected const float DEFAULT_BASED_DAMAGE = 10f;
         protected const float DEFAULT_DAMAGE_MULTIPLIER = 1f;
         protected const float DEFAULT_ANIMATION_SPEED = 0.2f;
+        #endregion
 
-        private Animation animation;
+        private Animation animation; // Animation of the bullet (All bullet should use animation to draw)
+        /// <summary>
+        /// Bullet Texture to render in the UI to indicate player which bullet is in the megazine
+        /// </summary>
         public Texture2D BulletUI { get; protected set; }
-        protected float speed = 100f;
+        /// <summary>
+        /// Current speed of the bullet
+        /// </summary>
+        protected float speed = DEFAULT_SPEED;
 
         /// <summary>
         /// Original damage of the bullet
@@ -38,11 +46,13 @@ namespace BulletManiac.Entity.Bullet
             get { return basedDamage * damageMultiplier; }
         }
 
+        /// <summary>
+        /// Animation of the bullet (All bullet should use animation to draw)
+        /// </summary>
         protected Animation Animation { get { return animation; } set { animation = value; } }
 
-        public Bullet(Vector2 position, Vector2 direction, float speed = DEFAULT_SPEED, float initalSpeed = 0f)
+        public Bullet(Vector2 position, Vector2 direction, float speed = DEFAULT_SPEED, float initalSpeed = 0f) : base("Bullet")
         {
-            name = "Bullet";
             this.position = position;
             Direction = direction;
             this.speed = speed;
@@ -50,12 +60,17 @@ namespace BulletManiac.Entity.Bullet
             CollisionManager.Add(this, "Bullet");
         }
 
-        public void UpdateShootPosition(Vector2 position, Vector2 direction, float speed = DEFAULT_SPEED, float initalSpeed = 0f)
+        public virtual void UpdateShootPosition(Vector2 position, Vector2 direction, float speed = DEFAULT_SPEED, float initalSpeed = 0f)
         {
             this.position = position;
             Direction = direction;
             this.speed = speed;
             this.position += Direction * initalSpeed; // Move the bullet by the initial speed
+        }
+
+        public virtual void Shoot()
+        {
+            GameManager.AddGameObject(this);
         }
 
         public override void Initialize()
@@ -75,17 +90,24 @@ namespace BulletManiac.Entity.Bullet
             if(CollisionManager.CheckTileCollision(this, Vector2.Zero))
             {
                 // Add smoke effect when bullet is destroy
-                //TextureEffect effect = new TextureEffect(new Animation(GameManager.Resources.FindTexture("Walking_Smoke"), 6, 1, 0.1f, looping: false),
-                //                                        Position, new Vector2(32, 32), true);
                 TextureEffect effect = new TextureEffect(new Animation(GameManager.Resources.FindAnimation("Destroy_Smoke_Animation")),
                                         Position, new Vector2(16, 16), new Vector2(0.65f) ,true);
                 GameManager.AddGameObject(effect);
-                IsDestroyed = true; // Manually destroyvfor this
+                IsDestroyed = true; // Destroy the bullet without trigger the delete event (as delete event is using when collide with enemy)
             }
 
             // Default bahavior of the bullet, which is moving to the desired direction
-            position += Direction * speed * GameManager.DeltaTime; // Move the bullet
+            position += CalculateVelocity() * GameManager.DeltaTime; // Move the bullet
             base.Update(gameTime);
+        }
+
+        /// <summary>
+        /// Bullet velocity calculation logic
+        /// </summary>
+        /// <returns></returns>
+        protected virtual Vector2 CalculateVelocity()
+        {
+            return Direction * speed;
         }
 
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
