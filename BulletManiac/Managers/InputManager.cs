@@ -23,10 +23,32 @@ namespace BulletManiac.Managers
         /// </summary>
         public static bool Moving => direction != Vector2.Zero;
         public static Vector2 MousePosition { get; private set; }
+        /// <summary>
+        /// One shot click of the left mouse button
+        /// </summary>
         public static bool MouseLeftClick { get; private set; }
+        /// <summary>
+        /// One shot click of the right mouse button
+        /// </summary>
         public static bool MouseRightClick { get; private set; }
+        /// <summary>
+        /// Holding click of the left mouse button
+        /// </summary>
         public static bool MouseLeftHold { get; private set; }
+        /// <summary>
+        /// Holding click of the right mouse button
+        /// </summary>
         public static bool MouseRightHold { get; private set; }
+        /// <summary>
+        /// Release of the left mouse button
+        /// </summary>
+        public static bool MouseLeftReleased { get; private set; }
+        /// <summary>
+        /// Release of the right mouse button
+        /// </summary>
+        public static bool MouseRightReleased { get; private set; }
+
+
         public static bool MouseScrollUp { get; private set; }
         public static bool MouseScrollDown { get; private set; }
         private static float currentMouseWheel, previousMouseWheel;
@@ -93,6 +115,8 @@ namespace BulletManiac.Managers
             MouseRightClick = mouseState.RightButton == ButtonState.Pressed && lastMouseState.RightButton == ButtonState.Released;
             MouseLeftHold = mouseState.LeftButton == ButtonState.Pressed;
             MouseRightHold = mouseState.RightButton == ButtonState.Pressed;
+            MouseLeftReleased = mouseState.LeftButton == ButtonState.Released;
+            MouseRightReleased = mouseState.RightButton == ButtonState.Released;
 
             previousMouseWheel = currentMouseWheel;
             currentMouseWheel = mouseState.ScrollWheelValue;

@@ -175,5 +175,10 @@ namespace BulletManiac.Collision
             else
                 return true;
         }
+
+        public static void Clear()
+        {
+            collidables.Clear();
+        }
     }
 }

@@ -31,9 +31,9 @@ namespace BulletManiac.Particle
 
         public void Initialize()
         {
-            for (int x = 8; x - 16 < GameManager.GraphicsDevice.Viewport.Width; x += 16)
+            for (int x = 8; x - 16 < Game1.GraphicsDeviceInstance.Viewport.Width; x += 16)
             {
-                for (int y = 8; y - 16 < GameManager.GraphicsDevice.Viewport.Height; y += 16)
+                for (int y = 8; y - 16 < Game1.GraphicsDeviceInstance.Viewport.Height; y += 16)
                 {
                     items.Add(new FadeItem
                     {

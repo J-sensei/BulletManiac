@@ -67,6 +67,7 @@ namespace BulletManiac.Tiled
                 }
             }
             EnemySpawned = enemySpawned;
+            Map.GetLayer<TiledMapTileLayer>("Door Open").Opacity = 0;
         }
 
         public bool TouchingDoor(Rectangle rect)
@@ -80,6 +81,16 @@ namespace BulletManiac.Tiled
                 }
             }
             return false;
+        }
+
+        public void DoorOpen()
+        {
+            Map.GetLayer<TiledMapTileLayer>("Door Open").Opacity = 1;
+        }
+
+        public void DoorClose()
+        {
+            Map.GetLayer<TiledMapTileLayer>("Door Open").Opacity = 0;
         }
 
         public Level(TiledMap map, int colStart, int rowStart, Color backgroundColor, Vector2 spawnPosition, int difficulty = 0) : this(map, colStart, rowStart, difficulty)

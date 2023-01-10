@@ -90,7 +90,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="5" name="Door Open" width="17" height="18" visible="0">
+ <layer id="5" name="Door Open" width="17" height="18">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,70,0,0,0,0,0,0,0,0,
