@@ -63,7 +63,7 @@ namespace BulletManiac.Scenes
             Button tutorialBtn = new Button(new Vector2(screenSize.Width / 2, screenSize.Height / 2), new Vector2(3.2f, 2.5f), "Tutorial");
             Button playBtn = new Button(new Vector2(screenSize.Width / 2, screenSize.Height / 2 + 70f), new Vector2(3.2f, 2.5f), "Play");
             Button settingBtn = new Button(new Vector2(screenSize.Width / 2, screenSize.Height / 2 + 140f), new Vector2(3.2f, 2.5f), "Setting");
-            Button quitBtn = new Button(new Vector2(screenSize.Width / 2, screenSize.Height / 2 + 210f), new Vector2(3.2f, 2.5f), "Exit");
+            Button quitBtn = new Button(new Vector2(screenSize.Width / 2, screenSize.Height / 2 + 210f), new Vector2(3.2f, 2.5f), "Quit");
 
             playBtn.ClickEvent += Play;
             quitBtn.ClickEvent += Exit;

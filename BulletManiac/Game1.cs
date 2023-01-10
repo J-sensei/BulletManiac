@@ -10,6 +10,7 @@ namespace BulletManiac
 {
     public class Game1 : Game
     {
+        const int INITIAL_SCENE = 0;
         /// <summary>
         /// Singleton of the Game (Monogame)
         /// </summary>
@@ -53,7 +54,8 @@ namespace BulletManiac
             ResourcesManager.Initialize(Content);
             SceneManager.Add(new MainMenuScene());
             SceneManager.Add(new GameScene());
-            SceneManager.LoadScene(1);
+            SceneManager.Add(new PauseScene());
+            SceneManager.LoadScene(INITIAL_SCENE);
 
             ResourcesManager.LoadTexture("Cursor", "SpriteSheet/UI/Cursor");
             Cursor.Instance = new Cursor();
@@ -65,8 +67,8 @@ namespace BulletManiac
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            //    Exit();
 
             Time.totalTime = (float)gameTime.TotalGameTime.TotalSeconds; // Total time of the program
             Time.deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds; // Update the delta time variable
@@ -83,15 +85,6 @@ namespace BulletManiac
                 GameManager.CurrentResolutionIndex = ++GameManager.CurrentResolutionIndex % 4;
                 GameManager.UpdateScreenSize(_graphics);
             }
-
-            //if (InputManager.GetKey(Keys.Q))
-            //{
-            //    SceneManager.GetScene(0).StopUpdate();
-            //}
-            //if (InputManager.GetKey(Keys.E))
-            //{
-            //    SceneManager.LoadScene(0);
-            //}
 
             IsMouseVisible = GameManager.Debug; // Show mouse cursor in debug mode
         }

@@ -330,6 +330,7 @@ namespace BulletManiac.Entity.Player
             colorOverlay = ResourcesManager.FindEffect("Color_Overlay");
             colorOverlay.Parameters["overlayColor"].SetValue(Color.White.ToVector4());
 
+            // The HP Bar of the player
             hpBar = new ProgressBar(ResourcesManager.FindTexture("HP_Background"), ResourcesManager.FindTexture("HP_Foreground"), 100, new Vector2(25f), new Vector2(4f));
             GameManager.AddGameObjectUI(hpBar);
             hpBar.UpdateValue(HP);

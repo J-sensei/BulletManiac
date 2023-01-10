@@ -76,7 +76,7 @@ namespace BulletManiac.Entity.UI
             }
             else if (mode == CursorMode.MouseAction)
             {
-                uvBound = new Rectangle(1 * SIZE, 0 * SIZE, SIZE, SIZE);
+                uvBound = new Rectangle(3 * SIZE, 0 * SIZE, SIZE, SIZE);
                 origin = new Vector2(0f);
             }
             else if(mode == CursorMode.Loading)

@@ -54,6 +54,24 @@ namespace BulletManiac.Scenes
             }
         }
 
+        /// <summary>
+        /// Open the open overlay current scene
+        /// </summary>
+        /// <param name="index"></param>
+        public static void OpenScene(int index)
+        {
+            if (!scenes[index].IsContentLoaded)
+                scenes[index].LoadContent();
+
+            scenes[index].Initialize();
+            scenes[index].Start();
+        }
+
+        public static void CloseScene(int index)
+        {
+            scenes[index].Stop();
+        }
+
         public static Scene GetScene(int index)
         {
             return scenes[index];

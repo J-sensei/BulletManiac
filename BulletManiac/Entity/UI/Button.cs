@@ -58,7 +58,7 @@ namespace BulletManiac.Entity.UI
                     hoverSound = true;
                 }
 
-                Cursor.Instance.ChangeMode(CursorMode.MouseAction);
+                Cursor.Instance.ChangeMode(CursorMode.MouseAction); // Hover effect
                 if (InputManager.MouseLeftHold)
                 {
                     uvBound = new Rectangle(5 * SIZE, 4 * SIZE, SIZE, SIZE); // Mouse click effect

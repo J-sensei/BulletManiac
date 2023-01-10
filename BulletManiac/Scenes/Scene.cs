@@ -23,10 +23,11 @@ namespace BulletManiac.Scenes
         /// </summary>
         public bool IsDrawing { get; private set; }
         public Color ClearColor { get; protected set; } = Color.CornflowerBlue;
+        public string Name { get; protected set; }
 
-        public Scene()
+        public Scene(string name = "Scene")
         {
-
+            Name = name;
         }
 
         public void Stop()

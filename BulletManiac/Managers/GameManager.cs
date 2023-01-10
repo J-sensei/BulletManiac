@@ -5,6 +5,7 @@ using BulletManiac.Entity.Enemy;
 using BulletManiac.Entity.Player;
 using BulletManiac.Entity.UI;
 using BulletManiac.Particle;
+using BulletManiac.Scenes;
 using BulletManiac.SpriteAnimation;
 using BulletManiac.Tiled;
 using BulletManiac.Tiled.AI;
@@ -120,6 +121,16 @@ namespace BulletManiac.Managers
         /// </summary>
         private static FrameCounter fpsCounter = new();
 
+        public static float TimePass { get; private set; }
+        public static string TimePassString
+        {
+            get
+            {
+                var ts = TimeSpan.FromSeconds(TimePass);
+                return string.Format("{0:00}:{1:00}", ts.Minutes, ts.Seconds);
+            }
+        }
+
         /// <summary>
         /// Change resolution of the game
         /// </summary>
@@ -194,6 +205,10 @@ namespace BulletManiac.Managers
             // Transition Effect initialization
             transitionEffect = new TransitionEffect(ResourcesManager.FindTexture("Transition_Texture"));
             transitionEffect.Initialize();
+
+            // Status reset
+            floor = 1; // Reset the floor count
+            TimePass = 0f;
 
             ApplyTransition(); // Run the transition when the game start
         }
@@ -297,6 +312,7 @@ namespace BulletManiac.Managers
                 CollisionManager.Update(gameTime); // Collision Update
                 entityManager.Update(gameTime); // Entity Manager Update
                 spawner.Update(gameTime);
+                TimePass += Time.DeltaTime;
             }
 
             // Camera Update
@@ -327,6 +343,13 @@ namespace BulletManiac.Managers
             {
                 var pos = CurrentLevel.TileGraph.RandomPosition;
                 spawner.Spawn(new Summoner(pos), pos);
+            }
+
+            if (InputManager.GetKey(Keys.Escape))
+            {
+                // Pause the game
+                SceneManager.OpenScene(2);
+                SceneManager.GetScene(1).StopUpdate();
             }
 
             //if (InputManager.GetKey(Keys.Q))
@@ -422,6 +445,7 @@ namespace BulletManiac.Managers
             spriteBatch.Draw(ResourcesManager.FindTexture("Skull_Icon"), new Vector2(46f, 138f),  null, Color.White, 0f, new Vector2(8f), new Vector2(2f), SpriteEffects.None, 0f);
             spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), " x" + entityManager.EnemyCount, new Vector2(53f, 130f), Color.Gray);
             spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "FLOOR: " + floor, new Vector2(35f, 180f), Color.Gray);
+            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "TIME: " + TimePassString, new Vector2(35f, 230f), Color.Gray);
             if (Debug)
             {
                 fpsCounter.Draw(spriteBatch, ResourcesManager.FindSpriteFont("DebugFont"), new Vector2(150f, 5f), Color.Red);
