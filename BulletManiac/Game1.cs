@@ -53,7 +53,7 @@ namespace BulletManiac
             ResourcesManager.Initialize(Content);
             SceneManager.Add(new MainMenuScene());
             SceneManager.Add(new GameScene());
-            SceneManager.LoadScene(0);
+            SceneManager.LoadScene(1);
 
             ResourcesManager.LoadTexture("Cursor", "SpriteSheet/UI/Cursor");
             Cursor.Instance = new Cursor();

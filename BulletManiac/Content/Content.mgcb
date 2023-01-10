@@ -781,6 +781,30 @@
 /processorParam:TextureFormat=Compressed
 /build:UI/Font/Font_Title.spritefont
 
+#begin UI/ProgressBar/HP_Background.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/ProgressBar/HP_Background.png
+
+#begin UI/ProgressBar/HP_Foreground.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/ProgressBar/HP_Foreground.png
+
 #begin UI/Transition_Texture.png
 /importer:TextureImporter
 /processor:TextureProcessor

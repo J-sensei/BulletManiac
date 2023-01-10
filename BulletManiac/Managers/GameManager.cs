@@ -236,6 +236,8 @@ namespace BulletManiac.Managers
             ResourcesManager.LoadTexture("Bullet_Empty", "UI/Bullet/bullet_empty");
             ResourcesManager.LoadSpriteFonts("DebugFont", "UI/Font/DebugFont");
             ResourcesManager.LoadSpriteFonts("Font_Player", "UI/Font/Font_Player");
+            ResourcesManager.LoadTexture("HP_Background", "UI/ProgressBar/HP_Background");
+            ResourcesManager.LoadTexture("HP_Foreground", "UI/ProgressBar/HP_Foreground");
 
             // Load Debug UI Sprites
             ResourcesManager.LoadTexture("Debug_Direction", "SpriteSheet/DebugUI/direction_16x16");

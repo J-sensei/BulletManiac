@@ -10,6 +10,7 @@ using BulletManiac.Particle;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Audio;
 using BulletManiac.SpriteAnimation;
+using BulletManiac.Entity.UI;
 
 namespace BulletManiac.Entity.Player
 {
@@ -23,7 +24,7 @@ namespace BulletManiac.Entity.Player
 
     public class Player : GameObject
     {
-
+        private ProgressBar hpBar;
         private AnimationManager animationManager; // Manange the animation based on certain action
         private List<SoundEffect> footstepsSounds; // Footstep sounds to play when walking
         private TextureEffect shadowEffect; // Visual shadow effect                           
@@ -294,6 +295,7 @@ namespace BulletManiac.Entity.Player
                 HP -= damage;
                 invincible = true; // Player become invincible after damage is taken
                 ResourcesManager.FindSoundEffect("Player_Hurt").Play();
+                hpBar.UpdateValue(HP);
             }
         }
 
@@ -325,6 +327,10 @@ namespace BulletManiac.Entity.Player
             // Shader initialize
             colorOverlay = ResourcesManager.FindEffect("Color_Overlay");
             colorOverlay.Parameters["overlayColor"].SetValue(Color.White.ToVector4());
+
+            hpBar = new ProgressBar(ResourcesManager.FindTexture("HP_Background"), ResourcesManager.FindTexture("HP_Foreground"), 100, new Vector2(25f), new Vector2(4f));
+            GameManager.AddGameObjectUI(hpBar);
+            hpBar.UpdateValue(HP);
             base.Initialize();
         }
         
@@ -375,9 +381,9 @@ namespace BulletManiac.Entity.Player
             }
         }
 
-        public override void CollisionEvent(GameObject gameObject)
-        {
+        //public override void CollisionEvent(GameObject gameObject)
+        //{
 
-        }
+        //}
     }
 }
