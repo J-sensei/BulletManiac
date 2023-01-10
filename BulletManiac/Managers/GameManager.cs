@@ -76,7 +76,7 @@ namespace BulletManiac.Managers
         /// </summary>
         private static List<float> gameZoomLevelList = new List<float>()
         {
-            1.5f, 3f, 6f, 12f
+            1.375f, 2.75f, 5.5f, 11f
         };
         /// <summary>
         /// Current resolution choices from the resolution list
@@ -213,6 +213,7 @@ namespace BulletManiac.Managers
 
             // Load UI Sprites
             ResourcesManager.LoadTexture("Crosshair_SpriteSheet", "SpriteSheet/UI/Crosshair");
+            ResourcesManager.LoadTexture("Cursor", "SpriteSheet/UI/Cursor");
             ResourcesManager.LoadTexture("Transition_Texture", "UI/Transition_Texture");
             ResourcesManager.LoadTexture("Bullet_Fill", "UI/Bullet/bullet_fill");
             ResourcesManager.LoadTexture("Bullet_Empty", "UI/Bullet/bullet_empty");
