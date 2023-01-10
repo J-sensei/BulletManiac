@@ -7,16 +7,18 @@ using System;
 
 namespace BulletManiac.Entity.UI
 {
+    public enum CursorMode
+    {
+        Crosshair, Mouse, MouseAction, Loading
+    }
+
     /// <summary>
     /// Cursor pointer that follow the mouse movement
     /// </summary>
     public class Cursor : GameObject
     {
-        public enum CursorMode
-        {
-            Crosshair, Mouse, MouseAction, Loading
-        }
 
+        public static Cursor Instance;
         const int SIZE = 16;
         readonly Vector2 baseScale;
         private Rectangle uvBound;
@@ -33,6 +35,7 @@ namespace BulletManiac.Entity.UI
             loadingAnimation = new Animation(ResourcesManager.FindTexture("Cursor"), 7, 16, 16, 0.12f, 6);
             //ChangeMode(CursorMode.Loading); // TEST
             baseScale = new Vector2(0.8f);
+            layerDepth = 0.1f; // On top of every button since button layer depth is 0
         }
 
         protected override Rectangle CalculateBound()
@@ -72,7 +75,7 @@ namespace BulletManiac.Entity.UI
             }
             else if (mode == CursorMode.MouseAction)
             {
-                uvBound = new Rectangle(1 * SIZE, 1 * SIZE, SIZE, SIZE);
+                uvBound = new Rectangle(1 * SIZE, 0 * SIZE, SIZE, SIZE);
                 origin = new Vector2(0f);
             }
             else if(mode == CursorMode.Loading)
