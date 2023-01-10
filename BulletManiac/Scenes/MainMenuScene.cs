@@ -14,7 +14,7 @@ namespace BulletManiac.Scenes
     {
         const string TITLE = "Bullet Maniac";
         const string VERSION = "v1.0";
-        const string FOOTER = "By XXX and XXX";
+        const string FOOTER = "By Liew Jiann Shen and Fong Zheng Wei";
         private readonly EntityManager entityManager = new();
         public override void LoadContent()
         {
