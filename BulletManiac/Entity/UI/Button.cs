@@ -16,7 +16,7 @@ namespace BulletManiac.Entity.UI
         private bool hoverSound = false;
         
         public string Text { get; set; }
-        public Color StringColor { get; set; } = Color.Black;
+        public Color StringColor { get; set; } = new Color(7, 24, 33);
         public bool Cliked { get; private set; }
         public EventHandler ClickEvent;
         public Rectangle uvBound;

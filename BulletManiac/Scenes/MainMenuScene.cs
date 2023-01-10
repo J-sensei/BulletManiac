@@ -14,7 +14,9 @@ namespace BulletManiac.Scenes
     {
         const string TITLE = "Bullet Maniac";
         const string VERSION = "v1.0";
-        const string FOOTER = "By Liew Jiann Shen and Fong Zheng Wei";
+        const string FOOTER = "By Liew Jiann Shen & Fong Zheng Wei";
+        readonly Color STRING_COLOR = new Color(238f, 236f, 231f);
+
         private readonly EntityManager entityManager = new();
         public override void LoadContent()
         {
@@ -34,9 +36,9 @@ namespace BulletManiac.Scenes
 
         public override void DrawUI(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Title"), TITLE, titlePosition, Color.White);
-            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), VERSION, versionPosition, Color.White);
-            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), FOOTER, footerPosition, Color.White);
+            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Title"), TITLE, titlePosition, STRING_COLOR);
+            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), VERSION, versionPosition, STRING_COLOR);
+            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), FOOTER, footerPosition, STRING_COLOR);
             entityManager.DrawUI(spriteBatch, gameTime);
         }
 

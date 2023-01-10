@@ -15,6 +15,8 @@ namespace BulletManiac.Scenes
     public class PauseScene : Scene
     {
         const string TITLE = "Pause";
+        readonly Color STRING_COLOR = new Color(238f, 236f, 231f);
+
         private Texture2D texture;
         private EntityManager entityManager = new();
         private Vector2 titlePosition;
@@ -90,7 +92,7 @@ namespace BulletManiac.Scenes
                 }
             }
 
-            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Title"), TITLE, titlePosition, Color.White);
+            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Title"), TITLE, titlePosition, STRING_COLOR);
 
             // Buttons
             entityManager.DrawUI(spriteBatch, gameTime);

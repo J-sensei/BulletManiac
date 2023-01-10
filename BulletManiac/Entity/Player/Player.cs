@@ -385,9 +385,10 @@ namespace BulletManiac.Entity.Player
             // Reloading Text
             if (Gun.Reloading)
             {
-                spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Player"), "Reloading", position + textPosOffset, Color.Black, 0f, textOffset, 0.3f, SpriteEffects.None, 0f);
+                spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Player"), "Reloading", position + textPosOffset, reloadingStringColor, 0f, textOffset, 0.3f, SpriteEffects.None, 0f);
             }
         }
+        Color reloadingStringColor = new Color(7, 24, 33);
 
         //public override void CollisionEvent(GameObject gameObject)
         //{
