@@ -35,6 +35,7 @@ namespace BulletManiac.Entity.Player
         private float dashSpeed = 180f;
         const float DEFAULT_HP = 100f;
         public float HP { get; private set; }
+        public float MaxHP { get; private set; }
 
         // Animation speed
         private float animationSpeed = 0.2f;
@@ -59,7 +60,7 @@ namespace BulletManiac.Entity.Player
 
         // Text position and offset to render with the player
         private Vector2 textOffset = new Vector2(32f, 0f);
-        private Vector2 textPosOffset = new Vector2(0f, -16f);
+        private Vector2 textPosOffset;
 
         // Dashing variables
         private Vector2 dashDirection;
@@ -76,6 +77,7 @@ namespace BulletManiac.Entity.Player
             scale = new Vector2(0.65f); // Scale of the player
             origin = new Vector2(16f); // Origin (Half of the sprite size) 32x32 / 2
             HP = DEFAULT_HP;
+            MaxHP = DEFAULT_HP;
 
             Gun = new Gun(this);
         }
@@ -331,6 +333,11 @@ namespace BulletManiac.Entity.Player
             hpBar = new ProgressBar(ResourcesManager.FindTexture("HP_Background"), ResourcesManager.FindTexture("HP_Foreground"), 100, new Vector2(25f), new Vector2(4f));
             GameManager.AddGameObjectUI(hpBar);
             hpBar.UpdateValue(HP);
+
+            // Calculate reloading text offset
+            float x = ResourcesManager.FindSpriteFont("Font_Player").MeasureString("Reloading").X;
+            textPosOffset = new(-x / 20f, -16f);
+
             base.Initialize();
         }
         

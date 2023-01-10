@@ -90,6 +90,7 @@ namespace BulletManiac.Managers
         public void ChangeLevel(int difficulty)
         {
             currentLevelIndex = Extensions.Random.Next(levels.Count); // Testing
+            CurrentLevel.DoorClose();
             tiledMapRenderer.LoadMap(CurrentLevel.Map);
             CollisionManager.ChangeTileCollision(CurrentLevel.Obstacles);
             pathTester.ChangeLevel(CurrentLevel);

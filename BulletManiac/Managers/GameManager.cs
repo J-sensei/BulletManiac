@@ -242,6 +242,7 @@ namespace BulletManiac.Managers
             // Load Debug UI Sprites
             ResourcesManager.LoadTexture("Debug_Direction", "SpriteSheet/DebugUI/direction_16x16");
             ResourcesManager.LoadTexture("Debug_Path", "SpriteSheet/DebugUI/path_16x16");
+            ResourcesManager.LoadTexture("Skull_Icon", "UI/Skull_Icon");
 
             // Load Tiled Map level
             ResourcesManager.LoadTiledMap("Level1", "Tiled/Level/Level1");
@@ -263,6 +264,12 @@ namespace BulletManiac.Managers
             ResourcesManager.LoadSoundEffect("SuicideShadow_Attacking", "Audio/Enemy/SuicideShadow_Attacking");
             ResourcesManager.LoadSoundEffect("SuicideShadow_AttackStart", "Audio/Enemy/SuicideShadow_AttackStart");
             ResourcesManager.LoadSoundEffect("Enemy_Spawn", "Audio/Enemy/Enemy_Spawn");
+
+            // Main Menu
+            ResourcesManager.LoadSpriteFonts("Font_Normal", "UI/Font/Font_Normal");
+            ResourcesManager.LoadSpriteFonts("Font_Title", "UI/Font/Font_Title");
+            ResourcesManager.LoadSoundEffect("Button_Hover", "Audio/UI/Button_Hover");
+            ResourcesManager.LoadSoundEffect("Button_Click", "Audio/UI/Button_Click");
 
             Animation.LoadAnimations();
             Bat.LoadContent();
@@ -327,6 +334,11 @@ namespace BulletManiac.Managers
             //    transitionEffect.Reset();
             //    transitionEffect.Start();
             //}
+            // Open the door is level is finish
+            if (IsLevelFinish)
+            {
+                CurrentLevel.DoorOpen();
+            }
 
             if (Debug)
                 pathTester.Update(gameTime);
@@ -405,14 +417,19 @@ namespace BulletManiac.Managers
         {
             entityManager.DrawUI(spriteBatch, gameTime);
 
-            //if (Debug)
-            //{
+            // UI
+            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "HP: " + Player.HP + "/" + Player.MaxHP, new Vector2(100f, 85f), Color.Gray);
+            spriteBatch.Draw(ResourcesManager.FindTexture("Skull_Icon"), new Vector2(46f, 138f),  null, Color.White, 0f, new Vector2(8f), new Vector2(2f), SpriteEffects.None, 0f);
+            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), " x" + entityManager.EnemyCount, new Vector2(53f, 130f), Color.Gray);
+            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "FLOOR: " + floor, new Vector2(35f, 180f), Color.Gray);
+            if (Debug)
+            {
                 fpsCounter.Draw(spriteBatch, ResourcesManager.FindSpriteFont("DebugFont"), new Vector2(150f, 5f), Color.Red);
                 spriteBatch.DrawString(ResourcesManager.FindSpriteFont("DebugFont"), "Player HP: " + Player.HP.ToString("N0"), new Vector2(5f, 5f), Color.Red);
                 spriteBatch.DrawString(ResourcesManager.FindSpriteFont("DebugFont"), "Enemy Count: " + entityManager.EnemyCount, new Vector2(5f, 20f), Color.Red);
                 spriteBatch.DrawString(ResourcesManager.FindSpriteFont("DebugFont"), "Floor: " + floor, new Vector2(5f, 40f), Color.Red);
                 spriteBatch.DrawString(ResourcesManager.FindSpriteFont("DebugFont"), "Is Level Finish: " + IsLevelFinish, new Vector2(5f, 60f), Color.Red);
-            //}
+            }
 
             transitionEffect.Draw(spriteBatch, gameTime);
         }
