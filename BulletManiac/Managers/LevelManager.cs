@@ -73,6 +73,7 @@ namespace BulletManiac.Managers
             this.tiledMapRenderer = tiledMapRenderer;
             this.pathTester = pathTester;
 
+            CurrentLevel.DoorClose(); // Make sure the first level door is close 
             tiledMapRenderer.LoadMap(CurrentLevel.Map); // Load tile map into the tile renderer
             CollisionManager.ChangeTileCollision(CurrentLevel.Obstacles); // Load the obstacles
             pathTester.ChangeLevel(CurrentLevel); // Change the debug path tester
@@ -89,6 +90,7 @@ namespace BulletManiac.Managers
         /// <param name="difficulty"></param>
         public void ChangeLevel(int difficulty)
         {
+            CurrentLevel.DoorClose(); // Close the door
             currentLevelIndex = Extensions.Random.Next(levels.Count); // Testing
             tiledMapRenderer.LoadMap(CurrentLevel.Map);
             CollisionManager.ChangeTileCollision(CurrentLevel.Obstacles);

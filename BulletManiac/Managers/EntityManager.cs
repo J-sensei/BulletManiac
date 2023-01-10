@@ -1,4 +1,6 @@
-﻿using BulletManiac.Entity;
+﻿using BulletManiac.Collision;
+using BulletManiac.Entity;
+using BulletManiac.Entity.Bullet;
 using BulletManiac.Entity.Enemy;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -24,9 +26,14 @@ namespace BulletManiac.Managers
         /// </summary>
         private readonly List<GameObject> gameObjectQueue = new List<GameObject>();
         private readonly List<Enemy> enemyGameObjects = new();
+        private readonly List<Bullet> bulletGameObjects = new();
         public int EnemyCount
         {
             get { return enemyGameObjects.Count; }
+        }
+        public int GameObjectCount
+        {
+            get { return gameObjects.Count; }
         }
 
         /// <summary>
@@ -81,9 +88,9 @@ namespace BulletManiac.Managers
             }
 
             if(gameObject is Enemy)
-            {
                 enemyGameObjects.Add((Enemy)gameObject);
-            }
+            else if(gameObject is Bullet)
+                bulletGameObjects.Add((Bullet)gameObject);
         }
 
         /// <summary>
@@ -179,6 +186,8 @@ namespace BulletManiac.Managers
                 // If the object is inside the enemy list, delete it
                 if (enemyGameObjects.Contains(gameObj))
                     enemyGameObjects.Remove((Enemy)gameObj);
+                if(bulletGameObjects.Contains(gameObj))
+                    bulletGameObjects.Remove((Bullet)gameObj);
             }
         }
 
@@ -206,6 +215,35 @@ namespace BulletManiac.Managers
             {
                 gameObj.Draw(spriteBatch, gameTime);
             }
+        }
+
+        public void Clear()
+        {
+            // Remove game objects
+            gameObjects.Clear();
+            gameObjectQueue.Clear();
+
+            gameObjectsUI.Clear();
+            gameObjectUIQueue.Clear();
+            enemyGameObjects.Clear();
+
+            // Clear the collision data
+            CollisionManager.Clear();
+        }
+
+        public void ClearBullets()
+        {
+            foreach(GameObject g in gameObjectQueue)
+            {
+                if (bulletGameObjects.Contains(g))
+                    GameObject.DestroyWithNoEvent(g);
+            }
+            foreach (GameObject g in gameObjects)
+            {
+                if (bulletGameObjects.Contains(g))
+                    GameObject.DestroyWithNoEvent(g);
+            }
+            bulletGameObjects.Clear();
         }
     }
 }

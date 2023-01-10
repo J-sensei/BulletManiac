@@ -121,8 +121,8 @@ namespace BulletManiac.Entity.Bullet
 
         public override void DeleteEvent()
         {
-            TextureEffect effect = new TextureEffect(new Animation(ResourcesManager.FindTexture("Bullet1"), 5, 25, 0.05f, 3, false),
-                        Position, new Vector2(8, 8), new Vector2(1f), true);
+            TextureEffect effect = new TextureEffect(new Animation(ResourcesManager.FindTexture("Bullet_Destroy"), 8, 1, 0.06f, 1, false),
+                        Position, new Vector2(16f), new Vector2(0.45f), true);
             GameManager.AddGameObject(effect);
             base.DeleteEvent();
         }

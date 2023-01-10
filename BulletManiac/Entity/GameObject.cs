@@ -59,6 +59,7 @@ namespace BulletManiac.Entity
         /// </summary>
         protected SpriteEffects spriteEffects = SpriteEffects.None;
         protected Color color = Color.White;
+        protected float layerDepth = 0f;
         #endregion
 
         #region Properties
@@ -148,7 +149,7 @@ namespace BulletManiac.Entity
 
             if (texture == null) return;
             
-            spriteBatch.Draw(texture, position, null, color, Rotation, origin, scale, spriteEffects, 0f);
+            spriteBatch.Draw(texture, position, null, color, Rotation, origin, scale, spriteEffects, layerDepth);
         }
 
         protected void DrawAnimation(Animation animation, SpriteBatch spriteBatch, GameTime gameTime)
@@ -156,12 +157,12 @@ namespace BulletManiac.Entity
             if (GameManager.Debug)
                 spriteBatch.Draw(debugBox, Bound, Color.White); // Draw the debug red box
 
-            animation.Draw(spriteBatch, position, color, Rotation, origin, scale, spriteEffects, 0f);
+            animation.Draw(spriteBatch, position, color, Rotation, origin, scale, spriteEffects, layerDepth);
         }
 
         protected void DrawTexture(Rectangle uvBound, SpriteBatch spriteBatch, GameTime gameTime)
         {
-            spriteBatch.Draw(texture, position, uvBound, color, Rotation, origin, scale, spriteEffects, 0f);
+            spriteBatch.Draw(texture, position, uvBound, color, Rotation, origin, scale, spriteEffects, layerDepth);
         }
 
         /// <summary>
@@ -172,6 +173,15 @@ namespace BulletManiac.Entity
         {
             gameObject.DeleteEvent();
             gameObject.destroyed = true; // Entities Manager will take care of this after destroy is set to true
+        }
+
+        /// <summary>
+        /// Purely remove the gameobject without triger any delete event
+        /// </summary>
+        /// <param name="gameObject"></param>
+        public static void DestroyWithNoEvent(GameObject gameObject)
+        {
+            gameObject.destroyed = true;
         }
 
         /// <summary>
