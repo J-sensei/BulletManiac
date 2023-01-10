@@ -43,6 +43,7 @@ namespace BulletManiac.Entity.UI
             ResourcesManager.LoadTexture("Buttons", "SpriteSheet/UI/Buttons");
         }
 
+        bool clicked = false;
         public override void Update(GameTime gameTime)
         {
             Rectangle mouseRect = new Rectangle((int)InputManager.MousePosition.X, (int)InputManager.MousePosition.Y, 1, 1);
@@ -57,22 +58,39 @@ namespace BulletManiac.Entity.UI
                     hoverSound = true;
                 }
 
-                uvBound = new Rectangle(7 * SIZE, 4 * SIZE, SIZE, SIZE);
                 Cursor.Instance.ChangeMode(CursorMode.MouseAction);
-                if (InputManager.MouseLeftClick)
+                if (InputManager.MouseLeftHold)
+                {
+                    uvBound = new Rectangle(5 * SIZE, 4 * SIZE, SIZE, SIZE); // Mouse click effect
+                    if (!clicked)
+                    {
+                        clicked = true;
+                        ResourcesManager.FindSoundEffect("Button_Click").Play();
+                    }
+                }
+                else
+                {
+                    uvBound = new Rectangle(7 * SIZE, 4 * SIZE, SIZE, SIZE);
+                }
+
+                if (InputManager.MouseLeftReleased && clicked)
                 {
                     // Click Action
                     if (ClickEvent != null)
                         ClickEvent.Invoke(this, new EventArgs());
                     else
                         GameManager.Log("Button", "Click Event is empty");
+
+                    clicked = false;
                 }
+
             }
             else
             {
                 isHovering = false;
                 uvBound = new Rectangle(4 * SIZE, 4 * SIZE, SIZE, SIZE);
                 hoverSound = false;
+                clicked = false;
             }
 
             base.Update(gameTime);

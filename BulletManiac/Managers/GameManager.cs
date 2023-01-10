@@ -194,6 +194,8 @@ namespace BulletManiac.Managers
             // Transition Effect initialization
             transitionEffect = new TransitionEffect(ResourcesManager.FindTexture("Transition_Texture"));
             transitionEffect.Initialize();
+
+            ApplyTransition(); // Run the transition when the game start
         }
 
         private static void LoadDefaultResources()
@@ -258,7 +260,6 @@ namespace BulletManiac.Managers
             ResourcesManager.LoadSoundEffect("SuicideShadow_Attacking", "Audio/Enemy/SuicideShadow_Attacking");
             ResourcesManager.LoadSoundEffect("SuicideShadow_AttackStart", "Audio/Enemy/SuicideShadow_AttackStart");
             ResourcesManager.LoadSoundEffect("Enemy_Spawn", "Audio/Enemy/Enemy_Spawn");
-            ResourcesManager.LoadSoundEffect("Button_Hover", "Audio/UI/Button_Hover");
 
             Animation.LoadAnimations();
             Bat.LoadContent();
@@ -340,6 +341,7 @@ namespace BulletManiac.Managers
             {
                 transitionDuration -= Time.DeltaTime;
             }
+
             transitionEffect.Update(gameTime);
         }
 
@@ -359,7 +361,13 @@ namespace BulletManiac.Managers
             spawner.Start();
             Player.Position = CurrentLevel.SpawnPosition;
             levelUpdated = true;
-            floor++;
+            floor++; // Update floor record
+        }
+
+        public static void ApplyTransition()
+        {
+            transitionEffect.Reset();
+            levelUpdated = true;
         }
 
         /// <summary>

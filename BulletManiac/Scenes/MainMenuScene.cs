@@ -21,6 +21,8 @@ namespace BulletManiac.Scenes
             ResourcesManager.LoadSpriteFonts("Font_22", "UI/Font/Font_22");
             ResourcesManager.LoadSpriteFonts("Font_64", "UI/Font/Font_64");
             ResourcesManager.LoadSoundEffect("Button_Hover", "Audio/UI/Button_Hover");
+            ResourcesManager.LoadSoundEffect("Button_Click", "Audio/UI/Button_Click");
+
             Button.LoadContent();
             base.LoadContent();
         }
