@@ -26,7 +26,7 @@ namespace BulletManiac.Entity.UI
         {
             uvBound = new Rectangle(4 * SIZE, 4 * SIZE, SIZE, SIZE);
             Text = text;
-            font = ResourcesManager.FindSpriteFont("Font_22");
+            font = ResourcesManager.FindSpriteFont("Font_Normal");
             this.position = position;
             origin = new Vector2(32f, 32f);
             this.scale = scale;

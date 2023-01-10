@@ -43,7 +43,7 @@ namespace BulletManiac.Managers
         /// </summary>
         public static GraphicsDevice GraphicsDevice { get; set; }
         /// <summary>
-        /// Global accessible player
+        /// Global accessible player (Singleton)
         /// </summary>
         public static Player Player { get; private set; }
         /// <summary>
@@ -235,6 +235,7 @@ namespace BulletManiac.Managers
             ResourcesManager.LoadTexture("Bullet_Fill", "UI/Bullet/bullet_fill");
             ResourcesManager.LoadTexture("Bullet_Empty", "UI/Bullet/bullet_empty");
             ResourcesManager.LoadSpriteFonts("DebugFont", "UI/Font/DebugFont");
+            ResourcesManager.LoadSpriteFonts("Font_Player", "UI/Font/Font_Player");
 
             // Load Debug UI Sprites
             ResourcesManager.LoadTexture("Debug_Direction", "SpriteSheet/DebugUI/direction_16x16");

@@ -10,6 +10,10 @@ namespace BulletManiac
 {
     public class Game1 : Game
     {
+        /// <summary>
+        /// Singleton of the Game (Monogame)
+        /// </summary>
+        public static Game Instance { get; private set; } 
         public static GraphicsDevice GraphicsDeviceInstance { get; private set; }
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -24,6 +28,7 @@ namespace BulletManiac
             _graphics = new GraphicsDeviceManager(this) { PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8 }; ;
             Content.RootDirectory = "Content";
             IsMouseVisible = false;
+            Instance = this;
             //_graphics.SynchronizeWithVerticalRetrace = true; //Vsync
             //IsFixedTimeStep = false;
         }

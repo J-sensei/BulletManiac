@@ -760,19 +760,26 @@
 /processorParam:TextureFormat=Compressed
 /build:UI/Font/DebugFont.spritefont
 
-#begin UI/Font/Font_22.spritefont
+#begin UI/Font/Font_Normal.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:UI/Font/Font_22.spritefont
+/build:UI/Font/Font_Normal.spritefont
 
-#begin UI/Font/Font_64.spritefont
+#begin UI/Font/Font_Player.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:UI/Font/Font_64.spritefont
+/build:UI/Font/Font_Player.spritefont
+
+#begin UI/Font/Font_Title.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:UI/Font/Font_Title.spritefont
 
 #begin UI/Transition_Texture.png
 /importer:TextureImporter
