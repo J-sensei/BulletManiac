@@ -22,6 +22,7 @@ namespace BulletManiac.Scenes
         /// Determine if this state need to draw
         /// </summary>
         public bool IsDrawing { get; private set; }
+        public Color ClearColor { get; protected set; } = Color.CornflowerBlue;
 
         public Scene()
         {

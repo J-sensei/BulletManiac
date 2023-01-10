@@ -39,6 +39,7 @@ namespace BulletManiac.Scenes
         public override void Update(GameTime gameTime)
         {
             GameManager.Update(gameTime); // Update all the game stuffs
+            ClearColor = GameManager.CurrentLevel.BackgroundColor;
         }
     }
 }

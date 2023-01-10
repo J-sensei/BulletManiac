@@ -12,6 +12,14 @@ namespace BulletManiac.Scenes
     {
         private static List<Scene> scenes = new();
         private static int currentStateIndex = 0;
+        public static Color ClearColor
+        {
+            get
+            {
+                if (scenes[currentStateIndex] != null) return scenes[currentStateIndex].ClearColor;
+                else return Color.CornflowerBlue;
+            }
+        }       
 
         public static void Add(Scene state)
         {

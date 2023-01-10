@@ -32,6 +32,7 @@ namespace BulletManiac
         {
             GraphicsDeviceInstance = _graphics.GraphicsDevice;
             GameManager.GraphicsDevice = _graphics.GraphicsDevice; // Initialize the Graphics Device in the Game Manager first
+            Window.Title = "Bullet Maniac";
 
             // Initialize objects
             InputManager.Initialize();
@@ -45,8 +46,9 @@ namespace BulletManiac
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             ResourcesManager.Initialize(Content);
+            SceneManager.Add(new MainMenuScene());
             SceneManager.Add(new GameScene());
-            SceneManager.LoadScene(0);
+            SceneManager.LoadScene(1);
 
             ResourcesManager.LoadTexture("Cursor", "SpriteSheet/UI/Cursor");
             Cursor.Instance = new Cursor();
@@ -91,8 +93,9 @@ namespace BulletManiac
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(GameManager.CurrentLevel.BackgroundColor); // Default screen clear color (Same color as the map)
+            //GraphicsDevice.Clear(GameManager.CurrentLevel.BackgroundColor); // Default screen clear color (Same color as the map)
             //GraphicsDevice.Clear(Color.CornflowerBlue); // Default screen clear color (Same color as the map)
+            GraphicsDevice.Clear(SceneManager.ClearColor);
 
             // Game World Layer
             // SpriteBatch Begin settings make sure the texture sprite is clean when scale up

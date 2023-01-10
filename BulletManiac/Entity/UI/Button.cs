@@ -22,14 +22,15 @@ namespace BulletManiac.Entity.UI
         public Rectangle uvBound;
         const int SIZE = 64;
 
-        public Button(Vector2 position, string text = "") : base(ResourcesManager.FindTexture("Buttons"))
+        public Button(Vector2 position, Vector2 scale, string text = "") : base(ResourcesManager.FindTexture("Buttons"))
         {
             uvBound = new Rectangle(4 * SIZE, 4 * SIZE, SIZE, SIZE);
             Text = text;
-            font = ResourcesManager.FindSpriteFont("MainFont");
+            font = ResourcesManager.FindSpriteFont("Font_22");
             this.position = position;
             origin = new Vector2(32f, 32f);
-            scale = new Vector2(2.5f, 2.5f);
+            this.scale = scale;
+            //scale = new Vector2(2.5f, 2.5f);
         }
 
         protected override Rectangle CalculateBound()
@@ -58,7 +59,6 @@ namespace BulletManiac.Entity.UI
 
                 uvBound = new Rectangle(7 * SIZE, 4 * SIZE, SIZE, SIZE);
                 Cursor.Instance.ChangeMode(CursorMode.MouseAction);
-
                 if (InputManager.MouseLeftClick)
                 {
                     // Click Action
@@ -72,7 +72,6 @@ namespace BulletManiac.Entity.UI
             {
                 isHovering = false;
                 uvBound = new Rectangle(4 * SIZE, 4 * SIZE, SIZE, SIZE);
-                Cursor.Instance.ChangeMode(CursorMode.Crosshair);
                 hoverSound = false;
             }
 

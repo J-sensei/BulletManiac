@@ -54,7 +54,8 @@ namespace BulletManiac.Entity.UI
             scale = baseScale * GameManager.CurrentCameraZoom;
             position = InputManager.MousePosition;
 
-            if(cursorMode == CursorMode.Loading)
+            ChangeMode(CursorMode.Crosshair);
+            if (cursorMode == CursorMode.Loading)
             {
                 loadingAnimation.Update(gameTime);
             }

@@ -182,7 +182,7 @@ namespace BulletManiac.Managers
             AddGameObject(Player); // Add player
             MagazineUI megazineUI = new MagazineUI(Player.Gun, new Vector2(CurrentResolution.X - 100, CurrentResolution.Y - 200)); // Gun Megazine UI
             AddGameObjectUI(megazineUI);
-            AddGameObjectUI(new Button(new Vector2(500f), "TEST"));
+            //AddGameObjectUI(new Button(new Vector2(500f), "TEST"));
 
             pathTester = new PathTester(ResourcesManager.FindLevel("Level1-1")); // Pathfinding Tester
             levelManager = new LevelManager(tiledMapRenderer, pathTester); // Level Manager 
@@ -233,7 +233,6 @@ namespace BulletManiac.Managers
             ResourcesManager.LoadTexture("Bullet_Fill", "UI/Bullet/bullet_fill");
             ResourcesManager.LoadTexture("Bullet_Empty", "UI/Bullet/bullet_empty");
             ResourcesManager.LoadSpriteFonts("DebugFont", "UI/Font/DebugFont");
-            ResourcesManager.LoadSpriteFonts("MainFont", "UI/Font/Main_Font");
 
             // Load Debug UI Sprites
             ResourcesManager.LoadTexture("Debug_Direction", "SpriteSheet/DebugUI/direction_16x16");
