@@ -104,7 +104,7 @@ namespace BulletManiac.Managers
         /// <summary>
         /// Spawner, responsible to handle the spawn
         /// </summary>
-        private static Spawner spawner = new();
+        private static Spawner spawner;
 
         /// <summary>
         /// Is player eliminated all the enemies
@@ -174,9 +174,26 @@ namespace BulletManiac.Managers
 
         public static void Initialize()
         {
-            tiledMapRenderer = new TiledMapRenderer(GraphicsDevice); // Initialize Tiled
+            if(tiledMapRenderer == null)
+                tiledMapRenderer = new TiledMapRenderer(GraphicsDevice); // Initialize Tiled
+            entityManager.Clear();
+            // Add cursor and player
+            Player = new Player(new Vector2(50f)); // Create Player in the game
+            AddGameObject(Player); // Add player
+            MagazineUI megazineUI = new MagazineUI(Player.Gun, new Vector2(CurrentResolution.X - 100, CurrentResolution.Y - 200)); // Gun Megazine UI
+            AddGameObjectUI(megazineUI);
+            AddGameObjectUI(new Button(new Vector2(500f), "TEST"));
 
-            InputManager.Initialize();
+            pathTester = new PathTester(ResourcesManager.FindLevel("Level1-1")); // Pathfinding Tester
+            levelManager = new LevelManager(tiledMapRenderer, pathTester); // Level Manager 
+            Player.Position = CurrentLevel.SpawnPosition;
+
+            spawner = new();
+            spawner.Start(); // Start the spawner immediately
+
+            // Transition Effect initialization
+            transitionEffect = new TransitionEffect(ResourcesManager.FindTexture("Transition_Texture"));
+            transitionEffect.Initialize();
         }
 
         private static void LoadDefaultResources()
@@ -212,8 +229,6 @@ namespace BulletManiac.Managers
             ResourcesManager.LoadTexture("Summoner_SpriteSheet", "SpriteSheet/Enemy/Summoner/SpriteSheet");
 
             // Load UI Sprites
-            ResourcesManager.LoadTexture("Crosshair_SpriteSheet", "SpriteSheet/UI/Crosshair");
-            ResourcesManager.LoadTexture("Cursor", "SpriteSheet/UI/Cursor");
             ResourcesManager.LoadTexture("Transition_Texture", "UI/Transition_Texture");
             ResourcesManager.LoadTexture("Bullet_Fill", "UI/Bullet/bullet_fill");
             ResourcesManager.LoadTexture("Bullet_Empty", "UI/Bullet/bullet_empty");
@@ -255,33 +270,13 @@ namespace BulletManiac.Managers
             ResourcesManager.LoadEffect("Color_Overlay", "Shader/ColorOverlay");
         }
         
-        public static void LoadContent(ContentManager content)
+        public static void LoadContent()
         {
             LoadDefaultResources(); // Load default resources needed for the game to start
-
-            // Add cursor and player
-            Player = new Player(new Vector2(50f)); // Create Player in the game
-            AddGameObject(Player); // Add player
-            MagazineUI megazineUI = new MagazineUI(Player.Gun, new Vector2(CurrentResolution.X - 100, CurrentResolution.Y - 200)); // Gun Megazine UI
-            AddGameObjectUI(megazineUI);
-            AddGameObjectUI(new Button(new Vector2(500f), "TEST"));
-            Cursor.Instance = new Cursor();
-            AddGameObjectUI(Cursor.Instance); // Add the game cursor
-
-            pathTester = new PathTester(ResourcesManager.FindLevel("Level1-1")); // Pathfinding Tester
-            levelManager = new LevelManager(tiledMapRenderer, pathTester); // Level Manager 
-            Player.Position = CurrentLevel.SpawnPosition;
-
-            spawner.Start(); // Start the spawner immediately
-
-            // Transition Effect initialization
-            transitionEffect = new TransitionEffect(ResourcesManager.FindTexture("Transition_Texture"));
-            transitionEffect.Initialize();
         }
 
         public static void Update(GameTime gameTime)
         {
-            InputManager.Update(gameTime); // Update the input manager
             tiledMapRenderer.Update(gameTime); // Tiled Map Update
 
             // If transition is ongoing, dont update these things
@@ -324,11 +319,11 @@ namespace BulletManiac.Managers
                 spawner.Spawn(new Summoner(pos), pos);
             }
 
-            if (InputManager.GetKey(Keys.Q))
-            {
-                transitionEffect.Reset();
-                transitionEffect.Start();
-            }
+            //if (InputManager.GetKey(Keys.Q))
+            //{
+            //    transitionEffect.Reset();
+            //    transitionEffect.Start();
+            //}
 
             if (Debug)
                 pathTester.Update(gameTime);
@@ -360,6 +355,7 @@ namespace BulletManiac.Managers
         public static void UpdateLevel()
         {
             levelManager.ChangeLevel(0);
+            entityManager.ClearBullets();
             transitionEffect.Reset();
             spawner.Start();
             Player.Position = CurrentLevel.SpawnPosition;
@@ -399,11 +395,15 @@ namespace BulletManiac.Managers
         {
             entityManager.DrawUI(spriteBatch, gameTime);
 
-            fpsCounter.Draw(spriteBatch, ResourcesManager.FindSpriteFont("DebugFont"), new Vector2(150f, 5f), Color.Red);
-            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("DebugFont"), "Player HP: " + Player.HP.ToString("N0"), new Vector2(5f, 5f), Color.Red);
-            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("DebugFont"), "Enemy Count: " + entityManager.EnemyCount, new Vector2(5f, 20f), Color.Red);
-            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("DebugFont"), "Floor: " + floor, new Vector2(5f, 40f), Color.Red);
-            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("DebugFont"), "Is Level Finish: " + IsLevelFinish, new Vector2(5f, 60f), Color.Red);
+            //if (Debug)
+            //{
+                fpsCounter.Draw(spriteBatch, ResourcesManager.FindSpriteFont("DebugFont"), new Vector2(150f, 5f), Color.Red);
+                spriteBatch.DrawString(ResourcesManager.FindSpriteFont("DebugFont"), "Player HP: " + Player.HP.ToString("N0"), new Vector2(5f, 5f), Color.Red);
+                spriteBatch.DrawString(ResourcesManager.FindSpriteFont("DebugFont"), "Enemy Count: " + entityManager.EnemyCount, new Vector2(5f, 20f), Color.Red);
+                spriteBatch.DrawString(ResourcesManager.FindSpriteFont("DebugFont"), "Floor: " + floor, new Vector2(5f, 40f), Color.Red);
+                spriteBatch.DrawString(ResourcesManager.FindSpriteFont("DebugFont"), "Is Level Finish: " + IsLevelFinish, new Vector2(5f, 60f), Color.Red);
+            //}
+
             transitionEffect.Draw(spriteBatch, gameTime);
         }
 

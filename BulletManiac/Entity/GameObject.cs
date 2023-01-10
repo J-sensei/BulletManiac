@@ -176,6 +176,15 @@ namespace BulletManiac.Entity
         }
 
         /// <summary>
+        /// Purely remove the gameobject without triger any delete event
+        /// </summary>
+        /// <param name="gameObject"></param>
+        public static void DestroyWithNoEvent(GameObject gameObject)
+        {
+            gameObject.destroyed = true;
+        }
+
+        /// <summary>
         /// Trigger when collide with other game object
         /// </summary>
         /// <param name="other"></param>
