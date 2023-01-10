@@ -1,5 +1,4 @@
-﻿using BulletManiac.Entity.Bullet;
-using BulletManiac.Managers;
+﻿using BulletManiac.Managers;
 using BulletManiac.SpriteAnimation;
 using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
@@ -7,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 
-namespace BulletManiac.Entity.Player
+namespace BulletManiac.Entity.Players
 {
     public class Gun : GameObject
     {
@@ -74,7 +73,7 @@ namespace BulletManiac.Entity.Player
 
             // Flip the gun
             float rotationDegree = MathHelper.ToDegrees(Rotation);
-            if ((rotationDegree >= 90 && rotationDegree <= 180) || (rotationDegree <= -90 && rotationDegree >= -180))
+            if (rotationDegree >= 90 && rotationDegree <= 180 || rotationDegree <= -90 && rotationDegree >= -180)
                 spriteEffects = SpriteEffects.FlipVertically;
             else
                 spriteEffects = SpriteEffects.None;
@@ -98,7 +97,7 @@ namespace BulletManiac.Entity.Player
         {
             Magazine.Update(shooting); // Reloading logic
             // If the animation is finish playing, then reset it or the gun is not shooting
-            if (shooting && animation.Finish || (!shooting && animation.CurrentFrameIndex > 0))
+            if (shooting && animation.Finish || !shooting && animation.CurrentFrameIndex > 0)
             {
                 shooting = false;
                 animation.Reset(); // Reset the animation once its finish playing
@@ -130,7 +129,7 @@ namespace BulletManiac.Entity.Player
                 bulletDirection.Y = Extensions.RandomRangeFloat(bulletDirection.Y - accuracy, bulletDirection.Y + accuracy);
 
                 // Fire Bullet
-                Bullet.Bullet bullet = Magazine.Shoot(); // Get the current bullet from the megazine
+                Bullets.Bullet bullet = Magazine.Shoot(); // Get the current bullet from the megazine
                 bullet.Shoot(position, bulletDirection, 150f, 16f);
                 ResourcesManager.FindSoundEffect("Gun_Shoot").Play();
             }

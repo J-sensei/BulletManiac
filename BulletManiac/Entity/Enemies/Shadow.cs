@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Linq;
 
-namespace BulletManiac.Entity.Enemy
+namespace BulletManiac.Entity.Enemies
 {
     public class Shadow : Enemy
     {
@@ -51,7 +51,7 @@ namespace BulletManiac.Entity.Enemy
         }
 
         public override void Update(GameTime gameTime)
-        {            
+        {
             base.Update(gameTime);
             if (currentAction == EnemyAction.Die) return; // Dont run anything else because enemy is dead
 
@@ -90,8 +90,8 @@ namespace BulletManiac.Entity.Enemy
 
         protected override Rectangle CalculateBound()
         {
-            Vector2 pos = position - (origin * scale / 2f) + new Vector2(2f, 0f);
-            return new Rectangle((int)pos.X, (int)pos.Y + 3, (int)((origin.X * 2) * scale.X / 2.2f), (int)((origin.Y * 2) * scale.Y / 2.2f));
+            Vector2 pos = position - origin * scale / 2f + new Vector2(2f, 0f);
+            return new Rectangle((int)pos.X, (int)pos.Y + 3, (int)(origin.X * 2 * scale.X / 2.2f), (int)(origin.Y * 2 * scale.Y / 2.2f));
         }
     }
 }

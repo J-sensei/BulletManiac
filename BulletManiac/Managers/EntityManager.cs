@@ -1,7 +1,7 @@
 ﻿using BulletManiac.Collision;
 using BulletManiac.Entity;
-using BulletManiac.Entity.Bullet;
-using BulletManiac.Entity.Enemy;
+using BulletManiac.Entity.Bullets;
+using BulletManiac.Entity.Enemies;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;

@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
-namespace BulletManiac.Entity.Enemy
+namespace BulletManiac.Entity.Enemies
 {
     public class SuicideShadow : Enemy
     {
@@ -27,7 +27,7 @@ namespace BulletManiac.Entity.Enemy
             name = "Suicide Shadow";
             hp = 20f;
             currentAction = EnemyAction.Idle;
-            
+
             scale = new Vector2(0.5f);
             navigationAgent = new NavigationAgent(this);
         }
@@ -37,7 +37,7 @@ namespace BulletManiac.Entity.Enemy
             animationManager.AddAnimation(EnemyAction.Idle, new Animation(ResourcesManager.FindTexture("SuicideShadow_Idle"), 8, 1, 0.1f));
             animationManager.AddAnimation(EnemyAction.Move, new Animation(ResourcesManager.FindTexture("SuicideShadow_Move"), 8, 1, animationSpeed));
             animationManager.AddAnimation(EnemyAction.Attack, new Animation(ResourcesManager.FindTexture("SuicideShadow_Attack"), 15, 1, 0.15f, looping: false));
-            
+
             // Shadow Visual
             shadowEffect = new TextureEffect(ResourcesManager.FindTexture("Shadow"),
                     new Rectangle(0, 0, 64, 64), // Crop the shadow sprite
@@ -68,7 +68,7 @@ namespace BulletManiac.Entity.Enemy
 
             // Bomb logic
             float distance = (GameManager.Player.Position - Position).Length();
-            if(distance < DISTANCE_TO_EXPLODE)
+            if (distance < DISTANCE_TO_EXPLODE)
             {
                 currentAction = EnemyAction.Attack;
                 //if (!attackSoundPlay)
@@ -78,7 +78,7 @@ namespace BulletManiac.Entity.Enemy
                 //}
             }
 
-            if(currentAction == EnemyAction.Attack)
+            if (currentAction == EnemyAction.Attack)
             {
                 attackingSound.Play();
             }
@@ -87,7 +87,7 @@ namespace BulletManiac.Entity.Enemy
                 attackingSound.Stop();
             }
 
-            if(currentAction == EnemyAction.Attack && animationManager.CurrentAnimation.Finish)
+            if (currentAction == EnemyAction.Attack && animationManager.CurrentAnimation.Finish)
             {
                 // Explode and delete enemy
                 Destroy(this);
@@ -134,8 +134,8 @@ namespace BulletManiac.Entity.Enemy
 
         protected override Rectangle CalculateBound()
         {
-            Vector2 pos = position - (origin * scale / 2f) + new Vector2(2f, 0f);
-            return new Rectangle((int)pos.X - 2, (int)pos.Y + 2, (int)((origin.X * 2) * scale.X / 2.2f), (int)((origin.Y * 2) * scale.Y / 2.2f));
+            Vector2 pos = position - origin * scale / 2f + new Vector2(2f, 0f);
+            return new Rectangle((int)pos.X - 2, (int)pos.Y + 2, (int)(origin.X * 2 * scale.X / 2.2f), (int)(origin.Y * 2 * scale.Y / 2.2f));
         }
 
         public override void DeleteEvent()

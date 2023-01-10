@@ -14,7 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BulletManiac.Entity.Enemy
+namespace BulletManiac.Entity.Enemies
 {
     // Idle => Moving => Attack => Idle (Repeat)
     public class Summoner : Enemy
@@ -81,10 +81,10 @@ namespace BulletManiac.Entity.Enemy
                 currentAction = state;
             }
 
-            if(currentAction == EnemyAction.Idle)
+            if (currentAction == EnemyAction.Idle)
             {
                 idleCD -= Time.DeltaTime;
-                if(idleCD <= 0f)
+                if (idleCD <= 0f)
                 {
                     currentAction = EnemyAction.Move;
                     state = currentAction;
@@ -112,7 +112,7 @@ namespace BulletManiac.Entity.Enemy
                         hasMove = true;
                     }
                 }
-                else if(navigationAgent.CurrentState == NavigationState.STOP && hasMove)
+                else if (navigationAgent.CurrentState == NavigationState.STOP && hasMove)
                 {
                     hasMove = false;
                     state = currentAction;
@@ -136,7 +136,7 @@ namespace BulletManiac.Entity.Enemy
                     navigationAgent.Update(gameTime);
             }
 
-            if(navigationAgent.CurrentXDir == XDirection.Left)
+            if (navigationAgent.CurrentXDir == XDirection.Left)
             {
                 spriteEffects = SpriteEffects.FlipHorizontally;
             }
@@ -190,7 +190,7 @@ namespace BulletManiac.Entity.Enemy
         protected override Rectangle CalculateBound()
         {
             Vector2 pos = position - origin;
-            return new Rectangle((int)pos.X + 22, (int)pos.Y + 40, (int)((origin.X * 2) * scale.X / 3f), (int)((origin.Y * 2) * scale.Y / 3f));
+            return new Rectangle((int)pos.X + 22, (int)pos.Y + 40, (int)(origin.X * 2 * scale.X / 3f), (int)(origin.Y * 2 * scale.Y / 3f));
         }
     }
 }

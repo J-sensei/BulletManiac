@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace BulletManiac.Entity.Bullet
+namespace BulletManiac.Entity.Bullets
 {
     /// <summary>
     /// Generic bullet class
@@ -63,7 +63,7 @@ namespace BulletManiac.Entity.Bullet
 
         public Bullet() : base("Bullet")
         {
-            
+
         }
 
         public virtual void Shoot(Vector2 position, Vector2 direction, float speed = DEFAULT_SPEED, float initalSpeed = 0f)
@@ -84,13 +84,13 @@ namespace BulletManiac.Entity.Bullet
         public override void Update(GameTime gameTime)
         {
             // Update the animation
-            if(animation != null)
+            if (animation != null)
             {
                 animation.Update(gameTime);
             }
 
             // Destroy the bullet when it hit the wall
-            if(CollisionManager.CheckTileCollision(this, Vector2.Zero))
+            if (CollisionManager.CheckTileCollision(this, Vector2.Zero))
             {
                 DeleteEventWall();
             }
@@ -141,7 +141,7 @@ namespace BulletManiac.Entity.Bullet
 
         public override void Dispose()
         {
-            if(animation != null)
+            if (animation != null)
             {
                 animation.Dispose();
                 animation = null;

@@ -1,5 +1,5 @@
 ﻿using BulletManiac.Entity;
-using BulletManiac.Entity.Enemy;
+using BulletManiac.Entity.Enemies;
 using BulletManiac.Managers;
 using BulletManiac.Particle;
 using BulletManiac.SpriteAnimation;

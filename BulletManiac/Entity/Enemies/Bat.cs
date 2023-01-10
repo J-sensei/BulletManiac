@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace BulletManiac.Entity.Enemy
+namespace BulletManiac.Entity.Enemies
 {
     public class Bat : Enemy
     {
@@ -87,7 +87,7 @@ namespace BulletManiac.Entity.Enemy
             {
                 // The steering behavior will update every MOVE_CD second
                 moveCD -= Time.DeltaTime;
-                if(moveCD <= 0f)
+                if (moveCD <= 0f)
                 {
                     steerAgent.Update(gameTime, GameManager.Player); // Bat is flying toward to the player
                     moveCD = MOVE_CD;
@@ -114,7 +114,7 @@ namespace BulletManiac.Entity.Enemy
                 spriteEffects = SpriteEffects.None;
 
             // When hit animation is finish playing (Recover from hit animation)
-            if(currentAction == EnemyAction.Hit && animationManager.GetAnimation(EnemyAction.Hit).Finish)
+            if (currentAction == EnemyAction.Hit && animationManager.GetAnimation(EnemyAction.Hit).Finish)
             {
                 currentAction = EnemyAction.Move;
                 animationManager.GetAnimation(EnemyAction.Hit).Reset();
@@ -133,8 +133,8 @@ namespace BulletManiac.Entity.Enemy
             //    Vector2 pos = position - (origin * scale / 1.1f) + new Vector2(2f, 0f);
             //    return new Rectangle((int)pos.X, (int)pos.Y + 3, (int)(texture.Width * scale.X / 1.25f), (int)(texture.Height * scale.Y / 1.1f));
             //}
-            Vector2 pos = position - (origin * scale / 1.1f) + new Vector2(2f, 0f);
-            return new Rectangle((int)pos.X - 1, (int)pos.Y, (int)((origin.X * 2.2) * scale.X / 1.25f), (int)((origin.Y * 2.2) * scale.Y / 1.1f));
+            Vector2 pos = position - origin * scale / 1.1f + new Vector2(2f, 0f);
+            return new Rectangle((int)pos.X - 1, (int)pos.Y, (int)(origin.X * 2.2 * scale.X / 1.25f), (int)(origin.Y * 2.2 * scale.Y / 1.1f));
         }
 
         public override void Dispose()

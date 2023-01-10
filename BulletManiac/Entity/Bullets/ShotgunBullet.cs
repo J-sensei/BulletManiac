@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
-namespace BulletManiac.Entity.Bullet
+namespace BulletManiac.Entity.Bullets
 {
     public class ShotgunBullet : Bullet
     {
@@ -14,7 +14,7 @@ namespace BulletManiac.Entity.Bullet
 
         public ShotgunBullet() : base()
         {
-            for(int i = 0; i < BULLET_NUM; i++)
+            for (int i = 0; i < BULLET_NUM; i++)
             {
                 bullets.Add(new DefaultBullet());
             }

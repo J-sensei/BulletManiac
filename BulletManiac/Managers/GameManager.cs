@@ -1,8 +1,8 @@
 ﻿using BulletManiac.AI;
 using BulletManiac.Collision;
 using BulletManiac.Entity;
-using BulletManiac.Entity.Enemy;
-using BulletManiac.Entity.Player;
+using BulletManiac.Entity.Enemies;
+using BulletManiac.Entity.Players;
 using BulletManiac.Entity.UI;
 using BulletManiac.Particle;
 using BulletManiac.Scenes;

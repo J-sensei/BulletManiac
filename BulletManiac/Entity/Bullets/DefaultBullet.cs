@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BulletManiac.Entity.Bullet
+namespace BulletManiac.Entity.Bullets
 {
     /// <summary>
     /// Most normal bullet in the game (Only shoot straight line)
@@ -28,8 +28,8 @@ namespace BulletManiac.Entity.Bullet
 
         protected override Rectangle CalculateBound()
         {
-            Vector2 pos = position - (origin * scale / 1.2f);
-            return new Rectangle((int)pos.X + 2, (int)pos.Y + 3, (int)((origin.X * 2) * scale.X / 1.5f), (int)((origin.Y * 2) * scale.Y / 1.5f));
+            Vector2 pos = position - origin * scale / 1.2f;
+            return new Rectangle((int)pos.X + 2, (int)pos.Y + 3, (int)(origin.X * 2 * scale.X / 1.5f), (int)(origin.Y * 2 * scale.Y / 1.5f));
         }
 
         public override void Initialize()

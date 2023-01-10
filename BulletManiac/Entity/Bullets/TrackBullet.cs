@@ -4,7 +4,7 @@ using BulletManiac.SpriteAnimation;
 using Microsoft.Xna.Framework;
 using System;
 
-namespace BulletManiac.Entity.Bullet
+namespace BulletManiac.Entity.Bullets
 {
     public class TrackBullet : Bullet
     {
@@ -46,13 +46,13 @@ namespace BulletManiac.Entity.Bullet
 
         public override void Update(GameTime gameTime)
         {
-            if(!isTarget)
+            if (!isTarget)
             {
                 target = GameManager.FindNearestEnemy(this);
                 isTarget = true;
             }
 
-            if(target != null && !target.IsDestroyed && (target.Position - position).Length() > 10f)
+            if (target != null && !target.IsDestroyed && (target.Position - position).Length() > 10f)
             {
                 steeringAgent.Update(gameTime, target);
                 velocity = steeringAgent.CurrentVelocity;
@@ -65,7 +65,7 @@ namespace BulletManiac.Entity.Bullet
 
             base.Update(gameTime);
         }
-        
+
         protected override Vector2 CalculateVelocity()
         {
             return velocity;
@@ -73,8 +73,8 @@ namespace BulletManiac.Entity.Bullet
 
         protected override Rectangle CalculateBound()
         {
-            Vector2 pos = position - (origin * scale / 1.2f);
-            return new Rectangle((int)pos.X + 2, (int)pos.Y + 3, (int)((origin.X * 2) * scale.X / 1.5f), (int)((origin.Y * 2) * scale.Y / 1.5f));
+            Vector2 pos = position - origin * scale / 1.2f;
+            return new Rectangle((int)pos.X + 2, (int)pos.Y + 3, (int)(origin.X * 2 * scale.X / 1.5f), (int)(origin.Y * 2 * scale.Y / 1.5f));
         }
     }
 }

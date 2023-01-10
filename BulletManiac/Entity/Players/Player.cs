@@ -1,7 +1,7 @@
 ﻿using BulletManiac.Collision;
 using BulletManiac.Managers;
 using BulletManiac.Utilities;
-using BulletManiac.Entity.Bullet;
+using BulletManiac.Entity.Bullets;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Audio;
 using BulletManiac.SpriteAnimation;
 using BulletManiac.Entity.UI;
 
-namespace BulletManiac.Entity.Player
+namespace BulletManiac.Entity.Players
 {
     /// <summary>
     /// Player actions, used to determine animation
@@ -84,8 +84,8 @@ namespace BulletManiac.Entity.Player
 
         protected override Rectangle CalculateBound()
         {
-            Vector2 pos = position - (origin * scale / 1.1f) + new Vector2(2f, 0f);
-            return new Rectangle((int)pos.X, (int)pos.Y + 3, (int)((origin.X * 2) * scale.X / 1.25f), (int)((origin.Y * 2) * scale.Y / 1.1f));
+            Vector2 pos = position - origin * scale / 1.1f + new Vector2(2f, 0f);
+            return new Rectangle((int)pos.X, (int)pos.Y + 3, (int)(origin.X * 2 * scale.X / 1.25f), (int)(origin.Y * 2 * scale.Y / 1.1f));
         }
 
         private void Dash()
@@ -106,9 +106,9 @@ namespace BulletManiac.Entity.Player
                         dashDirection.X = -1f;
 
                     float offset = 150f;
-                    if(InputManager.MousePosition.Y > (GameManager.CurrentResolution.Y / 2f) + offset)
+                    if (InputManager.MousePosition.Y > GameManager.CurrentResolution.Y / 2f + offset)
                         dashDirection.Y = 1f;
-                    else if(InputManager.MousePosition.Y < (GameManager.CurrentResolution.Y / 2f) - offset)
+                    else if (InputManager.MousePosition.Y < GameManager.CurrentResolution.Y / 2f - offset)
                         dashDirection.Y = -1f;
                     else
                         dashDirection.Y = 0f;
@@ -129,7 +129,7 @@ namespace BulletManiac.Entity.Player
             }
             else
             {
-                if(dashCD > 0f)
+                if (dashCD > 0f)
                     dashCD -= Time.DeltaTime;
             }
         }
@@ -216,7 +216,7 @@ namespace BulletManiac.Entity.Player
         }
 
         private int lastWalkingAnimIndex = 0; // Play the walking sfx only once
-        private List<int> walkFrame = new List<int>() { 0, 2}; // Frame to generate SFX (Walk)
+        private List<int> walkFrame = new List<int>() { 0, 2 }; // Frame to generate SFX (Walk)
         private List<int> runFrame = new List<int>() { 2, 6 }; // Frame to generate SFX (Run)
         private void WalkingSFX()
         {
@@ -226,7 +226,7 @@ namespace BulletManiac.Entity.Player
                 anim = animationManager.GetAnimation(PlayerAction.Run);
                 CreateWalkSFX(anim, runFrame);
             }
-            else if(currentAction == PlayerAction.Walk)
+            else if (currentAction == PlayerAction.Walk)
             {
                 anim = animationManager.GetAnimation(PlayerAction.Walk);
                 CreateWalkSFX(anim, walkFrame);
@@ -341,13 +341,13 @@ namespace BulletManiac.Entity.Player
 
             base.Initialize();
         }
-        
+
         public override void Update(GameTime gameTime)
         {
             if (GameManager.CurrentLevel.TouchingDoor(Bound)) GameManager.UpdateLevel(); // Update level
             Dash();
             Invincible();
-            if(!dashing)
+            if (!dashing)
                 PlayerMovement();
             Gun.Update(gameTime); // Gun logic
 
@@ -355,18 +355,18 @@ namespace BulletManiac.Entity.Player
             shadowEffect.Update(gameTime); // Shadow of the player
             base.Update(gameTime);
         }
-        
+
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             shadowEffect.Draw(spriteBatch, gameTime); // Shadow always behind the player
             spriteBatch.End(); // End previous drawing session first inorder to start new one
 
             // Start new drawing session with shader (Everything between this draw call will be affect by the shader apply)
-            if(invincible && blink)
+            if (invincible && blink)
                 spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: Camera.Main.Transform, effect: colorOverlay);
             else
                 spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: Camera.Main.Transform, effect: null);
-            
+
             // Draw the gun and player
             if (Gun.RenderInfront)
             {

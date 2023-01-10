@@ -1,4 +1,5 @@
 ﻿using BulletManiac.Collision;
+using BulletManiac.Entity.Players;
 using BulletManiac.SpriteAnimation;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -9,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BulletManiac.Entity.Enemy
+namespace BulletManiac.Entity.Enemies
 {
     /// <summary>
     /// Hit box that will deal damage when colliding to the player
@@ -53,9 +54,9 @@ namespace BulletManiac.Entity.Enemy
         public override void Update(GameTime gameTime)
         {
             animation.Update(gameTime);
-            if(animation.CurrentFrameIndex == frameToPlay && !soundEffectPlay)
+            if (animation.CurrentFrameIndex == frameToPlay && !soundEffectPlay)
             {
-                if(soundEffect != null)
+                if (soundEffect != null)
                     soundEffect.Play();
                 soundEffectPlay = true;
             }
@@ -90,13 +91,13 @@ namespace BulletManiac.Entity.Enemy
         {
             if (other.Name == "Player" && enablePlayerDamage)
             {
-                Player.Player player = (other as Player.Player);
+                Player player = other as Player;
                 player.TakeDamage(damage); // Test take damage
             }
 
-            if(other is Enemy && enableEnemyDamage)
+            if (other is Enemy && enableEnemyDamage)
             {
-                Enemy enemy = (other as Enemy);
+                Enemy enemy = other as Enemy;
                 if (!takenDamage.Contains(enemy)) // do not damage some enemy again
                 {
                     enemy.TakeDamage(damage);

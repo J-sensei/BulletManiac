@@ -1,4 +1,6 @@
 ﻿using BulletManiac.Collision;
+using BulletManiac.Entity.Bullets;
+using BulletManiac.Entity.Players;
 using BulletManiac.Managers;
 using BulletManiac.Particle;
 using BulletManiac.SpriteAnimation;
@@ -8,7 +10,7 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace BulletManiac.Entity.Enemy
+namespace BulletManiac.Entity.Enemies
 {
     /// <summary>
     /// Base class for enemy
@@ -118,7 +120,7 @@ namespace BulletManiac.Entity.Enemy
             if (other.Name == "Bullet")
             {
                 // Deal damaage to the enemy
-                hp -= (other as Bullet.Bullet).Damage;
+                hp -= (other as Bullet).Damage;
 
                 ResourcesManager.FindSoundEffect("Bullet_Hit").Play(); // Bullet Hit sound
                 currentAction = EnemyAction.Hit; // Change player state
@@ -126,9 +128,9 @@ namespace BulletManiac.Entity.Enemy
                 blink = true;
             }
 
-            if(other.Name == "Player")
+            if (other.Name == "Player")
             {
-                Player.Player player = (other as Player.Player);
+                Player player = other as Player;
                 player.TakeDamage(10f); // Test take damage
             }
         }

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BulletManiac.Entity.Bullet;
+using BulletManiac.Entity.Bullets;
 using BulletManiac.Managers;
 using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 
-namespace BulletManiac.Entity.Player
+namespace BulletManiac.Entity.Players
 {
     public class Magazine
     {
@@ -26,9 +26,9 @@ namespace BulletManiac.Entity.Player
         }
 
         public int Capacity { get { return capacity; } }
-        public Queue<BulletManiac.Entity.Bullet.Bullet> Bullets { get { return bullets; } }
+        public Queue<Bullet> Bullets { get { return bullets; } }
 
-        Queue<BulletManiac.Entity.Bullet.Bullet> bullets = new(); // current bullets in the megazine
+        Queue<Bullet> bullets = new(); // current bullets in the megazine
         public Magazine(int capacity, float bulletCD)
         {
             this.capacity = capacity;
@@ -36,7 +36,7 @@ namespace BulletManiac.Entity.Player
             currentBulletCD = bulletCD;
 
             // Add the initial bullets
-            for(int i = 0; i < capacity; i++)
+            for (int i = 0; i < capacity; i++)
                 bullets.Enqueue(LoadBullet());
         }
 
@@ -73,7 +73,7 @@ namespace BulletManiac.Entity.Player
 
             if (bullets.Count == 0)
             {
-                if(Reloading == false) ResourcesManager.FindSoundEffect("Mag_In").Play(); // When bullet is empty, play a sound
+                if (Reloading == false) ResourcesManager.FindSoundEffect("Mag_In").Play(); // When bullet is empty, play a sound
                 Reloading = true;
                 currentBulletCD -= Time.DeltaTime;
 
@@ -93,7 +93,7 @@ namespace BulletManiac.Entity.Player
             }
         }
 
-        Bullet.Bullet LoadBullet()
+        Bullet LoadBullet()
         {
             int rand = Extensions.Random.Next(4);
             switch (rand)
@@ -111,7 +111,7 @@ namespace BulletManiac.Entity.Player
             }
         }
 
-        public Bullet.Bullet Shoot()
+        public Bullet Shoot()
         {
             return bullets.Dequeue();
         }
