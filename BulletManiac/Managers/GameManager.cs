@@ -76,7 +76,7 @@ namespace BulletManiac.Managers
         /// </summary>
         private static List<float> gameZoomLevelList = new List<float>()
         {
-            1.5f, 3f, 6f, 12f
+            1.375f, 2.75f, 5.5f, 11f
         };
         /// <summary>
         /// Current resolution choices from the resolution list
@@ -213,10 +213,12 @@ namespace BulletManiac.Managers
 
             // Load UI Sprites
             ResourcesManager.LoadTexture("Crosshair_SpriteSheet", "SpriteSheet/UI/Crosshair");
+            ResourcesManager.LoadTexture("Cursor", "SpriteSheet/UI/Cursor");
             ResourcesManager.LoadTexture("Transition_Texture", "UI/Transition_Texture");
             ResourcesManager.LoadTexture("Bullet_Fill", "UI/Bullet/bullet_fill");
             ResourcesManager.LoadTexture("Bullet_Empty", "UI/Bullet/bullet_empty");
             ResourcesManager.LoadSpriteFonts("DebugFont", "UI/Font/DebugFont");
+            ResourcesManager.LoadSpriteFonts("MainFont", "UI/Font/Main_Font");
 
             // Load Debug UI Sprites
             ResourcesManager.LoadTexture("Debug_Direction", "SpriteSheet/DebugUI/direction_16x16");
@@ -242,10 +244,12 @@ namespace BulletManiac.Managers
             ResourcesManager.LoadSoundEffect("SuicideShadow_Attacking", "Audio/Enemy/SuicideShadow_Attacking");
             ResourcesManager.LoadSoundEffect("SuicideShadow_AttackStart", "Audio/Enemy/SuicideShadow_AttackStart");
             ResourcesManager.LoadSoundEffect("Enemy_Spawn", "Audio/Enemy/Enemy_Spawn");
+            ResourcesManager.LoadSoundEffect("Button_Hover", "Audio/UI/Button_Hover");
 
             Animation.LoadAnimations();
             Bat.LoadContent();
             LevelManager.LoadContent();
+            Button.LoadContent();
 
             // Shader
             ResourcesManager.LoadEffect("Color_Overlay", "Shader/ColorOverlay");
@@ -255,12 +259,14 @@ namespace BulletManiac.Managers
         {
             LoadDefaultResources(); // Load default resources needed for the game to start
 
-            // Add cursor and plpayer
-            AddGameObjectUI(new Cursor()); // Add the game cursor
+            // Add cursor and player
             Player = new Player(new Vector2(50f)); // Create Player in the game
             AddGameObject(Player); // Add player
             MagazineUI megazineUI = new MagazineUI(Player.Gun, new Vector2(CurrentResolution.X - 100, CurrentResolution.Y - 200)); // Gun Megazine UI
             AddGameObjectUI(megazineUI);
+            AddGameObjectUI(new Button(new Vector2(500f), "TEST"));
+            Cursor.Instance = new Cursor();
+            AddGameObjectUI(Cursor.Instance); // Add the game cursor
 
             pathTester = new PathTester(ResourcesManager.FindLevel("Level1-1")); // Pathfinding Tester
             levelManager = new LevelManager(tiledMapRenderer, pathTester); // Level Manager 
