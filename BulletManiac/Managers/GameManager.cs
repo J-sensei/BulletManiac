@@ -269,7 +269,6 @@ namespace BulletManiac.Managers
             ResourcesManager.LoadSoundEffect("Footstep2", "Audio/Footstep/Footstep2");
             ResourcesManager.LoadSoundEffect("Footstep3", "Audio/Footstep/Footstep3");
             ResourcesManager.LoadSoundEffect("Player_Hurt", "Audio/Player/Player_Hurt");
-            ResourcesManager.LoadSoundEffect("Gun_Shoot", "Audio/Gun/Gun_Shoot");
             ResourcesManager.LoadSoundEffect("Mag_In", "Audio/Gun/Mag_In");
             ResourcesManager.LoadSoundEffect("Pistol_Cock", "Audio/Gun/Pistol_Cock");
             ResourcesManager.LoadSoundEffect("Bullet_Hit", "Audio/Gun/Bullet_Hit");
@@ -281,6 +280,12 @@ namespace BulletManiac.Managers
             ResourcesManager.LoadSoundEffect("Enemy_Spawn", "Audio/Enemy/Enemy_Spawn");
             ResourcesManager.LoadSoundEffect("Door_Open", "Audio/Level/Door_Open");
             ResourcesManager.LoadSoundEffect("Pause", "Audio/UI/Pause");
+
+            // Bullet shoot sound effects
+            ResourcesManager.LoadSoundEffect("Default_Shoot", "Audio/Gun/Default_Shoot");
+            ResourcesManager.LoadSoundEffect("Track_Shoot", "Audio/Gun/Track_Shoot");
+            ResourcesManager.LoadSoundEffect("Shotgun_Shoot", "Audio/Gun/Shotgun_Shoot");
+            ResourcesManager.LoadSoundEffect("Explosion_Shoot", "Audio/Gun/Explosion_Shoot");
 
             // Main Menu
             ResourcesManager.LoadSpriteFonts("Font_Normal", "UI/Font/Font_Normal");

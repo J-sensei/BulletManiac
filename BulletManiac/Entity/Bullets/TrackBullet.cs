@@ -31,7 +31,7 @@ namespace BulletManiac.Entity.Bullets
         /// </summary>
         private Vector2 velocity;
 
-        public TrackBullet() : base()
+        public TrackBullet() : base(ResourcesManager.FindSoundEffect("Track_Shoot"))
         {
             Animation = new Animation(ResourcesManager.FindAnimation("TrackBullet_Animation"));
             Animation.Reset();

@@ -4,6 +4,7 @@ using BulletManiac.Particle;
 using BulletManiac.SpriteAnimation;
 using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
@@ -21,6 +22,7 @@ namespace BulletManiac.Entity.Bullets
         protected const float DEFAULT_ANIMATION_SPEED = 0.2f;
         #endregion
 
+        public SoundEffect ShootingSound { get; private set; }
         private Animation animation; // Animation of the bullet (All bullet should use animation to draw)
         /// <summary>
         /// Bullet Texture to render in the UI to indicate player which bullet is in the megazine
@@ -58,12 +60,13 @@ namespace BulletManiac.Entity.Bullets
             Direction = direction;
             this.speed = speed;
             this.position += Direction * initalSpeed; // Move the bullet by the initial speed
+
             CollisionManager.Add(this, "Bullet");
         }
 
-        public Bullet() : base("Bullet")
+        public Bullet(SoundEffect soundEffect) : base("Bullet")
         {
-
+            ShootingSound = soundEffect;
         }
 
         public virtual void Shoot(Vector2 position, Vector2 direction, float speed = DEFAULT_SPEED, float initalSpeed = 0f)

@@ -12,7 +12,7 @@ namespace BulletManiac.Entity.Bullets
         const int BULLET_NUM = 5;
         List<DefaultBullet> bullets = new();
 
-        public ShotgunBullet() : base()
+        public ShotgunBullet() : base(ResourcesManager.FindSoundEffect("Shotgun_Shoot"))
         {
             for (int i = 0; i < BULLET_NUM; i++)
             {

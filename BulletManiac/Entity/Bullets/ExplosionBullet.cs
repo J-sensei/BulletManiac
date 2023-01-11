@@ -13,7 +13,7 @@ namespace BulletManiac.Entity.Bullets
 {
     public class ExplosionBullet : Bullet
     {
-        public ExplosionBullet() : base()
+        public ExplosionBullet() : base(ResourcesManager.FindSoundEffect("Explosion_Shoot"))
         {
             Animation = new Animation(ResourcesManager.FindAnimation("ExplosionBullet_Animation"));
             Animation.Reset();

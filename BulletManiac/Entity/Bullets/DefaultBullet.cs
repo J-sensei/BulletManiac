@@ -14,7 +14,7 @@ namespace BulletManiac.Entity.Bullets
     /// </summary>
     public class DefaultBullet : Bullet
     {
-        public DefaultBullet() : base()
+        public DefaultBullet() : base(ResourcesManager.FindSoundEffect("Default_Shoot"))
         {
             //Animation = new Animation(GameManager.Resources.FindTexture("Bullet1"), 5, 25, 0.1f, 6);
             //Animation = GameManager.Resources.FindAnimation("DefaultBullet_Animation");
