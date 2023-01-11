@@ -452,7 +452,7 @@ namespace BulletManiac.Managers
             entityManager.DrawUI(spriteBatch, gameTime);
 
             // UI
-            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "HP: " + Player.HP + "/" + Player.MaxHP, new Vector2(100f, 85f), Color.Gray);
+            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "HP: " + Player.HP.ToString("N0") + "/" + Player.MaxHP.ToString("N0"), new Vector2(100f, 85f), Color.Gray);
             spriteBatch.Draw(ResourcesManager.FindTexture("Skull_Icon"), new Vector2(46f, 138f),  null, Color.White, 0f, new Vector2(8f), new Vector2(2f), SpriteEffects.None, 0f);
             spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), " x" + entityManager.EnemyCount, new Vector2(53f, 130f), Color.Gray);
             spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "FLOOR: " + floor, new Vector2(35f, 180f), Color.Gray);

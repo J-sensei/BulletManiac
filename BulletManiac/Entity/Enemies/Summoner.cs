@@ -190,11 +190,6 @@ namespace BulletManiac.Entity.Enemies
         protected override Rectangle CalculateBound()
         {
             Vector2 pos = position - (origin * (scale / 2));
-            //return new Rectangle((int)pos.X + 22, (int)pos.Y + 40, (int)(origin.X * 2 * scale.X / 3f), (int)(origin.Y * 2 * scale.Y / 3f));
-            //return new Rectangle((int)(position.X - (origin.X * scale.X)), 
-            //                    (int)(position.Y - (origin.Y * scale.Y)), 
-            //                    (int)(32 * scale.X), 
-            //                    (int)(32 * scale.Y));
             return new Rectangle((int)(pos.X + 4),
                     (int)(pos.Y + (origin.Y / 2) + 2),
                     (int)(32 * scale.X / 1.2f),

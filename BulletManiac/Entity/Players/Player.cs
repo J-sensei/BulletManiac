@@ -295,6 +295,7 @@ namespace BulletManiac.Entity.Players
             if (!invincible && !dashing)
             {
                 HP -= damage;
+                HP = MathHelper.Clamp(HP, 0f, MaxHP); // Clamp HP
                 invincible = true; // Player become invincible after damage is taken
                 ResourcesManager.FindSoundEffect("Player_Hurt").Play();
                 hpBar.UpdateValue(HP);

@@ -26,6 +26,10 @@ namespace BulletManiac.Entity.Enemies
         }
 
         protected float hp = 100f;
+        public float Damage { get { return basedDamage * DamageModifier; } }
+        protected float basedDamage = 10f;
+        public float DamageModifier { get; set; } = 1.0f;
+
         protected AnimationManager animationManager; // Manange the animation based on certain action
         protected TextureEffect shadowEffect; // Visual shadow effect
         protected EnemyAction currentAction = EnemyAction.Idle;
@@ -131,7 +135,7 @@ namespace BulletManiac.Entity.Enemies
             if (other.Name == "Player")
             {
                 Player player = other as Player;
-                player.TakeDamage(10f); // Test take damage
+                player.TakeDamage(Damage); // Test take damage
             }
         }
 
