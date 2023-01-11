@@ -103,8 +103,8 @@ namespace BulletManiac.Tiled
                 {
                     Vector2 pos = GameManager.CurrentLevel.TileGraph.RandomPositionAwayFromDistance(100f);
 
-                    // Difficulty 1 - 2 (Bat) 3 - 5 (Shadow) 6 - 7 (Suicide Shadow) 8 - 10 (Summoner) 
-                    int difficulty = GameManager.CurrentLevel.Difficulty;
+                    // Difficulty 1 - 2 (Bat) 3 - 5 (Shadow) 6 - 7 (Suicide hadow) 8 - 10 (Summoner) 
+                    int difficulty = GameManager.Difficulty;
                     int r = Extensions.Random.Next(1, difficulty + 1);
                     switch (r)
                     {

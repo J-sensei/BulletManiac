@@ -195,7 +195,7 @@ namespace BulletManiac.Managers
             AddGameObjectUI(megazineUI);
             //AddGameObjectUI(new Button(new Vector2(500f), "TEST"));
 
-            pathTester = new PathTester(ResourcesManager.FindLevel("Level1-1")); // Pathfinding Tester
+            pathTester = new PathTester(ResourcesManager.FindLevel(LevelManager.INITIAL_LEVEL)); // Pathfinding Tester
             levelManager = new LevelManager(tiledMapRenderer, pathTester); // Level Manager 
             Player.Position = CurrentLevel.SpawnPosition;
 
@@ -262,11 +262,6 @@ namespace BulletManiac.Managers
             ResourcesManager.LoadTexture("Debug_Direction", "SpriteSheet/DebugUI/direction_16x16");
             ResourcesManager.LoadTexture("Debug_Path", "SpriteSheet/DebugUI/path_16x16");
             ResourcesManager.LoadTexture("Skull_Icon", "UI/Skull_Icon");
-
-            // Load Tiled Map level
-            ResourcesManager.LoadTiledMap("Level1", "Tiled/Level/Level1");
-            ResourcesManager.LoadTiledMap("Level2", "Tiled/Level/Level2");
-            ResourcesManager.LoadTiledMap("Level3", "Tiled/Level/Level3");
 
             // Load Sound Effect
             ResourcesManager.LoadSoundEffect("Footstep1", "Audio/Footstep/Footstep1");

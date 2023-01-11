@@ -19,7 +19,8 @@ namespace BulletManiac.Managers
     /// </summary>
     public class LevelManager
     {
-        private List<Level> levels;
+        public const string INITIAL_LEVEL = "Level1";
+        private static List<Level> levels;
         public Level CurrentLevel
         {
             
@@ -37,23 +38,45 @@ namespace BulletManiac.Managers
         public static void LoadContent()
         {
             // Map 
-            ResourcesManager.LoadTiledMap("Level1-1", "Level/Level1-1");
-            ResourcesManager.LoadTiledMap("Level1-2", "Level/Level1-2");
-            ResourcesManager.LoadTiledMap("Level1-3", "Level/Level1-3");
-            ResourcesManager.LoadTiledMap("Level2-1", "Level/Level2-1");
-            ResourcesManager.LoadTiledMap("Level2-2", "Level/Level2-2");
+            ResourcesManager.LoadTiledMap("Map1", "Level/Map1");
+            ResourcesManager.LoadTiledMap("Map2", "Level/Map2");
+            ResourcesManager.LoadTiledMap("Map3", "Level/Map3");
+            ResourcesManager.LoadTiledMap("Map4", "Level/Map4");
+            ResourcesManager.LoadTiledMap("Map5", "Level/Map5");
+            ResourcesManager.LoadTiledMap("Map6", "Level/Map6");
+            ResourcesManager.LoadTiledMap("Map7", "Level/Map7");
+            ResourcesManager.LoadTiledMap("Map8", "Level/Map8");
+            ResourcesManager.LoadTiledMap("Map9", "Level/Map9");
+            ResourcesManager.LoadTiledMap("Map10", "Level/Map10");
 
             // Level
-            ResourcesManager.LoadLevel("Level1-1", new Level(ResourcesManager.FindTiledMap("Level1-1"), 8, 9, new Color(7, 24, 33), 
-                                                        Tile.ToPosition(new Tile(8 ,15), 16, 16), 1));
-            ResourcesManager.LoadLevel("Level1-2", new Level(ResourcesManager.FindTiledMap("Level1-2"), 3, 9, new Color(7, 24, 33),
-                                                        Tile.ToPosition(new Tile(8, 15), 16, 16), 1));
-            ResourcesManager.LoadLevel("Level1-3", new Level(ResourcesManager.FindTiledMap("Level1-3"), 8, 9, new Color(7, 24, 33),
-                                                        Tile.ToPosition(new Tile(8, 15), 16, 16), 2));
-            ResourcesManager.LoadLevel("Level2-1", new Level(ResourcesManager.FindTiledMap("Level2-1"), 10, 4, new Color(7, 24, 33),
-                                                        Tile.ToPosition(new Tile(10, 20), 16, 16), 3));
-            ResourcesManager.LoadLevel("Level2-2", new Level(ResourcesManager.FindTiledMap("Level2-2"), 10, 12, new Color(7, 24, 33),
-                                                        Tile.ToPosition(new Tile(10, 20), 16, 16), 4));
+            ResourcesManager.LoadLevel("Level1", new Level(ResourcesManager.FindTiledMap("Map1"), 8, 9, new Color(7, 24, 33),
+                                                        Tile.ToPosition(new Tile(8, 14), 16, 16)));
+            ResourcesManager.LoadLevel("Level2", new Level(ResourcesManager.FindTiledMap("Map1"), 8, 14, new Color(7, 24, 33),
+                                            Tile.ToPosition(new Tile(8, 14), 16, 16)));
+            ResourcesManager.LoadLevel("Level3", new Level(ResourcesManager.FindTiledMap("Map3"), 8, 14, new Color(7, 24, 33),
+                                Tile.ToPosition(new Tile(8, 14), 16, 16)));
+            ResourcesManager.LoadLevel("Level4", new Level(ResourcesManager.FindTiledMap("Map4"), 8, 14, new Color(7, 24, 33),
+                                Tile.ToPosition(new Tile(8, 14), 16, 16)));
+            ResourcesManager.LoadLevel("Level5", new Level(ResourcesManager.FindTiledMap("Map5"), 8, 15, new Color(7, 24, 33),
+                                Tile.ToPosition(new Tile(8, 15), 16, 16)));
+            ResourcesManager.LoadLevel("Level6", new Level(ResourcesManager.FindTiledMap("Map6"), 8, 15, new Color(7, 24, 33),
+                                Tile.ToPosition(new Tile(8, 15), 16, 16)));
+            ResourcesManager.LoadLevel("Level7", new Level(ResourcesManager.FindTiledMap("Map7"), 8, 15, new Color(7, 24, 33),
+                    Tile.ToPosition(new Tile(8, 15), 16, 16)));
+            ResourcesManager.LoadLevel("Level8", new Level(ResourcesManager.FindTiledMap("Map8"), 8, 15, new Color(7, 24, 33),
+                    Tile.ToPosition(new Tile(8, 15), 16, 16)));
+            ResourcesManager.LoadLevel("Level9", new Level(ResourcesManager.FindTiledMap("Map9"), 8, 9, new Color(7, 24, 33),
+                    Tile.ToPosition(new Tile(8, 14), 16, 16)));
+            ResourcesManager.LoadLevel("Level10", new Level(ResourcesManager.FindTiledMap("Map10"), 8, 15, new Color(7, 24, 33),
+                    Tile.ToPosition(new Tile(8, 15), 16, 16)));
+
+            // Load all the levels
+            levels = new List<Level>();
+            for(int i = 0; i < 10; i++)
+            {
+                levels.Add(ResourcesManager.FindLevel("Level" + (i + 1).ToString()));
+            }
         }
 
         /// <summary>
@@ -62,14 +85,7 @@ namespace BulletManiac.Managers
         /// <param name="level"></param>
         public LevelManager(TiledMapRenderer tiledMapRenderer, PathTester pathTester)
         {
-            levels = new List<Level>();
             currentLevelIndex = 0;
-            
-            // Load all the levels
-            levels.Add(ResourcesManager.FindLevel("Level1-1"));
-            levels.Add(ResourcesManager.FindLevel("Level1-2"));
-            levels.Add(ResourcesManager.FindLevel("Level1-3"));
-            levels.Add(ResourcesManager.FindLevel("Level2-1"));
 
             this.tiledMapRenderer = tiledMapRenderer;
             this.pathTester = pathTester;
@@ -94,16 +110,16 @@ namespace BulletManiac.Managers
             CurrentLevel.DoorClose(); // Close the door
 
             // Level Difficulty = current difficulty || previous difficulty (e.g. diffculty 5 will be randomly 5 or 4)
-            List<int> targetIndexes = new();
-            for(int i = 0; i < levels.Count; i++)
-            {
-                if (levels[i].Difficulty == difficulty || levels[i].Difficulty == difficulty - 1)
-                {
-                    targetIndexes.Add(i);
-                }
-            }
-            currentLevelIndex = targetIndexes.Shuffle(Extensions.Random).Take(1).FirstOrDefault();
-            //currentLevelIndex = Extensions.Random.Next(levels.Count); // Testing
+            //List<int> targetIndexes = new();
+            //for(int i = 0; i < levels.Count; i++)
+            //{
+            //    if (levels[i].Difficulty == difficulty || levels[i].Difficulty == difficulty - 1)
+            //    {
+            //        targetIndexes.Add(i);
+            //    }
+            //}
+            //currentLevelIndex = targetIndexes.Shuffle(Extensions.Random).Take(1).FirstOrDefault();
+            currentLevelIndex = Extensions.Random.Next(levels.Count); // Testing
             tiledMapRenderer.LoadMap(CurrentLevel.Map);
             CollisionManager.ChangeTileCollision(CurrentLevel.Obstacles);
             pathTester.ChangeLevel(CurrentLevel);
