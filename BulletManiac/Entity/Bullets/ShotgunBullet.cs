@@ -18,7 +18,7 @@ namespace BulletManiac.Entity.Bullets
             {
                 bullets.Add(new DefaultBullet());
             }
-            BulletUI = ResourcesManager.FindTexture("Bullet_Fill");
+            BulletUI = ResourcesManager.FindTexture("Bullet_Shotgun");
             Direction = direction;
         }
 

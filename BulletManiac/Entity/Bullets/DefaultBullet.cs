@@ -23,7 +23,7 @@ namespace BulletManiac.Entity.Bullets
 
             origin = new Vector2(8f); // Set the origin to the center of the texture
             scale = new Vector2(0.8f);
-            BulletUI = ResourcesManager.FindTexture("Bullet_Fill");
+            BulletUI = ResourcesManager.FindTexture("Bullet_Default");
         }
 
         protected override Rectangle CalculateBound()

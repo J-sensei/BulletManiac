@@ -759,6 +759,18 @@
 /processor:TiledMapProcessor
 /build:Tiled/Level/level3.tmx
 
+#begin UI/Bullet/bullet_default.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/Bullet/bullet_default.png
+
 #begin UI/Bullet/bullet_empty.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -771,7 +783,7 @@
 /processorParam:TextureFormat=Color
 /build:UI/Bullet/bullet_empty.png
 
-#begin UI/Bullet/bullet_fill.png
+#begin UI/Bullet/bullet_explosion.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -781,7 +793,31 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:UI/Bullet/bullet_fill.png
+/build:UI/Bullet/bullet_explosion.png
+
+#begin UI/Bullet/bullet_shotgun.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/Bullet/bullet_shotgun.png
+
+#begin UI/Bullet/bullet_track.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/Bullet/bullet_track.png
 
 #begin UI/Font/DebugFont.spritefont
 /importer:FontDescriptionImporter

@@ -247,8 +247,11 @@ namespace BulletManiac.Managers
 
             // Load UI Sprites
             ResourcesManager.LoadTexture("Transition_Texture", "UI/Transition_Texture");
-            ResourcesManager.LoadTexture("Bullet_Fill", "UI/Bullet/bullet_fill");
             ResourcesManager.LoadTexture("Bullet_Empty", "UI/Bullet/bullet_empty");
+            ResourcesManager.LoadTexture("Bullet_Default", "UI/Bullet/bullet_default");
+            ResourcesManager.LoadTexture("Bullet_Track", "UI/Bullet/bullet_track");
+            ResourcesManager.LoadTexture("Bullet_Shotgun", "UI/Bullet/bullet_shotgun");
+            ResourcesManager.LoadTexture("Bullet_Explosion", "UI/Bullet/bullet_explosion");
             ResourcesManager.LoadSpriteFonts("DebugFont", "UI/Font/DebugFont");
             ResourcesManager.LoadSpriteFonts("Font_Player", "UI/Font/Font_Player");
             ResourcesManager.LoadTexture("HP_Background", "UI/ProgressBar/HP_Background");

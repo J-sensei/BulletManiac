@@ -79,8 +79,8 @@ namespace BulletManiac.SpriteAnimation
             ResourcesManager.LoadAnimation("TrackBullet_Animation", new Animation(ResourcesManager.FindTexture("Bullet1"), 5, 25, 0.1f, 5));
             ResourcesManager.LoadAnimation("ExplosionBullet_Animation", new Animation(ResourcesManager.FindTexture("Bullet1"), 5, 25, 0.1f, 16));
 
-            ResourcesManager.LoadTexture("Bullet_Explosion", "SpriteSheet/Effect/Bullet_Explosion");
-            ResourcesManager.LoadAnimation("BulletExplode_Animation", new Animation(ResourcesManager.FindTexture("Bullet_Explosion"), 8, 1, 0.07f, looping: false));
+            ResourcesManager.LoadTexture("Bullet_Explosion_SpriteSheet", "SpriteSheet/Effect/Bullet_Explosion");
+            ResourcesManager.LoadAnimation("BulletExplode_Animation", new Animation(ResourcesManager.FindTexture("Bullet_Explosion_SpriteSheet"), 8, 1, 0.07f, looping: false));
         }
 
         public Animation(Animation animation)
