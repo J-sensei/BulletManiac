@@ -82,6 +82,10 @@ namespace BulletManiac.Tiled
         public void Start()
         {
             currentNumber = GameManager.CurrentLevel.EnemySpawned; // Largest possible number will be 110 enemy for a level
+            spawnCD = 1.1f - (GameManager.Difficulty * 0.1f); // from 1.0f (difficulty 1) to 0.1f (difficulty 10)
+            spawnNumber = 5 * GameManager.Difficulty; // from 5 to 50 enemy 
+            currentNumber = spawnNumber;
+            currentSpawnCD = spawnCD;
             active = true;
         }
 
@@ -119,7 +123,7 @@ namespace BulletManiac.Tiled
                         default:
                             GameManager.Log("Spawner", "The random number is out of bound r = " + r);
                             throw new Exception("Random enemy spawn is out of bound");
-                            break;
+                            //break;
                     }
                     currentSpawnCD = spawnCD;
                     currentNumber--;

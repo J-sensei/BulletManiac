@@ -3,6 +3,7 @@ using BulletManiac.Tiled;
 using BulletManiac.Tiled.AI;
 using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Collections;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
 using System;
@@ -91,7 +92,18 @@ namespace BulletManiac.Managers
         public void ChangeLevel(int difficulty)
         {
             CurrentLevel.DoorClose(); // Close the door
-            currentLevelIndex = Extensions.Random.Next(levels.Count); // Testing
+
+            // Level Difficulty = current difficulty || previous difficulty (e.g. diffculty 5 will be randomly 5 or 4)
+            List<int> targetIndexes = new();
+            for(int i = 0; i < levels.Count; i++)
+            {
+                if (levels[i].Difficulty == difficulty || levels[i].Difficulty == difficulty - 1)
+                {
+                    targetIndexes.Add(i);
+                }
+            }
+            currentLevelIndex = targetIndexes.Shuffle(Extensions.Random).Take(1).FirstOrDefault();
+            //currentLevelIndex = Extensions.Random.Next(levels.Count); // Testing
             tiledMapRenderer.LoadMap(CurrentLevel.Map);
             CollisionManager.ChangeTileCollision(CurrentLevel.Obstacles);
             pathTester.ChangeLevel(CurrentLevel);

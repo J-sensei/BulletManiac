@@ -209,6 +209,7 @@ namespace BulletManiac.Managers
             // Status reset
             floor = 1; // Reset the floor count
             TimePass = 0f;
+            Difficulty = 1;
 
             ApplyTransition(); // Run the transition when the game start
         }
@@ -398,19 +399,26 @@ namespace BulletManiac.Managers
         const float TRANSITION_DURATION = 0.5f;
         static float transitionDuration = TRANSITION_DURATION;
         private static bool doorOpened = false;
+        public static int Difficulty { get; private set; } = 1;
         /// <summary>
         /// Switch to a new level when player cleated a level
         /// </summary>
         public static void UpdateLevel()
         {
-            levelManager.ChangeLevel(0);
-            entityManager.ClearBullets();
-            transitionEffect.Reset();
-            spawner.Start();
-            Player.Position = CurrentLevel.SpawnPosition;
-            levelUpdated = true;
-            doorOpened = false;
+            levelManager.ChangeLevel(Difficulty); // Change the level of the current difficulty
+            entityManager.ClearBullets(); // Clear bullets from the previous level
+            transitionEffect.Reset(); // Reset the transition effect
+            spawner.Start(); // Start the spawning
+            Player.Position = CurrentLevel.SpawnPosition; // Update player position to the inital position of the level
+            levelUpdated = true; // Start the transition to hide updating when level the changing
+            doorOpened = false; // Door the close now
             floor++; // Update floor record
+
+            if(floor % 2 == 0)
+            {
+                Difficulty++;
+                Difficulty = Math.Clamp(Difficulty, 1, 10); // Clamp the difficulty
+            }
         }
 
         public static void ApplyTransition()
