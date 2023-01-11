@@ -80,7 +80,7 @@ namespace BulletManiac.Entity.Enemies
             {
                 if (navigationAgent.CurrentState != NavigationState.STOP)
                 {
-                    navigationAgent.Pathfind(GameManager.Player.Position); // Execute pathfinding
+                    //navigationAgent.Pathfind(GameManager.Player.Position); // Execute pathfinding
                     currentAction = EnemyAction.Move;
                 }
                 else
