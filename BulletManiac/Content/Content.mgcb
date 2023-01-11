@@ -93,6 +93,12 @@
 /processorParam:Quality=Best
 /build:Audio/Gun/Pistol_Cock.wav
 
+#begin Audio/Level/Door_Open.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Level/Door_Open.wav
+
 #begin Audio/Player/Player_Hurt.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -110,6 +116,12 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Audio/UI/Button_Hover.wav
+
+#begin Audio/UI/Pause.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/UI/Pause.wav
 
 #begin Level/AnimationSheet_Items.png
 /importer:TextureImporter

@@ -9,6 +9,12 @@ using System.Threading.Tasks;
 
 namespace BulletManiac.Tiled
 {
+    /*
+        Level difficulty will be rated from 1 - 10
+        Every 2 floor is cleared will increase 1 difficulty rated until 10
+        Spawn Number = Difficulty * Based Spawn Number
+        
+    */
     /// <summary>
     /// What a level will contain
     /// </summary>
@@ -83,9 +89,11 @@ namespace BulletManiac.Tiled
             return false;
         }
 
+        //bool playDoorSound = true;
         public void DoorOpen()
         {
             Map.GetLayer<TiledMapTileLayer>("Door Open").Opacity = 1;
+            ResourcesManager.FindSoundEffect("Door_Open").Play();
         }
 
         public void DoorClose()

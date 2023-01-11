@@ -279,6 +279,8 @@ namespace BulletManiac.Managers
             ResourcesManager.LoadSoundEffect("SuicideShadow_Attacking", "Audio/Enemy/SuicideShadow_Attacking");
             ResourcesManager.LoadSoundEffect("SuicideShadow_AttackStart", "Audio/Enemy/SuicideShadow_AttackStart");
             ResourcesManager.LoadSoundEffect("Enemy_Spawn", "Audio/Enemy/Enemy_Spawn");
+            ResourcesManager.LoadSoundEffect("Door_Open", "Audio/Level/Door_Open");
+            ResourcesManager.LoadSoundEffect("Pause", "Audio/UI/Pause");
 
             // Main Menu
             ResourcesManager.LoadSpriteFonts("Font_Normal", "UI/Font/Font_Normal");
@@ -348,19 +350,16 @@ namespace BulletManiac.Managers
             if (InputManager.GetKey(Keys.Escape))
             {
                 // Pause the game
+                ResourcesManager.FindSoundEffect("Pause").Play();
                 SceneManager.OpenScene(2);
                 SceneManager.GetScene(1).StopUpdate();
             }
-
-            //if (InputManager.GetKey(Keys.Q))
-            //{
-            //    transitionEffect.Reset();
-            //    transitionEffect.Start();
-            //}
+            
             // Open the door is level is finish
-            if (IsLevelFinish)
+            if (IsLevelFinish && !doorOpened)
             {
                 CurrentLevel.DoorOpen();
+                doorOpened = true;
             }
 
             if (Debug)
@@ -383,11 +382,14 @@ namespace BulletManiac.Managers
             transitionEffect.Update(gameTime);
         }
 
-        // Test Level variables
-        private static int floor = 1; // Record how many floor player has cleared
+        /// <summary>
+        /// Record how many floor player has cleared
+        /// </summary>
+        private static int floor = 1;
         static bool levelUpdated = false;
         const float TRANSITION_DURATION = 0.5f;
         static float transitionDuration = TRANSITION_DURATION;
+        private static bool doorOpened = false;
         /// <summary>
         /// Switch to a new level when player cleated a level
         /// </summary>
@@ -399,6 +401,7 @@ namespace BulletManiac.Managers
             spawner.Start();
             Player.Position = CurrentLevel.SpawnPosition;
             levelUpdated = true;
+            doorOpened = false;
             floor++; // Update floor record
         }
 
