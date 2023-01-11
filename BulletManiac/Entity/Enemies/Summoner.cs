@@ -64,7 +64,7 @@ namespace BulletManiac.Entity.Enemies
                     new Rectangle(0, 0, 64, 64), // Crop the shadow sprite
                     this,
                     new Vector2(32f), new Vector2(0.6f), new Vector2(0f, 10f));
-            origin = animationManager.CurrentAnimation.TextureBound / 2f;
+            origin = new Vector2(32f);
             base.Initialize();
         }
 
@@ -189,8 +189,16 @@ namespace BulletManiac.Entity.Enemies
 
         protected override Rectangle CalculateBound()
         {
-            Vector2 pos = position - origin;
-            return new Rectangle((int)pos.X + 22, (int)pos.Y + 40, (int)(origin.X * 2 * scale.X / 3f), (int)(origin.Y * 2 * scale.Y / 3f));
+            Vector2 pos = position - (origin * (scale / 2));
+            //return new Rectangle((int)pos.X + 22, (int)pos.Y + 40, (int)(origin.X * 2 * scale.X / 3f), (int)(origin.Y * 2 * scale.Y / 3f));
+            //return new Rectangle((int)(position.X - (origin.X * scale.X)), 
+            //                    (int)(position.Y - (origin.Y * scale.Y)), 
+            //                    (int)(32 * scale.X), 
+            //                    (int)(32 * scale.Y));
+            return new Rectangle((int)(pos.X + 4),
+                    (int)(pos.Y + (origin.Y / 2) + 2),
+                    (int)(32 * scale.X / 1.2f),
+                    (int)(32 * scale.Y / 1.2f));
         }
     }
 }
