@@ -28,7 +28,7 @@ namespace BulletManiac.Entity.Enemies
         private SteeringAgent steerAgent;
         private NavigationAgent navigationAgent;
 
-        float speed = 70f;
+        float speed = 50f;
         const int MAXIMUM_BAT_SUMMON = 20;
         float animationSpeed = 0.1f;
 
@@ -39,6 +39,7 @@ namespace BulletManiac.Entity.Enemies
             animationManager = new AnimationManager();
             name = "Summoner";
             hp = 150f;
+            basedDamage = 2f;
             currentAction = EnemyAction.Idle;
             scale = new Vector2(0.8f);
 

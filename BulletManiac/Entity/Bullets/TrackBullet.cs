@@ -36,6 +36,7 @@ namespace BulletManiac.Entity.Bullets
             Animation = new Animation(ResourcesManager.FindAnimation("TrackBullet_Animation"));
             Animation.Reset();
 
+            basedDamage = 10f;
             origin = Animation.TextureBound / 2f; // Set the origin to the center of the texture
             scale = new Vector2(0.8f);
             BulletUI = ResourcesManager.FindTexture("Bullet_Track");

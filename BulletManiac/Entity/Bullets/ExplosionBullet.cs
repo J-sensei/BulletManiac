@@ -18,6 +18,7 @@ namespace BulletManiac.Entity.Bullets
             Animation = new Animation(ResourcesManager.FindAnimation("ExplosionBullet_Animation"));
             Animation.Reset();
 
+            basedDamage = 0;
             origin = Animation.TextureBound / 2f; // Set the origin to the center of the texture
             scale = new Vector2(0.8f);
             BulletUI = ResourcesManager.FindTexture("Bullet_Explosion");
@@ -32,7 +33,7 @@ namespace BulletManiac.Entity.Bullets
         void CreateExplosion()
         {
             HitBox hitBox = new HitBox(new Animation(ResourcesManager.FindAnimation("BulletExplode_Animation")),
-            Position, new Vector2(1f), new List<int>() { 3, 4 }, enableEnemyDamage: true, enablePlayerDamage: false);
+            Position, new Vector2(1f), new List<int>() { 3, 4 }, damage: 30f, enableEnemyDamage: true, enablePlayerDamage: false);
             hitBox.AddSoundEffect(ResourcesManager.FindSoundEffect("SuicideShadow_Explosion"), 1); // Add new sound effect later
             GameManager.AddGameObject(hitBox);
 

@@ -25,7 +25,8 @@ namespace BulletManiac.Entity.Enemies
         {
             animationManager = new AnimationManager();
             name = "Suicide Shadow";
-            hp = 20f;
+            hp = 70f;
+            basedDamage = 10f;
             currentAction = EnemyAction.Idle;
 
             scale = new Vector2(0.5f);
@@ -92,7 +93,7 @@ namespace BulletManiac.Entity.Enemies
                 // Explode and delete enemy
                 Destroy(this);
                 HitBox hitBox = new HitBox(new Animation(ResourcesManager.FindTexture("SuicideShadow_Explode"), 8, 1, animationSpeed, looping: false),
-                            Position, new Vector2(1f), new List<int>() { 3, 4 }, enableEnemyDamage: true, enablePlayerDamage: true);
+                            Position, new Vector2(1f), new List<int>() { 3, 4 }, damage: 50f, enableEnemyDamage: true, enablePlayerDamage: true);
                 hitBox.AddSoundEffect(ResourcesManager.FindSoundEffect("SuicideShadow_Explosion"), 1);
                 GameManager.AddGameObject(hitBox);
 

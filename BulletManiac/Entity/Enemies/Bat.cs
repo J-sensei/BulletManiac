@@ -34,7 +34,8 @@ namespace BulletManiac.Entity.Enemies
         {
             animationManager = new AnimationManager();
             name = "Bat";
-            hp = 30f;
+            hp = 20f;
+            basedDamage = 5f;
             currentAction = EnemyAction.Move;
 
             steerAgent = new SteeringAgent(this, BAT_STERRING_SETTING, BAT_FLOCK_SETTING, BAT_SPEED, BAT_ARRIVAL_RADIUS, true);
