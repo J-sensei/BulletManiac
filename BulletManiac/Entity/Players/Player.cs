@@ -32,7 +32,7 @@ namespace BulletManiac.Entity.Players
 
         // Player status
         private float moveSpeed = 80f;
-        private float dashSpeed = 180f;
+        private float dashSpeed = 240f;
         const float DEFAULT_HP = 100f;
         public float HP { get; private set; }
         public float MaxHP { get; private set; }

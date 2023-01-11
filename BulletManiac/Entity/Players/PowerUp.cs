@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using BulletManiac.Collision;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -22,9 +23,9 @@ namespace BulletManiac.Entity.Players
             throw new NotImplementedException();
         }
 
-        public override void CollisionEvent(GameObject other)
+        public override void CollisionEvent(ICollidable other)
         {
-            if(other.Name == "Player")
+            if(other.Tag == "Player")
             {
                 PowerUpAction();
                 Destroy(this);

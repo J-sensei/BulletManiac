@@ -87,17 +87,17 @@ namespace BulletManiac.Entity.Enemies
         }
 
         List<Enemy> takenDamage = new();
-        public override void CollisionEvent(GameObject other)
+        public override void CollisionEvent(ICollidable other)
         {
-            if (other.Name == "Player" && enablePlayerDamage)
+            if (other.Tag == "Player" && enablePlayerDamage)
             {
-                Player player = other as Player;
+                Player player = other.GameObject as Player;
                 player.TakeDamage(damage); // Test take damage
             }
 
-            if (other is Enemy && enableEnemyDamage)
+            if (other.Tag == "Enemy" && enableEnemyDamage)
             {
-                Enemy enemy = other as Enemy;
+                Enemy enemy = other.GameObject as Enemy;
                 if (!takenDamage.Contains(enemy)) // do not damage some enemy again
                 {
                     enemy.TakeDamage(damage);
