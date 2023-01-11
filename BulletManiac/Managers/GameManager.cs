@@ -1,8 +1,8 @@
 ﻿using BulletManiac.AI;
 using BulletManiac.Collision;
 using BulletManiac.Entity;
-using BulletManiac.Entity.Enemy;
-using BulletManiac.Entity.Player;
+using BulletManiac.Entity.Enemies;
+using BulletManiac.Entity.Players;
 using BulletManiac.Entity.UI;
 using BulletManiac.Particle;
 using BulletManiac.Scenes;
@@ -195,7 +195,7 @@ namespace BulletManiac.Managers
             AddGameObjectUI(megazineUI);
             //AddGameObjectUI(new Button(new Vector2(500f), "TEST"));
 
-            pathTester = new PathTester(ResourcesManager.FindLevel("Level1-1")); // Pathfinding Tester
+            pathTester = new PathTester(ResourcesManager.FindLevel(LevelManager.INITIAL_LEVEL)); // Pathfinding Tester
             levelManager = new LevelManager(tiledMapRenderer, pathTester); // Level Manager 
             Player.Position = CurrentLevel.SpawnPosition;
 
@@ -209,6 +209,7 @@ namespace BulletManiac.Managers
             // Status reset
             floor = 1; // Reset the floor count
             TimePass = 0f;
+            Difficulty = 1;
 
             ApplyTransition(); // Run the transition when the game start
         }
@@ -247,8 +248,11 @@ namespace BulletManiac.Managers
 
             // Load UI Sprites
             ResourcesManager.LoadTexture("Transition_Texture", "UI/Transition_Texture");
-            ResourcesManager.LoadTexture("Bullet_Fill", "UI/Bullet/bullet_fill");
             ResourcesManager.LoadTexture("Bullet_Empty", "UI/Bullet/bullet_empty");
+            ResourcesManager.LoadTexture("Bullet_Default", "UI/Bullet/bullet_default");
+            ResourcesManager.LoadTexture("Bullet_Track", "UI/Bullet/bullet_track");
+            ResourcesManager.LoadTexture("Bullet_Shotgun", "UI/Bullet/bullet_shotgun");
+            ResourcesManager.LoadTexture("Bullet_Explosion", "UI/Bullet/bullet_explosion");
             ResourcesManager.LoadSpriteFonts("DebugFont", "UI/Font/DebugFont");
             ResourcesManager.LoadSpriteFonts("Font_Player", "UI/Font/Font_Player");
             ResourcesManager.LoadTexture("HP_Background", "UI/ProgressBar/HP_Background");
@@ -259,17 +263,11 @@ namespace BulletManiac.Managers
             ResourcesManager.LoadTexture("Debug_Path", "SpriteSheet/DebugUI/path_16x16");
             ResourcesManager.LoadTexture("Skull_Icon", "UI/Skull_Icon");
 
-            // Load Tiled Map level
-            ResourcesManager.LoadTiledMap("Level1", "Tiled/Level/Level1");
-            ResourcesManager.LoadTiledMap("Level2", "Tiled/Level/Level2");
-            ResourcesManager.LoadTiledMap("Level3", "Tiled/Level/Level3");
-
             // Load Sound Effect
             ResourcesManager.LoadSoundEffect("Footstep1", "Audio/Footstep/Footstep1");
             ResourcesManager.LoadSoundEffect("Footstep2", "Audio/Footstep/Footstep2");
             ResourcesManager.LoadSoundEffect("Footstep3", "Audio/Footstep/Footstep3");
             ResourcesManager.LoadSoundEffect("Player_Hurt", "Audio/Player/Player_Hurt");
-            ResourcesManager.LoadSoundEffect("Gun_Shoot", "Audio/Gun/Gun_Shoot");
             ResourcesManager.LoadSoundEffect("Mag_In", "Audio/Gun/Mag_In");
             ResourcesManager.LoadSoundEffect("Pistol_Cock", "Audio/Gun/Pistol_Cock");
             ResourcesManager.LoadSoundEffect("Bullet_Hit", "Audio/Gun/Bullet_Hit");
@@ -279,6 +277,14 @@ namespace BulletManiac.Managers
             ResourcesManager.LoadSoundEffect("SuicideShadow_Attacking", "Audio/Enemy/SuicideShadow_Attacking");
             ResourcesManager.LoadSoundEffect("SuicideShadow_AttackStart", "Audio/Enemy/SuicideShadow_AttackStart");
             ResourcesManager.LoadSoundEffect("Enemy_Spawn", "Audio/Enemy/Enemy_Spawn");
+            ResourcesManager.LoadSoundEffect("Door_Open", "Audio/Level/Door_Open");
+            ResourcesManager.LoadSoundEffect("Pause", "Audio/UI/Pause");
+
+            // Bullet shoot sound effects
+            ResourcesManager.LoadSoundEffect("Default_Shoot", "Audio/Gun/Default_Shoot");
+            ResourcesManager.LoadSoundEffect("Track_Shoot", "Audio/Gun/Track_Shoot");
+            ResourcesManager.LoadSoundEffect("Shotgun_Shoot", "Audio/Gun/Shotgun_Shoot");
+            ResourcesManager.LoadSoundEffect("Explosion_Shoot", "Audio/Gun/Explosion_Shoot");
 
             // Main Menu
             ResourcesManager.LoadSpriteFonts("Font_Normal", "UI/Font/Font_Normal");
@@ -348,19 +354,16 @@ namespace BulletManiac.Managers
             if (InputManager.GetKey(Keys.Escape))
             {
                 // Pause the game
+                ResourcesManager.FindSoundEffect("Pause").Play();
                 SceneManager.OpenScene(2);
                 SceneManager.GetScene(1).StopUpdate();
             }
-
-            //if (InputManager.GetKey(Keys.Q))
-            //{
-            //    transitionEffect.Reset();
-            //    transitionEffect.Start();
-            //}
+            
             // Open the door is level is finish
-            if (IsLevelFinish)
+            if (IsLevelFinish && !doorOpened)
             {
                 CurrentLevel.DoorOpen();
+                doorOpened = true;
             }
 
             if (Debug)
@@ -383,23 +386,34 @@ namespace BulletManiac.Managers
             transitionEffect.Update(gameTime);
         }
 
-        // Test Level variables
-        private static int floor = 1; // Record how many floor player has cleared
+        /// <summary>
+        /// Record how many floor player has cleared
+        /// </summary>
+        private static int floor = 1;
         static bool levelUpdated = false;
         const float TRANSITION_DURATION = 0.5f;
         static float transitionDuration = TRANSITION_DURATION;
+        private static bool doorOpened = false;
+        public static int Difficulty { get; private set; } = 1;
         /// <summary>
         /// Switch to a new level when player cleated a level
         /// </summary>
         public static void UpdateLevel()
         {
-            levelManager.ChangeLevel(0);
-            entityManager.ClearBullets();
-            transitionEffect.Reset();
-            spawner.Start();
-            Player.Position = CurrentLevel.SpawnPosition;
-            levelUpdated = true;
+            levelManager.ChangeLevel(Difficulty); // Change the level of the current difficulty
+            entityManager.ClearBullets(); // Clear bullets from the previous level
+            transitionEffect.Reset(); // Reset the transition effect
+            spawner.Start(); // Start the spawning
+            Player.Position = CurrentLevel.SpawnPosition; // Update player position to the inital position of the level
+            levelUpdated = true; // Start the transition to hide updating when level the changing
+            doorOpened = false; // Door the close now
             floor++; // Update floor record
+
+            if(floor % 2 == 0)
+            {
+                Difficulty++;
+                Difficulty = Math.Clamp(Difficulty, 1, 10); // Clamp the difficulty
+            }
         }
 
         public static void ApplyTransition()
@@ -441,7 +455,7 @@ namespace BulletManiac.Managers
             entityManager.DrawUI(spriteBatch, gameTime);
 
             // UI
-            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "HP: " + Player.HP + "/" + Player.MaxHP, new Vector2(100f, 85f), Color.Gray);
+            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "HP: " + Player.HP.ToString("N0") + "/" + Player.MaxHP.ToString("N0"), new Vector2(100f, 85f), Color.Gray);
             spriteBatch.Draw(ResourcesManager.FindTexture("Skull_Icon"), new Vector2(46f, 138f),  null, Color.White, 0f, new Vector2(8f), new Vector2(2f), SpriteEffects.None, 0f);
             spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), " x" + entityManager.EnemyCount, new Vector2(53f, 130f), Color.Gray);
             spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "FLOOR: " + floor, new Vector2(35f, 180f), Color.Gray);

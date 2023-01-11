@@ -1,5 +1,5 @@
 ﻿using BulletManiac.Entity;
-using BulletManiac.Entity.Enemy;
+using BulletManiac.Entity.Enemies;
 using BulletManiac.Managers;
 using BulletManiac.Particle;
 using BulletManiac.SpriteAnimation;
@@ -81,7 +81,10 @@ namespace BulletManiac.Tiled
 
         public void Start()
         {
-            currentNumber = GameManager.CurrentLevel.EnemySpawned; // Largest possible number will be 110 enemy for a level
+            spawnCD = 1.1f - (GameManager.Difficulty * 0.1f); // from 1.0f (difficulty 1) to 0.1f (difficulty 10)
+            spawnNumber = 5 * GameManager.Difficulty; // from 5 to 50 enemy 
+            currentNumber = spawnNumber;
+            currentSpawnCD = spawnCD;
             active = true;
         }
 
@@ -99,26 +102,27 @@ namespace BulletManiac.Tiled
                 {
                     Vector2 pos = GameManager.CurrentLevel.TileGraph.RandomPositionAwayFromDistance(100f);
 
-                    // Difficulty 0 - 2 (Bat) 3 - 5 (Shadow) 6 - 8 (Suicide Shadow) 9 - 11 (Summoner) 
-                    int difficulty = GameManager.CurrentLevel.Difficulty;
-                    int r = Extensions.Random.Next(0, difficulty); // 4 enemy type * 3 difficulty gap for each enemy
+                    // Difficulty 1 - 2 (Bat) 3 - 5 (Shadow) 6 - 7 (Suicide hadow) 8 - 10 (Summoner) 
+                    int difficulty = GameManager.Difficulty;
+                    int r = Extensions.Random.Next(1, difficulty + 1);
                     switch (r)
                     {
-                        case 0:
+                        case 1: case 2:
                             Spawn(new Bat(pos), pos);
                             break;
-                        case 1:
+                        case 3: case 4: case 5:
                             Spawn(new Shadow(pos), pos);
                             break;
-                        case 2:
+                        case 6: case 7:
                             Spawn(new SuicideShadow(pos), pos);
                             break;
-                        case 3:
+                        case 8: case 9: case 10:
                             Spawn(new Summoner(pos), pos);
                             break;
                         default:
                             GameManager.Log("Spawner", "The random number is out of bound r = " + r);
-                            break;
+                            throw new Exception("Random enemy spawn is out of bound");
+                            //break;
                     }
                     currentSpawnCD = spawnCD;
                     currentNumber--;

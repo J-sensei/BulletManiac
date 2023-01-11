@@ -75,11 +75,17 @@
 /processorParam:Quality=Best
 /build:Audio/Gun/Bullet_Hit.wav
 
-#begin Audio/Gun/Gun_Shoot.wav
+#begin Audio/Gun/Default_Shoot.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Audio/Gun/Gun_Shoot.wav
+/build:Audio/Gun/Default_Shoot.wav
+
+#begin Audio/Gun/Explosion_Shoot.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Gun/Explosion_Shoot.wav
 
 #begin Audio/Gun/Mag_In.wav
 /importer:WavImporter
@@ -92,6 +98,24 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Audio/Gun/Pistol_Cock.wav
+
+#begin Audio/Gun/Shotgun_Shoot.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Gun/Shotgun_Shoot.wav
+
+#begin Audio/Gun/Track_Shoot.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Gun/Track_Shoot.wav
+
+#begin Audio/Level/Door_Open.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Level/Door_Open.wav
 
 #begin Audio/Player/Player_Hurt.wav
 /importer:WavImporter
@@ -111,29 +135,11 @@
 /processorParam:Quality=Best
 /build:Audio/UI/Button_Hover.wav
 
-#begin Level/AnimationSheet_Items.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Level/AnimationSheet_Items.png
-
-#begin Level/AssetSheet_UI.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Level/AssetSheet_UI.png
+#begin Audio/UI/Pause.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/UI/Pause.wav
 
 #begin Level/GBDungeon.png
 /importer:TextureImporter
@@ -152,42 +158,55 @@
 /processor:TiledMapTilesetProcessor
 /build:Level/GBDungeon.tsx
 
-#begin Level/ItemSheet_Items.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Level/ItemSheet_Items.png
-
-#begin Level/Level1-1.tmx
+#begin Level/Map1.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
-/build:Level/Level1-1.tmx
+/build:Level/Map1.tmx
 
-#begin Level/Level1-2.tmx
+#begin Level/Map10.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
-/build:Level/Level1-2.tmx
+/build:Level/Map10.tmx
 
-#begin Level/Level1-3.tmx
+#begin Level/Map2.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
-/build:Level/Level1-3.tmx
+/build:Level/Map2.tmx
 
-#begin Level/Level2-1.tmx
+#begin Level/Map3.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
-/build:Level/Level2-1.tmx
+/build:Level/Map3.tmx
 
-#begin Level/Level2-2.tmx
+#begin Level/Map4.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
-/build:Level/Level2-2.tmx
+/build:Level/Map4.tmx
+
+#begin Level/Map5.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Level/Map5.tmx
+
+#begin Level/Map6.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Level/Map6.tmx
+
+#begin Level/Map7.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Level/Map7.tmx
+
+#begin Level/Map8.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Level/Map8.tmx
+
+#begin Level/Map9.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Level/Map9.tmx
 
 #begin Level/Path.png
 /importer:TextureImporter
@@ -222,42 +241,6 @@
 /importer:TiledMapTilesetImporter
 /processor:TiledMapTilesetProcessor
 /build:Level/TileSheet_DungeonGreen.tsx
-
-#begin Level/TileSheet_DungeonPink.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Level/TileSheet_DungeonPink.png
-
-#begin Level/TileSheet_DungeonPurple.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Level/TileSheet_DungeonPurple.png
-
-#begin Level/TileSheet_DungeonYellow.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Level/TileSheet_DungeonYellow.png
 
 #begin Shader/ColorOverlay.fx
 /importer:EffectImporter
@@ -729,6 +712,18 @@
 /processor:TiledMapProcessor
 /build:Tiled/Level/level3.tmx
 
+#begin UI/Bullet/bullet_default.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/Bullet/bullet_default.png
+
 #begin UI/Bullet/bullet_empty.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -741,7 +736,7 @@
 /processorParam:TextureFormat=Color
 /build:UI/Bullet/bullet_empty.png
 
-#begin UI/Bullet/bullet_fill.png
+#begin UI/Bullet/bullet_explosion.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -751,7 +746,31 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:UI/Bullet/bullet_fill.png
+/build:UI/Bullet/bullet_explosion.png
+
+#begin UI/Bullet/bullet_shotgun.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/Bullet/bullet_shotgun.png
+
+#begin UI/Bullet/bullet_track.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/Bullet/bullet_track.png
 
 #begin UI/Font/DebugFont.spritefont
 /importer:FontDescriptionImporter

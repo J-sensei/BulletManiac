@@ -1,4 +1,4 @@
-﻿using BulletManiac.Entity.Player;
+﻿using BulletManiac.Entity.Players;
 using BulletManiac.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -36,7 +36,7 @@ namespace BulletManiac.Entity.UI
             Vector2 offset = Vector2.Zero;
             int c = capacity - megazine.Bullets.Count;
             // Loop each bullet and render the bullet UI
-            foreach(Bullet.Bullet b in megazine.Bullets)
+            foreach(Bullets.Bullet b in megazine.Bullets)
             {
                 if(b.BulletUI == null) continue;
                 spriteBatch.Draw(b.BulletUI, position + offset, null, Color.White, angle, Vector2.Zero, Vector2.One * 2, SpriteEffects.None, 0f);

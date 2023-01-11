@@ -16,6 +16,7 @@ namespace BulletManiac.Scenes
     {
         const string TITLE = "Pause";
         readonly Color STRING_COLOR = new Color(238f, 236f, 231f);
+        readonly Color BACKGROUND_COLOR = new Color(7, 24, 33);
 
         private Texture2D texture;
         private EntityManager entityManager = new();
@@ -88,7 +89,7 @@ namespace BulletManiac.Scenes
             {
                 for (int y = 8; y - 16 < Game1.GraphicsDeviceInstance.Viewport.Height; y += 16)
                 {
-                    spriteBatch.Draw(texture, new Vector2(x, y), null, Color.Black * 0.5f, 0f, new Vector2(8, 8), 1f, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(texture, new Vector2(x, y), null, BACKGROUND_COLOR * 0.5f, 0f, new Vector2(8, 8), 1f, SpriteEffects.None, 0f);
                 }
             }
 

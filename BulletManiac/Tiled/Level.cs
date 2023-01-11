@@ -9,6 +9,12 @@ using System.Threading.Tasks;
 
 namespace BulletManiac.Tiled
 {
+    /*
+        Level difficulty will be rated from 1 - 10
+        Every 2 floor is cleared will increase 1 difficulty rated until 10
+        Spawn Number = Difficulty * Based Spawn Number
+        
+    */
     /// <summary>
     /// What a level will contain
     /// </summary>
@@ -16,11 +22,6 @@ namespace BulletManiac.Tiled
     {
         const string WALL_LAYER_NAME = "Wall";
         const string OBSTACLE_LAYER_NAME = "Obstacle";
-        /// <summary>
-        /// The difficulty value
-        /// </summary>
-        public int Difficulty { get; private set; }
-        public int EnemySpawned { get; private set; }
 
         /// <summary>
         /// Map of the level
@@ -39,10 +40,9 @@ namespace BulletManiac.Tiled
         public Color BackgroundColor { get; private set; } = Color.CornflowerBlue;
         public List<Rectangle> DoorBound { get; private set; } = new();
 
-        public Level(TiledMap map, int colStart, int rowStart, int difficulty = 0, int enemySpawned = 10)
+        public Level(TiledMap map, int colStart, int rowStart)
         {
             Map = map;
-            Difficulty = difficulty;
             TiledMapTileLayer wallLayer = Map.GetLayer<TiledMapTileLayer>(WALL_LAYER_NAME);
             // Construct the TileGraph
             TileGraph = new TileGraph();
@@ -66,7 +66,6 @@ namespace BulletManiac.Tiled
                     }
                 }
             }
-            EnemySpawned = enemySpawned;
             Map.GetLayer<TiledMapTileLayer>("Door Open").Opacity = 0;
         }
 
@@ -83,9 +82,11 @@ namespace BulletManiac.Tiled
             return false;
         }
 
+        //bool playDoorSound = true;
         public void DoorOpen()
         {
             Map.GetLayer<TiledMapTileLayer>("Door Open").Opacity = 1;
+            ResourcesManager.FindSoundEffect("Door_Open").Play();
         }
 
         public void DoorClose()
@@ -93,7 +94,7 @@ namespace BulletManiac.Tiled
             Map.GetLayer<TiledMapTileLayer>("Door Open").Opacity = 0;
         }
 
-        public Level(TiledMap map, int colStart, int rowStart, Color backgroundColor, Vector2 spawnPosition, int difficulty = 0) : this(map, colStart, rowStart, difficulty)
+        public Level(TiledMap map, int colStart, int rowStart, Color backgroundColor, Vector2 spawnPosition) : this(map, colStart, rowStart)
         {
             BackgroundColor = backgroundColor;
             SpawnPosition = spawnPosition;
