@@ -17,7 +17,6 @@ namespace BulletManiac.Entity.Enemies
         private NavigationAgent navigationAgent;
         const float DISTANCE_TO_EXPLODE = 35f;
         private float animationSpeed = 0.1f;
-        private bool attackSoundPlay = false;
         private SoundEffectInstance attackingSound;
         private float pathfindCD = 2f;
         private float currentPathfindCD = 2f;
@@ -51,12 +50,13 @@ namespace BulletManiac.Entity.Enemies
             base.Initialize();
         }
 
+        private bool attacking = false;
         public override void Update(GameTime gameTime)
         {
             // Recover from hit state
             if (currentAction == EnemyAction.Hit)
             {
-                if (!attackSoundPlay)
+                if (!attacking)
                 {
                     if (navigationAgent.CurrentState == NavigationState.MOVING)
                         currentAction = EnemyAction.Move;
@@ -72,11 +72,24 @@ namespace BulletManiac.Entity.Enemies
             if (distance < DISTANCE_TO_EXPLODE)
             {
                 currentAction = EnemyAction.Attack;
-                //if (!attackSoundPlay)
-                //{
-                //    GameManager.Resources.FindSoundEffect("SuicideShadow_AttackStart").Play();
-                //    attackSoundPlay = true;
-                //}
+                attacking = true;
+            }
+
+            // If player move out of certain distance, diactivate the attacking
+            if (distance > DISTANCE_TO_EXPLODE + 80f)
+            {
+                if (navigationAgent.CurrentState != NavigationState.STOP)
+                {
+                    navigationAgent.Pathfind(GameManager.Player.Position); // Execute pathfinding
+                    currentAction = EnemyAction.Move;
+                }
+                else
+                {
+                    currentAction = EnemyAction.Idle;
+                }
+
+                attacking = false;
+                animationManager.GetAnimation(EnemyAction.Attack).Reset();
             }
 
             if (currentAction == EnemyAction.Attack)
