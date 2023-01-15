@@ -222,8 +222,9 @@ namespace BulletManiac.Managers
             AddGameObject(new BulletSpeed(new Vector2(140f, 100f)));
             AddGameObject(new BulletDamage(new Vector2(160f, 100f)));
 
-            //MediaPlayer.IsRepeating = true;
-            //MediaPlayer.Play()
+            
+            MediaPlayer.IsRepeating = true;
+            MediaPlayer.Play(ResourcesManager.ContentManager.Load<Song>("Audio/Song/BGM"));
 
             ApplyTransition(); // Run the transition when the game start
         }
@@ -430,7 +431,7 @@ namespace BulletManiac.Managers
             levelUpdated = true; // Start the transition to hide updating when level the changing
             doorOpened = false; // Door the close now
             floor++; // Update floor record
-
+            
             if(floor % 2 == 0)
             {
                 Difficulty++;

@@ -123,6 +123,18 @@
 /processorParam:Quality=Best
 /build:Audio/Player/Player_Hurt.wav
 
+#begin Audio/Song/BGM.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Song/BGM.mp3
+
+#begin Audio/Song/BGM2.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Song/BGM2.mp3
+
 #begin Audio/UI/Button_Click.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
