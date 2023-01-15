@@ -1,8 +1,10 @@
 ﻿using BulletManiac.AI;
 using BulletManiac.Collision;
 using BulletManiac.Entity;
+using BulletManiac.Entity.Bullets;
 using BulletManiac.Entity.Enemies;
 using BulletManiac.Entity.Players;
+using BulletManiac.Entity.PowerUps;
 using BulletManiac.Entity.UI;
 using BulletManiac.Particle;
 using BulletManiac.Scenes;
@@ -14,6 +16,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
 using System;
@@ -210,6 +213,18 @@ namespace BulletManiac.Managers
             floor = 1; // Reset the floor count
             TimePass = 0f;
             Difficulty = 1;
+            // Reset Modifier
+            Bullet.SpeedModifier = 1.0f;
+            Bullet.DamageMultiplier = 1.0f;
+
+            AddGameObject(new Heart(new Vector2(100f, 100f)));
+            AddGameObject(new BulletCapacity(new Vector2(120f, 100f)));
+            AddGameObject(new BulletSpeed(new Vector2(140f, 100f)));
+            AddGameObject(new BulletDamage(new Vector2(160f, 100f)));
+
+            
+            MediaPlayer.IsRepeating = true;
+            MediaPlayer.Play(ResourcesManager.ContentManager.Load<Song>("Audio/Song/BGM"));
 
             ApplyTransition(); // Run the transition when the game start
         }
@@ -291,6 +306,14 @@ namespace BulletManiac.Managers
             ResourcesManager.LoadSpriteFonts("Font_Title", "UI/Font/Font_Title");
             ResourcesManager.LoadSoundEffect("Button_Hover", "Audio/UI/Button_Hover");
             ResourcesManager.LoadSoundEffect("Button_Click", "Audio/UI/Button_Click");
+            ResourcesManager.LoadSpriteFonts("Font_Small", "UI/Font/Font_Small");
+
+            // Power Up
+            ResourcesManager.LoadTexture("PowerUp_Heart", "UI/PowerUp/Heart");
+            ResourcesManager.LoadTexture("PowerUp_Heart_Animated", "UI/PowerUp/HeartAnimated");
+            ResourcesManager.LoadTexture("Bullet_Capacity", "UI/PowerUp/BulletCapacity");
+            ResourcesManager.LoadTexture("Bullet_Speed", "UI/PowerUp/BulletSpeed");
+            ResourcesManager.LoadTexture("Bullet_Damage", "UI/PowerUp/BulletDamage");
 
             Animation.LoadAnimations();
             Bat.LoadContent();
@@ -408,7 +431,7 @@ namespace BulletManiac.Managers
             levelUpdated = true; // Start the transition to hide updating when level the changing
             doorOpened = false; // Door the close now
             floor++; // Update floor record
-
+            
             if(floor % 2 == 0)
             {
                 Difficulty++;

@@ -1,4 +1,5 @@
-﻿using BulletManiac.Managers;
+﻿using BulletManiac.Collision;
+using BulletManiac.Managers;
 using BulletManiac.SpriteAnimation;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -188,7 +189,7 @@ namespace BulletManiac.Entity
         /// Trigger when collide with other game object
         /// </summary>
         /// <param name="other"></param>
-        public virtual void CollisionEvent(GameObject other) { }
+        public virtual void CollisionEvent(ICollidable other) { }
         /// <summary>
         /// Trigger before the object is delete
         /// </summary>

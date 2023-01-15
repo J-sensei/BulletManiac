@@ -19,6 +19,8 @@ namespace BulletManiac.Managers
         /// </summary>
         private static ContentManager contentManager;
 
+        public static ContentManager ContentManager { get { return contentManager; } }
+
         /// <summary>
         /// Textures bank, store texture need to use in the game
         /// </summary>

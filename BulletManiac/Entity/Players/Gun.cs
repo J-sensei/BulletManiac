@@ -57,6 +57,11 @@ namespace BulletManiac.Entity.Players
             base.Initialize();
         }
 
+        public void AddCapacity(int n)
+        {
+            Magazine.AddCapacity(n);
+        }
+
         Vector2 offset = new Vector2(0f);
         public override void Update(GameTime gameTime)
         {

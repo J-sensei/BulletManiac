@@ -40,6 +40,13 @@ namespace BulletManiac.Entity.Players
                 bullets.Enqueue(LoadBullet());
         }
 
+        public void AddCapacity(int n)
+        {
+            capacity += n;
+            for(int i = 0; i < n; i++)
+                bullets.Enqueue(LoadBullet());
+        }
+
         public void Update(bool shooting)
         {
             //if (bullets.Count < capacity && !shooting)

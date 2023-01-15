@@ -34,7 +34,7 @@ namespace BulletManiac.Entity.UI
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             Vector2 offset = Vector2.Zero;
-            int c = capacity - megazine.Bullets.Count;
+            int c = megazine.Capacity - megazine.Bullets.Count;
             // Loop each bullet and render the bullet UI
             foreach(Bullets.Bullet b in megazine.Bullets)
             {

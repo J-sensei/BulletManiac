@@ -32,7 +32,7 @@ namespace BulletManiac.Entity.Players
 
         // Player status
         private float moveSpeed = 80f;
-        private float dashSpeed = 180f;
+        private float dashSpeed = 240f;
         const float DEFAULT_HP = 100f;
         public float HP { get; private set; }
         public float MaxHP { get; private set; }
@@ -301,6 +301,14 @@ namespace BulletManiac.Entity.Players
                 hpBar.UpdateValue(HP);
             }
         }
+
+        public void Heal(float health)
+        {
+            HP += health;
+            HP = MathHelper.Clamp(HP, 0f, MaxHP); // Clamp HP
+            hpBar.UpdateValue(HP);
+        }
+
 
         public override void Initialize()
         {
