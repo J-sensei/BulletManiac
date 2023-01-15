@@ -1,4 +1,5 @@
-﻿using BulletManiac.Managers;
+﻿using BulletManiac.Entity.UI;
+using BulletManiac.Managers;
 using BulletManiac.SpriteAnimation;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -21,6 +22,7 @@ namespace BulletManiac.Entity.PowerUps
         public override void Initialize()
         {
             soundEffect = ResourcesManager.FindSoundEffect("Mag_In");
+            description = new Panel(new Vector2(position.X, position.Y - 10f), new Vector2(6f, 1f), "Increase 1 bullet");
             base.Initialize();
         }
 

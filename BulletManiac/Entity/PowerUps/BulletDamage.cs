@@ -1,6 +1,8 @@
 ﻿using BulletManiac.Entity.Bullets;
+using BulletManiac.Entity.UI;
 using BulletManiac.Managers;
 using BulletManiac.SpriteAnimation;
+using BulletManiac.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -13,6 +15,7 @@ namespace BulletManiac.Entity.PowerUps
 {
     internal class BulletDamage : PowerUp
     {
+        const float Multiplier = 0.1f;
         public BulletDamage(Vector2 position) : base(ResourcesManager.FindTexture("Bullet_Damage"), position)
         {
             origin = new Vector2(16f);
@@ -22,6 +25,7 @@ namespace BulletManiac.Entity.PowerUps
         public override void Initialize()
         {
             soundEffect = ResourcesManager.FindSoundEffect("Mag_In");
+            description = new Panel(new Vector2(position.X, position.Y - 10f), new Vector2(9f, 1f), "Increase 10% bullet damage");
             base.Initialize();
         }
 
@@ -32,7 +36,7 @@ namespace BulletManiac.Entity.PowerUps
 
         protected override void PowerUpAction()
         {
-            Bullet.DamageMultiplier = Bullet.DamageMultiplier + 1.0f;
+            Bullet.DamageMultiplier = Bullet.DamageMultiplier + Multiplier;
         }
     }
 }

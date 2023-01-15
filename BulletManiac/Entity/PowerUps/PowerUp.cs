@@ -38,7 +38,8 @@ namespace BulletManiac.Entity.PowerUps
             CollisionManager.Add(this, "Power Up");
 
         }
-
+        protected Panel description;
+        private bool showDescription = false;
         public override void Initialize()
         {
             // Dummy game object to rememeber the original position
@@ -48,6 +49,7 @@ namespace BulletManiac.Entity.PowerUps
                                 new Rectangle(0, 0, 64, 64), // Crop the shadow sprite
                                 dummy,
                                 new Vector2(32f), new Vector2(0.5f), new Vector2(0f, -3.5f));
+
             base.Initialize();
         }
 
@@ -89,10 +91,10 @@ namespace BulletManiac.Entity.PowerUps
             Vector2 mousePos = Camera.ScreenToWorld(InputManager.MousePosition);
             Rectangle mouseRect = new Rectangle((int)mousePos.X, (int)mousePos.Y, 1, 1);
 
-            //if (Bound.Intersects(mouseRect))
-            //{
-            //    Console.WriteLine("Yes");
-            //}
+            if (Bound.Intersects(mouseRect))
+                showDescription = true;
+            else
+                showDescription = false;
 
             if (animation != null)
                 animation.Update(gameTime);
@@ -107,6 +109,9 @@ namespace BulletManiac.Entity.PowerUps
                 DrawAnimation(animation, spriteBatch, gameTime);
             else
                 base.Draw(spriteBatch, gameTime);
+
+            if(description != null && showDescription)
+                description.Draw(spriteBatch, gameTime);
         }
     }
 }

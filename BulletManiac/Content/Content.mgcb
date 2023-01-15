@@ -793,6 +793,13 @@
 /processorParam:TextureFormat=Compressed
 /build:UI/Font/Font_Player.spritefont
 
+#begin UI/Font/Font_Small.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:UI/Font/Font_Small.spritefont
+
 #begin UI/Font/Font_Title.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor

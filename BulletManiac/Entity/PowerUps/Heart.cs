@@ -1,4 +1,5 @@
-﻿using BulletManiac.Managers;
+﻿using BulletManiac.Entity.UI;
+using BulletManiac.Managers;
 using BulletManiac.SpriteAnimation;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,6 +13,7 @@ namespace BulletManiac.Entity.PowerUps
 {
     internal class Heart : PowerUp
     {
+        const float heal = 20f;
         public Heart(Vector2 position) : base(ResourcesManager.FindTexture("PowerUp_Heart"), position)
         {
             origin = new Vector2(8.5f);
@@ -22,6 +24,7 @@ namespace BulletManiac.Entity.PowerUps
         {
             soundEffect = ResourcesManager.FindSoundEffect("Pause");
             animation = new Animation(ResourcesManager.FindTexture("PowerUp_Heart_Animated"), 5, 1, 0.1f);
+            description = new Panel(new Vector2(position.X, position.Y - 10f), new Vector2(3.5f, 1f), "Heal 20 HP");
             base.Initialize();
         }
 
@@ -32,7 +35,7 @@ namespace BulletManiac.Entity.PowerUps
 
         protected override void PowerUpAction()
         {
-            GameManager.Player.Heal(40f);
+            GameManager.Player.Heal(heal);
         }
     }
 }

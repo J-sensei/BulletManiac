@@ -1,4 +1,5 @@
 ﻿using BulletManiac.Entity.Bullets;
+using BulletManiac.Entity.UI;
 using BulletManiac.Managers;
 using BulletManiac.SpriteAnimation;
 using Microsoft.Xna.Framework;
@@ -13,6 +14,7 @@ namespace BulletManiac.Entity.PowerUps
 {
     internal class BulletSpeed : PowerUp
     {
+        const float MULTIPLIER = 0.1f;
         public BulletSpeed(Vector2 position) : base(ResourcesManager.FindTexture("Bullet_Speed"), position)
         {
             origin = new Vector2(16f);
@@ -22,6 +24,7 @@ namespace BulletManiac.Entity.PowerUps
         public override void Initialize()
         {
             soundEffect = ResourcesManager.FindSoundEffect("Mag_In");
+            description = new Panel(new Vector2(position.X, position.Y - 10f), new Vector2(9f, 1f), "Increase 10% bullet speed");
             base.Initialize();
         }
 
@@ -32,7 +35,7 @@ namespace BulletManiac.Entity.PowerUps
 
         protected override void PowerUpAction()
         {
-            Bullet.SpeedModifier = Bullet.SpeedModifier + 1.0f;
+            Bullet.SpeedModifier = Bullet.SpeedModifier + MULTIPLIER;
         }
     }
 }

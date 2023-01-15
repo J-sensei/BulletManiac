@@ -16,6 +16,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
 using System;
@@ -216,7 +217,13 @@ namespace BulletManiac.Managers
             Bullet.SpeedModifier = 1.0f;
             Bullet.DamageMultiplier = 1.0f;
 
-            AddGameObject(new BulletDamage(new Vector2(100f)));
+            AddGameObject(new Heart(new Vector2(100f, 100f)));
+            AddGameObject(new BulletCapacity(new Vector2(120f, 100f)));
+            AddGameObject(new BulletSpeed(new Vector2(140f, 100f)));
+            AddGameObject(new BulletDamage(new Vector2(160f, 100f)));
+
+            //MediaPlayer.IsRepeating = true;
+            //MediaPlayer.Play()
 
             ApplyTransition(); // Run the transition when the game start
         }
@@ -298,6 +305,7 @@ namespace BulletManiac.Managers
             ResourcesManager.LoadSpriteFonts("Font_Title", "UI/Font/Font_Title");
             ResourcesManager.LoadSoundEffect("Button_Hover", "Audio/UI/Button_Hover");
             ResourcesManager.LoadSoundEffect("Button_Click", "Audio/UI/Button_Click");
+            ResourcesManager.LoadSpriteFonts("Font_Small", "UI/Font/Font_Small");
 
             // Power Up
             ResourcesManager.LoadTexture("PowerUp_Heart", "UI/PowerUp/Heart");
