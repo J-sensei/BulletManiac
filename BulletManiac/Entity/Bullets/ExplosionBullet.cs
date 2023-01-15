@@ -13,6 +13,7 @@ namespace BulletManiac.Entity.Bullets
 {
     public class ExplosionBullet : Bullet
     {
+        const float EXPLOSION_DAMAGE = 30f;
         public ExplosionBullet() : base(ResourcesManager.FindSoundEffect("Explosion_Shoot"))
         {
             Animation = new Animation(ResourcesManager.FindAnimation("ExplosionBullet_Animation"));
@@ -33,7 +34,7 @@ namespace BulletManiac.Entity.Bullets
         void CreateExplosion()
         {
             HitBox hitBox = new HitBox(new Animation(ResourcesManager.FindAnimation("BulletExplode_Animation")),
-            Position, new Vector2(1f), new List<int>() { 3, 4 }, damage: 30f, enableEnemyDamage: true, enablePlayerDamage: false);
+            Position, new Vector2(1f), new List<int>() { 3, 4 }, damage: EXPLOSION_DAMAGE * Bullet.DamageMultiplier, enableEnemyDamage: true, enablePlayerDamage: false);
             hitBox.AddSoundEffect(ResourcesManager.FindSoundEffect("SuicideShadow_Explosion"), 1); // Add new sound effect later
             GameManager.AddGameObject(hitBox);
 

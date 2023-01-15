@@ -16,6 +16,7 @@ namespace BulletManiac.Entity.UI
         private readonly Gun gun;
         private readonly Magazine megazine;
         private readonly float angle = (float)Math.PI / 2.0f;  // 90 degrees
+        private readonly Vector2 originalPos;
 
         public MagazineUI(Gun gun, Vector2 position)
         {
@@ -24,6 +25,7 @@ namespace BulletManiac.Entity.UI
             this.megazine = gun.Magazine;
             capacity = megazine.Capacity;
             this.position = position;
+            originalPos = position;
         }
 
         //public override void Update(GameTime gameTime)
@@ -33,6 +35,7 @@ namespace BulletManiac.Entity.UI
 
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
+            position = new Vector2(originalPos.X, originalPos.Y - (20 * megazine.Capacity));
             Vector2 offset = Vector2.Zero;
             int c = megazine.Capacity - megazine.Bullets.Count;
             // Loop each bullet and render the bullet UI

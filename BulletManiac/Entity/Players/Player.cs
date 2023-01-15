@@ -114,6 +114,7 @@ namespace BulletManiac.Entity.Players
                         dashDirection.Y = 0f;
                 }
                 dashDirection.Normalize();
+                ResourcesManager.FindSoundEffect("Dash").Play();
             }
 
             if (dashing)
@@ -345,7 +346,7 @@ namespace BulletManiac.Entity.Players
             hpBar.UpdateValue(HP);
 
             // Calculate reloading text offset
-            float x = ResourcesManager.FindSpriteFont("Font_Player").MeasureString("Reloading").X;
+            float x = ResourcesManager.FindSpriteFont("Font_Player").MeasureString("Reloading 0s").X;
             textPosOffset = new(-x / 20f, -16f);
 
             base.Initialize();
@@ -394,7 +395,7 @@ namespace BulletManiac.Entity.Players
             // Reloading Text
             if (Gun.Reloading)
             {
-                spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Player"), "Reloading", position + textPosOffset, reloadingStringColor, 0f, textOffset, 0.3f, SpriteEffects.None, 0f);
+                spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Player"), "Reloading " + Gun.Magazine.CD.ToString("N0") + "s", position + textPosOffset, reloadingStringColor, 0f, textOffset, 0.3f, SpriteEffects.None, 0f);
             }
         }
         Color reloadingStringColor = new Color(7, 24, 33);

@@ -114,6 +114,7 @@ namespace BulletManiac.Managers
         /// Is player eliminated all the enemies
         /// </summary>
         public static bool IsLevelFinish { get { return spawner.IsFinish && entityManager.EnemyCount <= 0; } }
+        public static bool spawnPowerUp = false;
 
         /// <summary>
         /// Play the transition effect of the game
@@ -194,7 +195,7 @@ namespace BulletManiac.Managers
             // Add cursor and player
             Player = new Player(new Vector2(50f)); // Create Player in the game
             AddGameObject(Player); // Add player
-            MagazineUI megazineUI = new MagazineUI(Player.Gun, new Vector2(CurrentResolution.X - 100, CurrentResolution.Y - 200)); // Gun Megazine UI
+            MagazineUI megazineUI = new MagazineUI(Player.Gun, new Vector2(CurrentResolution.X - 80, CurrentResolution.Y - 50)); // Gun Megazine UI
             AddGameObjectUI(megazineUI);
             //AddGameObjectUI(new Button(new Vector2(500f), "TEST"));
 
@@ -217,11 +218,11 @@ namespace BulletManiac.Managers
             Bullet.SpeedModifier = 1.0f;
             Bullet.DamageMultiplier = 1.0f;
 
-            AddGameObject(new Heart(new Vector2(100f, 100f)));
-            AddGameObject(new BulletCapacity(new Vector2(120f, 100f)));
-            AddGameObject(new BulletSpeed(new Vector2(140f, 100f)));
-            AddGameObject(new BulletDamage(new Vector2(160f, 100f)));
-
+            // Test power ups
+            //AddGameObject(new Heart(new Vector2(100f, 100f)));
+            //AddGameObject(new BulletCapacity(new Vector2(120f, 100f)));
+            //AddGameObject(new BulletSpeed(new Vector2(140f, 100f)));
+            //AddGameObject(new BulletDamage(new Vector2(160f, 100f)));
             
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(ResourcesManager.ContentManager.Load<Song>("Audio/Song/BGM"));
@@ -294,6 +295,7 @@ namespace BulletManiac.Managers
             ResourcesManager.LoadSoundEffect("Enemy_Spawn", "Audio/Enemy/Enemy_Spawn");
             ResourcesManager.LoadSoundEffect("Door_Open", "Audio/Level/Door_Open");
             ResourcesManager.LoadSoundEffect("Pause", "Audio/UI/Pause");
+            ResourcesManager.LoadSoundEffect("Dash", "Audio/Player/Dash");
 
             // Bullet shoot sound effects
             ResourcesManager.LoadSoundEffect("Default_Shoot", "Audio/Gun/Default_Shoot");
@@ -381,6 +383,13 @@ namespace BulletManiac.Managers
                 SceneManager.OpenScene(2);
                 SceneManager.GetScene(1).StopUpdate();
             }
+
+            // Spawn Power Up
+            if (!spawnPowerUp && IsLevelFinish)
+            {
+                spawnPowerUp = true;
+                AddGameObject(GetPowerUp());
+            }
             
             // Open the door is level is finish
             if (IsLevelFinish && !doorOpened)
@@ -431,12 +440,33 @@ namespace BulletManiac.Managers
             levelUpdated = true; // Start the transition to hide updating when level the changing
             doorOpened = false; // Door the close now
             floor++; // Update floor record
-            
-            if(floor % 2 == 0)
+            spawnPowerUp = false;
+
+
+            if (floor % 2 == 0)
             {
                 Difficulty++;
                 Difficulty = Math.Clamp(Difficulty, 1, 10); // Clamp the difficulty
             }
+        }
+
+        static GameObject GetPowerUp()
+        {
+            Vector2 position = CurrentLevel.DoorBound[0].Center.ToVector2();
+            position.Y += 20f;
+            int r = Extensions.Random.Next(0, 4);
+            switch (r)
+            {
+                case 0:
+                    return new Heart(position);
+                case 1:
+                    return new BulletCapacity(position);
+                case 2:
+                    return new BulletSpeed(position);
+                case 3:
+                    return new BulletDamage(position);
+            }
+            return null;
         }
 
         public static void ApplyTransition()

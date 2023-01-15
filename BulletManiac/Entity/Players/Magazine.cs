@@ -17,6 +17,7 @@ namespace BulletManiac.Entity.Players
         private readonly float bulletCD;
         private float currentBulletCD; // Time required for each bullet to put in megazine
         public bool Reloading { get; private set; } = false;
+        public float CD { get { return currentBulletCD; } }
         public bool CanShoot
         {
             get
@@ -81,7 +82,6 @@ namespace BulletManiac.Entity.Players
             if (bullets.Count == 0)
             {
                 if (Reloading == false) ResourcesManager.FindSoundEffect("Mag_In").Play(); // When bullet is empty, play a sound
-                Reloading = true;
                 currentBulletCD -= Time.DeltaTime;
 
                 if (currentBulletCD <= 0f)
@@ -93,6 +93,7 @@ namespace BulletManiac.Entity.Players
                     currentBulletCD = bulletCD; // Reset CD
                     ResourcesManager.FindSoundEffect("Pistol_Cock").Play(); // Play a sound when reload is finish
                 }
+                Reloading = true;
             }
             else
             {

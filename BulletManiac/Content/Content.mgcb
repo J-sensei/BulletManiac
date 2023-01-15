@@ -117,6 +117,12 @@
 /processorParam:Quality=Best
 /build:Audio/Level/Door_Open.wav
 
+#begin Audio/Player/Dash.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Player/Dash.wav
+
 #begin Audio/Player/Player_Hurt.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

@@ -1,6 +1,7 @@
 ﻿using BulletManiac.Collision;
 using BulletManiac.Entity.Bullets;
 using BulletManiac.Entity.Players;
+using BulletManiac.Entity.UI;
 using BulletManiac.Managers;
 using BulletManiac.Particle;
 using BulletManiac.SpriteAnimation;
@@ -124,12 +125,16 @@ namespace BulletManiac.Entity.Enemies
             if (other.Tag == "Bullet")
             {
                 // Deal damaage to the enemy
-                hp -= (other.GameObject as Bullet).Damage;
+                float dmg = (other.GameObject as Bullet).Damage;
+                hp -= dmg;
 
                 ResourcesManager.FindSoundEffect("Bullet_Hit").Play(); // Bullet Hit sound
                 currentAction = EnemyAction.Hit; // Change player state
                 Destroy(other.GameObject); // Destroy bullet
                 blink = true;
+
+                if(dmg > 0)
+                    GameManager.AddGameObject(new DamageShower((int)dmg, Position));
             }
 
             if (other.Tag == "Player")
@@ -151,6 +156,9 @@ namespace BulletManiac.Entity.Enemies
                 //Console.WriteLine(takeDamageCD + " " + (takeDamageCD <= 0f).ToString());
                 hp -= damage;
                 takeDamageCD = 0.05f; // 0.1 second cooldown
+
+                if (damage > 0)
+                    GameManager.AddGameObject(new DamageShower((int)damage, Position));
             }
             else
             {
