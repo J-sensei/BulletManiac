@@ -302,6 +302,14 @@ namespace BulletManiac.Entity.Players
             }
         }
 
+        public void Heal(float health)
+        {
+            HP += health;
+            HP = MathHelper.Clamp(HP, 0f, MaxHP); // Clamp HP
+            hpBar.UpdateValue(HP);
+        }
+
+
         public override void Initialize()
         {
             CollisionManager.Add(this, "Player"); // Add player into the collision manager

@@ -1,8 +1,10 @@
 ﻿using BulletManiac.AI;
 using BulletManiac.Collision;
 using BulletManiac.Entity;
+using BulletManiac.Entity.Bullets;
 using BulletManiac.Entity.Enemies;
 using BulletManiac.Entity.Players;
+using BulletManiac.Entity.PowerUps;
 using BulletManiac.Entity.UI;
 using BulletManiac.Particle;
 using BulletManiac.Scenes;
@@ -210,6 +212,11 @@ namespace BulletManiac.Managers
             floor = 1; // Reset the floor count
             TimePass = 0f;
             Difficulty = 1;
+            // Reset Modifier
+            Bullet.SpeedModifier = 1.0f;
+            Bullet.DamageMultiplier = 1.0f;
+
+            AddGameObject(new BulletDamage(new Vector2(100f)));
 
             ApplyTransition(); // Run the transition when the game start
         }
@@ -291,6 +298,13 @@ namespace BulletManiac.Managers
             ResourcesManager.LoadSpriteFonts("Font_Title", "UI/Font/Font_Title");
             ResourcesManager.LoadSoundEffect("Button_Hover", "Audio/UI/Button_Hover");
             ResourcesManager.LoadSoundEffect("Button_Click", "Audio/UI/Button_Click");
+
+            // Power Up
+            ResourcesManager.LoadTexture("PowerUp_Heart", "UI/PowerUp/Heart");
+            ResourcesManager.LoadTexture("PowerUp_Heart_Animated", "UI/PowerUp/HeartAnimated");
+            ResourcesManager.LoadTexture("Bullet_Capacity", "UI/PowerUp/BulletCapacity");
+            ResourcesManager.LoadTexture("Bullet_Speed", "UI/PowerUp/BulletSpeed");
+            ResourcesManager.LoadTexture("Bullet_Damage", "UI/PowerUp/BulletDamage");
 
             Animation.LoadAnimations();
             Bat.LoadContent();

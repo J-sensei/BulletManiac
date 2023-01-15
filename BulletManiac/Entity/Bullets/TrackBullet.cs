@@ -40,7 +40,7 @@ namespace BulletManiac.Entity.Bullets
             origin = Animation.TextureBound / 2f; // Set the origin to the center of the texture
             scale = new Vector2(0.8f);
             BulletUI = ResourcesManager.FindTexture("Bullet_Track");
-            traceSpeed = speed * 1.2f;
+            traceSpeed = Speed * 1.2f;
             steeringAgent = new SteeringAgent(this, setting, FlockSetting.Default, traceSpeed);
             steeringAgent.SteeringBehavior = SteeringBehavior.Seek;
         }
@@ -61,7 +61,7 @@ namespace BulletManiac.Entity.Bullets
             }
             else // If bullet has no target or the distance is very close to the target
             {
-                velocity = direction * speed; // default velocity logic
+                velocity = direction * Speed; // default velocity logic
             }
 
             base.Update(gameTime);

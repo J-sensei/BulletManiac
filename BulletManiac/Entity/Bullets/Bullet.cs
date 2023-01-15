@@ -22,6 +22,8 @@ namespace BulletManiac.Entity.Bullets
         protected const float DEFAULT_ANIMATION_SPEED = 0.2f;
         #endregion
 
+        public static float SpeedModifier = 1.0f;
+
         public SoundEffect ShootingSound { get; private set; }
         private Animation animation; // Animation of the bullet (All bullet should use animation to draw)
         /// <summary>
@@ -32,6 +34,7 @@ namespace BulletManiac.Entity.Bullets
         /// Current speed of the bullet
         /// </summary>
         protected float speed = DEFAULT_SPEED;
+        protected float Speed { get { return speed * SpeedModifier; } }
 
         /// <summary>
         /// Original damage of the bullet
@@ -40,13 +43,13 @@ namespace BulletManiac.Entity.Bullets
         /// <summary>
         /// Modify the base damage value
         /// </summary>
-        protected float damageMultiplier = DEFAULT_DAMAGE_MULTIPLIER;
+        public static float DamageMultiplier = DEFAULT_DAMAGE_MULTIPLIER;
         /// <summary>
         /// How much damage deal to the enemy
         /// </summary>
         public float Damage
         {
-            get { return basedDamage * damageMultiplier; }
+            get { return basedDamage * DamageMultiplier; }
         }
 
         /// <summary>
@@ -109,7 +112,7 @@ namespace BulletManiac.Entity.Bullets
         /// <returns></returns>
         protected virtual Vector2 CalculateVelocity()
         {
-            return Direction * speed;
+            return Direction * Speed;
         }
 
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
