@@ -19,7 +19,7 @@ namespace BulletManiac.Scenes
         readonly Color BACKGROUND_COLOR = new Color(7, 24, 33);
 
         private Texture2D texture;
-        private EntityManager entityManager = new();
+        private EntityManager entityManager;
         private Vector2 titlePosition;
 
         public override void LoadContent()
@@ -38,6 +38,8 @@ namespace BulletManiac.Scenes
         float waitToClose = 0.25f;
         public override void Initialize()
         {
+            entityManager = new();
+
             texture = ResourcesManager.FindTexture("Transition_Texture");
             var screenSize = Game1.GraphicsDeviceInstance.Viewport.Bounds;
 
@@ -65,6 +67,7 @@ namespace BulletManiac.Scenes
 
         void MainMenu(object sender, System.EventArgs e)
         {
+            Cursor.Instance.ChangeMode(CursorMode.Loading);
             SceneManager.LoadScene(0);
         }
 

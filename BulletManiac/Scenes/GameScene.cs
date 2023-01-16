@@ -34,6 +34,7 @@ namespace BulletManiac.Scenes
         public override void Initialize()
         {
             GameManager.Initialize();
+            AudioManager.PlayMusic("BGM2");
         }
 
         public override void Update(GameTime gameTime)

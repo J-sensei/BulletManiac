@@ -21,8 +21,9 @@ namespace BulletManiac.Entity.UI
         public EventHandler ClickEvent;
         public Rectangle uvBound;
         const int SIZE = 64;
+        bool playSound;
 
-        public Button(Vector2 position, Vector2 scale, string text = "") : base(ResourcesManager.FindTexture("Buttons"))
+        public Button(Vector2 position, Vector2 scale, string text = "", bool playSound = true) : base(ResourcesManager.FindTexture("Buttons"))
         {
             uvBound = new Rectangle(4 * SIZE, 4 * SIZE, SIZE, SIZE);
             Text = text;
@@ -30,6 +31,7 @@ namespace BulletManiac.Entity.UI
             this.position = position;
             origin = new Vector2(32f, 32f);
             this.scale = scale;
+            this.playSound = playSound;
             //scale = new Vector2(2.5f, 2.5f);
         }
 
@@ -54,7 +56,8 @@ namespace BulletManiac.Entity.UI
                 if (!hoverSound)
                 {
                     // Player hover sound
-                    ResourcesManager.FindSoundEffect("Button_Hover").Play();
+                    //ResourcesManager.FindSoundEffect("Button_Hover").Play();
+                    AudioManager.Play("Button_Hover");
                     hoverSound = true;
                 }
 
@@ -65,7 +68,9 @@ namespace BulletManiac.Entity.UI
                     if (!clicked)
                     {
                         clicked = true;
-                        ResourcesManager.FindSoundEffect("Button_Click").Play();
+                        //ResourcesManager.FindSoundEffect("Button_Click").Play();
+                        if (playSound)
+                            AudioManager.Play("Button_Click");
                     }
                 }
                 else
@@ -108,5 +113,11 @@ namespace BulletManiac.Entity.UI
                 spriteBatch.DrawString(font, Text, new Vector2(x, y), StringColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             }
         }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+        }
+            
     }
 }

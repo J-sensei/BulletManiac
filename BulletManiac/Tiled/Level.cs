@@ -61,7 +61,7 @@ namespace BulletManiac.Tiled
                     bool hasTile = door.TryGetTile((ushort)i, (ushort)j, out TiledMapTile? tile);
                     if (hasTile && tile.Value.GlobalIdentifier != 0)
                     {
-                        DoorBound.Add(new Rectangle(i * Map.TileWidth, j * Map.TileHeight, Map.TileWidth, Map.TileHeight));
+                        DoorBound.Add(new Rectangle(i * Map.TileWidth, j * Map.TileHeight, Map.TileWidth, Map.TileHeight / 2));
                         break;
                     }
                 }
@@ -86,7 +86,8 @@ namespace BulletManiac.Tiled
         public void DoorOpen()
         {
             Map.GetLayer<TiledMapTileLayer>("Door Open").Opacity = 1;
-            ResourcesManager.FindSoundEffect("Door_Open").Play();
+            //ResourcesManager.FindSoundEffect("Door_Open").Play();
+            AudioManager.Play("Door_Open");
         }
 
         public void DoorClose()

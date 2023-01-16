@@ -81,7 +81,12 @@ namespace BulletManiac.Entity.Players
 
             if (bullets.Count == 0)
             {
-                if (Reloading == false) ResourcesManager.FindSoundEffect("Mag_In").Play(); // When bullet is empty, play a sound
+                if (Reloading == false) 
+                {
+                    //ResourcesManager.FindSoundEffect("Mag_In").Play(); // When bullet is empty, play a sound
+                    AudioManager.Play("Mag_In");
+                } 
+
                 currentBulletCD -= Time.DeltaTime;
 
                 if (currentBulletCD <= 0f)
@@ -91,7 +96,8 @@ namespace BulletManiac.Entity.Players
                         bullets.Enqueue(LoadBullet());
 
                     currentBulletCD = bulletCD; // Reset CD
-                    ResourcesManager.FindSoundEffect("Pistol_Cock").Play(); // Play a sound when reload is finish
+                    //ResourcesManager.FindSoundEffect("Pistol_Cock").Play(); // Play a sound when reload is finish
+                    AudioManager.Play("Pistol_Cock");
                 }
                 Reloading = true;
             }

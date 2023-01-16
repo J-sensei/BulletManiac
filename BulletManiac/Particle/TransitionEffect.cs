@@ -15,7 +15,7 @@ namespace BulletManiac.Particle
         private readonly Texture2D texture;
         private Color color = new Color(7, 24, 33);
         private List<FadeItem> items = new();
-        private float speed = 80f;
+        private float speed = 90f;
         private bool active = false;
         public bool Finish { 
             get 

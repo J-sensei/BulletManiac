@@ -102,7 +102,7 @@ namespace BulletManiac.Managers
         /// <summary>
         /// Managing entities in the game
         /// </summary>
-        private static EntityManager entityManager = new();
+        private static EntityManager entityManager;
         private static LevelManager levelManager;
 
         /// <summary>
@@ -189,6 +189,8 @@ namespace BulletManiac.Managers
 
         public static void Initialize()
         {
+            entityManager = new();
+
             if(tiledMapRenderer == null)
                 tiledMapRenderer = new TiledMapRenderer(GraphicsDevice); // Initialize Tiled
             entityManager.Clear();
@@ -217,15 +219,18 @@ namespace BulletManiac.Managers
             // Reset Modifier
             Bullet.SpeedModifier = 1.0f;
             Bullet.DamageMultiplier = 1.0f;
+            //Spawning
+            spawnPowerUp = false;
+            doorOpened = false;
 
             // Test power ups
             //AddGameObject(new Heart(new Vector2(100f, 100f)));
             //AddGameObject(new BulletCapacity(new Vector2(120f, 100f)));
             //AddGameObject(new BulletSpeed(new Vector2(140f, 100f)));
             //AddGameObject(new BulletDamage(new Vector2(160f, 100f)));
-            
-            MediaPlayer.IsRepeating = true;
-            MediaPlayer.Play(ResourcesManager.ContentManager.Load<Song>("Audio/Song/BGM"));
+
+            //MediaPlayer.IsRepeating = true;
+            //MediaPlayer.Play(ResourcesManager.ContentManager.Load<Song>("Audio/Song/BGM"));
 
             ApplyTransition(); // Run the transition when the game start
         }
@@ -330,7 +335,7 @@ namespace BulletManiac.Managers
         {
             LoadDefaultResources(); // Load default resources needed for the game to start
         }
-
+        
         public static void Update(GameTime gameTime)
         {
             tiledMapRenderer.Update(gameTime); // Tiled Map Update
@@ -338,12 +343,19 @@ namespace BulletManiac.Managers
             // If transition is ongoing, dont update these things
             if (transitionEffect.Finish)
             {
+                Cursor.Instance.ChangeMode(CursorMode.Crosshair);
                 NavigationAgent.GlobalUpdate();
                 SteeringAgent.GlobalUpdate();
                 CollisionManager.Update(gameTime); // Collision Update
                 entityManager.Update(gameTime); // Entity Manager Update
                 spawner.Update(gameTime);
-                TimePass += Time.DeltaTime;
+
+                if(!IsLevelFinish)
+                    TimePass += Time.DeltaTime;
+            }
+            else
+            {
+                Cursor.Instance.ChangeMode(CursorMode.Loading);
             }
 
             // Camera Update
@@ -376,10 +388,11 @@ namespace BulletManiac.Managers
                 spawner.Spawn(new Summoner(pos), pos);
             }
 
-            if (InputManager.GetKey(Keys.Escape))
+            if (InputManager.GetKey(Keys.Escape) && transitionEffect.Finish) // prevent player open pause menu when transition is playing
             {
                 // Pause the game
-                ResourcesManager.FindSoundEffect("Pause").Play();
+                //ResourcesManager.FindSoundEffect("Pause").Play();
+                AudioManager.Play("Pause");
                 SceneManager.OpenScene(2);
                 SceneManager.GetScene(1).StopUpdate();
             }
@@ -423,7 +436,7 @@ namespace BulletManiac.Managers
         /// </summary>
         private static int floor = 1;
         static bool levelUpdated = false;
-        const float TRANSITION_DURATION = 0.5f;
+        const float TRANSITION_DURATION = 0.25f; // How long delay the transition start (For the camera move happen and teleportation happen without player seeing it)
         static float transitionDuration = TRANSITION_DURATION;
         private static bool doorOpened = false;
         public static int Difficulty { get; private set; } = 1;

@@ -26,7 +26,7 @@ namespace BulletManiac.Entity.Enemies
 
         private const float BAT_SPEED = 65f;
         private const float BAT_ARRIVAL_RADIUS = 5f;
-        private const int TOTAL_BAT_LEFT_TO_FLEE = 5;
+        private const int TOTAL_BAT_LEFT_TO_FLEE = 3;
         private SteeringAgent steerAgent;
 
         private float animationSpeed = 0.05f;
@@ -79,7 +79,7 @@ namespace BulletManiac.Entity.Enemies
             base.Update(gameTime);
             if (currentAction == EnemyAction.Die) return;
 
-            if (FlockManager.Find(Name).Count <= TOTAL_BAT_LEFT_TO_FLEE)
+            if (FlockManager.Find(Name).Count < TOTAL_BAT_LEFT_TO_FLEE)
                 steerAgent.SteeringBehavior = SteeringBehavior.Flee;
             else
                 steerAgent.SteeringBehavior = SteeringBehavior.Arrival;

@@ -14,6 +14,8 @@ namespace BulletManiac.Utilities
         public double msgFrequency = 1.0f;
         public string msg = "";
 
+        public double FPS { get; private set; } = 0;
+
         /// <summary>
         /// The msgFrequency here is the reporting time to update the message.
         /// </summary>
@@ -25,6 +27,7 @@ namespace BulletManiac.Utilities
             {
                 msg = " Fps: " + (frames / elapsed).ToString() + "\n Elapsed time: " + elapsed.ToString() + "\n Updates (UPS): " + updates.ToString() + "\n Frames (FPS): " + frames.ToString() + "\n Delta Time: " + Time.DeltaTime.ToString();
                 //Console.WriteLine(msg);
+                FPS = frames;
                 elapsed = 0;
                 frames = 0;
                 updates = 0;
@@ -36,6 +39,11 @@ namespace BulletManiac.Utilities
         public void Draw(SpriteBatch spriteBatch, SpriteFont font, Vector2 fpsDisplayPosition, Color fpsTextColor)
         {
             spriteBatch.DrawString(font, msg, fpsDisplayPosition, fpsTextColor);
+            frames++;
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
             frames++;
         }
     }

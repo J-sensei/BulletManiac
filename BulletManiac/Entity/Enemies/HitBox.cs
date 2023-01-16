@@ -1,5 +1,6 @@
 ﻿using BulletManiac.Collision;
 using BulletManiac.Entity.Players;
+using BulletManiac.Managers;
 using BulletManiac.SpriteAnimation;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -57,7 +58,11 @@ namespace BulletManiac.Entity.Enemies
             if (animation.CurrentFrameIndex == frameToPlay && !soundEffectPlay)
             {
                 if (soundEffect != null)
-                    soundEffect.Play();
+                {
+                    //soundEffect.Play();
+                    AudioManager.Play(soundEffect);
+                }
+
                 soundEffectPlay = true;
             }
 

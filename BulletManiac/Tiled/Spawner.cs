@@ -46,7 +46,8 @@ namespace BulletManiac.Tiled
             if(spawnDelay <= 0f && !spawn) // Add the enemy only once
             {
                 GameManager.AddGameObject(enemy);
-                ResourcesManager.FindSoundEffect("Enemy_Spawn").Play();
+                //ResourcesManager.FindSoundEffect("Enemy_Spawn").Play();
+                AudioManager.Play("Enemy_Spawn");
                 spawn = true;
             }
 
@@ -81,8 +82,9 @@ namespace BulletManiac.Tiled
 
         public void Start()
         {
-            spawnCD = 1.1f - (GameManager.Difficulty * 0.1f); // from 1.0f (difficulty 1) to 0.1f (difficulty 10)
-            spawnNumber = 5 * GameManager.Difficulty; // from 5 to 50 enemy 
+            //spawnCD = 1.1f - (GameManager.Difficulty * 0.1f); // from 1.0f (difficulty 1) to 0.1f (difficulty 10)
+            spawnCD = 0.3f;
+            spawnNumber = 3 * GameManager.Difficulty; // from 5 to 50 enemy 
             currentNumber = spawnNumber;
             currentSpawnCD = spawnCD;
             active = true;

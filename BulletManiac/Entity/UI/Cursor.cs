@@ -32,7 +32,7 @@ namespace BulletManiac.Entity.UI
             uvBound = new Rectangle(4 * SIZE, 3 * SIZE, SIZE, SIZE); // Get the target sprite from the spritesheet
             origin = new Vector2(8f);
             cursorMode = CursorMode.Crosshair;
-            loadingAnimation = new Animation(ResourcesManager.FindTexture("Cursor"), 7, 16, 16, 0.12f, 6);
+            loadingAnimation = new Animation(ResourcesManager.FindTexture("Cursor"), 7, 16, 16, 0.08f, 6);
             //ChangeMode(CursorMode.Loading); // TEST
             baseScale = new Vector2(0.8f);
             layerDepth = 0.1f; // On top of every button since button layer depth is 0
@@ -54,7 +54,7 @@ namespace BulletManiac.Entity.UI
             scale = baseScale * GameManager.CurrentCameraZoom;
             position = InputManager.MousePosition;
 
-            ChangeMode(CursorMode.Crosshair);
+            //ChangeMode(CursorMode.Crosshair);
             if (cursorMode == CursorMode.Loading)
             {
                 loadingAnimation.Update(gameTime);
@@ -64,6 +64,8 @@ namespace BulletManiac.Entity.UI
 
         public void ChangeMode(CursorMode mode)
         {
+            if (cursorMode == mode) return;
+
             if(mode == CursorMode.Crosshair)
             {
                 uvBound = new Rectangle(4 * SIZE, 3 * SIZE, SIZE, SIZE); // Get the target sprite from the spritesheet

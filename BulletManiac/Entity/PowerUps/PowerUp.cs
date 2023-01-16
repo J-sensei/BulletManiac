@@ -65,7 +65,8 @@ namespace BulletManiac.Entity.PowerUps
                 // Play sound
                 if (soundEffect != null && !isPlay)
                 {
-                    soundEffect.Play();
+                    //soundEffect.Play();
+                    AudioManager.Play(soundEffect);
                     isPlay = true;
                 }
 

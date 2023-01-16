@@ -3,6 +3,7 @@ using BulletManiac.Tiled;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 using MonoGame.Extended.Tiled;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,7 @@ namespace BulletManiac.Managers
         /// Sound Effects to use across the game (Load WAV format file)
         /// </summary>
         private static readonly Dictionary<string, SoundEffect> SoundEffects = new();
+        private static readonly Dictionary<string, Song> Songs = new();
         /// <summary>
         /// Font used to render string as the game ui
         /// </summary>
@@ -122,6 +124,19 @@ namespace BulletManiac.Managers
             }
         }
 
+        public static void LoadSong(string name, string path)
+        {
+            if (!Songs.ContainsKey(name))
+            {
+                Song data = contentManager.Load<Song>(path);
+                Songs.Add(name, data);
+            }
+            else
+            {
+                GameManager.Log("Resources Manager", "Duplicate name '" + name + "' is failed to add into Song resources.");
+            }
+        }
+
         public static void LoadSpriteFonts(string name, string path)
         {
             if (!SpriteFonts.ContainsKey(name))
@@ -196,6 +211,11 @@ namespace BulletManiac.Managers
         public static SoundEffect FindSoundEffect(string name)
         {
             return SoundEffects[name];
+        }
+
+        public static Song FindSong(string name)
+        {
+            return Songs[name];
         }
 
         public static SpriteFont FindSpriteFont(string name)

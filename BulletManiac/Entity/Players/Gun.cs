@@ -136,7 +136,8 @@ namespace BulletManiac.Entity.Players
                 // Fire Bullet
                 Bullets.Bullet bullet = Magazine.Shoot(); // Get the current bullet from the megazine
                 bullet.Shoot(position, bulletDirection, 150f, 16f);
-                bullet.ShootingSound.Play();
+                AudioManager.Play(bullet.ShootingSound);
+                //bullet.ShootingSound.Play();
                 //ResourcesManager.FindSoundEffect("Gun_Shoot").Play(); // Change to unique bullet shot sound
             }
         }

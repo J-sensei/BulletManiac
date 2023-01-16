@@ -47,6 +47,7 @@ namespace BulletManiac.Entity.Enemies
             origin = animationManager.CurrentAnimation.TextureBound / 2f;
             attackingSound = ResourcesManager.FindSoundEffect("SuicideShadow_Attacking").CreateInstance();
             attackingSound.IsLooped = true;
+            attackingSound.Volume = AudioManager.EffectVolume;
             base.Initialize();
         }
 

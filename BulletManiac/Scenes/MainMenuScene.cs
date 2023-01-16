@@ -18,7 +18,7 @@ namespace BulletManiac.Scenes
         const string FOOTER = "By Liew Jiann Shen & Fong Zheng Wei";
         readonly Color STRING_COLOR = new Color(238f, 236f, 231f);
 
-        private readonly EntityManager entityManager = new();
+        private EntityManager entityManager;
         public override void LoadContent()
         {
             ResourcesManager.LoadSpriteFonts("Font_Normal", "UI/Font/Font_Normal");
@@ -48,6 +48,7 @@ namespace BulletManiac.Scenes
         private Vector2 footerPosition;
         public override void Initialize()
         {
+            entityManager = new();
             ClearColor = new Color(7, 24, 33);
             var screenSize = Game1.GraphicsDeviceInstance.Viewport.Bounds;
 
@@ -70,19 +71,27 @@ namespace BulletManiac.Scenes
 
             playBtn.ClickEvent += Play;
             quitBtn.ClickEvent += Exit;
+            settingBtn.ClickEvent += Option;
 
             entityManager.AddUIObject(tutorialBtn);
             entityManager.AddUIObject(playBtn);
             entityManager.AddUIObject(settingBtn);
             entityManager.AddUIObject(quitBtn);
 
-            MediaPlayer.Play(ResourcesManager.ContentManager.Load<Song>("Audio/Song/BGM2"));
-            MediaPlayer.IsRepeating = true;
+            AudioManager.PlayMusic("BGM1");
+            gameStart = false;
         }
 
+        bool gameStart = true;
         void Play(object sender, System.EventArgs e)
         {
+            Cursor.Instance.ChangeMode(CursorMode.Loading); // Normal mouse cursor
             SceneManager.LoadScene(1);
+        }
+
+        void Option(object sender, System.EventArgs e)
+        {
+            SceneManager.LoadScene(3);
         }
 
         void Exit(object sender, System.EventArgs e)
@@ -92,7 +101,8 @@ namespace BulletManiac.Scenes
 
         public override void Update(GameTime gameTime)
         {
-            Cursor.Instance.ChangeMode(CursorMode.Mouse); // Normal mouse cursor
+            if(!gameStart)
+                Cursor.Instance.ChangeMode(CursorMode.Mouse); // Normal mouse cursor
             entityManager.Update(gameTime); // If hover button, then it will change to hover mouse
         }
     }

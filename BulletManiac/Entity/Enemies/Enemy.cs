@@ -71,7 +71,7 @@ namespace BulletManiac.Entity.Enemies
                 currentAction = EnemyAction.Die;
                 if (!hasDeathSoundPlayed && deathSoundEffect != null)
                 {
-                    deathSoundEffect.Play();
+                    AudioManager.Play(deathSoundEffect);
                     hasDeathSoundPlayed = true;
                 }
 
@@ -127,8 +127,8 @@ namespace BulletManiac.Entity.Enemies
                 // Deal damaage to the enemy
                 float dmg = (other.GameObject as Bullet).Damage;
                 hp -= dmg;
-
-                ResourcesManager.FindSoundEffect("Bullet_Hit").Play(); // Bullet Hit sound
+                
+                AudioManager.Play("Bullet_Hit");
                 currentAction = EnemyAction.Hit; // Change player state
                 Destroy(other.GameObject); // Destroy bullet
                 blink = true;

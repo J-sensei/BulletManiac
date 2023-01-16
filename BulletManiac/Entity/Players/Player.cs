@@ -114,7 +114,8 @@ namespace BulletManiac.Entity.Players
                         dashDirection.Y = 0f;
                 }
                 dashDirection.Normalize();
-                ResourcesManager.FindSoundEffect("Dash").Play();
+                //ResourcesManager.FindSoundEffect("Dash").Play();
+                AudioManager.Play("Dash");
             }
 
             if (dashing)
@@ -263,7 +264,8 @@ namespace BulletManiac.Entity.Players
             GameManager.AddGameObject(effect); // Add smoke to the world
 
             // Audio
-            footstepsSounds[Extensions.Random.Next(footstepsSounds.Count)].Play();
+            //footstepsSounds[Extensions.Random.Next(footstepsSounds.Count)].Play();
+            AudioManager.Play(footstepsSounds[Extensions.Random.Next(footstepsSounds.Count)]);
             lastWalkingAnimIndex = currentIndex;
         }
 
@@ -298,7 +300,8 @@ namespace BulletManiac.Entity.Players
                 HP -= damage;
                 HP = MathHelper.Clamp(HP, 0f, MaxHP); // Clamp HP
                 invincible = true; // Player become invincible after damage is taken
-                ResourcesManager.FindSoundEffect("Player_Hurt").Play();
+                //ResourcesManager.FindSoundEffect("Player_Hurt").Play();
+                AudioManager.Play("Player_Hurt");
                 hpBar.UpdateValue(HP);
             }
         }
