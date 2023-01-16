@@ -36,6 +36,7 @@ namespace BulletManiac.Entity.Players
         const float DEFAULT_HP = 100f;
         public float HP { get; private set; }
         public float MaxHP { get; private set; }
+        public bool IsGameOver { get; private set; } = false;
 
         // Animation speed
         private float animationSpeed = 0.2f;
@@ -50,7 +51,7 @@ namespace BulletManiac.Entity.Players
 
         // Invincible variables
         private bool invincible = false;
-        private const float INVINCIBLE_TIME = 2f;
+        private const float INVINCIBLE_TIME = 1f;
         private float currentInvincibleTime = INVINCIBLE_TIME;
 
         // Blink variables
@@ -357,16 +358,21 @@ namespace BulletManiac.Entity.Players
 
         public override void Update(GameTime gameTime)
         {
+            // Player death logic
+            //if (InputManager.GetKey(Keys.K)) currentAction = PlayerAction.Death;
+            if(HP <= 0) currentAction = PlayerAction.Death;
+            animationManager.Update(currentAction, gameTime); // Update the animations
+            shadowEffect.Update(gameTime); // Shadow of the player
+            base.Update(gameTime);
+            if (currentAction == PlayerAction.Death && animationManager.GetAnimation(PlayerAction.Death).Finish) IsGameOver = true; // Declare the game is over
+            if (currentAction == PlayerAction.Death) return; // No need to update player logic anymore is the player is death
+
             if (GameManager.CurrentLevel.TouchingDoor(Bound)) GameManager.UpdateLevel(); // Update level
             Dash();
             Invincible();
             if (!dashing)
                 PlayerMovement();
             Gun.Update(gameTime); // Gun logic
-
-            animationManager.Update(currentAction, gameTime); // Update the animations
-            shadowEffect.Update(gameTime); // Shadow of the player
-            base.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
@@ -375,7 +381,7 @@ namespace BulletManiac.Entity.Players
             spriteBatch.End(); // End previous drawing session first inorder to start new one
 
             // Start new drawing session with shader (Everything between this draw call will be affect by the shader apply)
-            if (invincible && blink)
+            if (invincible && blink && !IsGameOver)
                 spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: Camera.Main.Transform, effect: colorOverlay);
             else
                 spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: Camera.Main.Transform, effect: null);

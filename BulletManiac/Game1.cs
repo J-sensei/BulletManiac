@@ -10,7 +10,7 @@ namespace BulletManiac
 {
     public class Game1 : Game
     {
-        const int INITIAL_SCENE = 0;
+        const int INITIAL_SCENE = 4;
         /// <summary>
         /// Singleton of the Game (Monogame)
         /// </summary>
@@ -62,6 +62,7 @@ namespace BulletManiac
             SceneManager.Add(new GameScene());
             SceneManager.Add(new PauseScene());
             SceneManager.Add(new OptionScene());
+            SceneManager.Add(new GameOverScene());
             SceneManager.LoadScene(INITIAL_SCENE);
 
             ResourcesManager.LoadTexture("Cursor", "SpriteSheet/UI/Cursor");

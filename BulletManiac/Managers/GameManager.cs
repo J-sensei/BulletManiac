@@ -187,6 +187,9 @@ namespace BulletManiac.Managers
             return entityManager.FindNearestEnemy(gameObject);
         }
 
+        private const string GAMEOVER_STRING = "YOU DIED";
+        private static Vector2 gameOverStringOrigin;
+        private static float gameOverColorTransparency = 0f;
         public static void Initialize()
         {
             entityManager = new();
@@ -222,15 +225,9 @@ namespace BulletManiac.Managers
             //Spawning
             spawnPowerUp = false;
             doorOpened = false;
-
-            // Test power ups
-            //AddGameObject(new Heart(new Vector2(100f, 100f)));
-            //AddGameObject(new BulletCapacity(new Vector2(120f, 100f)));
-            //AddGameObject(new BulletSpeed(new Vector2(140f, 100f)));
-            //AddGameObject(new BulletDamage(new Vector2(160f, 100f)));
-
-            //MediaPlayer.IsRepeating = true;
-            //MediaPlayer.Play(ResourcesManager.ContentManager.Load<Song>("Audio/Song/BGM"));
+            // YOU DIED effect for game over
+            gameOverStringOrigin = ResourcesManager.FindSpriteFont("Font_Title").MeasureString(GAMEOVER_STRING);
+            gameOverColorTransparency = 0f;
 
             ApplyTransition(); // Run the transition when the game start
         }
@@ -350,7 +347,7 @@ namespace BulletManiac.Managers
                 entityManager.Update(gameTime); // Entity Manager Update
                 spawner.Update(gameTime);
 
-                if(!IsLevelFinish)
+                if(!IsLevelFinish && !Player.IsGameOver)
                     TimePass += Time.DeltaTime;
             }
             else
@@ -362,9 +359,9 @@ namespace BulletManiac.Managers
             Camera.Main.Update(GraphicsDevice.Viewport);
             Camera.Main.Follow(Player); // Always follow the player
 
-            // Update debug status
+            // Debug
             if (InputManager.GetKey(Keys.F12)) Debug = !Debug;
-            if (InputManager.GetKey(Keys.R)) levelManager.ChangeLevel(); // Test change level
+            //if (InputManager.GetKey(Keys.R)) levelManager.ChangeLevel(); // Test change level
 
             // Test Enemy
             if (InputManager.GetKey(Keys.F))
@@ -411,10 +408,20 @@ namespace BulletManiac.Managers
                 doorOpened = true;
             }
 
-            if (Debug)
-                pathTester.Update(gameTime);
+            if (Player.IsGameOver)
+            {
+                // Transition effect of YOU DIED
+                gameOverColorTransparency += 0.5f * Time.DeltaTime; 
+                if(gameOverColorTransparency > 1.5f)
+                {
+                    SceneManager.LoadScene(4); // Go to game over scene
+                }
+            }
 
-            fpsCounter.Update(gameTime);
+            if (Debug)
+                pathTester.Update(gameTime); // Debug path tester
+
+            fpsCounter.Update(gameTime); // Debug FPS counter
 
             // Execute transition logics
             if(transitionDuration <= 0f && levelUpdated)
@@ -533,6 +540,11 @@ namespace BulletManiac.Managers
                 spriteBatch.DrawString(ResourcesManager.FindSpriteFont("DebugFont"), "Enemy Count: " + entityManager.EnemyCount, new Vector2(5f, 20f), Color.Red);
                 spriteBatch.DrawString(ResourcesManager.FindSpriteFont("DebugFont"), "Floor: " + floor, new Vector2(5f, 40f), Color.Red);
                 spriteBatch.DrawString(ResourcesManager.FindSpriteFont("DebugFont"), "Is Level Finish: " + IsLevelFinish, new Vector2(5f, 60f), Color.Red);
+            }
+
+            if (Player.IsGameOver)
+            {
+                spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Title"), "YOU DIED", new Vector2(CurrentResolution.X / 2, CurrentResolution.Y / 2), Color.Red * gameOverColorTransparency, 0, (gameOverStringOrigin / 2), 1f, SpriteEffects.None, 0f);
             }
 
             transitionEffect.Draw(spriteBatch, gameTime);

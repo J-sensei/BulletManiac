@@ -40,7 +40,7 @@ namespace BulletManiac.Scenes
         public override void DrawUI(SpriteBatch spriteBatch, GameTime gameTime)
         {
             spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Title"), TITLE, titlePosition, STRING_COLOR);
-            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), SUB_TITLE, versionPosition, STRING_COLOR);
+            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), SUB_TITLE, subtitlePosition, STRING_COLOR);
             spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "Master Volume: " + (AudioManager.MasterVolume * 100f).ToString("N0") + "%",
                                     new Vector2(screenSize.Width / 2 - 300f, screenSize.Height / 2 - 100f - 20f), STRING_COLOR);
             spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "SFX Volume: " + (AudioManager.SFXVolume * 100f).ToString("N0") + "%",
@@ -57,7 +57,7 @@ namespace BulletManiac.Scenes
         }
 
         private Vector2 titlePosition;
-        private Vector2 versionPosition;
+        private Vector2 subtitlePosition;
 
         Rectangle screenSize;
         Button masterDown;
@@ -81,9 +81,9 @@ namespace BulletManiac.Scenes
             float offsetX = ResourcesManager.FindSpriteFont("Font_Title").MeasureString(TITLE).X / 2;
             titlePosition = new Vector2(screenSize.Width / 2 - offsetX, screenSize.Height / 2 - 300f);
 
-            // Version 
+            // Sub title 
             float x = ResourcesManager.FindSpriteFont("Font_Normal").MeasureString(SUB_TITLE).X / 2;
-            versionPosition = new Vector2(screenSize.Width / 2 - x, screenSize.Height / 2 - 220f);
+            subtitlePosition = new Vector2(screenSize.Width / 2 - x, screenSize.Height / 2 - 220f);
 
             // Buttons
             masterDown = new Button(new Vector2(screenSize.Width / 2 + 200f, screenSize.Height / 2 - 100f), new Vector2(0.8f, 2f), "-", false);
