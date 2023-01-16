@@ -129,17 +129,47 @@
 /processorParam:Quality=Best
 /build:Audio/Player/Player_Hurt.wav
 
-#begin Audio/Song/BGM.mp3
+#begin Audio/Song/BGM1.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
 /processorParam:Quality=Best
-/build:Audio/Song/BGM.mp3
+/build:Audio/Song/BGM1.mp3
 
 #begin Audio/Song/BGM2.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:Audio/Song/BGM2.mp3
+
+#begin Audio/Song/BGM2.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Song/BGM2.mp3
+
+#begin Audio/Song/BGM3.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Song/BGM3.mp3
+
+#begin Audio/Song/BGM4.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Song/BGM4.mp3
+
+#begin Audio/Song/MainMenu.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Song/MainMenu.mp3
+
+#begin Audio/Song/Result.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Song/Result.mp3
 
 #begin Audio/UI/Button_Click.wav
 /importer:WavImporter
@@ -884,6 +914,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:UI/PowerUp/HeartAnimated.png
+
+#begin UI/ProgressBar/health_bar_decoration.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/ProgressBar/health_bar_decoration.png
+
+#begin UI/ProgressBar/health_bar.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/ProgressBar/health_bar.png
 
 #begin UI/ProgressBar/HP_Background.png
 /importer:TextureImporter

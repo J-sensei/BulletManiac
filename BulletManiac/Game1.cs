@@ -54,14 +54,19 @@ namespace BulletManiac
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             ResourcesManager.Initialize(Content);
-            ResourcesManager.LoadSong("BGM1", "Audio/Song/BGM");
+            ResourcesManager.LoadSong("BGM1", "Audio/Song/BGM1");
             ResourcesManager.LoadSong("BGM2", "Audio/Song/BGM2");
+            ResourcesManager.LoadSong("BGM3", "Audio/Song/BGM3");
+            ResourcesManager.LoadSong("BGM4", "Audio/Song/BGM4");
+            ResourcesManager.LoadSong("MainMenu", "Audio/Song/MainMenu");
+            ResourcesManager.LoadSong("Result", "Audio/Song/Result");
             ResourcesManager.LoadSpriteFonts("Font_Normal", "UI/Font/Font_Normal");
 
             SceneManager.Add(new MainMenuScene());
             SceneManager.Add(new GameScene());
             SceneManager.Add(new PauseScene());
             SceneManager.Add(new OptionScene());
+            SceneManager.Add(new GameOverScene());
             SceneManager.LoadScene(INITIAL_SCENE);
 
             ResourcesManager.LoadTexture("Cursor", "SpriteSheet/UI/Cursor");

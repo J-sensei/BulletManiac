@@ -27,6 +27,7 @@ namespace BulletManiac.Entity.Enemies
         }
 
         protected float hp = 100f;
+        public float HP { get { return hp; } }
         public float Damage { get { return basedDamage * DamageModifier; } }
         protected float basedDamage = 10f;
         public float DamageModifier { get; set; } = 1.0f;
@@ -172,6 +173,10 @@ namespace BulletManiac.Entity.Enemies
             TextureEffect effect = new TextureEffect(new Animation(ResourcesManager.FindAnimation("Destroy_Smoke_Animation")),
                                                     Position + deathSmokeOffset, new Vector2(16, 16), new Vector2(1.25f), true);
             GameManager.AddGameObject(effect);
+
+            // Add to result
+            GameResult.CountEnemy(this);
+
             base.DeleteEvent();
         }
 

@@ -1,4 +1,5 @@
 ﻿using BulletManiac.AI;
+using BulletManiac.Entity.Enemies;
 using BulletManiac.Managers;
 using BulletManiac.SpriteAnimation;
 using Microsoft.Xna.Framework;
@@ -45,19 +46,31 @@ namespace BulletManiac.Entity.Bullets
             steeringAgent.SteeringBehavior = SteeringBehavior.Seek;
         }
 
+        Enemy e;
         public override void Update(GameTime gameTime)
         {
             if (!isTarget)
             {
                 target = GameManager.FindNearestEnemy(this);
-                isTarget = true;
+                if(target != null)
+                {
+                    e = target as Enemy;
+                    isTarget = true;
+                }
             }
 
-            if (target != null && !target.IsDestroyed && (target.Position - position).Length() > 10f)
+            if (target != null)
             {
-                steeringAgent.Update(gameTime, target);
-                velocity = steeringAgent.CurrentVelocity;
-                Direction = SteeringAgent.GetHeading(velocity); // Update the Direction + rotation of the bullet
+                if(!target.IsDestroyed && (target.Position - position).Length() > 10f && e.HP > 0f)
+                {
+                    steeringAgent.Update(gameTime, target);
+                    velocity = steeringAgent.CurrentVelocity;
+                    Direction = SteeringAgent.GetHeading(velocity); // Update the Direction + rotation of the bullet
+                }
+                else
+                {
+                    velocity = direction * Speed; // default velocity logic
+                }
             }
             else // If bullet has no target or the distance is very close to the target
             {

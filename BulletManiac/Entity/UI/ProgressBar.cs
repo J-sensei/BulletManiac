@@ -26,6 +26,7 @@ namespace BulletManiac.Entity.UI
         private Rectangle animationRect;
         private Vector2 animationPositon;
         private Color animationShade;
+        private Vector2 foregroundOffset;
 
         public ProgressBar(Texture2D background, Texture2D foreground, float maxValue, Vector2 position, Vector2 scale)
         {
@@ -41,6 +42,8 @@ namespace BulletManiac.Entity.UI
             animationPositon = position;
             animationShade = Color.DarkGray;
         }
+
+        public void SetForegroundOffset(Vector2 offset) => foregroundOffset = offset;
 
         public override void Update(GameTime gameTime)
         {
@@ -78,8 +81,8 @@ namespace BulletManiac.Entity.UI
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             spriteBatch.Draw(background, position, null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 1f);
-            spriteBatch.Draw(foreground, position, barBound, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 1f);
-            spriteBatch.Draw(foreground, animationPositon, animationRect, animationShade, 0f, Vector2.Zero, scale, SpriteEffects.None, 1f);
+            spriteBatch.Draw(foreground, position + foregroundOffset, barBound, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 1f);
+            spriteBatch.Draw(foreground, animationPositon + foregroundOffset, animationRect, animationShade, 0f, Vector2.Zero, scale, SpriteEffects.None, 1f);
         }
 
         protected override Rectangle CalculateBound()

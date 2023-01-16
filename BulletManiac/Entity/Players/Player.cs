@@ -36,6 +36,7 @@ namespace BulletManiac.Entity.Players
         const float DEFAULT_HP = 100f;
         public float HP { get; private set; }
         public float MaxHP { get; private set; }
+        public bool IsGameOver { get; private set; } = false;
 
         // Animation speed
         private float animationSpeed = 0.2f;
@@ -50,7 +51,7 @@ namespace BulletManiac.Entity.Players
 
         // Invincible variables
         private bool invincible = false;
-        private const float INVINCIBLE_TIME = 2f;
+        private const float INVINCIBLE_TIME = 1f;
         private float currentInvincibleTime = INVINCIBLE_TIME;
 
         // Blink variables
@@ -303,6 +304,7 @@ namespace BulletManiac.Entity.Players
                 //ResourcesManager.FindSoundEffect("Player_Hurt").Play();
                 AudioManager.Play("Player_Hurt");
                 hpBar.UpdateValue(HP);
+                Camera.Main.Shake(1.5f);
             }
         }
 
@@ -344,12 +346,14 @@ namespace BulletManiac.Entity.Players
             colorOverlay.Parameters["overlayColor"].SetValue(Color.White.ToVector4());
 
             // The HP Bar of the player
-            hpBar = new ProgressBar(ResourcesManager.FindTexture("HP_Background"), ResourcesManager.FindTexture("HP_Foreground"), 100, new Vector2(25f), new Vector2(4f));
+            //hpBar = new ProgressBar(ResourcesManager.FindTexture("HP_Background"), ResourcesManager.FindTexture("HP_Foreground"), 100, new Vector2(25f), new Vector2(4f));
+            hpBar = new ProgressBar(ResourcesManager.FindTexture("health_bar_decoration"), ResourcesManager.FindTexture("health_bar"), 100, new Vector2(25f, 10f), new Vector2(5f));
+            hpBar.SetForegroundOffset(new Vector2(14f * 5, 0f));
             GameManager.AddGameObjectUI(hpBar);
             hpBar.UpdateValue(HP);
 
             // Calculate reloading text offset
-            float x = ResourcesManager.FindSpriteFont("Font_Player").MeasureString("Reloading 0s").X;
+            float x = ResourcesManager.FindSpriteFont("Font_Normal").MeasureString("Reloading 0.00s").X;
             textPosOffset = new(-x / 20f, -16f);
 
             base.Initialize();
@@ -357,16 +361,21 @@ namespace BulletManiac.Entity.Players
 
         public override void Update(GameTime gameTime)
         {
+            // Player death logic
+            //if (InputManager.GetKey(Keys.K)) currentAction = PlayerAction.Death;
+            if(HP <= 0) currentAction = PlayerAction.Death;
+            animationManager.Update(currentAction, gameTime); // Update the animations
+            shadowEffect.Update(gameTime); // Shadow of the player
+            base.Update(gameTime);
+            if (currentAction == PlayerAction.Death && animationManager.GetAnimation(PlayerAction.Death).Finish) IsGameOver = true; // Declare the game is over
+            if (currentAction == PlayerAction.Death) return; // No need to update player logic anymore is the player is death
+
             if (GameManager.CurrentLevel.TouchingDoor(Bound)) GameManager.UpdateLevel(); // Update level
             Dash();
             Invincible();
             if (!dashing)
                 PlayerMovement();
             Gun.Update(gameTime); // Gun logic
-
-            animationManager.Update(currentAction, gameTime); // Update the animations
-            shadowEffect.Update(gameTime); // Shadow of the player
-            base.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
@@ -375,7 +384,7 @@ namespace BulletManiac.Entity.Players
             spriteBatch.End(); // End previous drawing session first inorder to start new one
 
             // Start new drawing session with shader (Everything between this draw call will be affect by the shader apply)
-            if (invincible && blink)
+            if (invincible && blink && !IsGameOver)
                 spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: Camera.Main.Transform, effect: colorOverlay);
             else
                 spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, transformMatrix: Camera.Main.Transform, effect: null);
@@ -398,10 +407,11 @@ namespace BulletManiac.Entity.Players
             // Reloading Text
             if (Gun.Reloading)
             {
-                spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Player"), "Reloading " + Gun.Magazine.CD.ToString("N0") + "s", position + textPosOffset, reloadingStringColor, 0f, textOffset, 0.3f, SpriteEffects.None, 0f);
+                spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "Reloading " + Gun.Magazine.CD.ToString("N2") + "s", position + textPosOffset, reloadingStringColor, 0f, textOffset, 0.15f, SpriteEffects.None, 0f);
             }
         }
-        Color reloadingStringColor = new Color(7, 24, 33);
+        //Color reloadingStringColor = new Color(7, 24, 33);
+        Color reloadingStringColor = Color.DarkRed;
 
         //public override void CollisionEvent(GameObject gameObject)
         //{
