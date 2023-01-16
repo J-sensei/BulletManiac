@@ -64,21 +64,21 @@ namespace BulletManiac.Scenes
             x = ResourcesManager.FindSpriteFont("Font_Normal").MeasureString(FOOTER).X / 2;
             footerPosition = new Vector2(screenSize.Width / 2 - x, screenSize.Height / 2 + 310f);
             // Buttons
-            Button tutorialBtn = new Button(new Vector2(screenSize.Width / 2, screenSize.Height / 2), new Vector2(3.2f, 2.5f), "Tutorial");
-            Button playBtn = new Button(new Vector2(screenSize.Width / 2, screenSize.Height / 2 + 70f), new Vector2(3.2f, 2.5f), "Play");
-            Button settingBtn = new Button(new Vector2(screenSize.Width / 2, screenSize.Height / 2 + 140f), new Vector2(3.2f, 2.5f), "Setting");
-            Button quitBtn = new Button(new Vector2(screenSize.Width / 2, screenSize.Height / 2 + 210f), new Vector2(3.2f, 2.5f), "Quit");
+            //Button tutorialBtn = new Button(new Vector2(screenSize.Width / 2, screenSize.Height / 2), new Vector2(3.2f, 2.5f), "Tutorial");
+            Button playBtn = new Button(new Vector2(screenSize.Width / 2, screenSize.Height / 2 - 50f), new Vector2(3.2f, 2.5f), "Play");
+            Button settingBtn = new Button(new Vector2(screenSize.Width / 2, screenSize.Height / 2 + 50f), new Vector2(3.2f, 2.5f), "Setting");
+            Button quitBtn = new Button(new Vector2(screenSize.Width / 2, screenSize.Height / 2 + 150f), new Vector2(3.2f, 2.5f), "Quit");
 
             playBtn.ClickEvent += Play;
             quitBtn.ClickEvent += Exit;
             settingBtn.ClickEvent += Option;
 
-            entityManager.AddUIObject(tutorialBtn);
+            //entityManager.AddUIObject(tutorialBtn);
             entityManager.AddUIObject(playBtn);
             entityManager.AddUIObject(settingBtn);
             entityManager.AddUIObject(quitBtn);
 
-            AudioManager.PlayMusic("BGM1");
+            AudioManager.PlayMusic("MainMenu");
             gameStart = false;
         }
 

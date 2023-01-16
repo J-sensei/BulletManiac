@@ -172,6 +172,10 @@ namespace BulletManiac.Entity.Enemies
             TextureEffect effect = new TextureEffect(new Animation(ResourcesManager.FindAnimation("Destroy_Smoke_Animation")),
                                                     Position + deathSmokeOffset, new Vector2(16, 16), new Vector2(1.25f), true);
             GameManager.AddGameObject(effect);
+
+            // Add to result
+            GameResult.CountEnemy(this);
+
             base.DeleteEvent();
         }
 

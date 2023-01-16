@@ -19,7 +19,7 @@ namespace BulletManiac.Managers
 
         public static float EffectVolume { get { return SFXVolume * MasterVolume; } }
 
-        private static string currentSong = "";
+        public static string CurrentSong { get; private set; } = "";
 
         public static void Play(string name, float volume = 1.0f, float pitch = 0.0f, float pan = 0.0f)
         {
@@ -35,12 +35,12 @@ namespace BulletManiac.Managers
 
         public static void PlayMusic(string song)
         {
-            if (!currentSong.Equals(song))
+            if (!CurrentSong.Equals(song))
             {
                 MediaPlayer.Volume = MasterVolume * BGMVolume;
                 MediaPlayer.Play(ResourcesManager.FindSong(song));
                 MediaPlayer.IsRepeating = true;
-                currentSong = song;
+                CurrentSong = song;
             }
         }
 

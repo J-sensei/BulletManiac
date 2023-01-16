@@ -40,23 +40,23 @@ namespace BulletManiac.Scenes
         {
             spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Title"), TITLE, titlePosition, STRING_COLOR);
             spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), SUB_TITLE, subtitlePosition, STRING_COLOR);
-            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "Floor: 99",
-                                    new Vector2(screenSize.Width / 2 - 300f, screenSize.Height / 2 - 150f + yOffset), STRING_COLOR);
-            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "Level Clear: Yes",
-                        new Vector2(screenSize.Width / 2 - 300f, screenSize.Height / 2 - 100f + yOffset), STRING_COLOR);
-            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "Time Completed: 99:99",
+            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "Floor: " + GameResult.Floor + " (+"+GameResult.FloorScore+")",
+                                    new Vector2(screenSize.Width / 2 - 300f, screenSize.Height / 2 - 100f + yOffset), STRING_COLOR);
+            //spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "Level Clear: Yes",
+            //            new Vector2(screenSize.Width / 2 - 300f, screenSize.Height / 2 - 100f + yOffset), STRING_COLOR);
+            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "Time Completed: " + GameManager.TimePassString + "s" + " (-" + GameResult.TimeScore + ")",
                         new Vector2(screenSize.Width / 2 - 300f, screenSize.Height / 2 - 50f + yOffset), STRING_COLOR);
-            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "Bat Eliminated: 99",
+            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "Bat Eliminated: " + GameResult.Bat + " (+" + GameResult.Bat + ")",
                         new Vector2(screenSize.Width / 2 - 300f, screenSize.Height / 2 + yOffset), STRING_COLOR);
-            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "Shadow Eliminated: 99",
+            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "Shadow Eliminated: " + GameResult.Shadow + " (+" + (GameResult.Shadow*2) + ")",
                         new Vector2(screenSize.Width / 2 - 300f, screenSize.Height / 2 + 50f + yOffset), STRING_COLOR);
-            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "Suicide Shadow Eliminated: 99",
+            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "Suicide Shadow Eliminated: " +GameResult.SuicideShadow + " (+" + (GameResult.SuicideShadow*3) + ")",
                         new Vector2(screenSize.Width / 2 - 300f, screenSize.Height / 2 + 100f + yOffset), STRING_COLOR);
-            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "Summoner Eliminated: 99",
+            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "Summoner Eliminated: " + +GameResult.Summoner + " (+" + (GameResult.Summoner*4) + ")",
                         new Vector2(screenSize.Width / 2 - 300f, screenSize.Height / 2 + 150f + yOffset), STRING_COLOR);
-            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "Enemy Eliminated: 99",
+            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "Enemy Eliminated: " + (GameResult.Bat+ GameResult.Shadow+ GameResult.SuicideShadow+ GameResult.Summoner),
                         new Vector2(screenSize.Width / 2 - 300f, screenSize.Height / 2 + 200f + yOffset), STRING_COLOR);
-            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "Final Score: 99999",
+            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "Final Score: " + GameResult.Score,
                         new Vector2(screenSize.Width / 2 - 300f, screenSize.Height / 2 + 250f + yOffset), STRING_COLOR);
 
             entityManager.DrawUI(spriteBatch, gameTime);
@@ -69,6 +69,7 @@ namespace BulletManiac.Scenes
         public override void Initialize()
         {
             entityManager = new();
+            GameResult.Calculate(); // Calculate the result
 
             ClearColor = new Color(7, 24, 33);
             screenSize = Game1.GraphicsDeviceInstance.Viewport.Bounds;
@@ -89,6 +90,7 @@ namespace BulletManiac.Scenes
 
             entityManager.AddUIObject(mainMenuBtn);
             entityManager.AddUIObject(retryBtn);
+            AudioManager.PlayMusic("Result");
         }
 
         void MainMenu(object sender, System.EventArgs e) => SceneManager.LoadScene(0);
@@ -99,7 +101,6 @@ namespace BulletManiac.Scenes
             Cursor.Instance.ChangeMode(CursorMode.Mouse); // Normal mouse cursor
             entityManager.Update(gameTime); // If hover button, then it will change to hover mouse
         }
-
 
     }
 }

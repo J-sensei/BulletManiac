@@ -37,6 +37,7 @@ namespace BulletManiac.Managers
     /// </summary>
     public static class GameManager
     {
+        const int FINAL_FLOOR = 10;
         #region Public Properties
         /// <summary>
         /// Showing the debug log and debug box
@@ -208,15 +209,12 @@ namespace BulletManiac.Managers
             levelManager = new LevelManager(tiledMapRenderer, pathTester); // Level Manager 
             Player.Position = CurrentLevel.SpawnPosition;
 
-            spawner = new();
-            spawner.Start(); // Start the spawner immediately
-
             // Transition Effect initialization
             transitionEffect = new TransitionEffect(ResourcesManager.FindTexture("Transition_Texture"));
             transitionEffect.Initialize();
 
             // Status reset
-            floor = 1; // Reset the floor count
+            Floor = 1; // Reset the floor count
             TimePass = 0f;
             Difficulty = 1;
             // Reset Modifier
@@ -230,6 +228,10 @@ namespace BulletManiac.Managers
             gameOverColorTransparency = 0f;
 
             ApplyTransition(); // Run the transition when the game start
+
+            GameResult.Reset();
+            spawner = new();
+            spawner.Start(); // Start the spawner immediately
         }
 
         private static void LoadDefaultResources()
@@ -275,6 +277,8 @@ namespace BulletManiac.Managers
             ResourcesManager.LoadSpriteFonts("Font_Player", "UI/Font/Font_Player");
             ResourcesManager.LoadTexture("HP_Background", "UI/ProgressBar/HP_Background");
             ResourcesManager.LoadTexture("HP_Foreground", "UI/ProgressBar/HP_Foreground");
+            ResourcesManager.LoadTexture("health_bar", "UI/ProgressBar/health_bar");
+            ResourcesManager.LoadTexture("health_bar_decoration", "UI/ProgressBar/health_bar_decoration");
 
             // Load Debug UI Sprites
             ResourcesManager.LoadTexture("Debug_Direction", "SpriteSheet/DebugUI/direction_16x16");
@@ -441,7 +445,7 @@ namespace BulletManiac.Managers
         /// <summary>
         /// Record how many floor player has cleared
         /// </summary>
-        private static int floor = 1;
+        public static int Floor { get; private set; } = 1;
         static bool levelUpdated = false;
         const float TRANSITION_DURATION = 0.25f; // How long delay the transition start (For the camera move happen and teleportation happen without player seeing it)
         static float transitionDuration = TRANSITION_DURATION;
@@ -459,14 +463,24 @@ namespace BulletManiac.Managers
             Player.Position = CurrentLevel.SpawnPosition; // Update player position to the inital position of the level
             levelUpdated = true; // Start the transition to hide updating when level the changing
             doorOpened = false; // Door the close now
-            floor++; // Update floor record
+            Floor++; // Update floor record
             spawnPowerUp = false;
 
-
-            if (floor % 2 == 0)
+            if (Floor % 2 == 0)
             {
                 Difficulty++;
                 Difficulty = Math.Clamp(Difficulty, 1, 10); // Clamp the difficulty
+            }
+
+            // Every 5 floor change bgm
+            if(Floor % 5 == 0)
+            {
+                char x = AudioManager.CurrentSong[AudioManager.CurrentSong.Length - 1];
+                int n = int.Parse(x.ToString());
+                n = (n + 1) % 4;
+                if (n == 0) n = 4;
+                string newTrack = "BGM" + n;
+                AudioManager.PlayMusic(newTrack);
             }
         }
 
@@ -531,14 +545,14 @@ namespace BulletManiac.Managers
             spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "HP: " + Player.HP.ToString("N0") + "/" + Player.MaxHP.ToString("N0"), new Vector2(100f, 85f), Color.Gray);
             spriteBatch.Draw(ResourcesManager.FindTexture("Skull_Icon"), new Vector2(46f, 138f),  null, Color.White, 0f, new Vector2(8f), new Vector2(2f), SpriteEffects.None, 0f);
             spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), " x" + entityManager.EnemyCount, new Vector2(53f, 130f), Color.Gray);
-            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "FLOOR: " + floor, new Vector2(35f, 180f), Color.Gray);
+            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "FLOOR: " + Floor, new Vector2(35f, 180f), Color.Gray);
             spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "TIME: " + TimePassString, new Vector2(35f, 230f), Color.Gray);
             if (Debug)
             {
                 fpsCounter.Draw(spriteBatch, ResourcesManager.FindSpriteFont("DebugFont"), new Vector2(150f, 5f), Color.Red);
                 spriteBatch.DrawString(ResourcesManager.FindSpriteFont("DebugFont"), "Player HP: " + Player.HP.ToString("N0"), new Vector2(5f, 5f), Color.Red);
                 spriteBatch.DrawString(ResourcesManager.FindSpriteFont("DebugFont"), "Enemy Count: " + entityManager.EnemyCount, new Vector2(5f, 20f), Color.Red);
-                spriteBatch.DrawString(ResourcesManager.FindSpriteFont("DebugFont"), "Floor: " + floor, new Vector2(5f, 40f), Color.Red);
+                spriteBatch.DrawString(ResourcesManager.FindSpriteFont("DebugFont"), "Floor: " + Floor, new Vector2(5f, 40f), Color.Red);
                 spriteBatch.DrawString(ResourcesManager.FindSpriteFont("DebugFont"), "Is Level Finish: " + IsLevelFinish, new Vector2(5f, 60f), Color.Red);
             }
 
