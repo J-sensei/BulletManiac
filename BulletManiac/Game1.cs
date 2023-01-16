@@ -10,7 +10,7 @@ namespace BulletManiac
 {
     public class Game1 : Game
     {
-        const int INITIAL_SCENE = 4;
+        const int INITIAL_SCENE = 0;
         /// <summary>
         /// Singleton of the Game (Monogame)
         /// </summary>

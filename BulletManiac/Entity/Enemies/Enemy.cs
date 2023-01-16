@@ -27,6 +27,7 @@ namespace BulletManiac.Entity.Enemies
         }
 
         protected float hp = 100f;
+        public float HP { get { return hp; } }
         public float Damage { get { return basedDamage * DamageModifier; } }
         protected float basedDamage = 10f;
         public float DamageModifier { get; set; } = 1.0f;

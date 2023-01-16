@@ -44,7 +44,7 @@ namespace BulletManiac.Scenes
                                     new Vector2(screenSize.Width / 2 - 300f, screenSize.Height / 2 - 100f + yOffset), STRING_COLOR);
             //spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "Level Clear: Yes",
             //            new Vector2(screenSize.Width / 2 - 300f, screenSize.Height / 2 - 100f + yOffset), STRING_COLOR);
-            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "Time Completed: " + GameManager.TimePassString + "s" + " (-" + GameResult.TimeScore + ")",
+            spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "Time Survived: " + GameManager.TimePassString + "s" + " (-" + GameResult.TimeScore + ")",
                         new Vector2(screenSize.Width / 2 - 300f, screenSize.Height / 2 - 50f + yOffset), STRING_COLOR);
             spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "Bat Eliminated: " + GameResult.Bat + " (+" + GameResult.Bat + ")",
                         new Vector2(screenSize.Width / 2 - 300f, screenSize.Height / 2 + yOffset), STRING_COLOR);

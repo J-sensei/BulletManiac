@@ -304,6 +304,7 @@ namespace BulletManiac.Entity.Players
                 //ResourcesManager.FindSoundEffect("Player_Hurt").Play();
                 AudioManager.Play("Player_Hurt");
                 hpBar.UpdateValue(HP);
+                Camera.Main.Shake(1.5f);
             }
         }
 
@@ -352,7 +353,7 @@ namespace BulletManiac.Entity.Players
             hpBar.UpdateValue(HP);
 
             // Calculate reloading text offset
-            float x = ResourcesManager.FindSpriteFont("Font_Player").MeasureString("Reloading 0s").X;
+            float x = ResourcesManager.FindSpriteFont("Font_Normal").MeasureString("Reloading 0.00s").X;
             textPosOffset = new(-x / 20f, -16f);
 
             base.Initialize();
@@ -406,10 +407,11 @@ namespace BulletManiac.Entity.Players
             // Reloading Text
             if (Gun.Reloading)
             {
-                spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Player"), "Reloading " + Gun.Magazine.CD.ToString("N0") + "s", position + textPosOffset, reloadingStringColor, 0f, textOffset, 0.3f, SpriteEffects.None, 0f);
+                spriteBatch.DrawString(ResourcesManager.FindSpriteFont("Font_Normal"), "Reloading " + Gun.Magazine.CD.ToString("N2") + "s", position + textPosOffset, reloadingStringColor, 0f, textOffset, 0.15f, SpriteEffects.None, 0f);
             }
         }
-        Color reloadingStringColor = new Color(7, 24, 33);
+        //Color reloadingStringColor = new Color(7, 24, 33);
+        Color reloadingStringColor = Color.DarkRed;
 
         //public override void CollisionEvent(GameObject gameObject)
         //{
