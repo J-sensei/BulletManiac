@@ -367,28 +367,32 @@ namespace BulletManiac.Managers
             if (InputManager.GetKey(Keys.F12)) Debug = !Debug;
             //if (InputManager.GetKey(Keys.R)) levelManager.ChangeLevel(); // Test change level
 
-            // Test Enemy
-            if (InputManager.GetKey(Keys.F))
+            // Debug Spawn Enemy
+            if (Debug)
             {
-                var pos = CurrentLevel.TileGraph.RandomPosition;
-                spawner.Spawn(new Bat(pos), pos);
-            }
-            if (InputManager.GetKey(Keys.G))
-            {
-                var pos = CurrentLevel.TileGraph.RandomPosition;
-                spawner.Spawn(new Shadow(pos), pos);
-            }
-            if (InputManager.GetKey(Keys.H))
-            {
-                var pos = CurrentLevel.TileGraph.RandomPosition;
-                spawner.Spawn(new SuicideShadow(pos), pos);
-            }
-            if (InputManager.GetKey(Keys.J))
-            {
-                var pos = CurrentLevel.TileGraph.RandomPosition;
-                spawner.Spawn(new Summoner(pos), pos);
+                if (InputManager.GetKey(Keys.F))
+                {
+                    var pos = CurrentLevel.TileGraph.RandomPosition;
+                    spawner.Spawn(new Bat(pos), pos);
+                }
+                if (InputManager.GetKey(Keys.G))
+                {
+                    var pos = CurrentLevel.TileGraph.RandomPosition;
+                    spawner.Spawn(new Shadow(pos), pos);
+                }
+                if (InputManager.GetKey(Keys.H))
+                {
+                    var pos = CurrentLevel.TileGraph.RandomPosition;
+                    spawner.Spawn(new SuicideShadow(pos), pos);
+                }
+                if (InputManager.GetKey(Keys.J))
+                {
+                    var pos = CurrentLevel.TileGraph.RandomPosition;
+                    spawner.Spawn(new Summoner(pos), pos);
+                }
             }
 
+            // Pause menu
             if (InputManager.GetKey(Keys.Escape) && transitionEffect.Finish) // prevent player open pause menu when transition is playing
             {
                 // Pause the game
