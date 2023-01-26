@@ -10,7 +10,6 @@
 
 #-------------------------------- References --------------------------------#
 
-/reference:..\bin\Debug\net6.0\BulletManiac.dll
 /reference:C:\Users\Jsliew\.nuget\packages\monogame.extended.content.pipeline\3.9.0-alpha0084\tools\MonoGame.Extended.Content.Pipeline.dll
 
 #---------------------------------- Content ---------------------------------#
@@ -134,12 +133,6 @@
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:Audio/Song/BGM1.mp3
-
-#begin Audio/Song/BGM2.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:Audio/Song/BGM2.mp3
 
 #begin Audio/Song/BGM2.mp3
 /importer:Mp3Importer
